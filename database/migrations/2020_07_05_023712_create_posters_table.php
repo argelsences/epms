@@ -16,6 +16,7 @@ class CreatePostersTable extends Migration
         Schema::create('posters', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

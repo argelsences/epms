@@ -15,8 +15,8 @@ class CreateDepartmentsTable extends Migration
     {
         Schema::create('departments', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email');
+            $table->string('name')->unique();
+            $table->string('email')->unique();
             $table->string('phone', 20);
             $table->string('facebook');
             $table->string('instagram');
@@ -26,7 +26,7 @@ class CreateDepartmentsTable extends Migration
             $table->string('page_text_color',10);
             $table->string('google_analytics_code');
             $table->string('google_tag_manager_code');
-            $table->string('url');
+            $table->string('url')->unique();
             $table->timestamps();
             $table->softDeletes();
         });

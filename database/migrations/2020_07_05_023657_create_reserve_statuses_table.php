@@ -15,6 +15,7 @@ class CreateReserveStatusesTable extends Migration
     {
         Schema::create('reserve_statuses', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->timestamps();
         });
     }

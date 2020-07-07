@@ -15,7 +15,12 @@ class CreateBookItemsTable extends Migration
     {
         Schema::create('book_items', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->integer('quantity');
+            $table->bigInteger('book_id')->unsigned();
+            $table->foreign('book_id')->references('id')->on('books');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -15,9 +15,9 @@ class AddDeptIdRoleIdUsers extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
+            $table->string('designation');
+            $table->softDeletes();
             $table->bigInteger('department_id')->unsigned();
-            $table->bigInteger('role_id')->unsigned();
-            $table->foreign('role_id')->references('id')->on('roles');
             $table->foreign('department_id')->references('id')->on('departments');
         });
     }

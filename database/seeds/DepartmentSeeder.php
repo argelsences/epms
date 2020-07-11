@@ -12,5 +12,13 @@ class DepartmentSeeder extends Seeder
     public function run()
     {
         //
+        $department = DB::table('departments')->insert([
+            'name'       => 'Engineering Systems and Design',
+            'email'      => 'esd@sutd.edu.sg',
+            'url'        => 'esd',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
     }
 }

@@ -16,7 +16,7 @@ class UserController extends Controller
     public function index(User $model)
     {
         //
-        return view('admin.user.list', ['users' => $model::orderBy('name', 'ASC')->get()]);
+        return view('admin.users.list', ['users' => $model::orderBy('name', 'ASC')->get()]);
     }
 
     /**

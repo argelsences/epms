@@ -13,10 +13,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
-});
+});*/
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('home');
+
+Route::middleware('auth')->group(function(){
+    Route::get('/web-admin', 'AdminController@dashboard')->name('admin.dashboard');
+});
+
+Route::group(['middleware' => ['role:super-administrator|administrator']], function () {
+    Route::get('/web-admin/users', 'UserController@index')->name('user.index');
+	Route::get('/web-admin/users/create', 'UserController@create')->name('user.create');
+	Route::post('/web-admin/users/store', 'UserController@store')->name('user.store');
+	Route::delete('/web-admin/users/{user}', 'UserController@destroy')->name('user.destroy');
+	Route::get('/web-admin/users/{user}/edit', 'UserController@edit')->name('user.edit');
+	Route::put('/web-admin/users/{user}', 'UserController@update')->name('user.update');
+});

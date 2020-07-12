@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Homepage') }}</div>
+                <div class="card-header">{{ __('Dashboard') }}</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -14,7 +14,10 @@
                         </div>
                     @endif
 
-                    Front page
+                    List of user goes here
+                    @foreach ($users as $user)
+                        {{ $user->name }}
+                    @endforeach
                 </div>
             </div>
         </div>

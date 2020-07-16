@@ -16,7 +16,9 @@ class UserController extends Controller
     public function index(User $model)
     {
         //
-        return view('admin.users.list', ['users' => $model::orderBy('name', 'ASC')->get()]);
+        /////return view('admin.users.list', ['users' => $model::orderBy('name', 'ASC')->get()]);
+        /////return response()->json(($model::orderBy('name', 'ASC')->get()));
+        return view('admin.users.list');
     }
 
     /**
@@ -83,5 +85,9 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function list(User $model) {
+        return response()->json(($model::orderBy('name', 'ASC')->get()));
     }
 }

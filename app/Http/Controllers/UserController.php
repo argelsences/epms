@@ -13,11 +13,8 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(User $model)
-    {
+    public function index(User $model) {
         //
-        /////return view('admin.users.list', ['users' => $model::orderBy('name', 'ASC')->get()]);
-        /////return response()->json(($model::orderBy('name', 'ASC')->get()));
         return view('admin.users.list');
     }
 
@@ -59,9 +56,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit(User $user) {
         //
+        dd($user);
     }
 
     /**
@@ -82,9 +79,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
         //
+        dd($user);
     }
 
     public function list(User $model) {

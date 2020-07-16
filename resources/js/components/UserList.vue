@@ -11,6 +11,7 @@
                 <td>{{row.name}}</td>
                 <td>{{row.designation}}</td>
                 <td>{{row.email}}</td>
+                <td><a :href="`/web-admin/users/${row.id}/edit`">Edit</a></td>
             </tr>
         </tbody>
     </table>      
@@ -28,6 +29,7 @@
                     {label: 'Name', field: 'name'},
                     {label: 'Designation', field: 'designation'},
                     {label: 'Email', field: 'email'},
+                    {label: 'Actions', field: 'actions'},
                 ],
                 rows: [],
                 page: 1,

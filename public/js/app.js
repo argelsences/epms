@@ -1959,6 +1959,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -1977,6 +1978,9 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         label: 'Email',
         field: 'email'
+      }, {
+        label: 'Actions',
+        field: 'actions'
       }],
       rows: [],
       page: 1,
@@ -37661,7 +37665,15 @@ var render = function() {
           _vm._v(" "),
           _c("td", [_vm._v(_vm._s(row.designation))]),
           _vm._v(" "),
-          _c("td", [_vm._v(_vm._s(row.email))])
+          _c("td", [_vm._v(_vm._s(row.email))]),
+          _vm._v(" "),
+          _c("td", [
+            _c(
+              "a",
+              { attrs: { href: "/web-admin/users/" + row.id + "/edit" } },
+              [_vm._v("Edit")]
+            )
+          ])
         ])
       }),
       0

@@ -28,5 +28,10 @@ class UsersTableSeeder extends Seeder
             'model_type' => 'App\User',
             'model_id' => 1
         ]);
+
+        // make a role permission factory first
+        factory(App\User::class, 50)->create()->each(function($u) {
+            $u->posts()->save(factory(App\Post::class)->make());
+        });
     }
 }

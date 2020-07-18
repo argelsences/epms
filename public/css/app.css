@@ -10939,3 +10939,24 @@ a.text-dark:focus {
   }
 }
 
+.sidebar {
+  background-color: #222831;
+}
+
+.sidebar a p,
+.sidebar a span {
+  color: #eeeeee;
+}
+
+.sidebar .nav li:hover > a,
+.sidebar .nav li .dropdown-menu a:hover,
+.sidebar .nav li .dropdown-menu a:focus,
+.sidebar .nav li.active > [data-toggle=collapse] {
+  background-color: #404b69;
+}
+
+.sidebar[data-color=green] li.active > a {
+  background-color: #00818a;
+  box-shadow: none;
+}
+

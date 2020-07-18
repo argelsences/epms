@@ -12,3 +12,17 @@
 
 // Material icons
 @import '~@mdi/font/css/materialdesignicons.min.css';
+
+.sidebar {
+    background-color: #222831;
+    a p, a span{color: #eeeeee;}
+    .nav li:hover>a, .nav li .dropdown-menu a:hover, .nav li .dropdown-menu a:focus, .nav li.active>[data-toggle="collapse"]{
+        background-color: #404b69;
+    }
+
+}
+
+.sidebar[data-color="green"] li.active>a {
+    background-color: #00818a;
+    box-shadow: none;
+  }

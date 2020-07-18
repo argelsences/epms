@@ -10955,6 +10955,10 @@ a.text-dark:focus {
   background-color: #404b69;
 }
 
+.sidebar .logo a {
+  color: #00818a !important;
+}
+
 .sidebar[data-color=green] li.active > a {
   background-color: #00818a;
   box-shadow: none;

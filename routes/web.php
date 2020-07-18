@@ -32,7 +32,7 @@ Route::group(['middleware' => ['role:super-administrator|administrator']], funct
 	Route::delete('/web-admin/users/{user}', 'UserController@destroy')->name('user.destroy');
 	Route::get('/web-admin/users/{user}/edit', 'UserController@edit')->name('user.edit');
 	Route::put('/web-admin/users/{user}', 'UserController@update')->name('user.update');
-});Auth::routes();
+});
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
 

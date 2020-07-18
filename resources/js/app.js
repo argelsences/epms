@@ -5,8 +5,10 @@
  */
 
 require('./bootstrap');
+import Vuetify from 'vuetify';
 
 window.Vue = require('vue');
+window.Vue.use(Vuetify);
 
 /**
  * The following block of code may be used to automatically register your
@@ -29,5 +31,6 @@ Vue.component('user-list', require('./components/UserList.vue').default);
  */
 
 const app = new Vue({
+    vuetify: new Vuetify,
     el: '#app',
 });

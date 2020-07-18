@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b70cb4b42a974ef249b69a36c9366611",
+    "content-hash": "3571473abf52044cae3c475751ae00bb",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -950,6 +950,49 @@
                 "zf"
             ],
             "time": "2020-05-20T16:45:56+00:00"
+        },
+        {
+            "name": "laravel-frontend-presets/material-dashboard",
+            "version": "v1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-frontend-presets/material-dashboard.git",
+                "reference": "077c8430f4faeae3bdb3d4a6c1dbca5a195a1bfc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-frontend-presets/material-dashboard/zipball/077c8430f4faeae3bdb3d4a6c1dbca5a195a1bfc",
+                "reference": "077c8430f4faeae3bdb3d4a6c1dbca5a195a1bfc",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^7.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "LaravelFrontendPresets\\MaterialPreset\\MaterialPresetServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LaravelFrontendPresets\\MaterialPreset\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Laravel 5.x Front-end preset for material dashboard",
+            "homepage": "https://github.com/creativetimofficial/material-dashboard-laravel",
+            "keywords": [
+                "laravel",
+                "material",
+                "preset"
+            ],
+            "time": "2020-03-23T16:17:32+00:00"
         },
         {
             "name": "laravel/framework",

@@ -13,16 +13,83 @@
 // Material icons
 @import '~@mdi/font/css/materialdesignicons.min.css';
 
+$primary: #00818a;
+$primary-active: #005a60;
+$secondary: #404b69;
+$nav-color: #283149;
+
+// mixins
+@mixin no-box-shadow-border-radius {
+    border-radius: 0!important;
+    box-shadow: none!important;
+}
+@mixin primary-color{
+    background: $primary;
+    background: -moz-linear-gradient(left, rgba(0,129,138,1) 0%, rgba(0,129,138,1) 60%, rgba(0,90,96,1) 100%)!important;
+    background: -webkit-gradient(left top, right top, color-stop(0%, rgba(0,129,138,1)), color-stop(60%, rgba(0,129,138,1)), color-stop(100%, rgba(0,90,96,1)))!important;
+    background: -webkit-linear-gradient(left, rgba(0,129,138,1) 0%, rgba(0,129,138,1) 60%, rgba(0,90,96,1) 100%)!important;
+    background: -o-linear-gradient(left, rgba(0,129,138,1) 0%, rgba(0,129,138,1) 60%, rgba(0,90,96,1) 100%)!important;
+    background: -ms-linear-gradient(left, rgba(0,129,138,1) 0%, rgba(0,129,138,1) 60%, rgba(0,90,96,1) 100%)!important;
+    background: linear-gradient(to right, rgba(0,129,138,1) 0%, rgba(0,129,138,1) 60%, rgba(0,90,96,1) 100%)!important;
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00818a', endColorstr='#005a60', GradientType=1 )!important;
+}
+@mixin primary-color-active {
+    color: #fff;
+    background-color: $primary-active;
+    border-color:  $primary-active;
+}
+
+// sidebar changes
 .sidebar {
-    background-color: #222831;
+    background-color: $nav-color!important;
+    box-shadow: none;
+    color: #eeeeee;
     a p, a span{color: #eeeeee;}
     .nav li:hover>a, .nav li .dropdown-menu a:hover, .nav li .dropdown-menu a:focus, .nav li.active>[data-toggle="collapse"]{
-        background-color: #404b69;
+        background-color: $secondary;
+        @include no-box-shadow-border-radius;
     }
-    .logo a {color: #00818a!important;}
+    .logo a {color: $primary!important;}
 }
 
 .sidebar[data-color="green"] li.active>a {
-    background-color: #00818a;
+    background-color: $primary;
+    @include no-box-shadow-border-radius;
+}
+
+// navbar changes
+.navbar.bg-dark {
+    @extend .sidebar;
     box-shadow: none;
-  }
+}
+
+.card {
+    @include no-box-shadow-border-radius;
+    border: 1px solid rgba(64, 75, 105, .25);
+    .card-header{
+        @include no-box-shadow-border-radius;
+    }
+}
+.btn:not(.btn-round) {
+    @include no-box-shadow-border-radius;
+}
+
+.form-control{
+    border: none;
+}
+
+.card-header-primary{
+    @include primary-color;
+}
+
+.btn.btn-primary {
+    background: rgba(0,129,138,1);
+    border-color: rgba(0,129,138,1);
+}
+
+.btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active, .show > .btn-primary.dropdown-toggle, .btn.btn-primary:focus, .btn.btn-primary.focus, .btn.btn-primary:hover {
+    @include primary-color-active;
+}
+.text-primary{
+    color: $primary!important;
+}

@@ -1,4 +1,4 @@
-<div class="sidebar" data-color="green" data-background-color="white" data-image="{{ asset('material') }}/img/sidebar-1.jpg">
+<div class="sidebar" data-color="green">
   <!--
       Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
 
@@ -18,13 +18,13 @@
         </a>
       </li>
       <li class="nav-item {{ ($activePage == 'profile' || $activePage == 'user-management') ? ' active' : '' }}">
-        <a class="nav-link" data-toggle="collapse" href="#laravelExample" aria-expanded="true">
+        <a class="nav-link" data-toggle="collapse" href="#laravelExample" aria-expanded="false">
           <i><img style="width:25px" src="{{ asset('material') }}/img/laravel.svg"></i>
           <p>{{ __('Laravel Examples') }}
             <b class="caret"></b>
           </p>
         </a>
-        <div class="collapse show" id="laravelExample">
+        <div class="collapse" id="laravelExample">
           <ul class="nav">
             <li class="nav-item{{ $activePage == 'profile' ? ' active' : '' }}">
               <a class="nav-link" href="{{ route('profile.edit') }}">
@@ -75,12 +75,6 @@
         <a class="nav-link" href="{{ route('language') }}">
           <i class="material-icons">language</i>
           <p>{{ __('RTL Support') }}</p>
-        </a>
-      </li>
-      <li class="nav-item active-pro{{ $activePage == 'upgrade' ? ' active' : '' }} bg-danger">
-        <a class="nav-link text-white" href="{{ route('upgrade') }}">
-          <i class="material-icons">unarchive</i>
-          <p>{{ __('Upgrade to PRO') }}</p>
         </a>
       </li>
     </ul>

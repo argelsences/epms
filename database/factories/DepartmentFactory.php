@@ -6,8 +6,11 @@ use App\Department;
 use Faker\Generator as Faker;
 
 $factory->define(Department::class, function (Faker $faker) {
+
+    $faker->locale = 'en_SG';
+
     return [
-        'name' => $faker->company,
+        'name' => $faker->unique()->company,
         'email' => $faker->unique()->email,
         'phone' => $faker->phoneNumber,
         'facebook' => $faker->url,

@@ -5,6 +5,9 @@
  */
 // commented as it collides with material design
 /////require('./bootstrap');
+window.axios = require('axios');
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
 import Vuetify from 'vuetify';
 
 window.Vue = require('vue');

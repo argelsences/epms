@@ -26,12 +26,12 @@ Route::middleware('auth')->group(function(){
 });
 
 Route::group(['middleware' => ['role:super-administrator|administrator']], function () {
-    Route::get('/web-admin/users', 'UserController@index')->name('user.index');
-	Route::get('/web-admin/users/create', 'UserController@create')->name('user.create');
-	Route::post('/web-admin/users/store', 'UserController@store')->name('user.store');
-	Route::delete('/web-admin/users/{user}', 'UserController@destroy')->name('user.destroy');
-	Route::get('/web-admin/users/{user}/edit', 'UserController@edit')->name('user.edit');
-	Route::put('/web-admin/users/{user}', 'UserController@update')->name('user.update');
+    Route::get('/web-admin/users', 'UserController@index')->name('users.index');
+	Route::get('/web-admin/users/create', 'UserController@create')->name('users.create');
+	Route::post('/web-admin/users/store', 'UserController@store')->name('users.store');
+	Route::delete('/web-admin/users/{user}', 'UserController@destroy')->name('users.destroy');
+	Route::get('/web-admin/users/{user}/edit', 'UserController@edit')->name('users.edit');
+	Route::put('/web-admin/users/{user}', 'UserController@update')->name('users.update');
 });
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');

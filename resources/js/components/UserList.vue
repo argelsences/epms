@@ -1,6 +1,6 @@
 <template>              
-    <table class="table table-striped table-dark">
-        <thead>
+    <table class="table table-striped">
+        <thead class="thead-dark">
             <tr>
                 <th scope="col" v-for="(column, index) in columns" :key="index">{{column.label}}</th>
             </tr>

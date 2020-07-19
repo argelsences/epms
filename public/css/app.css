@@ -10982,6 +10982,10 @@ a.text-dark:focus {
   box-shadow: none;
 }
 
+.form-control {
+  border: none;
+}
+
 .card {
   border-radius: 0 !important;
   box-shadow: none !important;
@@ -10993,20 +10997,16 @@ a.text-dark:focus {
   box-shadow: none !important;
 }
 
-.btn:not(.btn-round) {
-  border-radius: 0 !important;
-  box-shadow: none !important;
-}
-
-.form-control {
-  border: none;
-}
-
 .card-header-primary {
   background: #00818a;
   background: -webkit-gradient(left top, right top, color-stop(0%, #00818a), color-stop(60%, #00818a), color-stop(100%, #005a60)) !important;
   background: linear-gradient(to right, #00818a 0%, #00818a 60%, #005a60 100%) !important;
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#00818a", endColorstr="#005a60", GradientType=1 ) !important;
+}
+
+.btn:not(.btn-round) {
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 .btn.btn-primary {
@@ -11023,6 +11023,26 @@ a.text-dark:focus {
   color: #fff;
   background-color: #005a60;
   border-color: #005a60;
+}
+
+.btn i {
+  margin-right: 10px;
+}
+
+.alert.alert-danger,
+.alert.alert-warning,
+.alert.alert-success,
+.alert.alert-info,
+.alert.alert-primary,
+.alert.alert-rose {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: #eeeeee;
+}
+
+.alert.alert-primary {
+  background-color: #00818a;
+  color: #eeeeee;
 }
 
 .text-primary {

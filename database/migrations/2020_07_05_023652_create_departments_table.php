@@ -17,7 +17,7 @@ class CreateDepartmentsTable extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('email')->unique();
-            $table->string('phone', 20)->nullable();
+            $table->string('phone', 40)->nullable();
             $table->string('facebook')->nullable();
             $table->string('instagram')->nullable();
             $table->string('logo_path')->nullable();

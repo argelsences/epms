@@ -17,6 +17,7 @@ $primary: #00818a;
 $primary-active: #005a60;
 $secondary: #404b69;
 $nav-color: #283149;
+$secondary_font_color: #eeeeee;
 
 // mixins
 @mixin no-box-shadow-border-radius {
@@ -62,7 +63,12 @@ $nav-color: #283149;
     @extend .sidebar;
     box-shadow: none;
 }
-
+// content body changes
+// form field
+.form-control{
+    border: none;
+}
+// card component
 .card {
     @include no-box-shadow-border-radius;
     border: 1px solid rgba(64, 75, 105, .25);
@@ -70,26 +76,36 @@ $nav-color: #283149;
         @include no-box-shadow-border-radius;
     }
 }
-.btn:not(.btn-round) {
-    @include no-box-shadow-border-radius;
-}
-
-.form-control{
-    border: none;
-}
-
 .card-header-primary{
     @include primary-color;
 }
-
-.btn.btn-primary {
-    background: rgba(0,129,138,1);
-    border-color: rgba(0,129,138,1);
+// button component
+.btn:not(.btn-round) {
+    @include no-box-shadow-border-radius;
 }
-
+.btn.btn-primary {
+    background: $primary;
+    border-color: $primary;
+}
 .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active, .show > .btn-primary.dropdown-toggle, .btn.btn-primary:focus, .btn.btn-primary.focus, .btn.btn-primary:hover {
     @include primary-color-active;
 }
+.btn{
+    i {margin-right:10px;}
+}
+// alert component
+.alert {
+    &.alert-danger, &.alert-warning, &.alert-success, &.alert-info, &.alert-primary, &.alert-rose  {
+        @include no-box-shadow-border-radius;
+        color: $secondary_font_color;
+    }
+    &.alert-primary{
+        background-color:$primary;
+        color: $secondary_font_color;
+    }
+}
+// texts
 .text-primary{
     color: $primary!important;
 }
+

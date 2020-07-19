@@ -1,19 +1,29 @@
-@extends('layouts.app')
+@extends('layouts.app', ['activePage' => 'user-management', 'titlePage' => __('User Management')])
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">{{ __('User List') }}</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-primary">
+                        <div class="row">
+                            <div class="col-6 text-left">
+                                <h4 class="card-title ">Users</h4>
+                                <p class="card-category"> Here you can manage users</p>
+                            </div>
+                            <div class="col-6 text-right">
+                                <a href="#" class="btn btn-sm btn-primary">
+                                    <i class="material-icons ">add_box</i>Add user
+                                </a>
+                            </div>
                         </div>
-                    @endif
-                    <user-list></user-list>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <user-list></user-list>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

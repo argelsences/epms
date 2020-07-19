@@ -29,13 +29,17 @@ class UsersTableSeeder extends Seeder
             'model_id' => 1
         ]);
 
-        // make a role permission factory first
-        factory(App\User::class, 50)->create()->each(function($u) {
-            //$u->posts()->save(factory(App\Post::class)->make());
+        
+        // check if environment is development, then proceed to factory
+        if (App::environment('local')) {
             $roles = \Spatie\Permission\Models\Role::all();
             $roleArray = $roles->pluck('name');
-            $the_role = $roleArray([range(0, count($roleArray) - 1)]);
-            $u->assignRole($the_role);
-        });
+            
+            // create 50 random users
+            factory(App\User::class, 50)->create()->each(function($u) use ($roleArray){
+                $the_role = $roleArray[rand(0, count($roleArray) - 1)];
+                $u->assignRole($the_role);
+            });
+        }
     }
 }

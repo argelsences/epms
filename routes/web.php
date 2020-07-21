@@ -17,12 +17,12 @@ use Illuminate\Support\Facades\Route;
     return view('welcome');
 });*/
 
-
-
 Route::get('/', 'HomeController@index')->name('home');
 
+Auth::routes();
+
 Route::prefix('web-admin')->middleware('auth')->group(function(){
-	Auth::routes();
+	
 	Route::get('/', 'AdminController@dashboard')->name('dashboard');
 	Route::resource('user', 'UserController', ['except' => ['show']]);
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);

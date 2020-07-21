@@ -14,7 +14,7 @@
                             </div>
                             <div class="col-6 text-right">
                                 <a href="#" class="btn btn-sm btn-primary">
-                                    <i class="material-icons ">add_box</i>Add user
+                                    <i class="material-icons ">add_box</i>User
                                 </a>
                             </div>
                         </div>

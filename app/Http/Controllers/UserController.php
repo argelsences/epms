@@ -88,6 +88,7 @@ class UserController extends Controller
     }
 
     public function list(User $model) {
+        
         return response()->json(($model::orderBy('id', 'ASC')->get()));
     }
 }

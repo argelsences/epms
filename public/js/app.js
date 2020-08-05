@@ -1960,27 +1960,45 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
   },
   data: function data() {
     return {
+      search: '',
       columns: [{
-        label: 'id',
-        field: 'id'
+        text: 'ID',
+        value: 'id'
       }, {
-        label: 'Name',
-        field: 'name'
+        text: 'Name',
+        value: 'name'
       }, {
-        label: 'Designation',
-        field: 'designation'
+        text: 'Designation',
+        value: 'designation'
       }, {
-        label: 'Email',
-        field: 'email'
+        text: 'Email',
+        value: 'email'
       }, {
-        label: 'Actions',
-        field: 'actions'
+        text: 'Actions',
+        value: 'actions',
+        sortable: false
       }],
       rows: [],
       page: 1,
@@ -1994,6 +2012,15 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('/api/users').then(function (response) {
         _this.rows = response.data;
       });
+    },
+    editItem: function editItem(item) {
+      this.editedIndex = this.desserts.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+    deleteItem: function deleteItem(item) {
+      var index = this.desserts.indexOf(item);
+      confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1);
     }
   },
   created: function created() {
@@ -2533,43 +2560,73 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("table", { staticClass: "table table-striped" }, [
-    _c("thead", { staticClass: "thead-dark" }, [
+  return _c(
+    "v-card",
+    [
       _c(
-        "tr",
-        _vm._l(_vm.columns, function(column, index) {
-          return _c("th", { key: index, attrs: { scope: "col" } }, [
-            _vm._v(_vm._s(column.label))
-          ])
-        }),
-        0
-      )
-    ]),
-    _vm._v(" "),
-    _c(
-      "tbody",
-      _vm._l(_vm.rows, function(row, index) {
-        return _c("tr", { key: row.id }, [
-          _c("td", [_vm._v(_vm._s(row.id))]),
-          _vm._v(" "),
-          _c("td", [_vm._v(_vm._s(row.name))]),
-          _vm._v(" "),
-          _c("td", [_vm._v(_vm._s(row.designation))]),
-          _vm._v(" "),
-          _c("td", [_vm._v(_vm._s(row.email))]),
-          _vm._v(" "),
-          _c("td", [
-            _c(
-              "a",
-              { attrs: { href: "/web-admin/users/" + row.id + "/edit" } },
-              [_vm._v("Edit")]
-            )
-          ])
+        "v-card-title",
+        [
+          _c("v-text-field", {
+            attrs: {
+              "append-icon": "search",
+              label: "Search",
+              "single-line": "",
+              "hide-details": ""
+            },
+            model: {
+              value: _vm.search,
+              callback: function($$v) {
+                _vm.search = $$v
+              },
+              expression: "search"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("v-data-table", {
+        attrs: { headers: _vm.columns, items: _vm.rows, search: _vm.search },
+        scopedSlots: _vm._u([
+          {
+            key: "item.actions",
+            fn: function(ref) {
+              var item = ref.item
+              return [
+                _c(
+                  "v-icon",
+                  {
+                    staticClass: "mr-2",
+                    attrs: { small: "" },
+                    on: {
+                      click: function($event) {
+                        return _vm.editItem(item)
+                      }
+                    }
+                  },
+                  [_vm._v("mdi-pencil")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "v-icon",
+                  {
+                    attrs: { small: "" },
+                    on: {
+                      click: function($event) {
+                        return _vm.deleteItem(item)
+                      }
+                    }
+                  },
+                  [_vm._v("mdi-delete")]
+                )
+              ]
+            }
+          }
         ])
-      }),
-      0
-    )
-  ])
+      })
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

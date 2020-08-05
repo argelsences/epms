@@ -1,4 +1,4 @@
-<template>              
+<!--<template>              
     <table class="table table-striped">
         <thead class="thead-dark">
             <tr>
@@ -15,6 +15,22 @@
             </tr>
         </tbody>
     </table>      
+</template>-->
+<template>
+  <v-card>
+    <v-card-title>
+      <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
+    </v-card-title>
+    <v-data-table :headers="columns" :items="rows" :search="search">
+        <template v-slot:item.actions="{ item }">
+            <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+            <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+        </template>
+        <!--<template v-slot:no-data>
+            <v-btn color="primary" @click="initialize">Reset</v-btn>
+        </template>-->
+    </v-data-table>
+  </v-card>
 </template>
 
 <script>
@@ -24,12 +40,13 @@
         },
         data() {
             return {
+                search : '',
                 columns: [
-                    {label: 'id', field: 'id'}, 
-                    {label: 'Name', field: 'name'},
-                    {label: 'Designation', field: 'designation'},
-                    {label: 'Email', field: 'email'},
-                    {label: 'Actions', field: 'actions'},
+                    {text: 'ID', value: 'id'}, 
+                    {text: 'Name', value: 'name'},
+                    {text: 'Designation', value: 'designation'},
+                    {text: 'Email', value: 'email'},
+                    {text: 'Actions', value: 'actions', sortable: false },
                 ],
                 rows: [],
                 page: 1,
@@ -42,8 +59,18 @@
                 .then( response => {
                     this.rows = response.data;
                 });
-            }
-            
+            },
+            editItem (item) {
+                this.editedIndex = this.desserts.indexOf(item)
+                this.editedItem = Object.assign({}, item)
+                this.dialog = true
+            },
+
+            deleteItem (item) {
+                const index = this.desserts.indexOf(item)
+                confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
+            },
+ 
         },
         created: function() {
             this.getUsers();

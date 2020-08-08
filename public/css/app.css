@@ -11010,8 +11010,10 @@ a.text-dark:focus {
 }
 
 .btn.btn-primary {
-  background: #00818a;
-  border-color: #00818a;
+  background: #00818a !important;
+  background-color: #00818a !important;
+  border-color: #00818a !important;
+  color: #fff;
 }
 
 .btn-primary:not(:disabled):not(.disabled):active,

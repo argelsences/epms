@@ -64,20 +64,22 @@
                                         </v-row>
                                         <v-row>
                                             <v-col cols="12" sm="12" md="6">
-                                                <v-text-field
+                                                <v-text-field label="Password" type="password" v-model="password" :rules="passwordRules"></v-text-field>
+                                                <!--<v-text-field
                                                     v-model="password"
-                                                    :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
+                                                    :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                                                     :rules="[rules.required, rules.min]"
-                                                    :type="show_password ? 'text' : 'password'"
+                                                    :type="showPassword ? 'text' : 'password'"
                                                     name="input-10-1"
                                                     label="Password"
                                                     hint="At least 8 characters"
                                                     counter
-                                                    @click:append="show_password = !show_password"
-                                                ></v-text-field>
+                                                    @click:append="showPassword = !showPassword"
+                                                ></v-text-field>-->
                                             </v-col>
                                             <v-col cols="12" sm="12" md="6">
-                                                <v-text-field
+                                                <v-text-field label="Confirm Password" type="password" v-model="passwordConfirm" :rules="passwordConfirmRules"></v-text-field>
+                                                <!--<v-text-field
                                                     v-model="password"
                                                     :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
                                                     :rules="[rules.required, rules.min]"
@@ -87,7 +89,7 @@
                                                     hint="At least 8 characters"
                                                     counter
                                                     @click:append="show_password = !show_password"
-                                                ></v-text-field>
+                                                ></v-text-field>-->
                                             </v-col>
                                         </v-row>
                                     </v-container>
@@ -95,7 +97,7 @@
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
                                     <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                                    <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                                    <v-btn color="blue darken-1" :disabled="!valid" text @click="save">Save</v-btn>
                                 </v-card-actions>
                             </v-card>
                         </v-dialog>
@@ -123,9 +125,18 @@
         data() {
             return {
                 dialog: false,
-                show_password: false,
+                valid: false,
+                //showPassword: false,
                 search : '',
-                password: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+                password: '',
+                passwordRules: [
+                    (v) => !!v || 'Password is required',
+                    (v) => v && v.length >= 8 || 'Password must be atleast 8 characters.',
+                ],
+                passwordConfirm: '',
+                passwordConfirmRules: [
+                    (v) => !(v!==this.password) || 'Password do not match.',
+                ],
                 rules: {
                     required: value => !!value || 'Required.',
                     min: v => v.length >= 8 || 'Min 8 characters',

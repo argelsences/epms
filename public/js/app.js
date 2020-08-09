@@ -2058,16 +2058,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
   },
   data: function data() {
+    var _this = this;
+
     return {
       dialog: false,
-      show_password: false,
+      valid: false,
+      //showPassword: false,
       search: '',
-      password: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+      password: '',
+      passwordRules: [function (v) {
+        return !!v || 'Password is required';
+      }, function (v) {
+        return v && v.length >= 8 || 'Password must be atleast 8 characters.';
+      }],
+      passwordConfirm: '',
+      passwordConfirmRules: [function (v) {
+        return !(v !== _this.password) || 'Password do not match.';
+      }],
       rules: {
         required: function required(value) {
           return !!value || 'Required.';
@@ -2126,10 +2140,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     getUsers: function getUsers() {
-      var _this = this;
+      var _this2 = this;
 
       axios.get('/api/users').then(function (response) {
-        _this.rows = response.data;
+        _this2.rows = response.data;
       });
     },
     editItem: function editItem(item) {
@@ -2142,14 +2156,14 @@ __webpack_require__.r(__webpack_exports__);
       confirm('Are you sure you want to delete this item?') && this.rows.splice(index, 1);
     },
     close: function close() {
-      var _this2 = this;
+      var _this3 = this;
 
       // make sure the dialog box is closed
       this.dialog = false; // next action is to make sure that the value of editedItem is on default, and re-initialize the editedIndex value
 
       this.$nextTick(function () {
-        _this2.editedItem = Object.assign({}, _this2.defaultItem);
-        _this2.editedIndex = -1;
+        _this3.editedItem = Object.assign({}, _this3.defaultItem);
+        _this3.editedIndex = -1;
       });
     },
     save: function save() {
@@ -2965,28 +2979,9 @@ var render = function() {
                                               [
                                                 _c("v-text-field", {
                                                   attrs: {
-                                                    "append-icon": _vm.show_password
-                                                      ? "mdi-eye"
-                                                      : "mdi-eye-off",
-                                                    rules: [
-                                                      _vm.rules.required,
-                                                      _vm.rules.min
-                                                    ],
-                                                    type: _vm.show_password
-                                                      ? "text"
-                                                      : "password",
-                                                    name: "input-10-1",
                                                     label: "Password",
-                                                    hint:
-                                                      "At least 8 characters",
-                                                    counter: ""
-                                                  },
-                                                  on: {
-                                                    "click:append": function(
-                                                      $event
-                                                    ) {
-                                                      _vm.show_password = !_vm.show_password
-                                                    }
+                                                    type: "password",
+                                                    rules: _vm.passwordRules
                                                   },
                                                   model: {
                                                     value: _vm.password,
@@ -3012,35 +3007,18 @@ var render = function() {
                                               [
                                                 _c("v-text-field", {
                                                   attrs: {
-                                                    "append-icon": _vm.show_password
-                                                      ? "mdi-eye"
-                                                      : "mdi-eye-off",
-                                                    rules: [
-                                                      _vm.rules.required,
-                                                      _vm.rules.min
-                                                    ],
-                                                    type: _vm.show_password
-                                                      ? "text"
-                                                      : "password",
-                                                    name: "input-10-1",
                                                     label: "Confirm Password",
-                                                    hint:
-                                                      "At least 8 characters",
-                                                    counter: ""
-                                                  },
-                                                  on: {
-                                                    "click:append": function(
-                                                      $event
-                                                    ) {
-                                                      _vm.show_password = !_vm.show_password
-                                                    }
+                                                    type: "password",
+                                                    rules:
+                                                      _vm.passwordConfirmRules
                                                   },
                                                   model: {
-                                                    value: _vm.password,
+                                                    value: _vm.passwordConfirm,
                                                     callback: function($$v) {
-                                                      _vm.password = $$v
+                                                      _vm.passwordConfirm = $$v
                                                     },
-                                                    expression: "password"
+                                                    expression:
+                                                      "passwordConfirm"
                                                   }
                                                 })
                                               ],
@@ -3078,6 +3056,7 @@ var render = function() {
                                       {
                                         attrs: {
                                           color: "blue darken-1",
+                                          disabled: !_vm.valid,
                                           text: ""
                                         },
                                         on: { click: _vm.save }

@@ -2026,6 +2026,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -2033,7 +2065,20 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       dialog: false,
+      show_password: false,
       search: '',
+      password: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+      rules: {
+        required: function required(value) {
+          return !!value || 'Required.';
+        },
+        min: function min(v) {
+          return v.length >= 8 || 'Min 8 characters';
+        },
+        emailMatch: function emailMatch() {
+          return 'The email and password you entered don\'t match';
+        }
+      },
       columns: [{
         text: 'ID',
         value: 'id'
@@ -2056,12 +2101,14 @@ __webpack_require__.r(__webpack_exports__);
       editedItem: {
         name: '',
         designation: '',
-        email: ''
+        email: '',
+        department_id: ''
       },
       defaultItem: {
         name: '',
         designation: '',
-        email: ''
+        email: '',
+        department_id: ''
       }
     };
   },
@@ -2109,6 +2156,11 @@ __webpack_require__.r(__webpack_exports__);
       // check if process is updating or creating
       // if update, then replace the value of the current item with the value in the editedItem
       // if creating, then push the edited item into the object
+      axios.post('/api/users/upsert', {
+        user: this.editedItem,
+        password: this.password
+      });
+
       if (this.editedIndex > -1) {
         // perform the update action here
         // action ...
@@ -2116,7 +2168,7 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         // perform the create action here
         // action ...
-        this.desserts.push(this.editedItem);
+        this.rows.push(this.editedItem);
       } // close the dialog box
 
 
@@ -2805,6 +2857,74 @@ var render = function() {
                                               },
                                               [
                                                 _c("v-text-field", {
+                                                  attrs: { label: "Email" },
+                                                  model: {
+                                                    value: _vm.editedItem.email,
+                                                    callback: function($$v) {
+                                                      _vm.$set(
+                                                        _vm.editedItem,
+                                                        "email",
+                                                        $$v
+                                                      )
+                                                    },
+                                                    expression:
+                                                      "editedItem.email"
+                                                  }
+                                                })
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-row",
+                                          [
+                                            _c(
+                                              "v-col",
+                                              {
+                                                attrs: {
+                                                  cols: "12",
+                                                  sm: "12",
+                                                  md: "6"
+                                                }
+                                              },
+                                              [
+                                                _c("v-text-field", {
+                                                  attrs: {
+                                                    label: "Department"
+                                                  },
+                                                  model: {
+                                                    value:
+                                                      _vm.editedItem
+                                                        .department_id,
+                                                    callback: function($$v) {
+                                                      _vm.$set(
+                                                        _vm.editedItem,
+                                                        "department_id",
+                                                        $$v
+                                                      )
+                                                    },
+                                                    expression:
+                                                      "editedItem.department_id"
+                                                  }
+                                                })
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-col",
+                                              {
+                                                attrs: {
+                                                  cols: "12",
+                                                  sm: "12",
+                                                  md: "6"
+                                                }
+                                              },
+                                              [
+                                                _c("v-text-field", {
                                                   attrs: {
                                                     label: "Designation"
                                                   },
@@ -2844,18 +2964,83 @@ var render = function() {
                                               },
                                               [
                                                 _c("v-text-field", {
-                                                  attrs: { label: "Email" },
+                                                  attrs: {
+                                                    "append-icon": _vm.show_password
+                                                      ? "mdi-eye"
+                                                      : "mdi-eye-off",
+                                                    rules: [
+                                                      _vm.rules.required,
+                                                      _vm.rules.min
+                                                    ],
+                                                    type: _vm.show_password
+                                                      ? "text"
+                                                      : "password",
+                                                    name: "input-10-1",
+                                                    label: "Password",
+                                                    hint:
+                                                      "At least 8 characters",
+                                                    counter: ""
+                                                  },
+                                                  on: {
+                                                    "click:append": function(
+                                                      $event
+                                                    ) {
+                                                      _vm.show_password = !_vm.show_password
+                                                    }
+                                                  },
                                                   model: {
-                                                    value: _vm.editedItem.email,
+                                                    value: _vm.password,
                                                     callback: function($$v) {
-                                                      _vm.$set(
-                                                        _vm.editedItem,
-                                                        "email",
-                                                        $$v
-                                                      )
+                                                      _vm.password = $$v
                                                     },
-                                                    expression:
-                                                      "editedItem.email"
+                                                    expression: "password"
+                                                  }
+                                                })
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-col",
+                                              {
+                                                attrs: {
+                                                  cols: "12",
+                                                  sm: "12",
+                                                  md: "6"
+                                                }
+                                              },
+                                              [
+                                                _c("v-text-field", {
+                                                  attrs: {
+                                                    "append-icon": _vm.show_password
+                                                      ? "mdi-eye"
+                                                      : "mdi-eye-off",
+                                                    rules: [
+                                                      _vm.rules.required,
+                                                      _vm.rules.min
+                                                    ],
+                                                    type: _vm.show_password
+                                                      ? "text"
+                                                      : "password",
+                                                    name: "input-10-1",
+                                                    label: "Confirm Password",
+                                                    hint:
+                                                      "At least 8 characters",
+                                                    counter: ""
+                                                  },
+                                                  on: {
+                                                    "click:append": function(
+                                                      $event
+                                                    ) {
+                                                      _vm.show_password = !_vm.show_password
+                                                    }
+                                                  },
+                                                  model: {
+                                                    value: _vm.password,
+                                                    callback: function($$v) {
+                                                      _vm.password = $$v
+                                                    },
+                                                    expression: "password"
                                                   }
                                                 })
                                               ],

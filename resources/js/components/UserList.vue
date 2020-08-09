@@ -50,12 +50,44 @@
                                                 <v-text-field v-model="editedItem.name" label="Name"></v-text-field>
                                             </v-col>
                                             <v-col cols="12" sm="12" md="6">
+                                                <v-text-field v-model="editedItem.email" label="Email"></v-text-field>
+                                            </v-col>
+                                            
+                                        </v-row>
+                                        <v-row>
+                                            <v-col cols="12" sm="12" md="6">
+                                                <v-text-field v-model="editedItem.department_id" label="Department"></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" sm="12" md="6">
                                                 <v-text-field v-model="editedItem.designation" label="Designation"></v-text-field>
                                             </v-col>
                                         </v-row>
                                         <v-row>
                                             <v-col cols="12" sm="12" md="6">
-                                                <v-text-field v-model="editedItem.email" label="Email"></v-text-field>
+                                                <v-text-field
+                                                    v-model="password"
+                                                    :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
+                                                    :rules="[rules.required, rules.min]"
+                                                    :type="show_password ? 'text' : 'password'"
+                                                    name="input-10-1"
+                                                    label="Password"
+                                                    hint="At least 8 characters"
+                                                    counter
+                                                    @click:append="show_password = !show_password"
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" sm="12" md="6">
+                                                <v-text-field
+                                                    v-model="password"
+                                                    :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
+                                                    :rules="[rules.required, rules.min]"
+                                                    :type="show_password ? 'text' : 'password'"
+                                                    name="input-10-1"
+                                                    label="Confirm Password"
+                                                    hint="At least 8 characters"
+                                                    counter
+                                                    @click:append="show_password = !show_password"
+                                                ></v-text-field>
                                             </v-col>
                                         </v-row>
                                     </v-container>
@@ -91,8 +123,14 @@
         data() {
             return {
                 dialog: false,
+                show_password: false,
                 search : '',
-
+                password: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+                rules: {
+                    required: value => !!value || 'Required.',
+                    min: v => v.length >= 8 || 'Min 8 characters',
+                    emailMatch: () => ('The email and password you entered don\'t match'),
+                },
                 columns: [
                     {text: 'ID', value: 'id'}, 
                     {text: 'Name', value: 'name'},
@@ -106,11 +144,13 @@
                     name: '',
                     designation: '',
                     email: '',
+                    department_id: '',
                 },
                 defaultItem: {
                     name: '',
                     designation: '',
                     email: '',
+                    department_id: '',
                 },
             }
         },
@@ -158,6 +198,11 @@
                 // check if process is updating or creating
                 // if update, then replace the value of the current item with the value in the editedItem
                 // if creating, then push the edited item into the object
+                axios.post('/api/users/upsert', {
+                    user: this.editedItem,
+                    password: this.password,
+                });
+
                 if (this.editedIndex > -1) {
                     // perform the update action here
                     // action ...
@@ -165,7 +210,7 @@
                 } else {
                     // perform the create action here
                     // action ...
-                    this.desserts.push(this.editedItem)
+                    this.rows.push(this.editedItem)
                 }
                 // close the dialog box
                 this.close()

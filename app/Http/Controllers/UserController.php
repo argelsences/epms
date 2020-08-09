@@ -91,4 +91,21 @@ class UserController extends Controller
         
         return response()->json(($model::orderBy('id', 'ASC')->get()));
     }
+
+    public function upsert(Request $request)
+    {
+        /*$this->authorize('manage', 'App\Category');
+        $categories = $request->post('categories');
+        foreach ($categories as $cat) {
+            if ($cat['id']) {
+                Category::where('id', $cat['id'])->update($cat);
+            }
+            else {
+                Category::create($cat);
+            }
+        }
+        return ['success' => true, 'categories' => Category::all()];*/
+        dd($request->all());
+    }
+
 }

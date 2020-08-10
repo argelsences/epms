@@ -45,30 +45,31 @@
                                     <v-card-text>
                                         <v-container>
                                             <v-form v-model="valid" ref="form">
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]"></v-text-field>
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-text-field v-model="editedItem.email" label="Email" :rules="[rules.required, rules.emailValid]"></v-text-field>
-                                                </v-col>
-                                            </v-row>
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-text-field v-model="editedItem.department_id" label="Department" :rules="[rules.required]"></v-text-field>
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-text-field v-model="editedItem.designation" label="Designation" :rules="[rules.required]"></v-text-field>
-                                                </v-col>
-                                            </v-row>
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-text-field label="Password" type="password" v-model="password" :rules="[rules.required, rules.min]"></v-text-field>
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-text-field label="Confirm Password" type="password" v-model="passwordConfirm" :rules="[rules.required,rules.passwordMatch]"></v-text-field>
-                                                </v-col>
-                                            </v-row>
+                                                <v-row>
+                                                    <v-col cols="12" sm="12" md="6">
+                                                        <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]"></v-text-field>
+                                                    </v-col>
+                                                    <v-col cols="12" sm="12" md="6">
+                                                        <v-text-field v-model="editedItem.email" label="Email" :rules="[rules.required, rules.emailValid]"></v-text-field>
+                                                    </v-col>
+                                                </v-row>
+                                                <v-row>
+                                                    <v-col cols="12" sm="12" md="6">
+                                                        <p>{{ departmentName }}</p>
+                                                        <v-text-field v-model="editedItem.department_id" label="Department" :rules="[rules.required]"></v-text-field>
+                                                    </v-col>
+                                                    <v-col cols="12" sm="12" md="6">
+                                                        <v-text-field v-model="editedItem.designation" label="Designation" :rules="[rules.required]"></v-text-field>
+                                                    </v-col>
+                                                </v-row>
+                                                <v-row>
+                                                    <v-col cols="12" sm="12" md="6">
+                                                        <v-text-field label="Password" type="password" v-model="password" :rules="[rules.required, rules.min]"></v-text-field>
+                                                    </v-col>
+                                                    <v-col cols="12" sm="12" md="6">
+                                                        <v-text-field label="Confirm Password" type="password" v-model="passwordConfirm" :rules="[rules.required,rules.passwordMatch]"></v-text-field>
+                                                    </v-col>
+                                                </v-row>
                                             </v-form>
                                         </v-container>
                                     </v-card-text>
@@ -107,26 +108,11 @@
                 valid: false,
                 //showPassword: false,
                 search : '',
-                nameRules: [
-                    (v) => !!v || 'Name is required',
-                ],
-                emailRules: [
-                    (v) => !!v || 'E-mail is required',
-                    (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
-                ],
                 password: '',
-                passwordRules: [
-                    (v) => !!v || 'Password is required',
-                    (v) => v && v.length >= 8 || 'Password must be atleast 8 characters.',
-                ],
                 passwordConfirm: '',
-                passwordConfirmRules: [
-                    (v) => !(v!==this.password) || 'Password do not match.',
-                ],
                 rules: {
                     required: (v) => !!v || 'Required.',
                     min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
-                    //emailMatch: () => ('The email and password you entered don\'t match'),
                     emailValid: (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
                     passwordMatch: (v) => !(v!==this.password) || 'Password do not match.'
                 },
@@ -157,6 +143,14 @@
             formTitle () {
                 return this.editedIndex === -1 ? 'New User' : 'Edit User'
             },
+            departmentName () {
+                //return this.rows[this.editItem].department.name
+                // not returning as there is no value for -1 index upon load
+                console.log( this.rows[1] );
+                //return this.rows[this.editedIndex].name
+                //return this.editedItem.department_id
+                return this.row[1].name
+            }, 
         },
         watch: {
             dialog (val) {
@@ -217,8 +211,9 @@
                 // close the dialog box
                 this.close()
             },
-            getDepartmentName(item){
-                console.log(item)
+            getDepartmentName(){
+                //console.log(item)
+                //return this.rows[this.editItem].department.name
             }
  
         },

@@ -2039,6 +2039,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -2051,24 +2052,8 @@ __webpack_require__.r(__webpack_exports__);
       valid: false,
       //showPassword: false,
       search: '',
-      nameRules: [function (v) {
-        return !!v || 'Name is required';
-      }],
-      emailRules: [function (v) {
-        return !!v || 'E-mail is required';
-      }, function (v) {
-        return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid';
-      }],
       password: '',
-      passwordRules: [function (v) {
-        return !!v || 'Password is required';
-      }, function (v) {
-        return v && v.length >= 8 || 'Password must be atleast 8 characters.';
-      }],
       passwordConfirm: '',
-      passwordConfirmRules: [function (v) {
-        return !(v !== _this.password) || 'Password do not match.';
-      }],
       rules: {
         required: function required(v) {
           return !!v || 'Required.';
@@ -2076,7 +2061,6 @@ __webpack_require__.r(__webpack_exports__);
         min: function min(v) {
           return v && v.length >= 8 || 'Minimum of 8 characters.';
         },
-        //emailMatch: () => ('The email and password you entered don\'t match'),
         emailValid: function emailValid(v) {
           return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid';
         },
@@ -2120,6 +2104,14 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     formTitle: function formTitle() {
       return this.editedIndex === -1 ? 'New User' : 'Edit User';
+    },
+    departmentName: function departmentName() {
+      //return this.rows[this.editItem].department.name
+      // not returning as there is no value for -1 index upon load
+      console.log(this.rows[1]); //return this.rows[this.editedIndex].name
+      //return this.editedItem.department_id
+
+      return this.row[1].name;
     }
   },
   watch: {
@@ -2182,8 +2174,8 @@ __webpack_require__.r(__webpack_exports__);
 
       this.close();
     },
-    getDepartmentName: function getDepartmentName(item) {
-      console.log(item);
+    getDepartmentName: function getDepartmentName() {//console.log(item)
+      //return this.rows[this.editItem].department.name
     }
   },
   created: function created() {
@@ -2950,6 +2942,14 @@ var render = function() {
                                                         }
                                                       },
                                                       [
+                                                        _c("p", [
+                                                          _vm._v(
+                                                            _vm._s(
+                                                              _vm.departmentName
+                                                            )
+                                                          )
+                                                        ]),
+                                                        _vm._v(" "),
                                                         _c("v-text-field", {
                                                           attrs: {
                                                             label: "Department",

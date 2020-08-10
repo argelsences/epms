@@ -89,7 +89,7 @@ class UserController extends Controller
 
     public function list(User $model) {
         
-        return response()->json(($model::orderBy('id', 'ASC')->get()));
+        return response()->json(($model::with('department')->orderBy('id', 'ASC')->get()));
     }
 
     public function upsert(Request $request)

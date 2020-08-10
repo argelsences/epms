@@ -15,91 +15,70 @@
             </tr>
         </tbody>
     </table>      
-</template>-->
+</template>
+1. Work on pushing the list of departments 
+2. For designation, work on pushing the list of designations and allow user to add new input
+3. Add Role
+4. Fix the password when user is editing
+5. Fix the message output after successful create or update
+-->
 <template>
     <v-app>
         <v-card>
-            <!--<v-card-title>
-            <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
-            </v-card-title>-->
             <v-data-table :headers="columns" :items="rows" :search="search">
                 <template v-slot:top>
                     <!-- the toolbar -->
                     <v-toolbar flat color="white">
-                        <!--<v-toolbar-title>
-                            <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
-                        </v-toolbar-title>-->
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details ></v-text-field>
-                        <!--<v-divider class="mx-4" inset horizontal></v-divider>-->
-                        
                         <v-spacer></v-spacer>
                         <!-- the dialog box -->        
                         <v-dialog v-model="dialog" max-width="600px">
                             <template v-slot:activator="{ on, attrs }">
                                 <v-btn class="mb-2 btn btn-sm btn-primary" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> User</v-btn>
                             </template>
-                            <v-card>
-                                <v-card-title>
-                                    <!-- formTitle is a computed property based on action edit or new -->
-                                    <span class="headline">{{ formTitle }}</span>
-                                </v-card-title>
-                                <v-card-text>
-                                    <v-container>
-                                        <v-row>
-                                            <v-col cols="12" sm="12" md="6">
-                                                <v-text-field v-model="editedItem.name" label="Name"></v-text-field>
-                                            </v-col>
-                                            <v-col cols="12" sm="12" md="6">
-                                                <v-text-field v-model="editedItem.email" label="Email"></v-text-field>
-                                            </v-col>
-                                            
-                                        </v-row>
-                                        <v-row>
-                                            <v-col cols="12" sm="12" md="6">
-                                                <v-text-field v-model="editedItem.department_id" label="Department"></v-text-field>
-                                            </v-col>
-                                            <v-col cols="12" sm="12" md="6">
-                                                <v-text-field v-model="editedItem.designation" label="Designation"></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row>
-                                            <v-col cols="12" sm="12" md="6">
-                                                <v-text-field label="Password" type="password" v-model="password" :rules="passwordRules"></v-text-field>
-                                                <!--<v-text-field
-                                                    v-model="password"
-                                                    :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                                                    :rules="[rules.required, rules.min]"
-                                                    :type="showPassword ? 'text' : 'password'"
-                                                    name="input-10-1"
-                                                    label="Password"
-                                                    hint="At least 8 characters"
-                                                    counter
-                                                    @click:append="showPassword = !showPassword"
-                                                ></v-text-field>-->
-                                            </v-col>
-                                            <v-col cols="12" sm="12" md="6">
-                                                <v-text-field label="Confirm Password" type="password" v-model="passwordConfirm" :rules="passwordConfirmRules"></v-text-field>
-                                                <!--<v-text-field
-                                                    v-model="password"
-                                                    :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
-                                                    :rules="[rules.required, rules.min]"
-                                                    :type="show_password ? 'text' : 'password'"
-                                                    name="input-10-1"
-                                                    label="Confirm Password"
-                                                    hint="At least 8 characters"
-                                                    counter
-                                                    @click:append="show_password = !show_password"
-                                                ></v-text-field>-->
-                                            </v-col>
-                                        </v-row>
-                                    </v-container>
-                                </v-card-text>
-                                <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                                    <v-btn color="blue darken-1" :disabled="!valid" text @click="save">Save</v-btn>
-                                </v-card-actions>
-                            </v-card>
+                            <v-form v-model="valid" ref="addUserForm" lazy-validation>
+                                <v-card>
+                                    <v-card-title>
+                                        <!-- formTitle is a computed property based on action edit or new -->
+                                        <span class="headline">{{ formTitle }}</span>
+                                    </v-card-title>
+                                    <v-card-text>
+                                        <v-container>
+                                            <v-form v-model="valid" ref="form">
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]"></v-text-field>
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-text-field v-model="editedItem.email" label="Email" :rules="[rules.required, rules.emailValid]"></v-text-field>
+                                                </v-col>
+                                            </v-row>
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-text-field v-model="editedItem.department_id" label="Department" :rules="[rules.required]"></v-text-field>
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-text-field v-model="editedItem.designation" label="Designation" :rules="[rules.required]"></v-text-field>
+                                                </v-col>
+                                            </v-row>
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-text-field label="Password" type="password" v-model="password" :rules="[rules.required, rules.min]"></v-text-field>
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-text-field label="Confirm Password" type="password" v-model="passwordConfirm" :rules="[rules.required,rules.passwordMatch]"></v-text-field>
+                                                </v-col>
+                                            </v-row>
+                                            </v-form>
+                                        </v-container>
+                                    </v-card-text>
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                                        <v-btn color="blue darken-1" :disabled="!valid" text @click="save">Save</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-form> 
                         </v-dialog>
                         <!-- the dialog box -->
                     </v-toolbar>
@@ -109,9 +88,9 @@
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                     <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
                 </template>
-                <!--<template v-slot:no-data>
+                <template v-slot:no-data>
                     <v-btn color="primary" @click="initialize">Reset</v-btn>
-                </template>-->
+                </template>
             </v-data-table>
         </v-card>
     </v-app>
@@ -128,6 +107,13 @@
                 valid: false,
                 //showPassword: false,
                 search : '',
+                nameRules: [
+                    (v) => !!v || 'Name is required',
+                ],
+                emailRules: [
+                    (v) => !!v || 'E-mail is required',
+                    (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+                ],
                 password: '',
                 passwordRules: [
                     (v) => !!v || 'Password is required',
@@ -138,9 +124,11 @@
                     (v) => !(v!==this.password) || 'Password do not match.',
                 ],
                 rules: {
-                    required: value => !!value || 'Required.',
-                    min: v => v.length >= 8 || 'Min 8 characters',
-                    emailMatch: () => ('The email and password you entered don\'t match'),
+                    required: (v) => !!v || 'Required.',
+                    min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
+                    //emailMatch: () => ('The email and password you entered don\'t match'),
+                    emailValid: (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
+                    passwordMatch: (v) => !(v!==this.password) || 'Password do not match.'
                 },
                 columns: [
                     {text: 'ID', value: 'id'}, 
@@ -172,13 +160,14 @@
         },
         watch: {
             dialog (val) {
+                this.editedIndex > -1 || this.$refs.form.reset();
                 // if val is true, then statement is true, if not the default value is this.close
                 // eg. the_title = title || "Error"; if title is true, the the value of the_title is the value of title, else the value of the_title is "Error"
                 val || this.close()
             },
         },
         methods: {
-            getUsers: function() {
+            initialize: function() {
                 axios.get('/api/users')
                 .then( response => {
                     this.rows = response.data;
@@ -223,13 +212,18 @@
                     // action ...
                     this.rows.push(this.editedItem)
                 }
+                // reset the form
+                this.$refs.form.reset();
                 // close the dialog box
                 this.close()
             },
+            getDepartmentName(item){
+                console.log(item)
+            }
  
         },
         created: function() {
-            this.getUsers();
+            this.initialize();
         }
     }
 </script>

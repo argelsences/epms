@@ -43,4 +43,9 @@ class User extends Authenticatable
     public function department(){
         return $this->belongsTo('App\Department');
     }
+
+    /*
+    public function the_department() {
+        return $this->hasOne(Department::class, 'department_id');
+    }*/
 }

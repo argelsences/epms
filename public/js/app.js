@@ -2041,6 +2041,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -2083,13 +2085,14 @@ __webpack_require__.r(__webpack_exports__);
         value: 'email'
       }, {
         text: 'Department',
-        value: 'department.name'
+        value: 'department_id'
       }, {
         text: 'Actions',
         value: 'actions',
         sortable: false
       }],
       rows: [],
+      departments: [],
       editedIndex: -1,
       editedItem: {
         name: '',
@@ -2131,6 +2134,14 @@ __webpack_require__.r(__webpack_exports__);
         _this2.rows = response.data;
       });
     },
+    getDepartments: function getDepartments() {
+      var _this3 = this;
+
+      axios.get('/api/departments').then(function (response) {
+        _this3.departments = response.data;
+      });
+      console.log(this.departments);
+    },
     editItem: function editItem(item) {
       this.editedIndex = this.rows.indexOf(item);
       this.editedItem = Object.assign({}, item);
@@ -2141,15 +2152,15 @@ __webpack_require__.r(__webpack_exports__);
       confirm('Are you sure you want to delete this item?') && this.rows.splice(index, 1);
     },
     close: function close() {
-      var _this3 = this;
+      var _this4 = this;
 
       /////this.$refs.form.reset();
       // make sure the dialog box is closed
       this.dialog = false; // next action is to make sure that the value of editedItem is on default, and re-initialize the editedIndex value
 
       this.$nextTick(function () {
-        _this3.editedItem = Object.assign({}, _this3.defaultItem);
-        _this3.editedIndex = -1;
+        _this4.editedItem = Object.assign({}, _this4.defaultItem);
+        _this4.editedIndex = -1;
       });
     },
     save: function save() {
@@ -2180,6 +2191,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.initialize();
+    this.getDepartments();
   }
 });
 
@@ -2929,12 +2941,12 @@ var render = function() {
                                                     }
                                                   },
                                                   [
-                                                    _c("v-text-field", {
+                                                    _c("v-select", {
                                                       attrs: {
+                                                        items: _vm.departments,
                                                         label: "Department",
-                                                        rules: [
-                                                          _vm.rules.required
-                                                        ]
+                                                        "item-text": "name",
+                                                        "item-value": "id"
                                                       },
                                                       model: {
                                                         value:

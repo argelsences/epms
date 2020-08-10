@@ -82,4 +82,10 @@ class DepartmentController extends Controller
     {
         //
     }
+    /**
+     * API function
+     */
+    public function list(Department $model){
+        return response()->json(($model::orderBy('name', 'ASC')->get()));
+    }
 }

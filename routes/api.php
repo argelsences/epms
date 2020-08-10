@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth:api'], function(){
     Route::get('/users', 'UserController@list');
+    Route::get('/departments', 'DepartmentController@list');
     Route::post('/users/upsert', 'UserController@upsert');
     //Route::delete('/categories/{category}', 'CategoryController@destroy');
     /////Route::middleware('can:delete,category')->delete('/categories/{category}', 'CategoryController@destroy');

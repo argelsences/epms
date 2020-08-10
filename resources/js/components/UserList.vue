@@ -17,16 +17,17 @@
     </table>      
 </template>
 ** search what is map function {{desserts.map(function(x) {return x.id; }).indexOf(item.id)}}
-1. Work on pushing the list of departments 
-2. For designation, work on pushing the list of designations and allow user to add new input
-3. Add Role
-4. Fix the password when user is editing
-5. Fix the message output after successful create or update
+1. API for department list, and selected department
+2. Work on pushing the list of departments
+3. For designation, work on pushing the list of designations and allow user to add new input
+4. Add Role
+5. Fix the password when user is editing
+6. Fix the message output after successful create or update
 -->
 <template>
     <v-app>
         <v-card>
-            <v-data-table :headers="columns" :items="rows" :search="search">
+            <v-data-table :headers="columns" :items="rows" :search="search" >
                 <template v-slot:top>
                     <!-- the toolbar -->
                     <v-toolbar flat color="white">
@@ -55,7 +56,8 @@
                                                 </v-row>
                                                 <v-row>
                                                     <v-col cols="12" sm="12" md="6">
-                                                        <v-text-field v-model="editedItem.department_id" label="Department" :rules="[rules.required]"></v-text-field>
+                                                        <!--<v-text-field v-model="editedItem.department_id" label="Department" :rules="[rules.required]"></v-text-field>-->
+                                                         <v-select :items="departments" label="Department" item-text="name" item-value="id" v-model="editedItem.department_id"></v-select>
                                                     </v-col>
                                                     <v-col cols="12" sm="12" md="6">
                                                         <v-text-field v-model="editedItem.designation" label="Designation" :rules="[rules.required]"></v-text-field>
@@ -122,10 +124,11 @@
                     {text: 'Name', value: 'name'},
                     {text: 'Designation', value: 'designation'},
                     {text: 'Email', value: 'email'},
-                    {text: 'Department', value: 'department.name'},
+                    {text: 'Department', value: 'department_id'},
                     {text: 'Actions', value: 'actions', sortable: false },
                 ],
                 rows: [],
+                departments: [],
                 editedIndex: -1,
                 editedItem: {
                     name: '',
@@ -164,6 +167,13 @@
                 .then( response => {
                     this.rows = response.data;
                 });
+            },
+            getDepartments: function() {
+                axios.get('/api/departments')
+                .then( response => {
+                    this.departments = response.data;
+                });
+                console.log(this.departments);
             },
             editItem (item) {
                 this.editedIndex = this.rows.indexOf(item)
@@ -214,6 +224,7 @@
         },
         created: function() {
             this.initialize();
+            this.getDepartments();
         }
     }
 </script>

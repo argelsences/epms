@@ -135,12 +135,18 @@
                     designation: '',
                     email: '',
                     department_id: '',
+                    department: {
+                        name: '',
+                    }
                 },
                 defaultItem: {
                     name: '',
                     designation: '',
                     email: '',
                     department_id: '',
+                    department: {
+                        name: '',
+                    }
                 },
                 index: 0,
             }
@@ -213,6 +219,14 @@
                 } else {
                     // perform the create action here
                     // action ...
+                    //////console.log(this.departments)
+                    var filterDepartment = this.departments.filter(function(e) {
+                        return e.id == this.editedItem.department_id;
+                    });
+
+                    //var filterDepartment = this.departments.filter( department => department.id == 2 );
+                    console.log(filterDepartment);
+                    this.editedItem.department.name = "sssss"
                     console.log(this.editedItem)
                     this.rows.push(this.editedItem)
                 }

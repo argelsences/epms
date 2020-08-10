@@ -124,7 +124,7 @@
                     {text: 'Name', value: 'name'},
                     {text: 'Designation', value: 'designation'},
                     {text: 'Email', value: 'email'},
-                    {text: 'Department', value: 'department_id'},
+                    {text: 'Department', value: 'department.name'},
                     {text: 'Actions', value: 'actions', sortable: false },
                 ],
                 rows: [],
@@ -219,15 +219,14 @@
                 } else {
                     // perform the create action here
                     // action ...
-                    //////console.log(this.departments)
-                    var filterDepartment = this.departments.filter(function(e) {
-                        return e.id == this.editedItem.department_id;
-                    });
-
-                    //var filterDepartment = this.departments.filter( department => department.id == 2 );
-                    console.log(filterDepartment);
-                    this.editedItem.department.name = "sssss"
-                    console.log(this.editedItem)
+                    // assign the edited item to a local var first to be able to be used for filter
+                    var editItem = this.editedItem
+                    /*var filterDepartment = this.departments.filter(function(department) {
+                        return department.id ==  editItem.department_id
+                    });*/
+                    // use ES6
+                    var filterDepartment = this.departments.filter( department => department.id == editItem.department_id );
+                    this.editedItem.department.name = filterDepartment[0].name;
                     this.rows.push(this.editedItem)
                 }
                 // reset the form

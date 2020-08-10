@@ -16,6 +16,7 @@
         </tbody>
     </table>      
 </template>
+** search what is map function {{desserts.map(function(x) {return x.id; }).indexOf(item.id)}}
 1. Work on pushing the list of departments 
 2. For designation, work on pushing the list of designations and allow user to add new input
 3. Add Role
@@ -36,7 +37,7 @@
                             <template v-slot:activator="{ on, attrs }">
                                 <v-btn class="mb-2 btn btn-sm btn-primary" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> User</v-btn>
                             </template>
-                            <v-form v-model="valid" ref="addUserForm" lazy-validation>
+                            <v-form v-model="valid" ref="form" @submit.prevent="">
                                 <v-card>
                                     <v-card-title>
                                         <!-- formTitle is a computed property based on action edit or new -->
@@ -44,7 +45,6 @@
                                     </v-card-title>
                                     <v-card-text>
                                         <v-container>
-                                            <v-form v-model="valid" ref="form">
                                                 <v-row>
                                                     <v-col cols="12" sm="12" md="6">
                                                         <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]"></v-text-field>
@@ -55,7 +55,6 @@
                                                 </v-row>
                                                 <v-row>
                                                     <v-col cols="12" sm="12" md="6">
-                                                        <p>{{ departmentName }}</p>
                                                         <v-text-field v-model="editedItem.department_id" label="Department" :rules="[rules.required]"></v-text-field>
                                                     </v-col>
                                                     <v-col cols="12" sm="12" md="6">
@@ -70,7 +69,6 @@
                                                         <v-text-field label="Confirm Password" type="password" v-model="passwordConfirm" :rules="[rules.required,rules.passwordMatch]"></v-text-field>
                                                     </v-col>
                                                 </v-row>
-                                            </v-form>
                                         </v-container>
                                     </v-card-text>
                                     <v-card-actions>
@@ -79,11 +77,14 @@
                                         <v-btn color="blue darken-1" :disabled="!valid" text @click="save">Save</v-btn>
                                     </v-card-actions>
                                 </v-card>
-                            </v-form> 
+                            </v-form>
                         </v-dialog>
                         <!-- the dialog box -->
                     </v-toolbar>
                 <!-- the toolbar -->
+                </template>
+                <template v-slot:item.id="{ item }">
+                    {{rows.map(function(x) {return x.id; }).indexOf(item.id)+1}}
                 </template>
                 <template v-slot:item.actions="{ item }">
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
@@ -121,6 +122,7 @@
                     {text: 'Name', value: 'name'},
                     {text: 'Designation', value: 'designation'},
                     {text: 'Email', value: 'email'},
+                    {text: 'Department', value: 'department.name'},
                     {text: 'Actions', value: 'actions', sortable: false },
                 ],
                 rows: [],
@@ -137,24 +139,20 @@
                     email: '',
                     department_id: '',
                 },
+                index: 0,
             }
         },
         computed: {
             formTitle () {
                 return this.editedIndex === -1 ? 'New User' : 'Edit User'
             },
-            departmentName () {
-                //return this.rows[this.editItem].department.name
-                // not returning as there is no value for -1 index upon load
-                console.log( this.rows[1] );
-                //return this.rows[this.editedIndex].name
-                //return this.editedItem.department_id
-                return this.row[1].name
-            }, 
+            /*departmentName () {
+                return this.editedIndex === -1 ? '' : this.rows[this.editedIndex].department.name
+            },*/ 
         },
         watch: {
             dialog (val) {
-                this.editedIndex > -1 || this.$refs.form.reset();
+                //this.editedIndex > -1 || this.$refs.form.reset();
                 // if val is true, then statement is true, if not the default value is this.close
                 // eg. the_title = title || "Error"; if title is true, the the value of the_title is the value of title, else the value of the_title is "Error"
                 val || this.close()
@@ -179,6 +177,7 @@
             },
 
             close () {
+                /////this.$refs.form.reset();
                 // make sure the dialog box is closed
                 this.dialog = false
                 // next action is to make sure that the value of editedItem is on default, and re-initialize the editedIndex value
@@ -204,18 +203,14 @@
                 } else {
                     // perform the create action here
                     // action ...
+                    console.log(this.editedItem)
                     this.rows.push(this.editedItem)
                 }
                 // reset the form
-                this.$refs.form.reset();
+                /////this.$refs.form.reset();
                 // close the dialog box
                 this.close()
             },
-            getDepartmentName(){
-                //console.log(item)
-                //return this.rows[this.editItem].department.name
-            }
- 
         },
         created: function() {
             this.initialize();

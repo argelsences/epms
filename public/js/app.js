@@ -2043,6 +2043,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -2071,10 +2075,8 @@ __webpack_require__.r(__webpack_exports__);
           return !(v !== _this.password) || 'Password do not match.';
         }
       },
-      columns: [{
-        text: 'ID',
-        value: 'id'
-      }, {
+      headers: [//{text: 'ID', value: 'id'}, 
+      {
         text: 'Name',
         value: 'name'
       }, {
@@ -2176,7 +2178,18 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/api/users/upsert', {
         user: this.editedItem,
         password: this.password
+      }); // assign the edited item to a local var first to be able to be used for filter
+
+      var editItem = this.editedItem;
+      /*var filterDepartment = this.departments.filter(function(department) {
+              return department.id ==  editItem.department_id
+      });*/
+      // use ES6, filter can only access local variables
+
+      var filterDepartment = this.departments.filter(function (department) {
+        return department.id == editItem.department_id;
       });
+      this.editedItem.department.name = filterDepartment[0].name;
 
       if (this.editedIndex > -1) {
         // perform the update action here
@@ -2185,18 +2198,8 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         // perform the create action here
         // action ...
-        // assign the edited item to a local var first to be able to be used for filter
-        var editItem = this.editedItem;
-        /*var filterDepartment = this.departments.filter(function(department) {
-            return department.id ==  editItem.department_id
-        });*/
-        // use ES6
-
-        var filterDepartment = this.departments.filter(function (department) {
-          return department.id == editItem.department_id;
-        });
-        this.editedItem.department.name = filterDepartment[0].name;
         this.rows.push(this.editedItem);
+        console.log(this.rows.length);
       } // reset the form
       /////this.$refs.form.reset();
       // close the dialog box
@@ -2751,7 +2754,7 @@ var render = function() {
         [
           _c("v-data-table", {
             attrs: {
-              headers: _vm.columns,
+              headers: _vm.headers,
               items: _vm.rows,
               search: _vm.search
             },
@@ -2834,6 +2837,7 @@ var render = function() {
                               "v-form",
                               {
                                 ref: "form",
+                                attrs: { "lazy-validation": "" },
                                 on: {
                                   submit: function($event) {
                                     $event.preventDefault()
@@ -2957,12 +2961,15 @@ var render = function() {
                                                     }
                                                   },
                                                   [
-                                                    _c("v-select", {
+                                                    _c("v-autocomplete", {
                                                       attrs: {
                                                         items: _vm.departments,
-                                                        label: "Department",
                                                         "item-text": "name",
-                                                        "item-value": "id"
+                                                        "item-value": "id",
+                                                        label: "Department",
+                                                        rules: [
+                                                          _vm.rules.required
+                                                        ]
                                                       },
                                                       model: {
                                                         value:
@@ -2995,8 +3002,11 @@ var render = function() {
                                                     }
                                                   },
                                                   [
-                                                    _c("v-text-field", {
+                                                    _c("v-combobox", {
                                                       attrs: {
+                                                        items: _vm.rows,
+                                                        "item-text":
+                                                          "designation",
                                                         label: "Designation",
                                                         rules: [
                                                           _vm.rules.required
@@ -3157,25 +3167,6 @@ var render = function() {
                 proxy: true
               },
               {
-                key: "item.id",
-                fn: function(ref) {
-                  var item = ref.item
-                  return [
-                    _vm._v(
-                      "\n                " +
-                        _vm._s(
-                          _vm.rows
-                            .map(function(x) {
-                              return x.id
-                            })
-                            .indexOf(item.id) + 1
-                        ) +
-                        "\n            "
-                    )
-                  ]
-                }
-              },
-              {
                 key: "item.actions",
                 fn: function(ref) {
                   var item = ref.item
@@ -3216,7 +3207,7 @@ var render = function() {
                     _c(
                       "v-btn",
                       {
-                        attrs: { color: "primary" },
+                        staticClass: "btn btn-sm btn-primary",
                         on: { click: _vm.initialize }
                       },
                       [_vm._v("Reset")]

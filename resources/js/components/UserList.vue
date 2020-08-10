@@ -17,17 +17,19 @@
     </table>      
 </template>
 ** search what is map function {{desserts.map(function(x) {return x.id; }).indexOf(item.id)}}
-1. API for department list, and selected department
-2. Work on pushing the list of departments
-3. For designation, work on pushing the list of designations and allow user to add new input
-4. Add Role
-5. Fix the password when user is editing
-6. Fix the message output after successful create or update
+1. API for department list, and selected department DONE
+2. Work on pushing the list of departments DONE
+3. Fix issue with department when editing entry DONE
+4. Disable editing email on update
+5. For designation, work on pushing the list of unique designations and allow user to add new input (use autocomplete)
+6. Add Role
+7. Fix the password when user is editing
+8. Fix the message output after successful create or update
 -->
 <template>
     <v-app>
         <v-card>
-            <v-data-table :headers="columns" :items="rows" :search="search" >
+            <v-data-table :headers="headers" :items="rows" :search="search" >
                 <template v-slot:top>
                     <!-- the toolbar -->
                     <v-toolbar flat color="white">
@@ -38,7 +40,7 @@
                             <template v-slot:activator="{ on, attrs }">
                                 <v-btn class="mb-2 btn btn-sm btn-primary" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> User</v-btn>
                             </template>
-                            <v-form v-model="valid" ref="form" @submit.prevent="">
+                            <v-form v-model="valid" ref="form" @submit.prevent="" lazy-validation>
                                 <v-card>
                                     <v-card-title>
                                         <!-- formTitle is a computed property based on action edit or new -->
@@ -57,10 +59,12 @@
                                                 <v-row>
                                                     <v-col cols="12" sm="12" md="6">
                                                         <!--<v-text-field v-model="editedItem.department_id" label="Department" :rules="[rules.required]"></v-text-field>-->
-                                                         <v-select :items="departments" label="Department" item-text="name" item-value="id" v-model="editedItem.department_id"></v-select>
+                                                        <!--<v-select :items="departments" label="Department" item-text="name" item-value="id" v-model="editedItem.department_id" :rules="[rules.required]"></v-select>-->
+                                                        <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]"></v-autocomplete>
                                                     </v-col>
                                                     <v-col cols="12" sm="12" md="6">
-                                                        <v-text-field v-model="editedItem.designation" label="Designation" :rules="[rules.required]"></v-text-field>
+                                                        <!--<v-text-field v-model="editedItem.designation" label="Designation" :rules="[rules.required]"></v-text-field>-->
+                                                        <v-combobox v-model="editedItem.designation" :items="rows" item-text="designation"  label="Designation" :rules="[rules.required]"></v-combobox>
                                                     </v-col>
                                                 </v-row>
                                                 <v-row>
@@ -85,15 +89,15 @@
                     </v-toolbar>
                 <!-- the toolbar -->
                 </template>
-                <template v-slot:item.id="{ item }">
+                <!--<template v-slot:item.id="{ item }">
                     {{rows.map(function(x) {return x.id; }).indexOf(item.id)+1}}
-                </template>
+                </template>-->
                 <template v-slot:item.actions="{ item }">
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                     <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
                 </template>
                 <template v-slot:no-data>
-                    <v-btn color="primary" @click="initialize">Reset</v-btn>
+                    <v-btn class="btn btn-sm btn-primary" @click="initialize">Reset</v-btn>
                 </template>
             </v-data-table>
         </v-card>
@@ -119,8 +123,8 @@
                     emailValid: (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
                     passwordMatch: (v) => !(v!==this.password) || 'Password do not match.'
                 },
-                columns: [
-                    {text: 'ID', value: 'id'}, 
+                headers: [
+                    //{text: 'ID', value: 'id'}, 
                     {text: 'Name', value: 'name'},
                     {text: 'Designation', value: 'designation'},
                     {text: 'Email', value: 'email'},
@@ -212,6 +216,15 @@
                     password: this.password,
                 });
 
+                // assign the edited item to a local var first to be able to be used for filter
+                var editItem = this.editedItem
+                /*var filterDepartment = this.departments.filter(function(department) {
+                        return department.id ==  editItem.department_id
+                });*/
+                // use ES6, filter can only access local variables
+                var filterDepartment = this.departments.filter( department => department.id == editItem.department_id );
+                this.editedItem.department.name = filterDepartment[0].name;
+
                 if (this.editedIndex > -1) {
                     // perform the update action here
                     // action ...
@@ -219,15 +232,8 @@
                 } else {
                     // perform the create action here
                     // action ...
-                    // assign the edited item to a local var first to be able to be used for filter
-                    var editItem = this.editedItem
-                    /*var filterDepartment = this.departments.filter(function(department) {
-                        return department.id ==  editItem.department_id
-                    });*/
-                    // use ES6
-                    var filterDepartment = this.departments.filter( department => department.id == editItem.department_id );
-                    this.editedItem.department.name = filterDepartment[0].name;
                     this.rows.push(this.editedItem)
+                    console.log(this.rows.length)
                 }
                 // reset the form
                 /////this.$refs.form.reset();

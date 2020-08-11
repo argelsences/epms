@@ -122,12 +122,12 @@
                 showPassword: false,
                 search : '',
                 password: '',
-                passwordConfirm: '',
+                //passwordConfirm: '',
                 rules: {
                     required: (v) => !!v || 'Required.',
                     min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
                     emailValid: (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
-                    passwordMatch: (v) => !(v!==this.password) || 'Password do not match.'
+                    //passwordMatch: (v) => !(v!==this.password) || 'Password do not match.'
                 },
                 headers: [
                     //{text: 'ID', value: 'id'}, 

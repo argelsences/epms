@@ -20,16 +20,20 @@
 1. API for department list, and selected department DONE
 2. Work on pushing the list of departments DONE
 3. Fix issue with department when editing entry DONE
-4. Disable editing email on update
-5. For designation, work on pushing the list of unique designations and allow user to add new input (use autocomplete)
+4. Disable editing email on update DONE
+5. For designation, work on pushing the list of unique designations and allow user to add new input (use combobox) DONE
 6. Add Role
-7. Fix the password when user is editing
-8. Fix the message output after successful create or update
+7. Fix the password when user is editing DONE, confirm password is not shown
+8. Changed password field with input to show the password DONE
+9. BUG: when edit then add new, the password is prefilled and you can save without setting the password. Designation is affected. DONE
+10. Fix the message output after successful create or update
+11. Push changes to API backend
+12. Force form reset
 -->
 <template>
     <v-app>
         <v-card>
-            <v-data-table :headers="headers" :items="rows" :search="search" >
+            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20">
                 <template v-slot:top>
                     <!-- the toolbar -->
                     <v-toolbar flat color="white">
@@ -53,26 +57,28 @@
                                                         <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]"></v-text-field>
                                                     </v-col>
                                                     <v-col cols="12" sm="12" md="6">
-                                                        <v-text-field v-model="editedItem.email" label="Email" :rules="[rules.required, rules.emailValid]"></v-text-field>
+                                                        <v-text-field v-if="editedIndex > -1" v-model="editedItem.email" label="Email" :rules="[rules.required, rules.emailValid]" readonly disabled></v-text-field>
+                                                        <v-text-field v-else v-model="editedItem.email" label="Email" :rules="[rules.required, rules.emailValid]"></v-text-field>
                                                     </v-col>
                                                 </v-row>
                                                 <v-row>
                                                     <v-col cols="12" sm="12" md="6">
                                                         <!--<v-text-field v-model="editedItem.department_id" label="Department" :rules="[rules.required]"></v-text-field>-->
                                                         <!--<v-select :items="departments" label="Department" item-text="name" item-value="id" v-model="editedItem.department_id" :rules="[rules.required]"></v-select>-->
-                                                        <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]"></v-autocomplete>
+                                                        <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select"></v-autocomplete>
                                                     </v-col>
                                                     <v-col cols="12" sm="12" md="6">
                                                         <!--<v-text-field v-model="editedItem.designation" label="Designation" :rules="[rules.required]"></v-text-field>-->
-                                                        <v-combobox v-model="editedItem.designation" :items="rows" item-text="designation"  label="Designation" :rules="[rules.required]"></v-combobox>
+                                                        <v-combobox v-model="editedItem.designation" :items="rows" item-text="designation" item-value="designation"  label="Designation" :rules="[rules.required]" :return-object="false" hint="Type to select or add new item"></v-combobox>
                                                     </v-col>
                                                 </v-row>
                                                 <v-row>
                                                     <v-col cols="12" sm="12" md="6">
-                                                        <v-text-field label="Password" type="password" v-model="password" :rules="[rules.required, rules.min]"></v-text-field>
+                                                        <!--<v-text-field label="Password" type="password" v-model="password" :rules="[rules.required, rules.min]"></v-text-field>-->
+                                                        <v-text-field v-model="password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="showPassword ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters" counter @click:append="showPassword = !showPassword"></v-text-field>
                                                     </v-col>
                                                     <v-col cols="12" sm="12" md="6">
-                                                        <v-text-field label="Confirm Password" type="password" v-model="passwordConfirm" :rules="[rules.required,rules.passwordMatch]"></v-text-field>
+                                                        <!--<v-text-field v-if="editedIndex == -1" label="Confirm Password" type="password" v-model="passwordConfirm" :rules="[rules.required,rules.passwordMatch]"></v-text-field>-->
                                                     </v-col>
                                                 </v-row>
                                         </v-container>
@@ -113,7 +119,7 @@
             return {
                 dialog: false,
                 valid: false,
-                //showPassword: false,
+                showPassword: false,
                 search : '',
                 password: '',
                 passwordConfirm: '',
@@ -165,7 +171,6 @@
         },
         watch: {
             dialog (val) {
-                //this.editedIndex > -1 || this.$refs.form.reset();
                 // if val is true, then statement is true, if not the default value is this.close
                 // eg. the_title = title || "Error"; if title is true, the the value of the_title is the value of title, else the value of the_title is "Error"
                 val || this.close()
@@ -208,6 +213,7 @@
             },
 
             save () {
+                this.$refs.form.validate()
                 // check if process is updating or creating
                 // if update, then replace the value of the current item with the value in the editedItem
                 // if creating, then push the edited item into the object

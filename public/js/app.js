@@ -2047,6 +2047,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -2057,7 +2063,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       dialog: false,
       valid: false,
-      //showPassword: false,
+      showPassword: false,
       search: '',
       password: '',
       passwordConfirm: '',
@@ -2128,7 +2134,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     dialog: function dialog(val) {
-      //this.editedIndex > -1 || this.$refs.form.reset();
       // if val is true, then statement is true, if not the default value is this.close
       // eg. the_title = title || "Error"; if title is true, the the value of the_title is the value of title, else the value of the_title is "Error"
       val || this.close();
@@ -2172,9 +2177,10 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     save: function save() {
-      // check if process is updating or creating
+      this.$refs.form.validate(); // check if process is updating or creating
       // if update, then replace the value of the current item with the value in the editedItem
       // if creating, then push the edited item into the object
+
       axios.post('/api/users/upsert', {
         user: this.editedItem,
         password: this.password
@@ -2756,7 +2762,8 @@ var render = function() {
             attrs: {
               headers: _vm.headers,
               items: _vm.rows,
-              search: _vm.search
+              search: _vm.search,
+              "items-per-page": 20
             },
             scopedSlots: _vm._u([
               {
@@ -2917,30 +2924,63 @@ var render = function() {
                                                     }
                                                   },
                                                   [
-                                                    _c("v-text-field", {
-                                                      attrs: {
-                                                        label: "Email",
-                                                        rules: [
-                                                          _vm.rules.required,
-                                                          _vm.rules.emailValid
-                                                        ]
-                                                      },
-                                                      model: {
-                                                        value:
-                                                          _vm.editedItem.email,
-                                                        callback: function(
-                                                          $$v
-                                                        ) {
-                                                          _vm.$set(
-                                                            _vm.editedItem,
-                                                            "email",
-                                                            $$v
-                                                          )
-                                                        },
-                                                        expression:
-                                                          "editedItem.email"
-                                                      }
-                                                    })
+                                                    _vm.editedIndex > -1
+                                                      ? _c("v-text-field", {
+                                                          attrs: {
+                                                            label: "Email",
+                                                            rules: [
+                                                              _vm.rules
+                                                                .required,
+                                                              _vm.rules
+                                                                .emailValid
+                                                            ],
+                                                            readonly: "",
+                                                            disabled: ""
+                                                          },
+                                                          model: {
+                                                            value:
+                                                              _vm.editedItem
+                                                                .email,
+                                                            callback: function(
+                                                              $$v
+                                                            ) {
+                                                              _vm.$set(
+                                                                _vm.editedItem,
+                                                                "email",
+                                                                $$v
+                                                              )
+                                                            },
+                                                            expression:
+                                                              "editedItem.email"
+                                                          }
+                                                        })
+                                                      : _c("v-text-field", {
+                                                          attrs: {
+                                                            label: "Email",
+                                                            rules: [
+                                                              _vm.rules
+                                                                .required,
+                                                              _vm.rules
+                                                                .emailValid
+                                                            ]
+                                                          },
+                                                          model: {
+                                                            value:
+                                                              _vm.editedItem
+                                                                .email,
+                                                            callback: function(
+                                                              $$v
+                                                            ) {
+                                                              _vm.$set(
+                                                                _vm.editedItem,
+                                                                "email",
+                                                                $$v
+                                                              )
+                                                            },
+                                                            expression:
+                                                              "editedItem.email"
+                                                          }
+                                                        })
                                                   ],
                                                   1
                                                 )
@@ -2969,7 +3009,8 @@ var render = function() {
                                                         label: "Department",
                                                         rules: [
                                                           _vm.rules.required
-                                                        ]
+                                                        ],
+                                                        hint: "Type to select"
                                                       },
                                                       model: {
                                                         value:
@@ -3007,10 +3048,15 @@ var render = function() {
                                                         items: _vm.rows,
                                                         "item-text":
                                                           "designation",
+                                                        "item-value":
+                                                          "designation",
                                                         label: "Designation",
                                                         rules: [
                                                           _vm.rules.required
-                                                        ]
+                                                        ],
+                                                        "return-object": false,
+                                                        hint:
+                                                          "Type to select or add new item"
                                                       },
                                                       model: {
                                                         value:
@@ -3051,12 +3097,28 @@ var render = function() {
                                                   [
                                                     _c("v-text-field", {
                                                       attrs: {
-                                                        label: "Password",
-                                                        type: "password",
+                                                        "append-icon": _vm.showPassword
+                                                          ? "mdi-eye"
+                                                          : "mdi-eye-off",
                                                         rules: [
                                                           _vm.rules.required,
                                                           _vm.rules.min
-                                                        ]
+                                                        ],
+                                                        type: _vm.showPassword
+                                                          ? "text"
+                                                          : "password",
+                                                        name: "input-10-1",
+                                                        label: "Password",
+                                                        hint:
+                                                          "At least 8 characters",
+                                                        counter: ""
+                                                      },
+                                                      on: {
+                                                        "click:append": function(
+                                                          $event
+                                                        ) {
+                                                          _vm.showPassword = !_vm.showPassword
+                                                        }
                                                       },
                                                       model: {
                                                         value: _vm.password,
@@ -3072,42 +3134,13 @@ var render = function() {
                                                   1
                                                 ),
                                                 _vm._v(" "),
-                                                _c(
-                                                  "v-col",
-                                                  {
-                                                    attrs: {
-                                                      cols: "12",
-                                                      sm: "12",
-                                                      md: "6"
-                                                    }
-                                                  },
-                                                  [
-                                                    _c("v-text-field", {
-                                                      attrs: {
-                                                        label:
-                                                          "Confirm Password",
-                                                        type: "password",
-                                                        rules: [
-                                                          _vm.rules.required,
-                                                          _vm.rules
-                                                            .passwordMatch
-                                                        ]
-                                                      },
-                                                      model: {
-                                                        value:
-                                                          _vm.passwordConfirm,
-                                                        callback: function(
-                                                          $$v
-                                                        ) {
-                                                          _vm.passwordConfirm = $$v
-                                                        },
-                                                        expression:
-                                                          "passwordConfirm"
-                                                      }
-                                                    })
-                                                  ],
-                                                  1
-                                                )
+                                                _c("v-col", {
+                                                  attrs: {
+                                                    cols: "12",
+                                                    sm: "12",
+                                                    md: "6"
+                                                  }
+                                                })
                                               ],
                                               1
                                             )

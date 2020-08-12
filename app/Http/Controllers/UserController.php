@@ -6,6 +6,7 @@ use App\User;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -86,10 +87,17 @@ class UserController extends Controller
         //
         dd($user);
     }
-
+    /**
+     * API to return all users
+     */
     public function list(User $model) {
-        
         return response()->json(($model::with('department')->orderBy('id', 'ASC')->get()));
+    }
+    /**
+     * API to return all roles
+     */
+    public function getAllRoles (Role $model){
+        return response()->json(($model::orderBy('name', 'ASC')->get(['id','name'])));
     }
 
     public function upsert(Request $request)

@@ -24,6 +24,7 @@ Auth::routes();
 Route::prefix('web-admin')->middleware('auth')->group(function(){
 	
 	Route::get('/', 'AdminController@dashboard')->name('dashboard');
+	// later remove this
 	Route::resource('user', 'UserController', ['except' => ['show']]);
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
@@ -60,7 +61,7 @@ Route::prefix('web-admin')->middleware('auth')->group(function(){
 	// remove later for demo only
 });
 
-Route::group(['prefix' => 'web-admin','middleware' => ['role:super-administrator|administrator']], function () {
+Route::group(['prefix' => 'web-admin','middleware' => ['role:Super Administrator|Administrator']], function () {
     Route::get('users', 'UserController@index')->name('users.index');
 	Route::get('users/create', 'UserController@create')->name('users.create');
 	Route::post('users/store', 'UserController@store')->name('users.store');

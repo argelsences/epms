@@ -108,13 +108,13 @@ class RolesAndPermissionSeeder extends Seeder
         // this can be done as separate statements
 
         // subscriber, basic user, no permission except to edit own profile
-        $role = Role::create(['name' => 'subscriber'])
+        $role = Role::create(['name' => 'Subscriber'])
             ->givePermissionTo(['edit profile']);
         // reviewer
-        $role = Role::create(['name' => 'reviewer'])
+        $role = Role::create(['name' => 'Reviewer'])
             ->givePermissionTo(['list event review','edit event review','view event', 'view poster', 'edit profile']);
         // contributor
-        $role = Role::create(['name' => 'contributor'])
+        $role = Role::create(['name' => 'Contributor'])
             ->givePermissionTo([
                 'list poster','edit poster','list event','edit event',
                 'list speaker','edit speaker','list venue','edit venue',
@@ -123,7 +123,7 @@ class RolesAndPermissionSeeder extends Seeder
                 'list subscriber','delete subscriber', 'export booking', 'edit profile'
         ]);
         // author
-        $role = Role::create(['name' => 'author'])
+        $role = Role::create(['name' => 'Author'])
             ->givePermissionTo([
                 'list poster','edit poster', 'delete poster', 'add poster',
                 'list event','edit event', 'add event', 'delete event', 'publish event', 'submit event review', 
@@ -135,7 +135,7 @@ class RolesAndPermissionSeeder extends Seeder
                 'list subscriber','delete subscriber', 'export booking', 'edit profile'
             ]);
         // administrator
-        $role = Role::create(['name' => 'administrator'])
+        $role = Role::create(['name' => 'Administrator'])
             ->givePermissionTo([
                 'list poster','edit poster', 'delete poster', 'add poster',
                 'list event','edit event', 'add event', 'delete event', 'publish event', 'submit event review', 
@@ -152,6 +152,6 @@ class RolesAndPermissionSeeder extends Seeder
         /*$role = Role::create(['name' => 'super-administrator'])
             ->givePermissionTo(Permission::all());*/
         // all permissions are allowed, the check is done via AuthServiceProvider using Gate::before
-        $role = Role::create(['name' => 'super-administrator']);
+        $role = Role::create(['name' => 'Super Administrator']);
     }
 }

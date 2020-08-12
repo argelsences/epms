@@ -75,10 +75,11 @@
                                                 <v-row>
                                                     <v-col cols="12" sm="12" md="6">
                                                         <!--<v-text-field label="Password" type="password" v-model="password" :rules="[rules.required, rules.min]"></v-text-field>-->
-                                                        <v-text-field v-model="password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="showPassword ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters" counter @click:append="showPassword = !showPassword"></v-text-field>
+                                                        <v-autocomplete v-model="editedItem.role_id" :items="roles" item-text="name" item-value="id"  label="Role" :rules="[rules.required]" hint="Type to select"></v-autocomplete>
                                                     </v-col>
                                                     <v-col cols="12" sm="12" md="6">
                                                         <!--<v-text-field v-if="editedIndex == -1" label="Confirm Password" type="password" v-model="passwordConfirm" :rules="[rules.required,rules.passwordMatch]"></v-text-field>-->
+                                                        <v-text-field v-model="password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="showPassword ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters" counter @click:append="showPassword = !showPassword"></v-text-field>
                                                     </v-col>
                                                 </v-row>
                                         </v-container>
@@ -139,12 +140,14 @@
                 ],
                 rows: [],
                 departments: [],
+                roles: [],
                 editedIndex: -1,
                 editedItem: {
                     name: '',
                     designation: '',
                     email: '',
                     department_id: '',
+                    role_id: '',
                     department: {
                         name: '',
                     }
@@ -154,6 +157,7 @@
                     designation: '',
                     email: '',
                     department_id: '',
+                    role_id: '',
                     department: {
                         name: '',
                     }
@@ -188,7 +192,12 @@
                 .then( response => {
                     this.departments = response.data;
                 });
-                console.log(this.departments);
+            },
+            getRoles: function() {
+                axios.get('/api/roles')
+                .then( response => {
+                    this.roles = response.data;
+                });
             },
             editItem (item) {
                 this.editedIndex = this.rows.indexOf(item)
@@ -254,6 +263,7 @@
         created: function() {
             this.initialize();
             this.getDepartments();
+            this.getRoles();
         }
     }
 </script>

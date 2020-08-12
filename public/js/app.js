@@ -2053,6 +2053,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -2097,12 +2098,14 @@ __webpack_require__.r(__webpack_exports__);
       }],
       rows: [],
       departments: [],
+      roles: [],
       editedIndex: -1,
       editedItem: {
         name: '',
         designation: '',
         email: '',
         department_id: '',
+        role_id: '',
         department: {
           name: ''
         }
@@ -2112,6 +2115,7 @@ __webpack_require__.r(__webpack_exports__);
         designation: '',
         email: '',
         department_id: '',
+        role_id: '',
         department: {
           name: ''
         }
@@ -2149,7 +2153,13 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('/api/departments').then(function (response) {
         _this2.departments = response.data;
       });
-      console.log(this.departments);
+    },
+    getRoles: function getRoles() {
+      var _this3 = this;
+
+      axios.get('/api/roles').then(function (response) {
+        _this3.roles = response.data;
+      });
     },
     editItem: function editItem(item) {
       this.editedIndex = this.rows.indexOf(item);
@@ -2161,18 +2171,18 @@ __webpack_require__.r(__webpack_exports__);
       confirm('Are you sure you want to delete this item?') && this.rows.splice(index, 1);
     },
     close: function close() {
-      var _this3 = this;
+      var _this4 = this;
 
       // make sure the dialog box is closed
       this.dialog = false; // next action is to make sure that the value of editedItem is on default, and re-initialize the editedIndex value
 
       this.$nextTick(function () {
         // reset the defaultItem object
-        _this3.editedItem = Object.assign({}, _this3.defaultItem); // reset the edit flag
+        _this4.editedItem = Object.assign({}, _this4.defaultItem); // reset the edit flag
 
-        _this3.editedIndex = -1; // reset the form
+        _this4.editedIndex = -1; // reset the form
 
-        _this3.$refs.form.reset();
+        _this4.$refs.form.reset();
       });
     },
     save: function save() {
@@ -2216,6 +2226,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     this.initialize();
     this.getDepartments();
+    this.getRoles();
   }
 });
 
@@ -3094,6 +3105,48 @@ var render = function() {
                                                     }
                                                   },
                                                   [
+                                                    _c("v-autocomplete", {
+                                                      attrs: {
+                                                        items: _vm.roles,
+                                                        "item-text": "name",
+                                                        "item-value": "id",
+                                                        label: "Role",
+                                                        rules: [
+                                                          _vm.rules.required
+                                                        ],
+                                                        hint: "Type to select"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedItem
+                                                            .role_id,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedItem,
+                                                            "role_id",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedItem.role_id"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "6"
+                                                    }
+                                                  },
+                                                  [
                                                     _c("v-text-field", {
                                                       attrs: {
                                                         "append-icon": _vm.showPassword
@@ -3131,15 +3184,7 @@ var render = function() {
                                                     })
                                                   ],
                                                   1
-                                                ),
-                                                _vm._v(" "),
-                                                _c("v-col", {
-                                                  attrs: {
-                                                    cols: "12",
-                                                    sm: "12",
-                                                    md: "6"
-                                                  }
-                                                })
+                                                )
                                               ],
                                               1
                                             )

@@ -202,13 +202,16 @@
             },
 
             close () {
-                /////this.$refs.form.reset();
                 // make sure the dialog box is closed
                 this.dialog = false
                 // next action is to make sure that the value of editedItem is on default, and re-initialize the editedIndex value
                 this.$nextTick(() => {
+                    // reset the defaultItem object
                     this.editedItem = Object.assign({}, this.defaultItem)
+                    // reset the edit flag
                     this.editedIndex = -1
+                    // reset the form
+                    this.$refs.form.reset();
                 })
             },
 
@@ -239,12 +242,13 @@
                     // perform the create action here
                     // action ...
                     this.rows.push(this.editedItem)
-                    console.log(this.rows.length)
                 }
                 // reset the form
                 /////this.$refs.form.reset();
+                //Object.assign(this.$data, this.$options.data.editedItem.call(this));
                 // close the dialog box
                 this.close()
+                
             },
         },
         created: function() {

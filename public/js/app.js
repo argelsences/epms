@@ -2058,15 +2058,13 @@ __webpack_require__.r(__webpack_exports__);
     console.log('Component mounted');
   },
   data: function data() {
-    var _this = this;
-
     return {
       dialog: false,
       valid: false,
       showPassword: false,
       search: '',
       password: '',
-      passwordConfirm: '',
+      //passwordConfirm: '',
       rules: {
         required: function required(v) {
           return !!v || 'Required.';
@@ -2076,10 +2074,8 @@ __webpack_require__.r(__webpack_exports__);
         },
         emailValid: function emailValid(v) {
           return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid';
-        },
-        passwordMatch: function passwordMatch(v) {
-          return !(v !== _this.password) || 'Password do not match.';
-        }
+        } //passwordMatch: (v) => !(v!==this.password) || 'Password do not match.'
+
       },
       headers: [//{text: 'ID', value: 'id'}, 
       {
@@ -2141,17 +2137,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     initialize: function initialize() {
-      var _this2 = this;
+      var _this = this;
 
       axios.get('/api/users').then(function (response) {
-        _this2.rows = response.data;
+        _this.rows = response.data;
       });
     },
     getDepartments: function getDepartments() {
-      var _this3 = this;
+      var _this2 = this;
 
       axios.get('/api/departments').then(function (response) {
-        _this3.departments = response.data;
+        _this2.departments = response.data;
       });
       console.log(this.departments);
     },
@@ -2165,15 +2161,18 @@ __webpack_require__.r(__webpack_exports__);
       confirm('Are you sure you want to delete this item?') && this.rows.splice(index, 1);
     },
     close: function close() {
-      var _this4 = this;
+      var _this3 = this;
 
-      /////this.$refs.form.reset();
       // make sure the dialog box is closed
       this.dialog = false; // next action is to make sure that the value of editedItem is on default, and re-initialize the editedIndex value
 
       this.$nextTick(function () {
-        _this4.editedItem = Object.assign({}, _this4.defaultItem);
-        _this4.editedIndex = -1;
+        // reset the defaultItem object
+        _this3.editedItem = Object.assign({}, _this3.defaultItem); // reset the edit flag
+
+        _this3.editedIndex = -1; // reset the form
+
+        _this3.$refs.form.reset();
       });
     },
     save: function save() {
@@ -2205,9 +2204,9 @@ __webpack_require__.r(__webpack_exports__);
         // perform the create action here
         // action ...
         this.rows.push(this.editedItem);
-        console.log(this.rows.length);
       } // reset the form
       /////this.$refs.form.reset();
+      //Object.assign(this.$data, this.$options.data.editedItem.call(this));
       // close the dialog box
 
 

@@ -33,7 +33,7 @@
 <template>
     <v-app>
         <v-card>
-            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20">
+            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" :single-expand="singleExpand" :expanded.sync="expanded" show-expand>
                 <template v-slot:top>
                     <!-- the toolbar -->
                     <v-toolbar flat color="white">
@@ -106,6 +106,20 @@
                 <template v-slot:no-data>
                     <v-btn class="btn btn-sm btn-primary" @click="initialize">Reset</v-btn>
                 </template>
+                <template v-slot:expanded-item="{ headers, item }">
+                    <td :colspan="headers.length/2" flat>
+                        <v-chip class="ma-2" color="pink" label text-color="white"> 
+                            <v-icon left>mdi-email</v-icon>Email
+                        </v-chip>
+                        {{ item.email }}
+                    </td>
+                    <td :colspan="headers.length/2" flat>
+                        <v-chip class="ma-2" color="green" label text-color="white"> 
+                            <v-icon left>mdi-face</v-icon>Designation
+                        </v-chip>
+                        {{ item.designation }}
+                    </td>
+                </template>
             </v-data-table>
         </v-card>
     </v-app>
@@ -121,6 +135,8 @@
                 dialog: false,
                 valid: false,
                 showPassword: false,
+                expanded: [],
+                singleExpand: false,
                 search : '',
                 password: '',
                 //passwordConfirm: '',

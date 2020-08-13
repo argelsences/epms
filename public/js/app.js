@@ -2054,6 +2054,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -2063,6 +2077,8 @@ __webpack_require__.r(__webpack_exports__);
       dialog: false,
       valid: false,
       showPassword: false,
+      expanded: [],
+      singleExpand: false,
       search: '',
       password: '',
       //passwordConfirm: '',
@@ -2773,7 +2789,15 @@ var render = function() {
               headers: _vm.headers,
               items: _vm.rows,
               search: _vm.search,
-              "items-per-page": 20
+              "items-per-page": 20,
+              "single-expand": _vm.singleExpand,
+              expanded: _vm.expanded,
+              "show-expand": ""
+            },
+            on: {
+              "update:expanded": function($event) {
+                _vm.expanded = $event
+              }
             },
             scopedSlots: _vm._u([
               {
@@ -3292,6 +3316,76 @@ var render = function() {
                   ]
                 },
                 proxy: true
+              },
+              {
+                key: "expanded-item",
+                fn: function(ref) {
+                  var headers = ref.headers
+                  var item = ref.item
+                  return [
+                    _c(
+                      "td",
+                      { attrs: { colspan: headers.length / 2, flat: "" } },
+                      [
+                        _c(
+                          "v-chip",
+                          {
+                            staticClass: "ma-2",
+                            attrs: {
+                              color: "pink",
+                              label: "",
+                              "text-color": "white"
+                            }
+                          },
+                          [
+                            _c("v-icon", { attrs: { left: "" } }, [
+                              _vm._v("mdi-email")
+                            ]),
+                            _vm._v("Email\n                    ")
+                          ],
+                          1
+                        ),
+                        _vm._v(
+                          "\n                    " +
+                            _vm._s(item.email) +
+                            "\n                "
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "td",
+                      { attrs: { colspan: headers.length / 2, flat: "" } },
+                      [
+                        _c(
+                          "v-chip",
+                          {
+                            staticClass: "ma-2",
+                            attrs: {
+                              color: "green",
+                              label: "",
+                              "text-color": "white"
+                            }
+                          },
+                          [
+                            _c("v-icon", { attrs: { left: "" } }, [
+                              _vm._v("mdi-face")
+                            ]),
+                            _vm._v("Designation\n                    ")
+                          ],
+                          1
+                        ),
+                        _vm._v(
+                          "\n                    " +
+                            _vm._s(item.designation) +
+                            "\n                "
+                        )
+                      ],
+                      1
+                    )
+                  ]
+                }
               }
             ])
           })

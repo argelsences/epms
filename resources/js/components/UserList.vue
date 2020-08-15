@@ -106,15 +106,15 @@
                 <template v-slot:no-data>
                     <v-btn class="btn btn-sm btn-primary" @click="initialize">Reset</v-btn>
                 </template>
-                <template v-slot:expanded-item="{ headers, item }">
-                    <td :colspan="headers.length/2" flat>
-                        <v-chip class="ma-2" color="pink" label text-color="white"> 
+                <template v-slot:expanded-item="{ headers, item }" flat>
+                    <td :colspan="headers.length/2">
+                        <v-chip class="ma-2" color="grey darken-3" label text-color="white"> 
                             <v-icon left>mdi-email</v-icon>Email
                         </v-chip>
                         {{ item.email }}
                     </td>
                     <td :colspan="headers.length/2" flat>
-                        <v-chip class="ma-2" color="green" label text-color="white"> 
+                        <v-chip class="ma-2" color="grey darken-3" label text-color="white"> 
                             <v-icon left>mdi-face</v-icon>Designation
                         </v-chip>
                         {{ item.designation }}
@@ -149,9 +149,10 @@
                 headers: [
                     //{text: 'ID', value: 'id'}, 
                     {text: 'Name', value: 'name'},
-                    {text: 'Designation', value: 'designation'},
-                    {text: 'Email', value: 'email'},
+                    //{text: 'Designation', value: 'designation'},
+                    //{text: 'Email', value: 'email'},
                     {text: 'Department', value: 'department.name'},
+                    {text: 'Role', value: 'roles[0].name'},
                     {text: 'Actions', value: 'actions', sortable: false },
                 ],
                 rows: [],
@@ -166,7 +167,12 @@
                     role_id: '',
                     department: {
                         name: '',
-                    }
+                    },
+                    roles : [
+                        { 
+                            name: '',
+                        },
+                    ]
                 },
                 defaultItem: {
                     name: '',
@@ -176,7 +182,12 @@
                     role_id: '',
                     department: {
                         name: '',
-                    }
+                    },
+                    roles : [
+                        { 
+                            name: '',
+                        },
+                    ]
                 },
                 index: 0,
             }
@@ -202,6 +213,7 @@
                 .then( response => {
                     this.rows = response.data;
                 });
+                console.log(this.rows)
             },
             getDepartments: function() {
                 axios.get('/api/departments')

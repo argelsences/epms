@@ -91,7 +91,11 @@ class UserController extends Controller
      * API to return all users
      */
     public function list(User $model) {
-        return response()->json(($model::with('department')->orderBy('id', 'ASC')->get()));
+        return response()->json((
+            $model::with(['department','roles'])
+            ->orderBy('id', 'ASC')
+            ->get())
+        );
     }
     /**
      * API to return all roles

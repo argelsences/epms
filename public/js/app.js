@@ -2098,15 +2098,14 @@ __webpack_require__.r(__webpack_exports__);
       {
         text: 'Name',
         value: 'name'
-      }, {
-        text: 'Designation',
-        value: 'designation'
-      }, {
-        text: 'Email',
-        value: 'email'
-      }, {
+      }, //{text: 'Designation', value: 'designation'},
+      //{text: 'Email', value: 'email'},
+      {
         text: 'Department',
         value: 'department.name'
+      }, {
+        text: 'Role',
+        value: 'roles[0].name'
       }, {
         text: 'Actions',
         value: 'actions',
@@ -2124,7 +2123,10 @@ __webpack_require__.r(__webpack_exports__);
         role_id: '',
         department: {
           name: ''
-        }
+        },
+        roles: [{
+          name: ''
+        }]
       },
       defaultItem: {
         name: '',
@@ -2134,7 +2136,10 @@ __webpack_require__.r(__webpack_exports__);
         role_id: '',
         department: {
           name: ''
-        }
+        },
+        roles: [{
+          name: ''
+        }]
       },
       index: 0
     };
@@ -2162,6 +2167,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('/api/users').then(function (response) {
         _this.rows = response.data;
       });
+      console.log(this.rows);
     },
     getDepartments: function getDepartments() {
       var _this2 = this;
@@ -3325,14 +3331,14 @@ var render = function() {
                   return [
                     _c(
                       "td",
-                      { attrs: { colspan: headers.length / 2, flat: "" } },
+                      { attrs: { colspan: headers.length / 2 } },
                       [
                         _c(
                           "v-chip",
                           {
                             staticClass: "ma-2",
                             attrs: {
-                              color: "pink",
+                              color: "grey darken-3",
                               label: "",
                               "text-color": "white"
                             }
@@ -3363,7 +3369,7 @@ var render = function() {
                           {
                             staticClass: "ma-2",
                             attrs: {
-                              color: "green",
+                              color: "grey darken-3",
                               label: "",
                               "text-color": "white"
                             }

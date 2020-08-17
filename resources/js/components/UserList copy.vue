@@ -33,7 +33,7 @@
 <template>
     <v-app>
         <v-card>
-            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" :single-expand="singleExpand" :expanded.sync="expanded" show-expand sort-by="name">
+            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" :single-expand="singleExpand" :expanded.sync="expanded" show-expand>
                 <template v-slot:top>
                     <!-- the toolbar -->
                     <v-toolbar flat color="white">
@@ -66,7 +66,7 @@
                                                     <v-col cols="12" sm="12" md="6">
                                                         <!--<v-text-field v-model="editedItem.department_id" label="Department" :rules="[rules.required]"></v-text-field>-->
                                                         <!--<v-select :items="departments" label="Department" item-text="name" item-value="id" v-model="editedItem.department_id" :rules="[rules.required]"></v-select>-->
-                                                        <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select"></v-autocomplete>
+                                                        <v-autocomplete v-model="editedItem.department.id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select"></v-autocomplete>
                                                     </v-col>
                                                     <v-col cols="12" sm="12" md="6">
                                                         <!--<v-text-field v-model="editedItem.designation" label="Designation" :rules="[rules.required]"></v-text-field>-->
@@ -76,7 +76,7 @@
                                                 <v-row>
                                                     <v-col cols="12" sm="12" md="6">
                                                         <!--<v-text-field label="Password" type="password" v-model="password" :rules="[rules.required, rules.min]"></v-text-field>-->
-                                                        <v-autocomplete v-model="editedItem.role_id" :items="roles" item-text="name" item-value="id"  label="Role" :rules="[rules.required]" hint="Type to select"></v-autocomplete>
+                                                        <v-autocomplete v-model="editedItem.roles[0].id" :items="roles" item-text="name" item-value="id"  label="Role" :rules="[rules.required]" hint="Type to select"></v-autocomplete>
                                                     </v-col>
                                                     <v-col cols="12" sm="12" md="6">
                                                         <!--<v-text-field v-if="editedIndex == -1" label="Confirm Password" type="password" v-model="passwordConfirm" :rules="[rules.required,rules.passwordMatch]"></v-text-field>-->
@@ -139,7 +139,7 @@
                 valid: true,
                 showPassword: false,
                 expanded: [],
-                singleExpand: true,
+                singleExpand: false,
                 search : '',
                 password: '',
                 //passwordConfirm: '',
@@ -167,9 +167,6 @@
                     designation: '',
                     email: '',
                     department_id: '',
-                    department_name: '',
-                    role_id: '',
-                    role_name: '',
                     department: {
                         id: 0,
                         name: '',
@@ -187,9 +184,6 @@
                     designation: '',
                     email: '',
                     department_id: '',
-                    department_name: '',
-                    role_id: '',
-                    role_name: '',
                     department: {
                         id: 0,
                         name: '',
@@ -283,13 +277,13 @@
                         return department.id ==  editItem.department_id
                 });*/
                 // use ES6, filter can only access local variables
-                var filterDepartment = this.departments.filter( department => department.id == editItem.department_id );
-                this.editedItem.department_name = filterDepartment[0].name;
-                //this.editedItem.department.id = filterDepartment[0].id;
+                var filterDepartment = this.departments.filter( department => department.id == editItem.department.id );
+                this.editedItem.department.name = filterDepartment[0].name;
+                this.editedItem.department.id = filterDepartment[0].id;
                 
-                var filterRole = this.roles.filter( role => role.id == editItem.role_id );
-                this.editedItem.role_name = filterRole[0].name;
-                //this.editedItem.roles[0].id = filterRole[0].id;
+                var filterRole = this.roles.filter( role => role.id == editItem.roles[0].id );
+                this.editedItem.roles[0].name = filterRole[0].name;
+                this.editedItem.roles[0].id = filterRole[0].id;
                 
 
                 if (this.editedIndex > -1) {

@@ -2068,6 +2068,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -2075,10 +2078,10 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       dialog: false,
-      valid: false,
+      valid: true,
       showPassword: false,
       expanded: [],
-      singleExpand: false,
+      singleExpand: true,
       search: '',
       password: '',
       //passwordConfirm: '',
@@ -2102,10 +2105,10 @@ __webpack_require__.r(__webpack_exports__);
       //{text: 'Email', value: 'email'},
       {
         text: 'Department',
-        value: 'department.name'
+        value: 'department_name'
       }, {
         text: 'Role',
-        value: 'roles[0].name'
+        value: 'role_name'
       }, {
         text: 'Actions',
         value: 'actions',
@@ -2120,28 +2123,38 @@ __webpack_require__.r(__webpack_exports__);
         designation: '',
         email: '',
         department_id: '',
+        department_name: '',
         role_id: '',
+        role_name: '',
         department: {
+          id: 0,
           name: ''
         },
         roles: [{
+          id: 0,
           name: ''
-        }]
+        }],
+        password: ''
       },
       defaultItem: {
         name: '',
         designation: '',
         email: '',
         department_id: '',
+        department_name: '',
         role_id: '',
+        role_name: '',
         department: {
+          id: 0,
           name: ''
         },
         roles: [{
+          id: 0,
           name: ''
-        }]
-      },
-      index: 0
+        }],
+        password: ''
+      } //index: 0,
+
     };
   },
   computed: {
@@ -2166,8 +2179,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('/api/users').then(function (response) {
         _this.rows = response.data;
-      });
-      console.log(this.rows);
+      }); //console.log("the rows" + this.rows)
     },
     getDepartments: function getDepartments() {
       var _this2 = this;
@@ -2187,6 +2199,7 @@ __webpack_require__.r(__webpack_exports__);
       this.editedIndex = this.rows.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
+      console.log(this.editedIndex);
     },
     deleteItem: function deleteItem(item) {
       var index = this.rows.indexOf(item);
@@ -2226,16 +2239,22 @@ __webpack_require__.r(__webpack_exports__);
       var filterDepartment = this.departments.filter(function (department) {
         return department.id == editItem.department_id;
       });
-      this.editedItem.department.name = filterDepartment[0].name;
+      this.editedItem.department_name = filterDepartment[0].name; //this.editedItem.department.id = filterDepartment[0].id;
+
+      var filterRole = this.roles.filter(function (role) {
+        return role.id == editItem.role_id;
+      });
+      this.editedItem.role_name = filterRole[0].name; //this.editedItem.roles[0].id = filterRole[0].id;
 
       if (this.editedIndex > -1) {
         // perform the update action here
         // action ...
-        Object.assign(this.rows[this.editedIndex], this.editedItem);
+        Object.assign(this.rows[this.editedIndex], this.editedItem); /////console.log(this.editedItem)
       } else {
         // perform the create action here
         // action ...
         this.rows.push(this.editedItem);
+        console.log(this.rows);
       } // reset the form
       /////this.$refs.form.reset();
       //Object.assign(this.$data, this.$options.data.editedItem.call(this));
@@ -2798,7 +2817,8 @@ var render = function() {
               "items-per-page": 20,
               "single-expand": _vm.singleExpand,
               expanded: _vm.expanded,
-              "show-expand": ""
+              "show-expand": "",
+              "sort-by": "name"
             },
             on: {
               "update:expanded": function($event) {
@@ -2881,38 +2901,38 @@ var render = function() {
                           [
                             _vm._v(" "),
                             _c(
-                              "v-form",
-                              {
-                                ref: "form",
-                                attrs: { "lazy-validation": "" },
-                                on: {
-                                  submit: function($event) {
-                                    $event.preventDefault()
-                                  }
-                                },
-                                model: {
-                                  value: _vm.valid,
-                                  callback: function($$v) {
-                                    _vm.valid = $$v
-                                  },
-                                  expression: "valid"
-                                }
-                              },
+                              "v-card",
                               [
+                                _c("v-card-title", [
+                                  _c("span", { staticClass: "headline" }, [
+                                    _vm._v(_vm._s(_vm.formTitle))
+                                  ])
+                                ]),
+                                _vm._v(" "),
                                 _c(
-                                  "v-card",
+                                  "v-card-text",
                                   [
-                                    _c("v-card-title", [
-                                      _c("span", { staticClass: "headline" }, [
-                                        _vm._v(_vm._s(_vm.formTitle))
-                                      ])
-                                    ]),
-                                    _vm._v(" "),
                                     _c(
-                                      "v-card-text",
+                                      "v-container",
                                       [
                                         _c(
-                                          "v-container",
+                                          "v-form",
+                                          {
+                                            ref: "form",
+                                            attrs: { "lazy-validation": "" },
+                                            on: {
+                                              submit: function($event) {
+                                                $event.preventDefault()
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.valid,
+                                              callback: function($$v) {
+                                                _vm.valid = $$v
+                                              },
+                                              expression: "valid"
+                                            }
+                                          },
                                           [
                                             _c(
                                               "v-row",
@@ -3177,41 +3197,77 @@ var render = function() {
                                                     }
                                                   },
                                                   [
-                                                    _c("v-text-field", {
-                                                      attrs: {
-                                                        "append-icon": _vm.showPassword
-                                                          ? "mdi-eye"
-                                                          : "mdi-eye-off",
-                                                        rules: [
-                                                          _vm.rules.required,
-                                                          _vm.rules.min
-                                                        ],
-                                                        type: _vm.showPassword
-                                                          ? "text"
-                                                          : "password",
-                                                        name: "input-10-1",
-                                                        label: "Password",
-                                                        hint:
-                                                          "At least 8 characters",
-                                                        counter: ""
-                                                      },
-                                                      on: {
-                                                        "click:append": function(
-                                                          $event
-                                                        ) {
-                                                          _vm.showPassword = !_vm.showPassword
-                                                        }
-                                                      },
-                                                      model: {
-                                                        value: _vm.password,
-                                                        callback: function(
-                                                          $$v
-                                                        ) {
-                                                          _vm.password = $$v
-                                                        },
-                                                        expression: "password"
-                                                      }
-                                                    })
+                                                    _vm.editedIndex > -1
+                                                      ? _c("v-text-field", {
+                                                          attrs: {
+                                                            "append-icon": _vm.showPassword
+                                                              ? "mdi-eye"
+                                                              : "mdi-eye-off",
+                                                            rules: [
+                                                              _vm.rules.min
+                                                            ],
+                                                            type: _vm.showPassword
+                                                              ? "text"
+                                                              : "password",
+                                                            label: "Password",
+                                                            hint:
+                                                              "At least 8 characters",
+                                                            counter: ""
+                                                          },
+                                                          on: {
+                                                            "click:append": function(
+                                                              $event
+                                                            ) {
+                                                              _vm.showPassword = !_vm.showPassword
+                                                            }
+                                                          },
+                                                          model: {
+                                                            value: _vm.password,
+                                                            callback: function(
+                                                              $$v
+                                                            ) {
+                                                              _vm.password = $$v
+                                                            },
+                                                            expression:
+                                                              "password"
+                                                          }
+                                                        })
+                                                      : _c("v-text-field", {
+                                                          attrs: {
+                                                            "append-icon": _vm.showPassword
+                                                              ? "mdi-eye"
+                                                              : "mdi-eye-off",
+                                                            rules: [
+                                                              _vm.rules
+                                                                .required,
+                                                              _vm.rules.min
+                                                            ],
+                                                            type: _vm.showPassword
+                                                              ? "text"
+                                                              : "password",
+                                                            label: "Password",
+                                                            hint:
+                                                              "At least 8 characters",
+                                                            counter: ""
+                                                          },
+                                                          on: {
+                                                            "click:append": function(
+                                                              $event
+                                                            ) {
+                                                              _vm.showPassword = !_vm.showPassword
+                                                            }
+                                                          },
+                                                          model: {
+                                                            value: _vm.password,
+                                                            callback: function(
+                                                              $$v
+                                                            ) {
+                                                              _vm.password = $$v
+                                                            },
+                                                            expression:
+                                                              "password"
+                                                          }
+                                                        })
                                                   ],
                                                   1
                                                 )
@@ -3223,39 +3279,39 @@ var render = function() {
                                         )
                                       ],
                                       1
+                                    )
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-card-actions",
+                                  [
+                                    _c("v-spacer"),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        attrs: {
+                                          color: "blue darken-1",
+                                          text: ""
+                                        },
+                                        on: { click: _vm.close }
+                                      },
+                                      [_vm._v("Cancel")]
                                     ),
                                     _vm._v(" "),
                                     _c(
-                                      "v-card-actions",
-                                      [
-                                        _c("v-spacer"),
-                                        _vm._v(" "),
-                                        _c(
-                                          "v-btn",
-                                          {
-                                            attrs: {
-                                              color: "blue darken-1",
-                                              text: ""
-                                            },
-                                            on: { click: _vm.close }
-                                          },
-                                          [_vm._v("Cancel")]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "v-btn",
-                                          {
-                                            attrs: {
-                                              color: "blue darken-1",
-                                              disabled: !_vm.valid,
-                                              text: ""
-                                            },
-                                            on: { click: _vm.save }
-                                          },
-                                          [_vm._v("Save")]
-                                        )
-                                      ],
-                                      1
+                                      "v-btn",
+                                      {
+                                        attrs: {
+                                          color: "blue darken-1",
+                                          disabled: !_vm.valid,
+                                          text: ""
+                                        },
+                                        on: { click: _vm.save }
+                                      },
+                                      [_vm._v("Save")]
                                     )
                                   ],
                                   1

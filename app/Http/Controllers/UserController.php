@@ -91,11 +91,36 @@ class UserController extends Controller
      * API to return all users
      */
     public function list(User $model) {
-        return response()->json((
-            $model::with(['department','roles'])
+
+        $dataObject = [];
+
+        $users = $model::with(['department:id,name','roles:id,name'])
+                ->orderBy('id', 'ASC')
+                ->get();
+        
+        foreach ($users as $user){
+            
+            $dataObject[] = (object) [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'designation' => $user->designation,
+                'department_id' => $user->department_id,
+                'department_name' => $user->department->name,
+                'role_id' => $user->roles[0]->id,
+                'role_name' => $user->roles[0]->name
+            ];
+        }
+
+        //var_dump($dataObject);
+        //die();
+        /*return response()->json((
+            $model::with(['department:id,name','roles:id,name'])
             ->orderBy('id', 'ASC')
             ->get())
-        );
+        );*/
+
+        return response()->json($dataObject);
     }
     /**
      * API to return all roles

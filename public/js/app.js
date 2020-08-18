@@ -2083,7 +2083,7 @@ __webpack_require__.r(__webpack_exports__);
       expanded: [],
       singleExpand: true,
       search: '',
-      password: '',
+      ///password: '',
       //passwordConfirm: '',
       rules: {
         required: function required(v) {
@@ -2119,6 +2119,7 @@ __webpack_require__.r(__webpack_exports__);
       roles: [],
       editedIndex: -1,
       editedItem: {
+        id: 0,
         name: '',
         designation: '',
         email: '',
@@ -2137,6 +2138,7 @@ __webpack_require__.r(__webpack_exports__);
         password: ''
       },
       defaultItem: {
+        id: 0,
         name: '',
         designation: '',
         email: '',
@@ -2198,8 +2200,7 @@ __webpack_require__.r(__webpack_exports__);
     editItem: function editItem(item) {
       this.editedIndex = this.rows.indexOf(item);
       this.editedItem = Object.assign({}, item);
-      this.dialog = true;
-      console.log(this.editedIndex);
+      this.dialog = true; /////console.log(this.editedIndex);
     },
     deleteItem: function deleteItem(item) {
       var index = this.rows.indexOf(item);
@@ -2221,14 +2222,17 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     save: function save() {
+      var _this5 = this;
+
       this.$refs.form.validate(); // check if process is updating or creating
       // if update, then replace the value of the current item with the value in the editedItem
       // if creating, then push the edited item into the object
 
-      axios.post('/api/users/upsert', {
-        user: this.editedItem,
-        password: this.password
-      }); // assign the edited item to a local var first to be able to be used for filter
+      /*axios.post('/api/users/upsert', {
+          user: this.editedItem,
+          password: this.password,
+      });*/
+      // assign the edited item to a local var first to be able to be used for filter
 
       var editItem = this.editedItem;
       /*var filterDepartment = this.departments.filter(function(department) {
@@ -2245,16 +2249,31 @@ __webpack_require__.r(__webpack_exports__);
         return role.id == editItem.role_id;
       });
       this.editedItem.role_name = filterRole[0].name; //this.editedItem.roles[0].id = filterRole[0].id;
+      /////console.log(this.editedItem)
+
+      console.log(this.editedIndex);
+      var editedIndex = this.editedIndex;
 
       if (this.editedIndex > -1) {
         // perform the update action here
         // action ...
-        Object.assign(this.rows[this.editedIndex], this.editedItem); /////console.log(this.editedItem)
+        /////Object.assign(this.rows[this.editedIndex], this.editedItem)
+        /////console.log(this.editedItem)
+        axios.post('/api/users/update', {
+          user: this.editedItem //password: this.editedItem.password
+
+        }).then(function (res) {
+          if (res.data.success) {
+            /////this.feedback = 'Changes saved.';
+            /////this.categories = res.data.categories;
+            console.log(_this5.rows[editedIndex]); /////Object.assign(this.rows[editedIndex], this.editedItem)
+          }
+        });
+        Object.assign(this.rows[this.editedIndex], this.editedItem);
       } else {
         // perform the create action here
         // action ...
-        this.rows.push(this.editedItem);
-        console.log(this.rows);
+        this.rows.push(this.editedItem); /////console.log(this.rows)
       } // reset the form
       /////this.$refs.form.reset();
       //Object.assign(this.$data, this.$options.data.editedItem.call(this));
@@ -3222,14 +3241,20 @@ var render = function() {
                                                             }
                                                           },
                                                           model: {
-                                                            value: _vm.password,
+                                                            value:
+                                                              _vm.editedItem
+                                                                .password,
                                                             callback: function(
                                                               $$v
                                                             ) {
-                                                              _vm.password = $$v
+                                                              _vm.$set(
+                                                                _vm.editedItem,
+                                                                "password",
+                                                                $$v
+                                                              )
                                                             },
                                                             expression:
-                                                              "password"
+                                                              "editedItem.password"
                                                           }
                                                         })
                                                       : _c("v-text-field", {
@@ -3258,14 +3283,20 @@ var render = function() {
                                                             }
                                                           },
                                                           model: {
-                                                            value: _vm.password,
+                                                            value:
+                                                              _vm.editedItem
+                                                                .password,
                                                             callback: function(
                                                               $$v
                                                             ) {
-                                                              _vm.password = $$v
+                                                              _vm.$set(
+                                                                _vm.editedItem,
+                                                                "password",
+                                                                $$v
+                                                              )
                                                             },
                                                             expression:
-                                                              "password"
+                                                              "editedItem.password"
                                                           }
                                                         })
                                                   ],

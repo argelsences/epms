@@ -80,8 +80,8 @@
                                                     </v-col>
                                                     <v-col cols="12" sm="12" md="6">
                                                         <!--<v-text-field v-if="editedIndex == -1" label="Confirm Password" type="password" v-model="passwordConfirm" :rules="[rules.required,rules.passwordMatch]"></v-text-field>-->
-                                                        <v-text-field v-if="editedIndex > -1" v-model="password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.min]" :type="showPassword ? 'text' : 'password'" label="Password" hint="At least 8 characters" counter @click:append="showPassword = !showPassword"></v-text-field>
-                                                        <v-text-field v-else v-model="password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="showPassword ? 'text' : 'password'" label="Password" hint="At least 8 characters" counter @click:append="showPassword = !showPassword"></v-text-field>
+                                                        <v-text-field v-if="editedIndex > -1" v-model="editedItem.password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.min]" :type="showPassword ? 'text' : 'password'" label="Password" hint="At least 8 characters" counter @click:append="showPassword = !showPassword"></v-text-field>
+                                                        <v-text-field v-else v-model="editedItem.password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="showPassword ? 'text' : 'password'" label="Password" hint="At least 8 characters" counter @click:append="showPassword = !showPassword"></v-text-field>
                                                     </v-col>
                                                 </v-row>
                                                 </v-form>
@@ -141,7 +141,7 @@
                 expanded: [],
                 singleExpand: true,
                 search : '',
-                password: '',
+                ///password: '',
                 //passwordConfirm: '',
                 rules: {
                     required: (v) => !!v || 'Required.',
@@ -163,6 +163,7 @@
                 roles: [],
                 editedIndex: -1,
                 editedItem: {
+                    id: 0,
                     name: '',
                     designation: '',
                     email: '',
@@ -183,6 +184,7 @@
                     password: '',
                 },
                 defaultItem: {
+                    id: 0,
                     name: '',
                     designation: '',
                     email: '',
@@ -244,7 +246,7 @@
                 this.editedIndex = this.rows.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 this.dialog = true
-                console.log(this.editedIndex);
+                /////console.log(this.editedIndex);
             },
 
             deleteItem (item) {
@@ -272,10 +274,10 @@
                 // check if process is updating or creating
                 // if update, then replace the value of the current item with the value in the editedItem
                 // if creating, then push the edited item into the object
-                axios.post('/api/users/upsert', {
+                /*axios.post('/api/users/upsert', {
                     user: this.editedItem,
                     password: this.password,
-                });
+                });*/
                 
                 // assign the edited item to a local var first to be able to be used for filter
                 var editItem = this.editedItem
@@ -290,18 +292,36 @@
                 var filterRole = this.roles.filter( role => role.id == editItem.role_id );
                 this.editedItem.role_name = filterRole[0].name;
                 //this.editedItem.roles[0].id = filterRole[0].id;
-                
 
+                /////console.log(this.editedItem)
+                
+                console.log(this.editedIndex)
+                var editedIndex = this.editedIndex
                 if (this.editedIndex > -1) {
                     // perform the update action here
                     // action ...
-                    Object.assign(this.rows[this.editedIndex], this.editedItem)
+                    /////Object.assign(this.rows[this.editedIndex], this.editedItem)
                     /////console.log(this.editedItem)
+                    axios.post('/api/users/update', {
+                        user: this.editedItem,
+                        //password: this.editedItem.password
+                    })
+                    .then((res) => {
+                        if (res.data.success) {
+                            /////this.feedback = 'Changes saved.';
+                            /////this.categories = res.data.categories;
+                            console.log(this.rows[editedIndex])
+                            /////Object.assign(this.rows[editedIndex], this.editedItem)
+                        }
+                    });
+
+                    Object.assign(this.rows[this.editedIndex], this.editedItem)
+                    
                 } else {
                     // perform the create action here
                     // action ...
                     this.rows.push(this.editedItem)
-                    console.log(this.rows)
+                    /////console.log(this.rows)
                 }
                 // reset the form
                 /////this.$refs.form.reset();

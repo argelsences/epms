@@ -71,9 +71,36 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //
+        //dd($request->all());
+        /////$this->authorize('manage', 'App\Category');
+        $user = $request->post('user');
+        
+        $theUser = User::findOrFail($user['id']);
+        $updateSuccess = $theUser->update([
+            'name' => $user['name'],
+            'designation' => $user['designation'],
+            'department_id' => $user['department_id'],
+            'designation' => $user['designation'],
+        ]);
+        
+        if (isset($user['password']) && $user['password'] !== ''){
+            /*$theUser->update([
+                'password' => Hash::make($user['password']),
+            ]);*/
+        }
+        /*foreach ($categories as $cat) {
+            if ($cat['id']) {
+                Category::where('id', $cat['id'])->update($cat);
+            }
+            else {
+                Category::create($cat);
+            }
+        }
+        return ['success' => true, 'categories' => Category::all()];*/
+        return ['success' => true,];
     }
 
     /**
@@ -112,8 +139,6 @@ class UserController extends Controller
             ];
         }
 
-        //var_dump($dataObject);
-        //die();
         /*return response()->json((
             $model::with(['department:id,name','roles:id,name'])
             ->orderBy('id', 'ASC')
@@ -129,8 +154,8 @@ class UserController extends Controller
         return response()->json(($model::orderBy('name', 'ASC')->get(['id','name'])));
     }
 
-    public function upsert(Request $request)
-    {
+    /////public function update(Request $request)
+    ////{
         /*$this->authorize('manage', 'App\Category');
         $categories = $request->post('categories');
         foreach ($categories as $cat) {
@@ -142,7 +167,7 @@ class UserController extends Controller
             }
         }
         return ['success' => true, 'categories' => Category::all()];*/
-        dd($request->all());
-    }
+        /////dd($request->all());
+    /////}
 
 }

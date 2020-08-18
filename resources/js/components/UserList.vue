@@ -33,7 +33,7 @@
 <template>
     <v-app>
         <v-card>
-            <p>{{feedback}}</p>
+            <v-alert v-model="successAlert" type="success" transition="fade-transition" dismissible>{{feedback}}</v-alert>
             <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" :single-expand="singleExpand" :expanded.sync="expanded" show-expand sort-by="name">
                 <template v-slot:top>
                     <!-- the toolbar -->
@@ -147,6 +147,7 @@
                 departments: [],
                 roles: [],
                 editedIndex: -1,
+                successAlert: false,
                 rules: {
                     required: (v) => !!v || 'Required.',
                     min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
@@ -295,7 +296,8 @@
                     })
                     .then(response => {
                         if (response.data.success) {
-                            this.feedback = 'Changes saved.'
+                            this.feedback = 'Changes for ' + editedItem.name + ' is saved.'
+                            this.successAlert = true
                             Object.assign(this.rows[editedIndex], editedItem)
                         }
                     })

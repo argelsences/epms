@@ -2089,6 +2089,7 @@ __webpack_require__.r(__webpack_exports__);
       departments: [],
       roles: [],
       editedIndex: -1,
+      successAlert: false,
       rules: {
         required: function required(v) {
           return !!v || 'Required.';
@@ -2254,7 +2255,8 @@ __webpack_require__.r(__webpack_exports__);
           user: editedItem
         }).then(function (response) {
           if (response.data.success) {
-            _this5.feedback = 'Changes saved.';
+            _this5.feedback = 'Changes for ' + editedItem.name + ' is saved.';
+            _this5.successAlert = true;
             Object.assign(_this5.rows[editedIndex], editedItem);
           }
         }); //Object.assign(this.rows[this.editedIndex], this.editedItem)
@@ -2813,7 +2815,24 @@ var render = function() {
       _c(
         "v-card",
         [
-          _c("p", [_vm._v(_vm._s(_vm.feedback))]),
+          _c(
+            "v-alert",
+            {
+              attrs: {
+                type: "success",
+                transition: "fade-transition",
+                dismissible: ""
+              },
+              model: {
+                value: _vm.successAlert,
+                callback: function($$v) {
+                  _vm.successAlert = $$v
+                },
+                expression: "successAlert"
+              }
+            },
+            [_vm._v(_vm._s(_vm.feedback))]
+          ),
           _vm._v(" "),
           _c("v-data-table", {
             attrs: {

@@ -2071,6 +2071,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -2083,6 +2084,7 @@ __webpack_require__.r(__webpack_exports__);
       expanded: [],
       singleExpand: true,
       search: '',
+      feedback: '',
       ///password: '',
       //passwordConfirm: '',
       rules: {
@@ -2234,50 +2236,36 @@ __webpack_require__.r(__webpack_exports__);
       });*/
       // assign the edited item to a local var first to be able to be used for filter
 
-      var editItem = this.editedItem;
+      var editedItem = this.editedItem;
+      var editedIndex = this.editedIndex;
       /*var filterDepartment = this.departments.filter(function(department) {
               return department.id ==  editItem.department_id
       });*/
       // use ES6, filter can only access local variables
 
       var filterDepartment = this.departments.filter(function (department) {
-        return department.id == editItem.department_id;
+        return department.id == editedItem.department_id;
       });
-      this.editedItem.department_name = filterDepartment[0].name; //this.editedItem.department.id = filterDepartment[0].id;
-
+      this.editedItem.department_name = filterDepartment[0].name;
       var filterRole = this.roles.filter(function (role) {
-        return role.id == editItem.role_id;
+        return role.id == editedItem.role_id;
       });
-      this.editedItem.role_name = filterRole[0].name; //this.editedItem.roles[0].id = filterRole[0].id;
-      /////console.log(this.editedItem)
-
-      console.log(this.editedIndex);
-      var editedIndex = this.editedIndex;
+      this.editedItem.role_name = filterRole[0].name;
 
       if (this.editedIndex > -1) {
-        // perform the update action here
-        // action ...
-        /////Object.assign(this.rows[this.editedIndex], this.editedItem)
-        /////console.log(this.editedItem)
         axios.post('/api/users/update', {
-          user: this.editedItem //password: this.editedItem.password
-
-        }).then(function (res) {
-          if (res.data.success) {
-            /////this.feedback = 'Changes saved.';
-            /////this.categories = res.data.categories;
-            console.log(_this5.rows[editedIndex]); /////Object.assign(this.rows[editedIndex], this.editedItem)
+          user: editedItem
+        }).then(function (response) {
+          if (response.data.success) {
+            _this5.feedback = 'Changes saved.';
+            Object.assign(_this5.rows[editedIndex], editedItem);
           }
-        });
-        Object.assign(this.rows[this.editedIndex], this.editedItem);
+        }); //Object.assign(this.rows[this.editedIndex], this.editedItem)
       } else {
         // perform the create action here
         // action ...
         this.rows.push(this.editedItem); /////console.log(this.rows)
-      } // reset the form
-      /////this.$refs.form.reset();
-      //Object.assign(this.$data, this.$options.data.editedItem.call(this));
-      // close the dialog box
+      } // close the dialog box
 
 
       this.close();
@@ -2828,6 +2816,8 @@ var render = function() {
       _c(
         "v-card",
         [
+          _c("p", [_vm._v(_vm._s(_vm.feedback))]),
+          _vm._v(" "),
           _c("v-data-table", {
             attrs: {
               headers: _vm.headers,

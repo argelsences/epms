@@ -100,6 +100,7 @@ class UserController extends Controller
             }
         }
         return ['success' => true, 'categories' => Category::all()];*/
+        // return the same data compared to list to ensure using the same 
         return ['success' => true,];
     }
 

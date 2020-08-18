@@ -33,6 +33,7 @@
 <template>
     <v-app>
         <v-card>
+            <p>{{feedback}}</p>
             <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" :single-expand="singleExpand" :expanded.sync="expanded" show-expand sort-by="name">
                 <template v-slot:top>
                     <!-- the toolbar -->
@@ -141,6 +142,7 @@
                 expanded: [],
                 singleExpand: true,
                 search : '',
+                feedback: '',
                 ///password: '',
                 //passwordConfirm: '',
                 rules: {
@@ -280,52 +282,36 @@
                 });*/
                 
                 // assign the edited item to a local var first to be able to be used for filter
-                var editItem = this.editedItem
+                var editedItem = this.editedItem
+                var editedIndex = this.editedIndex
                 /*var filterDepartment = this.departments.filter(function(department) {
                         return department.id ==  editItem.department_id
                 });*/
                 // use ES6, filter can only access local variables
-                var filterDepartment = this.departments.filter( department => department.id == editItem.department_id );
+                var filterDepartment = this.departments.filter( department => department.id == editedItem.department_id );
                 this.editedItem.department_name = filterDepartment[0].name;
-                //this.editedItem.department.id = filterDepartment[0].id;
                 
-                var filterRole = this.roles.filter( role => role.id == editItem.role_id );
+                var filterRole = this.roles.filter( role => role.id == editedItem.role_id );
                 this.editedItem.role_name = filterRole[0].name;
-                //this.editedItem.roles[0].id = filterRole[0].id;
-
-                /////console.log(this.editedItem)
                 
-                console.log(this.editedIndex)
-                var editedIndex = this.editedIndex
                 if (this.editedIndex > -1) {
-                    // perform the update action here
-                    // action ...
-                    /////Object.assign(this.rows[this.editedIndex], this.editedItem)
-                    /////console.log(this.editedItem)
                     axios.post('/api/users/update', {
-                        user: this.editedItem,
-                        //password: this.editedItem.password
+                        user: editedItem,
                     })
-                    .then((res) => {
-                        if (res.data.success) {
-                            /////this.feedback = 'Changes saved.';
-                            /////this.categories = res.data.categories;
-                            console.log(this.rows[editedIndex])
-                            /////Object.assign(this.rows[editedIndex], this.editedItem)
+                    .then(response => {
+                        if (response.data.success) {
+                            this.feedback = 'Changes saved.'
+                            Object.assign(this.rows[editedIndex], editedItem)
                         }
-                    });
-
-                    Object.assign(this.rows[this.editedIndex], this.editedItem)
-                    
+                    })
+                    //Object.assign(this.rows[this.editedIndex], this.editedItem)
                 } else {
                     // perform the create action here
                     // action ...
                     this.rows.push(this.editedItem)
                     /////console.log(this.rows)
                 }
-                // reset the form
-                /////this.$refs.form.reset();
-                //Object.assign(this.$data, this.$options.data.editedItem.call(this));
+
                 // close the dialog box
                 this.close()
                 

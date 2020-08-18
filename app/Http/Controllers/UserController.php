@@ -87,9 +87,9 @@ class UserController extends Controller
         ]);
         
         if (isset($user['password']) && $user['password'] !== ''){
-            /*$theUser->update([
+            $theUser->update([
                 'password' => Hash::make($user['password']),
-            ]);*/
+            ]);
         }
         /*foreach ($categories as $cat) {
             if ($cat['id']) {

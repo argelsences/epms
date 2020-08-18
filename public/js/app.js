@@ -2085,8 +2085,10 @@ __webpack_require__.r(__webpack_exports__);
       singleExpand: true,
       search: '',
       feedback: '',
-      ///password: '',
-      //passwordConfirm: '',
+      rows: [],
+      departments: [],
+      roles: [],
+      editedIndex: -1,
       rules: {
         required: function required(v) {
           return !!v || 'Required.';
@@ -2099,13 +2101,10 @@ __webpack_require__.r(__webpack_exports__);
         } //passwordMatch: (v) => !(v!==this.password) || 'Password do not match.'
 
       },
-      headers: [//{text: 'ID', value: 'id'}, 
-      {
+      headers: [{
         text: 'Name',
         value: 'name'
-      }, //{text: 'Designation', value: 'designation'},
-      //{text: 'Email', value: 'email'},
-      {
+      }, {
         text: 'Department',
         value: 'department_name'
       }, {
@@ -2116,10 +2115,6 @@ __webpack_require__.r(__webpack_exports__);
         value: 'actions',
         sortable: false
       }],
-      rows: [],
-      departments: [],
-      roles: [],
-      editedIndex: -1,
       editedItem: {
         id: 0,
         name: '',
@@ -2157,8 +2152,7 @@ __webpack_require__.r(__webpack_exports__);
           name: ''
         }],
         password: ''
-      } //index: 0,
-
+      }
     };
   },
   computed: {
@@ -2202,7 +2196,7 @@ __webpack_require__.r(__webpack_exports__);
     editItem: function editItem(item) {
       this.editedIndex = this.rows.indexOf(item);
       this.editedItem = Object.assign({}, item);
-      this.dialog = true; /////console.log(this.editedIndex);
+      this.dialog = true;
     },
     deleteItem: function deleteItem(item) {
       var index = this.rows.indexOf(item);
@@ -2242,17 +2236,20 @@ __webpack_require__.r(__webpack_exports__);
               return department.id ==  editItem.department_id
       });*/
       // use ES6, filter can only access local variables
+      // get department name based on department_id
 
       var filterDepartment = this.departments.filter(function (department) {
         return department.id == editedItem.department_id;
       });
-      this.editedItem.department_name = filterDepartment[0].name;
+      this.editedItem.department_name = filterDepartment[0].name; // get role name based on role_id
+
       var filterRole = this.roles.filter(function (role) {
         return role.id == editedItem.role_id;
       });
       this.editedItem.role_name = filterRole[0].name;
 
       if (this.editedIndex > -1) {
+        // push changes to server
         axios.post('/api/users/update', {
           user: editedItem
         }).then(function (response) {

@@ -143,8 +143,10 @@
                 singleExpand: true,
                 search : '',
                 feedback: '',
-                ///password: '',
-                //passwordConfirm: '',
+                rows: [],
+                departments: [],
+                roles: [],
+                editedIndex: -1,
                 rules: {
                     required: (v) => !!v || 'Required.',
                     min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
@@ -152,18 +154,11 @@
                     //passwordMatch: (v) => !(v!==this.password) || 'Password do not match.'
                 },
                 headers: [
-                    //{text: 'ID', value: 'id'}, 
                     {text: 'Name', value: 'name'},
-                    //{text: 'Designation', value: 'designation'},
-                    //{text: 'Email', value: 'email'},
                     {text: 'Department', value: 'department_name'},
                     {text: 'Role', value: 'role_name'},
                     {text: 'Actions', value: 'actions', sortable: false },
                 ],
-                rows: [],
-                departments: [],
-                roles: [],
-                editedIndex: -1,
                 editedItem: {
                     id: 0,
                     name: '',
@@ -206,7 +201,6 @@
                     ],
                     password: '',
                 },
-                //index: 0,
             }
         },
         computed: {
@@ -248,7 +242,6 @@
                 this.editedIndex = this.rows.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 this.dialog = true
-                /////console.log(this.editedIndex);
             },
 
             deleteItem (item) {
@@ -288,13 +281,15 @@
                         return department.id ==  editItem.department_id
                 });*/
                 // use ES6, filter can only access local variables
+                // get department name based on department_id
                 var filterDepartment = this.departments.filter( department => department.id == editedItem.department_id );
                 this.editedItem.department_name = filterDepartment[0].name;
-                
+                // get role name based on role_id
                 var filterRole = this.roles.filter( role => role.id == editedItem.role_id );
                 this.editedItem.role_name = filterRole[0].name;
                 
                 if (this.editedIndex > -1) {
+                    // push changes to server
                     axios.post('/api/users/update', {
                         user: editedItem,
                     })

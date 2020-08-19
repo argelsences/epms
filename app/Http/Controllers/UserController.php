@@ -71,37 +71,54 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function upsert(Request $request)
     {
-        //
-        //dd($request->all());
         /////$this->authorize('manage', 'App\Category');
         $user = $request->post('user');
         
-        $theUser = User::findOrFail($user['id']);
-        $updateSuccess = $theUser->update([
-            'name' => $user['name'],
-            'designation' => $user['designation'],
-            'department_id' => $user['department_id'],
-            'designation' => $user['designation'],
-        ]);
-        
-        if (isset($user['password']) && $user['password'] !== ''){
-            $theUser->update([
+        if ( $user['id'] ){
+            // retrieve the user object
+            $theUser = User::findOrFail($user['id']);
+
+            // update the user object with updated details
+            $updateSuccess = $theUser->update([
+                'name' => $user['name'],
+                'designation' => $user['designation'],
+                'department_id' => $user['department_id'],
+                'designation' => $user['designation'],
+            ]);
+            
+            // if password is changed, update it
+            if (isset($user['password']) && $user['password'] !== ''){
+                $theUser->update([
+                    'password' => Hash::make($user['password']),
+                ]);
+            }
+            
+            // remove all roles of the user first
+            foreach($theUser->getRoleNames() as $role){
+                $theUser->removeRole($role);
+            }
+            // update user role
+            $roleStoreSuccess = $this->storeRole($theUser, $user['role_id']);
+        }
+        else{
+            $theUser = User::create([
+                'name' => $user['name'],
+                'designation' => $user['designation'],
+                'department_id' => $user['department_id'],
+                'designation' => $user['designation'],
+                'email' => $user['email'],
                 'password' => Hash::make($user['password']),
             ]);
+            
+            // assign the roles
+            $roleStoreSuccess = $this->storeRole($theUser, $user['role_id']);
         }
-        /*foreach ($categories as $cat) {
-            if ($cat['id']) {
-                Category::where('id', $cat['id'])->update($cat);
-            }
-            else {
-                Category::create($cat);
-            }
-        }
-        return ['success' => true, 'categories' => Category::all()];*/
+        
         // return the same data compared to list to ensure using the same 
-        return ['success' => true,];
+        $success = ($theUser && $roleStoreSuccess) ? true : false;
+        return ['success' => $success,];
     }
 
     /**
@@ -127,7 +144,6 @@ class UserController extends Controller
                 ->get();
         
         foreach ($users as $user){
-            
             $dataObject[] = (object) [
                 'id' => $user->id,
                 'name' => $user->name,
@@ -155,20 +171,18 @@ class UserController extends Controller
         return response()->json(($model::orderBy('name', 'ASC')->get(['id','name'])));
     }
 
-    /////public function update(Request $request)
-    ////{
-        /*$this->authorize('manage', 'App\Category');
-        $categories = $request->post('categories');
-        foreach ($categories as $cat) {
-            if ($cat['id']) {
-                Category::where('id', $cat['id'])->update($cat);
-            }
-            else {
-                Category::create($cat);
-            }
+    private function storeRole( User $user, $role_id ){
+        
+        $assignedRole = false;
+
+        if (isset($role_id)){
+            $role_r = Role::where('id', '=', $role_id)->firstOrFail();
+            // $role_r is the object, pass it as it is needed by polymorph table model_has_roles
+            // better this way, but you can also use the name itself
+            $assignedRole = $user->assignRole($role_r); //Assigning role to user
         }
-        return ['success' => true, 'categories' => Category::all()];*/
-        /////dd($request->all());
-    /////}
+
+        return $assignedRole;
+    }
 
 }

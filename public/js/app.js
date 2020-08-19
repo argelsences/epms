@@ -2224,11 +2224,6 @@ __webpack_require__.r(__webpack_exports__);
       this.$refs.form.validate(); // check if process is updating or creating
       // if update, then replace the value of the current item with the value in the editedItem
       // if creating, then push the edited item into the object
-
-      /*axios.post('/api/users/upsert', {
-          user: this.editedItem,
-          password: this.password,
-      });*/
       // assign the edited item to a local var first to be able to be used for filter
 
       var editedItem = this.editedItem;
@@ -2248,24 +2243,37 @@ __webpack_require__.r(__webpack_exports__);
         return role.id == editedItem.role_id;
       });
       this.editedItem.role_name = filterRole[0].name;
-
-      if (this.editedIndex > -1) {
-        // push changes to server
-        axios.post('/api/users/update', {
-          user: editedItem
-        }).then(function (response) {
-          if (response.data.success) {
-            _this5.feedback = 'Changes for ' + editedItem.name + ' is saved.';
-            _this5.successAlert = true;
-            Object.assign(_this5.rows[editedIndex], editedItem);
-          }
-        }); //Object.assign(this.rows[this.editedIndex], this.editedItem)
-      } else {
-        // perform the create action here
-        // action ...
-        this.rows.push(this.editedItem); /////console.log(this.rows)
-      } // close the dialog box
-
+      axios.post('/api/users/upsert', {
+        user: editedItem
+      }).then(function (response) {
+        if (response.data.success) {
+          _this5.feedback = 'Changes for ' + editedItem.name + ' is saved.';
+          _this5.successAlert = true;
+          if (editedIndex > -1) Object.assign(_this5.rows[editedIndex], editedItem);else _this5.rows.push(editedItem);
+        }
+      });
+      setTimeout(function () {
+        _this5.successAlert = false;
+      }, 10000); /////if (this.editedIndex > -1) {
+      // push changes to server
+      /////axios.post('/api/users/update', {
+      /////user: editedItem,
+      /////})
+      /////.then(response => {
+      /////if (response.data.success) {
+      /////this.feedback = 'Changes for ' + editedItem.name + ' is saved.'
+      /////this.successAlert = true
+      /////Object.assign(this.rows[editedIndex], editedItem)
+      /////}
+      /////})
+      //Object.assign(this.rows[this.editedIndex], this.editedItem)
+      /////} else {
+      // perform the create action here
+      // action ...
+      /////this.rows.push(this.editedItem)
+      /////console.log(this.rows)
+      /////}
+      // close the dialog box
 
       this.close();
     }

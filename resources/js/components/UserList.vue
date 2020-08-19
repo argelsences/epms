@@ -270,10 +270,6 @@
                 // check if process is updating or creating
                 // if update, then replace the value of the current item with the value in the editedItem
                 // if creating, then push the edited item into the object
-                /*axios.post('/api/users/upsert', {
-                    user: this.editedItem,
-                    password: this.password,
-                });*/
                 
                 // assign the edited item to a local var first to be able to be used for filter
                 var editedItem = this.editedItem
@@ -288,26 +284,44 @@
                 // get role name based on role_id
                 var filterRole = this.roles.filter( role => role.id == editedItem.role_id );
                 this.editedItem.role_name = filterRole[0].name;
-                
-                if (this.editedIndex > -1) {
-                    // push changes to server
-                    axios.post('/api/users/update', {
-                        user: editedItem,
-                    })
-                    .then(response => {
-                        if (response.data.success) {
-                            this.feedback = 'Changes for ' + editedItem.name + ' is saved.'
-                            this.successAlert = true
+
+                axios.post('/api/users/upsert', {
+                    user: editedItem,
+                })
+                .then(response => {
+                    if (response.data.success) {
+                        this.feedback = 'Changes for ' + editedItem.name + ' is saved.'
+                        this.successAlert = true
+                        if ( editedIndex > -1 )
                             Object.assign(this.rows[editedIndex], editedItem)
-                        }
-                    })
+                        else
+                            this.rows.push(editedItem)
+                    }
+                })
+
+                setTimeout(()=>{
+                    this.successAlert=false
+                    },10000)
+
+                /////if (this.editedIndex > -1) {
+                    // push changes to server
+                    /////axios.post('/api/users/update', {
+                        /////user: editedItem,
+                    /////})
+                    /////.then(response => {
+                        /////if (response.data.success) {
+                            /////this.feedback = 'Changes for ' + editedItem.name + ' is saved.'
+                            /////this.successAlert = true
+                            /////Object.assign(this.rows[editedIndex], editedItem)
+                        /////}
+                    /////})
                     //Object.assign(this.rows[this.editedIndex], this.editedItem)
-                } else {
+                /////} else {
                     // perform the create action here
                     // action ...
-                    this.rows.push(this.editedItem)
+                    /////this.rows.push(this.editedItem)
                     /////console.log(this.rows)
-                }
+                /////}
 
                 // close the dialog box
                 this.close()
@@ -318,6 +332,6 @@
             this.initialize();
             this.getDepartments();
             this.getRoles();
-        }
+        },
     }
 </script>

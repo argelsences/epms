@@ -22,7 +22,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('/users', 'UserController@list')->name('user.list');
     Route::get('/roles', 'UserController@getAllRoles')->name('user.roles');
     Route::get('/departments', 'DepartmentController@list')->name('department.list');
-    Route::post('/users/update', 'UserController@update')->name('user.update');
+    Route::post('/users/upsert', 'UserController@upsert')->name('user.upsert');
     //Route::delete('/categories/{category}', 'CategoryController@destroy');
     /////Route::middleware('can:delete,category')->delete('/categories/{category}', 'CategoryController@destroy');
     //Route::post('/menu-items/add', 'MenuItemController@store');

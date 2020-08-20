@@ -26,6 +26,7 @@ window.Vue.use(Vuetify);
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('user-list', require('./components/UserList.vue').default);
+Vue.component('department-list', require('./components/DepartmentList.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

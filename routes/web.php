@@ -62,12 +62,8 @@ Route::prefix('web-admin')->middleware('auth')->group(function(){
 });
 
 Route::group(['prefix' => 'web-admin','middleware' => ['role:Super Administrator|Administrator']], function () {
-    Route::get('users', 'UserController@index')->name('users.index');
-	Route::get('users/create', 'UserController@create')->name('users.create');
-	Route::post('users/store', 'UserController@store')->name('users.store');
-	Route::delete('users/{user}', 'UserController@destroy')->name('users.destroy');
-	Route::get('users/{user}/edit', 'UserController@edit')->name('users.edit');
-	Route::put('users/{user}', 'UserController@update')->name('users.update');
+	Route::get('users', 'UserController@index')->name('users.index');
+	Route::get('departments', 'DepartmentController@index')->name('deparrments.index');
 });
 
 /////Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');

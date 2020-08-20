@@ -33,7 +33,8 @@
 <template>
     <v-app>
         <v-card>
-            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" :single-expand="singleExpand" :expanded.sync="expanded" show-expand>
+            <v-alert v-model="successAlert" type="success" transition="fade-transition" dismissible>{{feedback}}</v-alert>
+            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" :single-expand="singleExpand" :expanded.sync="expanded" show-expand sort-by="name">
                 <template v-slot:top>
                     <!-- the toolbar -->
                     <v-toolbar flat color="white">
@@ -42,7 +43,7 @@
                         <!-- the dialog box -->        
                         <v-dialog v-model="dialog" max-width="600px">
                             <template v-slot:activator="{ on, attrs }">
-                                <v-btn class="mb-2 btn btn-sm btn-primary" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> User</v-btn>
+                                <v-btn class="mb-2 btn btn-sm btn-primary" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Department</v-btn>
                             </template>
                             
                                 <v-card>
@@ -66,7 +67,7 @@
                                                     <v-col cols="12" sm="12" md="6">
                                                         <!--<v-text-field v-model="editedItem.department_id" label="Department" :rules="[rules.required]"></v-text-field>-->
                                                         <!--<v-select :items="departments" label="Department" item-text="name" item-value="id" v-model="editedItem.department_id" :rules="[rules.required]"></v-select>-->
-                                                        <v-autocomplete v-model="editedItem.department.id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select"></v-autocomplete>
+                                                        <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select"></v-autocomplete>
                                                     </v-col>
                                                     <v-col cols="12" sm="12" md="6">
                                                         <!--<v-text-field v-model="editedItem.designation" label="Designation" :rules="[rules.required]"></v-text-field>-->
@@ -76,12 +77,12 @@
                                                 <v-row>
                                                     <v-col cols="12" sm="12" md="6">
                                                         <!--<v-text-field label="Password" type="password" v-model="password" :rules="[rules.required, rules.min]"></v-text-field>-->
-                                                        <v-autocomplete v-model="editedItem.roles[0].id" :items="roles" item-text="name" item-value="id"  label="Role" :rules="[rules.required]" hint="Type to select"></v-autocomplete>
+                                                        <v-autocomplete v-model="editedItem.role_id" :items="roles" item-text="name" item-value="id"  label="Role" :rules="[rules.required]" hint="Type to select"></v-autocomplete>
                                                     </v-col>
                                                     <v-col cols="12" sm="12" md="6">
                                                         <!--<v-text-field v-if="editedIndex == -1" label="Confirm Password" type="password" v-model="passwordConfirm" :rules="[rules.required,rules.passwordMatch]"></v-text-field>-->
-                                                        <v-text-field v-if="editedIndex > -1" v-model="password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.min]" :type="showPassword ? 'text' : 'password'" label="Password" hint="At least 8 characters" counter @click:append="showPassword = !showPassword"></v-text-field>
-                                                        <v-text-field v-else v-model="password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="showPassword ? 'text' : 'password'" label="Password" hint="At least 8 characters" counter @click:append="showPassword = !showPassword"></v-text-field>
+                                                        <v-text-field v-if="editedIndex > -1" v-model="editedItem.password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.min]" :type="showPassword ? 'text' : 'password'" label="Password" hint="At least 8 characters" counter @click:append="showPassword = !showPassword"></v-text-field>
+                                                        <v-text-field v-else v-model="editedItem.password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="showPassword ? 'text' : 'password'" label="Password" hint="At least 8 characters" counter @click:append="showPassword = !showPassword"></v-text-field>
                                                     </v-col>
                                                 </v-row>
                                                 </v-form>
@@ -99,9 +100,14 @@
                     </v-toolbar>
                 <!-- the toolbar -->
                 </template>
-                <!--<template v-slot:item.id="{ item }">
-                    {{rows.map(function(x) {return x.id; }).indexOf(item.id)+1}}
-                </template>-->
+                <template v-slot:item.url="{ item }">
+                    <v-chip class="ma-2" color="teal" text-color="white" label :href="item.url" target="blank">
+                        <v-avatar left>
+                            <v-icon>mdi-link</v-icon>
+                        </v-avatar>
+                        URL
+                     </v-chip>
+                </template>
                 <template v-slot:item.actions="{ item }">
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                     <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
@@ -114,7 +120,7 @@
                         <v-chip class="ma-2" color="grey darken-3" label text-color="white"> 
                             <v-icon left>mdi-email</v-icon>Email
                         </v-chip>
-                        {{ item.email }}
+                        {{ item.email }}target
                     </td>
                     <td :colspan="headers.length/2" flat>
                         <v-chip class="ma-2" color="grey darken-3" label text-color="white"> 
@@ -139,10 +145,14 @@
                 valid: true,
                 showPassword: false,
                 expanded: [],
-                singleExpand: false,
+                singleExpand: true,
                 search : '',
-                password: '',
-                //passwordConfirm: '',
+                feedback: '',
+                rows: [],
+                departments: [],
+                roles: [],
+                editedIndex: -1,
+                successAlert: false,
                 rules: {
                     required: (v) => !!v || 'Required.',
                     min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
@@ -150,23 +160,19 @@
                     //passwordMatch: (v) => !(v!==this.password) || 'Password do not match.'
                 },
                 headers: [
-                    //{text: 'ID', value: 'id'}, 
                     {text: 'Name', value: 'name'},
-                    //{text: 'Designation', value: 'designation'},
-                    //{text: 'Email', value: 'email'},
-                    {text: 'Department', value: 'department_name'},
-                    {text: 'Role', value: 'role_name'},
+                    {text: 'URL', value: 'url'},
                     {text: 'Actions', value: 'actions', sortable: false },
                 ],
-                rows: [],
-                departments: [],
-                roles: [],
-                editedIndex: -1,
                 editedItem: {
+                    id: 0,
                     name: '',
                     designation: '',
                     email: '',
                     department_id: '',
+                    department_name: '',
+                    role_id: '',
+                    role_name: '',
                     department: {
                         id: 0,
                         name: '',
@@ -180,10 +186,14 @@
                     password: '',
                 },
                 defaultItem: {
+                    id: 0,
                     name: '',
                     designation: '',
                     email: '',
                     department_id: '',
+                    department_name: '',
+                    role_id: '',
+                    role_name: '',
                     department: {
                         id: 0,
                         name: '',
@@ -196,12 +206,11 @@
                     ],
                     password: '',
                 },
-                //index: 0,
             }
         },
         computed: {
             formTitle () {
-                return this.editedIndex === -1 ? 'New User' : 'Edit User'
+                return this.editedIndex === -1 ? 'New Department' : 'Edit Department'
             },
             /*departmentName () {
                 return this.editedIndex === -1 ? '' : this.rows[this.editedIndex].department.name
@@ -216,12 +225,13 @@
         },
         methods: {
             initialize: function() {
-                axios.get('/api/users')
+                axios.get('/api/departments')
                 .then( response => {
                     this.rows = response.data;
                 });
-                //console.log("the rows" + this.rows)
+                console.log(this.rows)
             },
+            /*
             getDepartments: function() {
                 axios.get('/api/departments')
                 .then( response => {
@@ -233,12 +243,11 @@
                 .then( response => {
                     this.roles = response.data;
                 });
-            },
+            },*/
             editItem (item) {
                 this.editedIndex = this.rows.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 this.dialog = true
-                console.log(this.editedIndex);
             },
 
             deleteItem (item) {
@@ -266,40 +275,59 @@
                 // check if process is updating or creating
                 // if update, then replace the value of the current item with the value in the editedItem
                 // if creating, then push the edited item into the object
-                axios.post('/api/users/upsert', {
-                    user: this.editedItem,
-                    password: this.password,
-                });
                 
                 // assign the edited item to a local var first to be able to be used for filter
-                var editItem = this.editedItem
+                var editedItem = this.editedItem
+                var editedIndex = this.editedIndex
                 /*var filterDepartment = this.departments.filter(function(department) {
                         return department.id ==  editItem.department_id
                 });*/
                 // use ES6, filter can only access local variables
-                var filterDepartment = this.departments.filter( department => department.id == editItem.department.id );
-                this.editedItem.department.name = filterDepartment[0].name;
-                this.editedItem.department.id = filterDepartment[0].id;
-                
-                var filterRole = this.roles.filter( role => role.id == editItem.roles[0].id );
-                this.editedItem.roles[0].name = filterRole[0].name;
-                this.editedItem.roles[0].id = filterRole[0].id;
-                
+                // get department name based on department_id
+                var filterDepartment = this.departments.filter( department => department.id == editedItem.department_id );
+                this.editedItem.department_name = filterDepartment[0].name;
+                // get role name based on role_id
+                var filterRole = this.roles.filter( role => role.id == editedItem.role_id );
+                this.editedItem.role_name = filterRole[0].name;
 
-                if (this.editedIndex > -1) {
-                    // perform the update action here
-                    // action ...
-                    Object.assign(this.rows[this.editedIndex], this.editedItem)
-                    /////console.log(this.editedItem)
-                } else {
+                axios.post('/api/users/upsert', {
+                    user: editedItem,
+                })
+                .then(response => {
+                    if (response.data.success) {
+                        this.feedback = 'Changes for ' + editedItem.name + ' is saved.'
+                        this.successAlert = true
+                        if ( editedIndex > -1 )
+                            Object.assign(this.rows[editedIndex], editedItem)
+                        else
+                            this.rows.push(editedItem)
+                    }
+                })
+
+                setTimeout(()=>{
+                    this.successAlert=false
+                    },10000)
+
+                /////if (this.editedIndex > -1) {
+                    // push changes to server
+                    /////axios.post('/api/users/update', {
+                        /////user: editedItem,
+                    /////})
+                    /////.then(response => {
+                        /////if (response.data.success) {
+                            /////this.feedback = 'Changes for ' + editedItem.name + ' is saved.'
+                            /////this.successAlert = true
+                            /////Object.assign(this.rows[editedIndex], editedItem)
+                        /////}
+                    /////})
+                    //Object.assign(this.rows[this.editedIndex], this.editedItem)
+                /////} else {
                     // perform the create action here
                     // action ...
-                    this.rows.push(this.editedItem)
-                    console.log(this.rows)
-                }
-                // reset the form
-                /////this.$refs.form.reset();
-                //Object.assign(this.$data, this.$options.data.editedItem.call(this));
+                    /////this.rows.push(this.editedItem)
+                    /////console.log(this.rows)
+                /////}
+
                 // close the dialog box
                 this.close()
                 
@@ -307,8 +335,8 @@
         },
         created: function() {
             this.initialize();
-            this.getDepartments();
-            this.getRoles();
-        }
+            //this.getDepartments();
+            //this.getRoles();
+        },
     }
 </script>

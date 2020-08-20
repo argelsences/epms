@@ -73,7 +73,9 @@ class UserController extends Controller
      */
     public function upsert(Request $request)
     {
-        /////$this->authorize('manage', 'App\Category');
+        if ( auth()->user()->can(['edit user', 'add user']) ){
+            return response('Unauthorized', 403);
+        }
         $user = $request->post('user');
         
         if ( $user['id'] ){
@@ -136,6 +138,10 @@ class UserController extends Controller
      * API to return all users
      */
     public function list(User $model) {
+
+        if (auth()->user()->can(['list user'])){
+            return response('Unauthorized', 403);
+        }
 
         $dataObject = [];
 

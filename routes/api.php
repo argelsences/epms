@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
     return $request->user();
 });*/
 
-Route::group(['middleware' => 'auth:api'], function(){
+Route::group(['middleware' => ['auth:api']], function(){
     Route::get('/users', 'UserController@list')->name('user.list');
     Route::get('/roles', 'UserController@getAllRoles')->name('user.roles');
     Route::get('/departments', 'DepartmentController@list')->name('department.list');

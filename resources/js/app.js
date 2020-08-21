@@ -9,9 +9,11 @@ window.axios = require('axios');
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 import Vuetify from 'vuetify';
+import VueMask from 'v-mask'
 
 window.Vue = require('vue');
 window.Vue.use(Vuetify);
+window.Vue.use(VueMask);
 
 /**
  * The following block of code may be used to automatically register your

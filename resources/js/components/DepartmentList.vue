@@ -65,24 +65,76 @@
                                                 </v-row>
                                                 <v-row>
                                                     <v-col cols="12" sm="12" md="6">
-                                                        <!--<v-text-field v-model="editedItem.department_id" label="Department" :rules="[rules.required]"></v-text-field>-->
+                                                        <v-text-field v-model="editedItem.phone" label="Tel. #" :rules="[rules.phoneValid]"></v-text-field>
                                                         <!--<v-select :items="departments" label="Department" item-text="name" item-value="id" v-model="editedItem.department_id" :rules="[rules.required]"></v-select>-->
-                                                        <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select"></v-autocomplete>
+                                                        <!--<v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select"></v-autocomplete>-->
                                                     </v-col>
                                                     <v-col cols="12" sm="12" md="6">
-                                                        <!--<v-text-field v-model="editedItem.designation" label="Designation" :rules="[rules.required]"></v-text-field>-->
-                                                        <v-combobox v-model="editedItem.designation" :items="rows" item-text="designation" item-value="designation"  label="Designation" :rules="[rules.required]" :return-object="false" hint="Type to select or add new item"></v-combobox>
+                                                        <v-text-field v-model="editedItem.facebook" label="Facebook URL" :rules="[rules.urlValid]"></v-text-field>
+                                                        <!--<v-combobox v-model="editedItem.designation" :items="rows" item-text="designation" item-value="designation"  label="Designation" :rules="[rules.required]" :return-object="false" hint="Type to select or add new item"></v-combobox>-->
                                                     </v-col>
                                                 </v-row>
                                                 <v-row>
                                                     <v-col cols="12" sm="12" md="6">
-                                                        <!--<v-text-field label="Password" type="password" v-model="password" :rules="[rules.required, rules.min]"></v-text-field>-->
-                                                        <v-autocomplete v-model="editedItem.role_id" :items="roles" item-text="name" item-value="id"  label="Role" :rules="[rules.required]" hint="Type to select"></v-autocomplete>
+                                                        <v-text-field v-model="editedItem.instagram" label="Instagram URL" :rules="[rules.urlValid]"></v-text-field>
                                                     </v-col>
                                                     <v-col cols="12" sm="12" md="6">
-                                                        <!--<v-text-field v-if="editedIndex == -1" label="Confirm Password" type="password" v-model="passwordConfirm" :rules="[rules.required,rules.passwordMatch]"></v-text-field>-->
-                                                        <v-text-field v-if="editedIndex > -1" v-model="editedItem.password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.min]" :type="showPassword ? 'text' : 'password'" label="Password" hint="At least 8 characters" counter @click:append="showPassword = !showPassword"></v-text-field>
-                                                        <v-text-field v-else v-model="editedItem.password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="showPassword ? 'text' : 'password'" label="Password" hint="At least 8 characters" counter @click:append="showPassword = !showPassword"></v-text-field>
+                                                        <v-text-field label="Logo" v-model="editedItem.logo_path"></v-text-field>
+                                                    </v-col>
+                                                </v-row>
+                                                <v-row>
+                                                    <v-col cols="12" sm="12" md="6">
+                                                        <v-text-field v-model="editedItem.page_header_bg_color" v-mask="mask" hide-details class="ma-0 pa-0"  label="Page header bg color" outlined readonly :placeholder="color">
+                                                            <template v-slot:append>
+                                                                <v-menu v-model="menu_header_bg" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
+                                                                    <template v-slot:activator="{ on }">
+                                                                        <div :style="swatchStyleHeaderBGColor" v-on="on" />
+                                                                    </template>
+                                                                    <v-card>
+                                                                        <v-card-text class="pa-0">
+                                                                            <v-color-picker v-model="editedItem.page_header_bg_color" mode="hexa" hide-mode-switch flat />
+                                                                        </v-card-text>
+                                                                    </v-card>
+                                                                </v-menu>
+                                                            </template>
+                                                        </v-text-field>
+                                                    </v-col>
+                                                    <v-col cols="12" sm="12" md="6">
+                                                        <v-text-field v-model="editedItem.page_bg_color" v-mask="mask" hide-details class="ma-0 pa-0"  label="Page bg color" outlined readonly :placeholder="color">
+                                                            <template v-slot:append>
+                                                                <v-menu v-model="menu_bg" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
+                                                                    <template v-slot:activator="{ on }">
+                                                                        <div :style="swatchStyleBGColor" v-on="on" />
+                                                                    </template>
+                                                                    <v-card>
+                                                                        <v-card-text class="pa-0">
+                                                                            <v-color-picker v-model="editedItem.page_bg_color" mode="hexa" hide-mode-switch flat />
+                                                                        </v-card-text>
+                                                                    </v-card>
+                                                                </v-menu>
+                                                            </template>
+                                                        </v-text-field>
+                                                    </v-col>
+                                                </v-row>
+                                                <v-row>
+                                                    <v-col cols="12" sm="12" md="6">
+                                                        <v-text-field v-model="editedItem.page_text_color" v-mask="mask" hide-details class="ma-0 pa-0"  label="Page text color" outlined readonly :placeholder="color">
+                                                            <template v-slot:append>
+                                                                <v-menu v-model="menu_text_color" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
+                                                                    <template v-slot:activator="{ on }">
+                                                                        <div :style="swatchStyleTextColor" v-on="on" />
+                                                                    </template>
+                                                                    <v-card>
+                                                                        <v-card-text class="pa-0">
+                                                                            <v-color-picker v-model="editedItem.page_text_color" mode="hexa" hide-mode-switch flat />
+                                                                        </v-card-text>
+                                                                    </v-card>
+                                                                </v-menu>
+                                                            </template>
+                                                        </v-text-field>
+                                                    </v-col>
+                                                    <v-col cols="12" sm="12" md="6">
+                                                        <v-text-field label="URL" v-model="editedItem.url"></v-text-field>
                                                     </v-col>
                                                 </v-row>
                                                 </v-form>
@@ -143,7 +195,6 @@
             return {
                 dialog: false,
                 valid: true,
-                showPassword: false,
                 expanded: [],
                 singleExpand: true,
                 search : '',
@@ -153,10 +204,20 @@
                 roles: [],
                 editedIndex: -1,
                 successAlert: false,
+                color: '#1976D2',
+                mask: '?#XXXXXX',
+                menu_header_bg: false,
+                menu_bg: false,
+                menu_text_color: false,
+                //c_picker: '',
+                //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
+
                 rules: {
                     required: (v) => !!v || 'Required.',
                     min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
                     emailValid: (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
+                    phoneValid: (v) => /^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/.test(v) || 'Tel. # must be valid',
+                    urlValid: (v) => /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(v) || 'URL must be valid',
                     //passwordMatch: (v) => !(v!==this.password) || 'Password do not match.'
                 },
                 headers: [
@@ -167,44 +228,27 @@
                 editedItem: {
                     id: 0,
                     name: '',
-                    designation: '',
+                    phone: '',
                     email: '',
-                    department_id: '',
-                    department_name: '',
-                    role_id: '',
-                    role_name: '',
-                    department: {
-                        id: 0,
-                        name: '',
-                    },
-                    roles : [
-                        { 
-                            id: 0,
-                            name: '',
-                        },
-                    ],
-                    password: '',
+                    facebook: '',
+                    instagram: '',
+                    logo_path: '',
+                    page_header_bg_color: '',
+                    page_bg_color: '',
+                    page_text_color: '',
                 },
                 defaultItem: {
                     id: 0,
                     name: '',
-                    designation: '',
+                    phone: '',
                     email: '',
-                    department_id: '',
+                    facebook: '',
+                    instagram: '',
                     department_name: '',
-                    role_id: '',
-                    role_name: '',
-                    department: {
-                        id: 0,
-                        name: '',
-                    },
-                    roles : [
-                        { 
-                            id: 0,
-                            name: '',
-                        },
-                    ],
-                    password: '',
+                    logo_path: '',
+                    page_header_bg_color: '',
+                    page_bg_color: '',
+                    page_text_color: '',
                 },
             }
         },
@@ -215,6 +259,54 @@
             /*departmentName () {
                 return this.editedIndex === -1 ? '' : this.rows[this.editedIndex].department.name
             },*/ 
+            swatchStyleHeaderBGColor() {
+                const { menu } = this
+                var background = this.editedItem.page_header_bg_color
+                // ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
+                if (this.editedItem.page_header_bg_color == '' || this.editedItem.page_header_bg_color == null )
+                    background = '#1976D2'
+                    
+                return {
+                    backgroundColor: background,
+                    cursor: 'pointer',
+                    height: '30px',
+                    width: '30px',
+                    borderRadius: menu ? '50%' : '4px',
+                    transition: 'border-radius 200ms ease-in-out'
+                }
+            },
+            swatchStyleBGColor() {
+                const { menu } = this
+                var background = this.editedItem.page_bg_color
+                // ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
+                if (this.editedItem.page_bg_color == '' || this.editedItem.page_bg_color == null )
+                    background = '#1976D2'
+                    
+                return {
+                    backgroundColor: background,
+                    cursor: 'pointer',
+                    height: '30px',
+                    width: '30px',
+                    borderRadius: menu ? '50%' : '4px',
+                    transition: 'border-radius 200ms ease-in-out'
+                }
+            },
+            swatchStyleTextColor() {
+                const { menu } = this
+                var background = this.editedItem.page_text_color
+                // ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
+                if (this.editedItem.page_text_color == '' || this.editedItem.page_text_color == null )
+                    background = '#1976D2'
+                    
+                return {
+                    backgroundColor: background,
+                    cursor: 'pointer',
+                    height: '30px',
+                    width: '30px',
+                    borderRadius: menu ? '50%' : '4px',
+                    transition: 'border-radius 200ms ease-in-out'
+                }
+            },
         },
         watch: {
             dialog (val) {
@@ -229,21 +321,7 @@
                 .then( response => {
                     this.rows = response.data;
                 });
-                console.log(this.rows)
             },
-            /*
-            getDepartments: function() {
-                axios.get('/api/departments')
-                .then( response => {
-                    this.departments = response.data;
-                });
-            },
-            getRoles: function() {
-                axios.get('/api/roles')
-                .then( response => {
-                    this.roles = response.data;
-                });
-            },*/
             editItem (item) {
                 this.editedIndex = this.rows.indexOf(item)
                 this.editedItem = Object.assign({}, item)
@@ -269,7 +347,6 @@
                 })
                 
             },
-
             save () {
                 this.$refs.form.validate()
                 // check if process is updating or creating

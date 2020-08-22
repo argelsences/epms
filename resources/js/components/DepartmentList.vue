@@ -41,7 +41,7 @@
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details ></v-text-field>
                         <v-spacer></v-spacer>
                         <!-- the dialog box -->        
-                        <v-dialog v-model="dialog" max-width="600px">
+                        <v-dialog v-model="dialog" max-width="800px">
                             <template v-slot:activator="{ on, attrs }">
                                 <v-btn class="mb-2 btn btn-sm btn-primary" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Department</v-btn>
                             </template>
@@ -55,36 +55,50 @@
                                         <v-container>
                                             <v-form v-model="valid" ref="form" @submit.prevent="" lazy-validation>
                                                 <v-row>
+                                                    <v-subheader><h4>Details</h4></v-subheader>
+                                                </v-row>
+                                                <v-row>
                                                     <v-col cols="12" sm="12" md="6">
-                                                        <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]"></v-text-field>
+                                                        <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
                                                     </v-col>
                                                     <v-col cols="12" sm="12" md="6">
-                                                        <v-text-field v-if="editedIndex > -1" v-model="editedItem.email" label="Email" :rules="[rules.required, rules.emailValid]" readonly disabled></v-text-field>
-                                                        <v-text-field v-else v-model="editedItem.email" label="Email" :rules="[rules.required, rules.emailValid]"></v-text-field>
+                                                        <v-text-field v-if="editedIndex > -1" v-model="editedItem.email" label="Email" :rules="[rules.required, rules.emailValid]" readonly disabled prepend-icon="mdi-email" ></v-text-field>
+                                                        <v-text-field v-else v-model="editedItem.email" label="Email" :rules="[rules.required, rules.emailValid]" prepend-icon="mdi-email" ></v-text-field>
                                                     </v-col>
                                                 </v-row>
                                                 <v-row>
                                                     <v-col cols="12" sm="12" md="6">
-                                                        <v-text-field v-model="editedItem.phone" label="Tel. #" :rules="[rules.phoneValid]"></v-text-field>
+                                                        <v-text-field v-model="editedItem.phone" label="Tel. #" :rules="[rules.phoneValid]" prepend-icon="mdi-phone" ></v-text-field>
                                                         <!--<v-select :items="departments" label="Department" item-text="name" item-value="id" v-model="editedItem.department_id" :rules="[rules.required]"></v-select>-->
                                                         <!--<v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select"></v-autocomplete>-->
                                                     </v-col>
                                                     <v-col cols="12" sm="12" md="6">
-                                                        <v-text-field v-model="editedItem.facebook" label="Facebook URL" :rules="[rules.urlValid]"></v-text-field>
+                                                        <v-text-field label="Logo" v-model="editedItem.logo_path" prepend-icon="mdi-camera-iris" ></v-text-field>
+                                                    </v-col>
+                                                </v-row>
+                                                <v-row>
+                                                    <v-col cols="12" sm="12" md="12">
+                                                        <v-text-field v-model="editedItem.url" label="Department URI" prepend-icon="mdi-link" :prefix="base_url"></v-text-field>
+                                                    </v-col>
+                                                </v-row>
+                                                <v-row>
+                                                    <v-subheader><h4>Social Media</h4></v-subheader>
+                                                </v-row>
+                                                <v-row>
+                                                    <v-col cols="12" sm="12" md="6">
+                                                        <v-text-field v-model="editedItem.facebook" label="Facebook URL" :rules="[rules.urlValid]" prepend-icon="mdi-facebook"></v-text-field>
                                                         <!--<v-combobox v-model="editedItem.designation" :items="rows" item-text="designation" item-value="designation"  label="Designation" :rules="[rules.required]" :return-object="false" hint="Type to select or add new item"></v-combobox>-->
                                                     </v-col>
-                                                </v-row>
-                                                <v-row>
                                                     <v-col cols="12" sm="12" md="6">
-                                                        <v-text-field v-model="editedItem.instagram" label="Instagram URL" :rules="[rules.urlValid]"></v-text-field>
-                                                    </v-col>
-                                                    <v-col cols="12" sm="12" md="6">
-                                                        <v-text-field label="Logo" v-model="editedItem.logo_path"></v-text-field>
+                                                        <v-text-field v-model="editedItem.instagram" label="Instagram URL" :rules="[rules.urlValid]" prepend-icon="mdi-instagram"></v-text-field>
                                                     </v-col>
                                                 </v-row>
                                                 <v-row>
-                                                    <v-col cols="12" sm="12" md="6">
-                                                        <v-text-field v-model="editedItem.page_header_bg_color" v-mask="mask" hide-details class="ma-0 pa-0"  label="Page header bg color" outlined readonly :placeholder="color">
+                                                    <v-subheader><h4>Typography</h4></v-subheader>
+                                                </v-row>
+                                                <v-row>
+                                                    <v-col cols="12" sm="12" md="4">
+                                                        <v-text-field v-model="editedItem.page_header_bg_color" v-mask="mask" hide-details class="ma-0 pa-0"  label="Page header bg color" outlined readonly :placeholder="color" >
                                                             <template v-slot:append>
                                                                 <v-menu v-model="menu_header_bg" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
                                                                     <template v-slot:activator="{ on }">
@@ -99,7 +113,7 @@
                                                             </template>
                                                         </v-text-field>
                                                     </v-col>
-                                                    <v-col cols="12" sm="12" md="6">
+                                                    <v-col cols="12" sm="12" md="4">
                                                         <v-text-field v-model="editedItem.page_bg_color" v-mask="mask" hide-details class="ma-0 pa-0"  label="Page bg color" outlined readonly :placeholder="color">
                                                             <template v-slot:append>
                                                                 <v-menu v-model="menu_bg" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
@@ -115,9 +129,7 @@
                                                             </template>
                                                         </v-text-field>
                                                     </v-col>
-                                                </v-row>
-                                                <v-row>
-                                                    <v-col cols="12" sm="12" md="6">
+                                                    <v-col cols="12" sm="12" md="4">
                                                         <v-text-field v-model="editedItem.page_text_color" v-mask="mask" hide-details class="ma-0 pa-0"  label="Page text color" outlined readonly :placeholder="color">
                                                             <template v-slot:append>
                                                                 <v-menu v-model="menu_text_color" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
@@ -133,8 +145,16 @@
                                                             </template>
                                                         </v-text-field>
                                                     </v-col>
+                                                </v-row>
+                                                <v-row>
+                                                    <v-subheader><h4 class="mt-6">Statistics code</h4></v-subheader>
+                                                </v-row>
+                                                <v-row>
                                                     <v-col cols="12" sm="12" md="6">
-                                                        <v-text-field label="URL" v-model="editedItem.url"></v-text-field>
+                                                        <v-textarea label="Google Analytics code" hint="Paste the code here" v-model="editedItem.google_analytics_code"></v-textarea>
+                                                    </v-col>
+                                                    <v-col cols="12" sm="12" md="6">
+                                                        <v-textarea label="Google Tag Manager code" hint="Paste the code here" v-model="editedItem.google_tag_manager_code"></v-textarea>
                                                     </v-col>
                                                 </v-row>
                                                 </v-form>
@@ -209,6 +229,7 @@
                 menu_header_bg: false,
                 menu_bg: false,
                 menu_text_color: false,
+                base_url: window.location.origin + '/',
                 //c_picker: '',
                 //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
 

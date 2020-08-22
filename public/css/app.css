@@ -11051,3 +11051,7 @@ a.text-dark:focus {
   color: #00818a !important;
 }
 
+.navbar.navbar-absolute {
+  z-index: 200;
+}
+

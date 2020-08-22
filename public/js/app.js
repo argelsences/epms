@@ -2096,6 +2096,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -2118,6 +2138,7 @@ __webpack_require__.r(__webpack_exports__);
       menu_header_bg: false,
       menu_bg: false,
       menu_text_color: false,
+      base_url: window.location.origin + '/',
       //c_picker: '',
       //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
       rules: {
@@ -3797,7 +3818,7 @@ var render = function() {
                         _c(
                           "v-dialog",
                           {
-                            attrs: { "max-width": "600px" },
+                            attrs: { "max-width": "800px" },
                             scopedSlots: _vm._u([
                               {
                                 key: "activator",
@@ -3879,6 +3900,16 @@ var render = function() {
                                             _c(
                                               "v-row",
                                               [
+                                                _c("v-subheader", [
+                                                  _c("h4", [_vm._v("Details")])
+                                                ])
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-row",
+                                              [
                                                 _c(
                                                   "v-col",
                                                   {
@@ -3894,7 +3925,9 @@ var render = function() {
                                                         label: "Name",
                                                         rules: [
                                                           _vm.rules.required
-                                                        ]
+                                                        ],
+                                                        "prepend-icon":
+                                                          "mdi-information"
                                                       },
                                                       model: {
                                                         value:
@@ -3937,7 +3970,9 @@ var render = function() {
                                                                 .emailValid
                                                             ],
                                                             readonly: "",
-                                                            disabled: ""
+                                                            disabled: "",
+                                                            "prepend-icon":
+                                                              "mdi-email"
                                                           },
                                                           model: {
                                                             value:
@@ -3964,7 +3999,9 @@ var render = function() {
                                                                 .required,
                                                               _vm.rules
                                                                 .emailValid
-                                                            ]
+                                                            ],
+                                                            "prepend-icon":
+                                                              "mdi-email"
                                                           },
                                                           model: {
                                                             value:
@@ -4008,7 +4045,9 @@ var render = function() {
                                                         label: "Tel. #",
                                                         rules: [
                                                           _vm.rules.phoneValid
-                                                        ]
+                                                        ],
+                                                        "prepend-icon":
+                                                          "mdi-phone"
                                                       },
                                                       model: {
                                                         value:
@@ -4042,88 +4081,10 @@ var render = function() {
                                                   [
                                                     _c("v-text-field", {
                                                       attrs: {
-                                                        label: "Facebook URL",
-                                                        rules: [
-                                                          _vm.rules.urlValid
-                                                        ]
+                                                        label: "Logo",
+                                                        "prepend-icon":
+                                                          "mdi-camera-iris"
                                                       },
-                                                      model: {
-                                                        value:
-                                                          _vm.editedItem
-                                                            .facebook,
-                                                        callback: function(
-                                                          $$v
-                                                        ) {
-                                                          _vm.$set(
-                                                            _vm.editedItem,
-                                                            "facebook",
-                                                            $$v
-                                                          )
-                                                        },
-                                                        expression:
-                                                          "editedItem.facebook"
-                                                      }
-                                                    })
-                                                  ],
-                                                  1
-                                                )
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-row",
-                                              [
-                                                _c(
-                                                  "v-col",
-                                                  {
-                                                    attrs: {
-                                                      cols: "12",
-                                                      sm: "12",
-                                                      md: "6"
-                                                    }
-                                                  },
-                                                  [
-                                                    _c("v-text-field", {
-                                                      attrs: {
-                                                        label: "Instagram URL",
-                                                        rules: [
-                                                          _vm.rules.urlValid
-                                                        ]
-                                                      },
-                                                      model: {
-                                                        value:
-                                                          _vm.editedItem
-                                                            .instagram,
-                                                        callback: function(
-                                                          $$v
-                                                        ) {
-                                                          _vm.$set(
-                                                            _vm.editedItem,
-                                                            "instagram",
-                                                            $$v
-                                                          )
-                                                        },
-                                                        expression:
-                                                          "editedItem.instagram"
-                                                      }
-                                                    })
-                                                  ],
-                                                  1
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "v-col",
-                                                  {
-                                                    attrs: {
-                                                      cols: "12",
-                                                      sm: "12",
-                                                      md: "6"
-                                                    }
-                                                  },
-                                                  [
-                                                    _c("v-text-field", {
-                                                      attrs: { label: "Logo" },
                                                       model: {
                                                         value:
                                                           _vm.editedItem
@@ -4157,7 +4118,160 @@ var render = function() {
                                                     attrs: {
                                                       cols: "12",
                                                       sm: "12",
+                                                      md: "12"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        label: "Department URI",
+                                                        "prepend-icon":
+                                                          "mdi-link",
+                                                        prefix: _vm.base_url
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedItem.url,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedItem,
+                                                            "url",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedItem.url"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-row",
+                                              [
+                                                _c("v-subheader", [
+                                                  _c("h4", [
+                                                    _vm._v("Social Media")
+                                                  ])
+                                                ])
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-row",
+                                              [
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
                                                       md: "6"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        label: "Facebook URL",
+                                                        rules: [
+                                                          _vm.rules.urlValid
+                                                        ],
+                                                        "prepend-icon":
+                                                          "mdi-facebook"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedItem
+                                                            .facebook,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedItem,
+                                                            "facebook",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedItem.facebook"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "6"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        label: "Instagram URL",
+                                                        rules: [
+                                                          _vm.rules.urlValid
+                                                        ],
+                                                        "prepend-icon":
+                                                          "mdi-instagram"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedItem
+                                                            .instagram,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedItem,
+                                                            "instagram",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedItem.instagram"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-row",
+                                              [
+                                                _c("v-subheader", [
+                                                  _c("h4", [
+                                                    _vm._v("Typography")
+                                                  ])
+                                                ])
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-row",
+                                              [
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "4"
                                                     }
                                                   },
                                                   [
@@ -4316,7 +4430,7 @@ var render = function() {
                                                     attrs: {
                                                       cols: "12",
                                                       sm: "12",
-                                                      md: "6"
+                                                      md: "4"
                                                     }
                                                   },
                                                   [
@@ -4466,21 +4580,15 @@ var render = function() {
                                                     })
                                                   ],
                                                   1
-                                                )
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-row",
-                                              [
+                                                ),
+                                                _vm._v(" "),
                                                 _c(
                                                   "v-col",
                                                   {
                                                     attrs: {
                                                       cols: "12",
                                                       sm: "12",
-                                                      md: "6"
+                                                      md: "4"
                                                     }
                                                   },
                                                   [
@@ -4631,6 +4739,64 @@ var render = function() {
                                                     })
                                                   ],
                                                   1
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-row",
+                                              [
+                                                _c("v-subheader", [
+                                                  _c(
+                                                    "h4",
+                                                    { staticClass: "mt-6" },
+                                                    [_vm._v("Statistics code")]
+                                                  )
+                                                ])
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-row",
+                                              [
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "6"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-textarea", {
+                                                      attrs: {
+                                                        label:
+                                                          "Google Analytics code",
+                                                        hint:
+                                                          "Paste the code here"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedItem
+                                                            .google_analytics_code,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedItem,
+                                                            "google_analytics_code",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedItem.google_analytics_code"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
                                                 ),
                                                 _vm._v(" "),
                                                 _c(
@@ -4643,22 +4809,28 @@ var render = function() {
                                                     }
                                                   },
                                                   [
-                                                    _c("v-text-field", {
-                                                      attrs: { label: "URL" },
+                                                    _c("v-textarea", {
+                                                      attrs: {
+                                                        label:
+                                                          "Google Tag Manager code",
+                                                        hint:
+                                                          "Paste the code here"
+                                                      },
                                                       model: {
                                                         value:
-                                                          _vm.editedItem.url,
+                                                          _vm.editedItem
+                                                            .google_tag_manager_code,
                                                         callback: function(
                                                           $$v
                                                         ) {
                                                           _vm.$set(
                                                             _vm.editedItem,
-                                                            "url",
+                                                            "google_tag_manager_code",
                                                             $$v
                                                           )
                                                         },
                                                         expression:
-                                                          "editedItem.url"
+                                                          "editedItem.google_tag_manager_code"
                                                       }
                                                     })
                                                   ],
@@ -5022,7 +5194,7 @@ var render = function() {
                         _c(
                           "v-dialog",
                           {
-                            attrs: { "max-width": "600px" },
+                            attrs: { "max-width": "800px" },
                             scopedSlots: _vm._u([
                               {
                                 key: "activator",

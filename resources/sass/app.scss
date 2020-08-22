@@ -110,6 +110,10 @@ $secondary_font_color: #eeeeee;
 .text-primary{
     color: $primary!important;
 }
+// navbar
+.navbar.navbar-absolute{
+    z-index: 200;
+}
 
 // vuetify override
 

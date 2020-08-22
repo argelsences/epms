@@ -41,7 +41,7 @@
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details ></v-text-field>
                         <v-spacer></v-spacer>
                         <!-- the dialog box -->        
-                        <v-dialog v-model="dialog" max-width="600px">
+                        <v-dialog v-model="dialog" max-width="800px">
                             <template v-slot:activator="{ on, attrs }">
                                 <v-btn class="mb-2 btn btn-sm btn-primary" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> User</v-btn>
                             </template>

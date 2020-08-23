@@ -19,10 +19,12 @@ use Illuminate\Support\Facades\Route;
 });*/
 
 Route::group(['middleware' => ['auth:api']], function(){
-    Route::get('/users', 'UserController@list')->name('user.list');
-    Route::get('/roles', 'UserController@getAllRoles')->name('user.roles');
-    Route::get('/departments', 'DepartmentController@list')->name('department.list');
-    Route::post('/users/upsert', 'UserController@upsert')->name('user.upsert');
+    Route::get('/users', 'UserController@list')->name('users.list');
+    Route::get('/roles', 'UserController@getAllRoles')->name('users.roles');
+    Route::get('/departments', 'DepartmentController@list')->name('departments.list');
+
+    Route::post('/users/upsert', 'UserController@upsert')->name('users.upsert');
+    Route::post('/departments/upsert', 'DepartmentController@upsert')->name('departments.upsert');
     //Route::delete('/categories/{category}', 'CategoryController@destroy');
     /////Route::middleware('can:delete,category')->delete('/categories/{category}', 'CategoryController@destroy');
     //Route::post('/menu-items/add', 'MenuItemController@store');

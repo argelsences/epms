@@ -45,56 +45,54 @@
                             <template v-slot:activator="{ on, attrs }">
                                 <v-btn class="mb-2 btn btn-sm btn-primary" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> User</v-btn>
                             </template>
-                            
-                                <v-card>
-                                    <v-card-title>
-                                        <!-- formTitle is a computed property based on action edit or new -->
-                                        <span class="headline">{{ formTitle }}</span>
-                                    </v-card-title>
-                                    <v-card-text>
-                                        <v-container>
-                                            <v-form v-model="valid" ref="form" @submit.prevent="" lazy-validation>
-                                                <v-row>
-                                                    <v-col cols="12" sm="12" md="6">
-                                                        <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]"></v-text-field>
-                                                    </v-col>
-                                                    <v-col cols="12" sm="12" md="6">
-                                                        <v-text-field v-if="editedIndex > -1" v-model="editedItem.email" label="Email" :rules="[rules.required, rules.emailValid]" readonly disabled></v-text-field>
-                                                        <v-text-field v-else v-model="editedItem.email" label="Email" :rules="[rules.required, rules.emailValid]"></v-text-field>
-                                                    </v-col>
-                                                </v-row>
-                                                <v-row>
-                                                    <v-col cols="12" sm="12" md="6">
-                                                        <!--<v-text-field v-model="editedItem.department_id" label="Department" :rules="[rules.required]"></v-text-field>-->
-                                                        <!--<v-select :items="departments" label="Department" item-text="name" item-value="id" v-model="editedItem.department_id" :rules="[rules.required]"></v-select>-->
-                                                        <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select"></v-autocomplete>
-                                                    </v-col>
-                                                    <v-col cols="12" sm="12" md="6">
-                                                        <!--<v-text-field v-model="editedItem.designation" label="Designation" :rules="[rules.required]"></v-text-field>-->
-                                                        <v-combobox v-model="editedItem.designation" :items="rows" item-text="designation" item-value="designation"  label="Designation" :rules="[rules.required]" :return-object="false" hint="Type to select or add new item"></v-combobox>
-                                                    </v-col>
-                                                </v-row>
-                                                <v-row>
-                                                    <v-col cols="12" sm="12" md="6">
-                                                        <!--<v-text-field label="Password" type="password" v-model="password" :rules="[rules.required, rules.min]"></v-text-field>-->
-                                                        <v-autocomplete v-model="editedItem.role_id" :items="roles" item-text="name" item-value="id"  label="Role" :rules="[rules.required]" hint="Type to select"></v-autocomplete>
-                                                    </v-col>
-                                                    <v-col cols="12" sm="12" md="6">
-                                                        <!--<v-text-field v-if="editedIndex == -1" label="Confirm Password" type="password" v-model="passwordConfirm" :rules="[rules.required,rules.passwordMatch]"></v-text-field>-->
-                                                        <v-text-field v-if="editedIndex > -1" v-model="editedItem.password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.min]" :type="showPassword ? 'text' : 'password'" label="Password" hint="At least 8 characters" counter @click:append="showPassword = !showPassword"></v-text-field>
-                                                        <v-text-field v-else v-model="editedItem.password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="showPassword ? 'text' : 'password'" label="Password" hint="At least 8 characters" counter @click:append="showPassword = !showPassword"></v-text-field>
-                                                    </v-col>
-                                                </v-row>
-                                                </v-form>
-                                        </v-container>
-                                    </v-card-text>
-                                    <v-card-actions>
-                                        <v-spacer></v-spacer>
-                                        <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                                        <v-btn color="blue darken-1" :disabled="!valid" text @click="save">Save</v-btn>
-                                    </v-card-actions>
-                                </v-card>
-                            
+                            <v-card>
+                                <v-card-title>
+                                    <!-- formTitle is a computed property based on action edit or new -->
+                                    <span class="headline">{{ formTitle }}</span>
+                                </v-card-title>
+                                <v-card-text>
+                                    <v-container>
+                                        <v-form v-model="valid" ref="form" @submit.prevent="" lazy-validation>
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]"></v-text-field>
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-text-field v-if="editedIndex > -1" v-model="editedItem.email" label="Email" :rules="[rules.required, rules.emailValid]" readonly disabled></v-text-field>
+                                                    <v-text-field v-else v-model="editedItem.email" label="Email" :rules="[rules.required, rules.emailValid]"></v-text-field>
+                                                </v-col>
+                                            </v-row>
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <!--<v-text-field v-model="editedItem.department_id" label="Department" :rules="[rules.required]"></v-text-field>-->
+                                                    <!--<v-select :items="departments" label="Department" item-text="name" item-value="id" v-model="editedItem.department_id" :rules="[rules.required]"></v-select>-->
+                                                    <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select"></v-autocomplete>
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <!--<v-text-field v-model="editedItem.designation" label="Designation" :rules="[rules.required]"></v-text-field>-->
+                                                    <v-combobox v-model="editedItem.designation" :items="rows" item-text="designation" item-value="designation"  label="Designation" :rules="[rules.required]" :return-object="false" hint="Type to select or add new item"></v-combobox>
+                                                </v-col>
+                                            </v-row>
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <!--<v-text-field label="Password" type="password" v-model="password" :rules="[rules.required, rules.min]"></v-text-field>-->
+                                                    <v-autocomplete v-model="editedItem.role_id" :items="roles" item-text="name" item-value="id"  label="Role" :rules="[rules.required]" hint="Type to select"></v-autocomplete>
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <!--<v-text-field v-if="editedIndex == -1" label="Confirm Password" type="password" v-model="passwordConfirm" :rules="[rules.required,rules.passwordMatch]"></v-text-field>-->
+                                                    <v-text-field v-if="editedIndex > -1" v-model="editedItem.password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.min]" :type="showPassword ? 'text' : 'password'" label="Password" hint="At least 8 characters" counter @click:append="showPassword = !showPassword"></v-text-field>
+                                                    <v-text-field v-else v-model="editedItem.password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="showPassword ? 'text' : 'password'" label="Password" hint="At least 8 characters" counter @click:append="showPassword = !showPassword"></v-text-field>
+                                                </v-col>
+                                            </v-row>
+                                        </v-form>
+                                    </v-container>
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                                    <v-btn color="blue darken-1" :disabled="!valid" text @click="save">Save</v-btn>
+                                </v-card-actions>
+                            </v-card>
                         </v-dialog>
                         <!-- the dialog box -->
                     </v-toolbar>

@@ -89,4 +89,44 @@ class DepartmentController extends Controller
     public function list(Department $model){
         return response()->json(($model::orderBy('name', 'ASC')->get()));
     }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function upsert(Request $request)
+    {
+        if ( auth()->user()->can(['edit department', 'add department']) ){
+            return response('Unauthorized', 403);
+        }
+        $createSuccess = $updateSuccess = false;
+        $department = $request->post('department');
+        
+        if ( $department['id'] ){
+            // retrieve the user object
+            $theDepartment = Department::findOrFail($department['id']);
+
+            // update the user object with updated details
+            $updateSuccess = $theDepartment->update([
+                'name' => $department['name'],
+                'url' => $department['url'],
+                'email' => $department['email'],
+            ]);
+            //$department['updated_at'] = Carbon::now(env("APP_TIMEZONE"));
+        }
+        else{
+            $createSuccess = Department::create([
+                'name' => $department['name'],
+                'url' => $department['url'],
+                'email' => $department['email'],
+            ]);
+        }
+        
+        // return the same data compared to list to ensure using the same 
+        $success = ($createSuccess || $updateSuccess) ? true : false;
+        return ['success' => $success,];
+    }
 }

@@ -33,8 +33,7 @@
 <template>
     <v-app>
         <v-card>
-            <v-alert v-model="successAlert" type="success" transition="fade-transition" dismissible>{{feedback}}</v-alert>
-            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" :single-expand="singleExpand" :expanded.sync="expanded" show-expand sort-by="name">
+            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" sort-by="name">
                 <template v-slot:top>
                     <!-- the toolbar -->
                     <v-toolbar flat color="white">
@@ -45,128 +44,125 @@
                             <template v-slot:activator="{ on, attrs }">
                                 <v-btn class="mb-2 btn btn-sm btn-primary" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Department</v-btn>
                             </template>
-                            
-                                <v-card>
-                                    <v-card-title>
-                                        <!-- formTitle is a computed property based on action edit or new -->
-                                        <span class="headline">{{ formTitle }}</span>
-                                    </v-card-title>
-                                    <v-card-text>
-                                        <v-container>
-                                            <v-form v-model="valid" ref="form" @submit.prevent="" lazy-validation>
-                                                <v-row>
-                                                    <v-subheader><h4>Details</h4></v-subheader>
-                                                </v-row>
-                                                <v-row>
-                                                    <v-col cols="12" sm="12" md="6">
-                                                        <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
-                                                    </v-col>
-                                                    <v-col cols="12" sm="12" md="6">
-                                                        <v-text-field v-if="editedIndex > -1" v-model="editedItem.email" label="Email" :rules="[rules.required, rules.emailValid]" readonly disabled prepend-icon="mdi-email" ></v-text-field>
-                                                        <v-text-field v-else v-model="editedItem.email" label="Email" :rules="[rules.required, rules.emailValid]" prepend-icon="mdi-email" ></v-text-field>
-                                                    </v-col>
-                                                </v-row>
-                                                <v-row>
-                                                    <v-col cols="12" sm="12" md="6">
-                                                        <v-text-field v-model="editedItem.phone" label="Tel. #" :rules="[rules.phoneValid]" prepend-icon="mdi-phone" ></v-text-field>
-                                                        <!--<v-select :items="departments" label="Department" item-text="name" item-value="id" v-model="editedItem.department_id" :rules="[rules.required]"></v-select>-->
-                                                        <!--<v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select"></v-autocomplete>-->
-                                                    </v-col>
-                                                    <v-col cols="12" sm="12" md="6">
-                                                        <v-text-field label="Logo" v-model="editedItem.logo_path" prepend-icon="mdi-camera-iris" ></v-text-field>
-                                                    </v-col>
-                                                </v-row>
-                                                <v-row>
-                                                    <v-col cols="12" sm="12" md="12">
-                                                        <v-text-field v-model="editedItem.url" label="Department URI" prepend-icon="mdi-link" :prefix="base_url"></v-text-field>
-                                                    </v-col>
-                                                </v-row>
-                                                <v-row>
-                                                    <v-subheader><h4>Social Media</h4></v-subheader>
-                                                </v-row>
-                                                <v-row>
-                                                    <v-col cols="12" sm="12" md="6">
-                                                        <v-text-field v-model="editedItem.facebook" label="Facebook URL" :rules="[rules.urlValid]" prepend-icon="mdi-facebook"></v-text-field>
-                                                        <!--<v-combobox v-model="editedItem.designation" :items="rows" item-text="designation" item-value="designation"  label="Designation" :rules="[rules.required]" :return-object="false" hint="Type to select or add new item"></v-combobox>-->
-                                                    </v-col>
-                                                    <v-col cols="12" sm="12" md="6">
-                                                        <v-text-field v-model="editedItem.instagram" label="Instagram URL" :rules="[rules.urlValid]" prepend-icon="mdi-instagram"></v-text-field>
-                                                    </v-col>
-                                                </v-row>
-                                                <v-row>
-                                                    <v-subheader><h4>Typography</h4></v-subheader>
-                                                </v-row>
-                                                <v-row>
-                                                    <v-col cols="12" sm="12" md="4">
-                                                        <v-text-field v-model="editedItem.page_header_bg_color" v-mask="mask" hide-details class="ma-0 pa-0"  label="Page header bg color" outlined readonly :placeholder="color" >
-                                                            <template v-slot:append>
-                                                                <v-menu v-model="menu_header_bg" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
-                                                                    <template v-slot:activator="{ on }">
-                                                                        <div :style="swatchStyleHeaderBGColor" v-on="on" />
-                                                                    </template>
-                                                                    <v-card>
-                                                                        <v-card-text class="pa-0">
-                                                                            <v-color-picker v-model="editedItem.page_header_bg_color" mode="hexa" hide-mode-switch flat />
-                                                                        </v-card-text>
-                                                                    </v-card>
-                                                                </v-menu>
-                                                            </template>
-                                                        </v-text-field>
-                                                    </v-col>
-                                                    <v-col cols="12" sm="12" md="4">
-                                                        <v-text-field v-model="editedItem.page_bg_color" v-mask="mask" hide-details class="ma-0 pa-0"  label="Page bg color" outlined readonly :placeholder="color">
-                                                            <template v-slot:append>
-                                                                <v-menu v-model="menu_bg" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
-                                                                    <template v-slot:activator="{ on }">
-                                                                        <div :style="swatchStyleBGColor" v-on="on" />
-                                                                    </template>
-                                                                    <v-card>
-                                                                        <v-card-text class="pa-0">
-                                                                            <v-color-picker v-model="editedItem.page_bg_color" mode="hexa" hide-mode-switch flat />
-                                                                        </v-card-text>
-                                                                    </v-card>
-                                                                </v-menu>
-                                                            </template>
-                                                        </v-text-field>
-                                                    </v-col>
-                                                    <v-col cols="12" sm="12" md="4">
-                                                        <v-text-field v-model="editedItem.page_text_color" v-mask="mask" hide-details class="ma-0 pa-0"  label="Page text color" outlined readonly :placeholder="color">
-                                                            <template v-slot:append>
-                                                                <v-menu v-model="menu_text_color" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
-                                                                    <template v-slot:activator="{ on }">
-                                                                        <div :style="swatchStyleTextColor" v-on="on" />
-                                                                    </template>
-                                                                    <v-card>
-                                                                        <v-card-text class="pa-0">
-                                                                            <v-color-picker v-model="editedItem.page_text_color" mode="hexa" hide-mode-switch flat />
-                                                                        </v-card-text>
-                                                                    </v-card>
-                                                                </v-menu>
-                                                            </template>
-                                                        </v-text-field>
-                                                    </v-col>
-                                                </v-row>
-                                                <v-row>
-                                                    <v-subheader><h4 class="mt-6">Statistics code</h4></v-subheader>
-                                                </v-row>
-                                                <v-row>
-                                                    <v-col cols="12" sm="12" md="6">
-                                                        <v-textarea label="Google Analytics code" hint="Paste the code here" v-model="editedItem.google_analytics_code"></v-textarea>
-                                                    </v-col>
-                                                    <v-col cols="12" sm="12" md="6">
-                                                        <v-textarea label="Google Tag Manager code" hint="Paste the code here" v-model="editedItem.google_tag_manager_code"></v-textarea>
-                                                    </v-col>
-                                                </v-row>
-                                                </v-form>
-                                        </v-container>
-                                    </v-card-text>
-                                    <v-card-actions>
-                                        <v-spacer></v-spacer>
-                                        <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                                        <v-btn color="blue darken-1" :disabled="!valid" text @click="save">Save</v-btn>
-                                    </v-card-actions>
-                                </v-card>
-                            
+                            <v-card>
+                                <v-card-title>
+                                    <!-- formTitle is  a computed property based on action edit or new -->
+                                    <span class="headline">{{ formTitle }}</span>
+                                </v-card-title>
+                                <v-card-text>
+                                    <v-container>
+                                        <v-form v-model="isValid" ref="form">
+                                            <v-row>
+                                                <v-subheader><h4>Details</h4></v-subheader>
+                                            </v-row>
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-text-field v-model="editedItem.email" label="Email" :rules="[rules.required, rules.emailValid]" prepend-icon="mdi-email" ></v-text-field>
+                                                </v-col>
+                                            </v-row>
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-text-field v-model="editedItem.phone" label="Tel. #" :rules="[rules.phoneValid]" prepend-icon="mdi-phone" ></v-text-field>
+                                                    <!--<v-select :items="departments" label="Department" item-text="name" item-value="id" v-model="editedItem.department_id" :rules="[rules.required]"></v-select>-->
+                                                    <!--<v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select"></v-autocomplete>-->
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-text-field label="Logo" v-model="editedItem.logo_path" prepend-icon="mdi-camera-iris" ></v-text-field>
+                                                </v-col>
+                                            </v-row>
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="12">
+                                                    <v-text-field v-model="editedItem.url" label="Department URI" prepend-icon="mdi-link" :prefix="base_url" :rules="[rules.required]"></v-text-field>
+                                                </v-col>
+                                            </v-row>
+                                            <v-row>
+                                                <v-subheader><h4>Social Media</h4></v-subheader>
+                                            </v-row>
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-text-field v-model="editedItem.facebook" label="Facebook URL" :rules="[rules.urlValid]" prepend-icon="mdi-facebook"></v-text-field>
+                                                    <!--<v-combobox v-model="editedItem.designation" :items="rows" item-text="designation" item-value="designation"  label="Designation" :rules="[rules.required]" :return-object="false" hint="Type to select or add new item"></v-combobox>-->
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-text-field v-model="editedItem.instagram" label="Instagram URL" :rules="[rules.urlValid]" prepend-icon="mdi-instagram"></v-text-field>
+                                                </v-col>
+                                            </v-row>
+                                            <v-row>
+                                                <v-subheader><h4>Typography</h4></v-subheader>
+                                            </v-row>
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="4">
+                                                    <v-text-field v-model="editedItem.page_header_bg_color" v-mask="mask" hide-details class="ma-0 pa-0"  label="Page header bg color" outlined readonly :placeholder="color" >
+                                                        <template v-slot:append>
+                                                            <v-menu v-model="menu_header_bg" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
+                                                                <template v-slot:activator="{ on }">
+                                                                    <div :style="swatchStyleHeaderBGColor" v-on="on" />
+                                                                </template>
+                                                                <v-card>
+                                                                    <v-card-text class="pa-0">
+                                                                        <v-color-picker v-model="editedItem.page_header_bg_color" mode="hexa" hide-mode-switch flat />
+                                                                    </v-card-text>
+                                                                </v-card>
+                                                            </v-menu>
+                                                        </template>
+                                                    </v-text-field>
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="4">
+                                                    <v-text-field v-model="editedItem.page_bg_color" v-mask="mask" hide-details class="ma-0 pa-0"  label="Page bg color" outlined readonly :placeholder="color">
+                                                        <template v-slot:append>
+                                                            <v-menu v-model="menu_bg" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
+                                                                <template v-slot:activator="{ on }">
+                                                                    <div :style="swatchStyleBGColor" v-on="on" />
+                                                                </template>
+                                                                <v-card>
+                                                                    <v-card-text class="pa-0">
+                                                                        <v-color-picker v-model="editedItem.page_bg_color" mode="hexa" hide-mode-switch flat />
+                                                                    </v-card-text>
+                                                                </v-card>
+                                                            </v-menu>
+                                                        </template>
+                                                    </v-text-field>
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="4">
+                                                    <v-text-field v-model="editedItem.page_text_color" v-mask="mask" hide-details class="ma-0 pa-0"  label="Page text color" outlined readonly :placeholder="color">
+                                                        <template v-slot:append>
+                                                            <v-menu v-model="menu_text_color" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
+                                                                <template v-slot:activator="{ on }">
+                                                                    <div :style="swatchStyleTextColor" v-on="on" />
+                                                                </template>
+                                                                <v-card>
+                                                                    <v-card-text class="pa-0">
+                                                                        <v-color-picker v-model="editedItem.page_text_color" mode="hexa" hide-mode-switch flat />
+                                                                    </v-card-text>
+                                                                </v-card>
+                                                            </v-menu>
+                                                        </template>
+                                                    </v-text-field>
+                                                </v-col>
+                                            </v-row>
+                                            <v-row>
+                                                <v-subheader><h4 class="mt-6">Statistics code</h4></v-subheader>
+                                            </v-row>
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-textarea label="Google Analytics code" hint="Paste the code here" v-model="editedItem.google_analytics_code"></v-textarea>
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-textarea label="Google Tag Manager code" hint="Paste the code here" v-model="editedItem.google_tag_manager_code"></v-textarea>
+                                                </v-col>
+                                            </v-row>
+                                        </v-form>
+                                    </v-container>
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                                    <v-btn color="blue darken-1" :disabled="!isValid" text @click="save">Save</v-btn>
+                                </v-card-actions>
+                            </v-card>
                         </v-dialog>
                         <!-- the dialog box -->
                     </v-toolbar>
@@ -187,21 +183,16 @@
                 <template v-slot:no-data>
                     <v-btn class="btn btn-sm btn-primary" @click="initialize">Reset</v-btn>
                 </template>
-                <template v-slot:expanded-item="{ headers, item }" flat>
-                    <td :colspan="headers.length/2">
-                        <v-chip class="ma-2" color="grey darken-3" label text-color="white"> 
-                            <v-icon left>mdi-email</v-icon>Email
-                        </v-chip>
-                        {{ item.email }}target
-                    </td>
-                    <td :colspan="headers.length/2" flat>
-                        <v-chip class="ma-2" color="grey darken-3" label text-color="white"> 
-                            <v-icon left>mdi-face</v-icon>Designation
-                        </v-chip>
-                        {{ item.designation }}
-                    </td>
-                </template>
             </v-data-table>
+
+            <v-snackbar v-model="snackbar" :timeout="timeout">
+                {{ feedback }}
+                <template v-slot:action="{ attrs }">
+                    <v-btn color="teal" text v-bind="attrs" @click="snackbar = false">
+                        Close
+                    </v-btn>
+                </template>
+            </v-snackbar>
         </v-card>
     </v-app>
 </template>
@@ -214,31 +205,31 @@
         data() {
             return {
                 dialog: false,
-                valid: true,
-                expanded: [],
-                singleExpand: true,
+                isValid: true,
                 search : '',
                 feedback: '',
                 rows: [],
                 departments: [],
                 roles: [],
                 editedIndex: -1,
-                successAlert: false,
+                //successAlert: false,
                 color: '#1976D2',
                 mask: '?#XXXXXX',
                 menu_header_bg: false,
                 menu_bg: false,
                 menu_text_color: false,
                 base_url: window.location.origin + '/',
+                snackbar: false,
+                timeout: 5000,
                 //c_picker: '',
                 //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
 
                 rules: {
                     required: (v) => !!v || 'Required.',
-                    min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
+                    /////min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
                     emailValid: (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
-                    phoneValid: (v) => /^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/.test(v) || 'Tel. # must be valid',
-                    urlValid: (v) => /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(v) || 'URL must be valid',
+                    phoneValid: (v) => !v || /^(?=.*[0-9])[- +()x0-9]+$/.test(v) || 'Tel. # must be valid',
+                    urlValid: (v) => !v || /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(v) || 'URL must be valid',
                     //passwordMatch: (v) => !(v!==this.password) || 'Password do not match.'
                 },
                 headers: [
@@ -257,6 +248,8 @@
                     page_header_bg_color: '',
                     page_bg_color: '',
                     page_text_color: '',
+                    google_analytics_code: '',
+                    google_tag_manager_code: '',
                 },
                 defaultItem: {
                     id: 0,
@@ -270,6 +263,8 @@
                     page_header_bg_color: '',
                     page_bg_color: '',
                     page_text_color: '',
+                    google_analytics_code: '',
+                    google_tag_manager_code: '',
                 },
             }
         },
@@ -382,19 +377,20 @@
                 });*/
                 // use ES6, filter can only access local variables
                 // get department name based on department_id
-                var filterDepartment = this.departments.filter( department => department.id == editedItem.department_id );
-                this.editedItem.department_name = filterDepartment[0].name;
+                /////var filterDepartment = this.departments.filter( department => department.id == editedItem.department_id );
+                /////this.editedItem.department_name = filterDepartment[0].name;
                 // get role name based on role_id
-                var filterRole = this.roles.filter( role => role.id == editedItem.role_id );
-                this.editedItem.role_name = filterRole[0].name;
-
-                axios.post('/api/users/upsert', {
-                    user: editedItem,
+                /////var filterRole = this.roles.filter( role => role.id == editedItem.role_id );
+                /////this.editedItem.role_name = filterRole[0].name;
+                console.log(editedItem)
+                axios.post('/api/departments/upsert', {
+                    department: editedItem,
                 })
                 .then(response => {
                     if (response.data.success) {
                         this.feedback = 'Changes for ' + editedItem.name + ' is saved.'
                         this.successAlert = true
+                        this.snackbar = true
                         if ( editedIndex > -1 )
                             Object.assign(this.rows[editedIndex], editedItem)
                         else
@@ -433,8 +429,6 @@
         },
         created: function() {
             this.initialize();
-            //this.getDepartments();
-            //this.getRoles();
         },
     }
 </script>

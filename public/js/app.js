@@ -2107,15 +2107,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -2123,39 +2114,37 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       dialog: false,
-      valid: true,
-      expanded: [],
-      singleExpand: true,
+      isValid: true,
       search: '',
       feedback: '',
       rows: [],
       departments: [],
       roles: [],
       editedIndex: -1,
-      successAlert: false,
+      //successAlert: false,
       color: '#1976D2',
       mask: '?#XXXXXX',
       menu_header_bg: false,
       menu_bg: false,
       menu_text_color: false,
       base_url: window.location.origin + '/',
+      snackbar: false,
+      timeout: 5000,
       //c_picker: '',
       //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
       rules: {
         required: function required(v) {
           return !!v || 'Required.';
         },
-        min: function min(v) {
-          return v && v.length >= 8 || 'Minimum of 8 characters.';
-        },
+        /////min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
         emailValid: function emailValid(v) {
           return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid';
         },
         phoneValid: function phoneValid(v) {
-          return /^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/.test(v) || 'Tel. # must be valid';
+          return !v || /^(?=.*[0-9])[- +()x0-9]+$/.test(v) || 'Tel. # must be valid';
         },
         urlValid: function urlValid(v) {
-          return /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(v) || 'URL must be valid';
+          return !v || /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(v) || 'URL must be valid';
         } //passwordMatch: (v) => !(v!==this.password) || 'Password do not match.'
 
       },
@@ -2180,7 +2169,9 @@ __webpack_require__.r(__webpack_exports__);
         logo_path: '',
         page_header_bg_color: '',
         page_bg_color: '',
-        page_text_color: ''
+        page_text_color: '',
+        google_analytics_code: '',
+        google_tag_manager_code: ''
       },
       defaultItem: {
         id: 0,
@@ -2193,7 +2184,9 @@ __webpack_require__.r(__webpack_exports__);
         logo_path: '',
         page_header_bg_color: '',
         page_bg_color: '',
-        page_text_color: ''
+        page_text_color: '',
+        google_analytics_code: '',
+        google_tag_manager_code: ''
       }
     };
   },
@@ -2302,22 +2295,20 @@ __webpack_require__.r(__webpack_exports__);
       });*/
       // use ES6, filter can only access local variables
       // get department name based on department_id
+      /////var filterDepartment = this.departments.filter( department => department.id == editedItem.department_id );
+      /////this.editedItem.department_name = filterDepartment[0].name;
+      // get role name based on role_id
+      /////var filterRole = this.roles.filter( role => role.id == editedItem.role_id );
+      /////this.editedItem.role_name = filterRole[0].name;
 
-      var filterDepartment = this.departments.filter(function (department) {
-        return department.id == editedItem.department_id;
-      });
-      this.editedItem.department_name = filterDepartment[0].name; // get role name based on role_id
-
-      var filterRole = this.roles.filter(function (role) {
-        return role.id == editedItem.role_id;
-      });
-      this.editedItem.role_name = filterRole[0].name;
-      axios.post('/api/users/upsert', {
-        user: editedItem
+      console.log(editedItem);
+      axios.post('/api/departments/upsert', {
+        department: editedItem
       }).then(function (response) {
         if (response.data.success) {
           _this3.feedback = 'Changes for ' + editedItem.name + ' is saved.';
           _this3.successAlert = true;
+          _this3.snackbar = true;
           if (editedIndex > -1) Object.assign(_this3.rows[editedIndex], editedItem);else _this3.rows.push(editedItem);
         }
       });
@@ -2348,8 +2339,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    this.initialize(); //this.getDepartments();
-    //this.getRoles();
+    this.initialize();
   }
 });
 
@@ -2397,8 +2387,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
 //
 //
 //
@@ -3753,40 +3741,13 @@ var render = function() {
       _c(
         "v-card",
         [
-          _c(
-            "v-alert",
-            {
-              attrs: {
-                type: "success",
-                transition: "fade-transition",
-                dismissible: ""
-              },
-              model: {
-                value: _vm.successAlert,
-                callback: function($$v) {
-                  _vm.successAlert = $$v
-                },
-                expression: "successAlert"
-              }
-            },
-            [_vm._v(_vm._s(_vm.feedback))]
-          ),
-          _vm._v(" "),
           _c("v-data-table", {
             attrs: {
               headers: _vm.headers,
               items: _vm.rows,
               search: _vm.search,
               "items-per-page": 20,
-              "single-expand": _vm.singleExpand,
-              expanded: _vm.expanded,
-              "show-expand": "",
               "sort-by": "name"
-            },
-            on: {
-              "update:expanded": function($event) {
-                _vm.expanded = $event
-              }
             },
             scopedSlots: _vm._u([
               {
@@ -3882,18 +3843,12 @@ var render = function() {
                                           "v-form",
                                           {
                                             ref: "form",
-                                            attrs: { "lazy-validation": "" },
-                                            on: {
-                                              submit: function($event) {
-                                                $event.preventDefault()
-                                              }
-                                            },
                                             model: {
-                                              value: _vm.valid,
+                                              value: _vm.isValid,
                                               callback: function($$v) {
-                                                _vm.valid = $$v
+                                                _vm.isValid = $$v
                                               },
-                                              expression: "valid"
+                                              expression: "isValid"
                                             }
                                           },
                                           [
@@ -3959,67 +3914,32 @@ var render = function() {
                                                     }
                                                   },
                                                   [
-                                                    _vm.editedIndex > -1
-                                                      ? _c("v-text-field", {
-                                                          attrs: {
-                                                            label: "Email",
-                                                            rules: [
-                                                              _vm.rules
-                                                                .required,
-                                                              _vm.rules
-                                                                .emailValid
-                                                            ],
-                                                            readonly: "",
-                                                            disabled: "",
-                                                            "prepend-icon":
-                                                              "mdi-email"
-                                                          },
-                                                          model: {
-                                                            value:
-                                                              _vm.editedItem
-                                                                .email,
-                                                            callback: function(
-                                                              $$v
-                                                            ) {
-                                                              _vm.$set(
-                                                                _vm.editedItem,
-                                                                "email",
-                                                                $$v
-                                                              )
-                                                            },
-                                                            expression:
-                                                              "editedItem.email"
-                                                          }
-                                                        })
-                                                      : _c("v-text-field", {
-                                                          attrs: {
-                                                            label: "Email",
-                                                            rules: [
-                                                              _vm.rules
-                                                                .required,
-                                                              _vm.rules
-                                                                .emailValid
-                                                            ],
-                                                            "prepend-icon":
-                                                              "mdi-email"
-                                                          },
-                                                          model: {
-                                                            value:
-                                                              _vm.editedItem
-                                                                .email,
-                                                            callback: function(
-                                                              $$v
-                                                            ) {
-                                                              _vm.$set(
-                                                                _vm.editedItem,
-                                                                "email",
-                                                                $$v
-                                                              )
-                                                            },
-                                                            expression:
-                                                              "editedItem.email"
-                                                          }
-                                                        })
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        label: "Email",
+                                                        rules: [
+                                                          _vm.rules.required,
+                                                          _vm.rules.emailValid
+                                                        ],
+                                                        "prepend-icon":
+                                                          "mdi-email"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedItem.email,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedItem,
+                                                            "email",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedItem.email"
+                                                      }
+                                                    })
                                                   ],
                                                   1
                                                 )
@@ -4127,7 +4047,10 @@ var render = function() {
                                                         label: "Department URI",
                                                         "prepend-icon":
                                                           "mdi-link",
-                                                        prefix: _vm.base_url
+                                                        prefix: _vm.base_url,
+                                                        rules: [
+                                                          _vm.rules.required
+                                                        ]
                                                       },
                                                       model: {
                                                         value:
@@ -4871,7 +4794,7 @@ var render = function() {
                                       {
                                         attrs: {
                                           color: "blue darken-1",
-                                          disabled: !_vm.valid,
+                                          disabled: !_vm.isValid,
                                           text: ""
                                         },
                                         on: { click: _vm.save }
@@ -4974,79 +4897,55 @@ var render = function() {
                   ]
                 },
                 proxy: true
-              },
-              {
-                key: "expanded-item",
-                fn: function(ref) {
-                  var headers = ref.headers
-                  var item = ref.item
-                  return [
-                    _c(
-                      "td",
-                      { attrs: { colspan: headers.length / 2 } },
-                      [
-                        _c(
-                          "v-chip",
-                          {
-                            staticClass: "ma-2",
-                            attrs: {
-                              color: "grey darken-3",
-                              label: "",
-                              "text-color": "white"
-                            }
-                          },
-                          [
-                            _c("v-icon", { attrs: { left: "" } }, [
-                              _vm._v("mdi-email")
-                            ]),
-                            _vm._v("Email\n                    ")
-                          ],
-                          1
-                        ),
-                        _vm._v(
-                          "\n                    " +
-                            _vm._s(item.email) +
-                            "target\n                "
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "td",
-                      { attrs: { colspan: headers.length / 2, flat: "" } },
-                      [
-                        _c(
-                          "v-chip",
-                          {
-                            staticClass: "ma-2",
-                            attrs: {
-                              color: "grey darken-3",
-                              label: "",
-                              "text-color": "white"
-                            }
-                          },
-                          [
-                            _c("v-icon", { attrs: { left: "" } }, [
-                              _vm._v("mdi-face")
-                            ]),
-                            _vm._v("Designation\n                    ")
-                          ],
-                          1
-                        ),
-                        _vm._v(
-                          "\n                    " +
-                            _vm._s(item.designation) +
-                            "\n                "
-                        )
-                      ],
-                      1
-                    )
-                  ]
-                }
               }
             ])
-          })
+          }),
+          _vm._v(" "),
+          _c(
+            "v-snackbar",
+            {
+              attrs: { timeout: _vm.timeout },
+              scopedSlots: _vm._u([
+                {
+                  key: "action",
+                  fn: function(ref) {
+                    var attrs = ref.attrs
+                    return [
+                      _c(
+                        "v-btn",
+                        _vm._b(
+                          {
+                            attrs: { color: "teal", text: "" },
+                            on: {
+                              click: function($event) {
+                                _vm.snackbar = false
+                              }
+                            }
+                          },
+                          "v-btn",
+                          attrs,
+                          false
+                        ),
+                        [
+                          _vm._v(
+                            "\n                    Close\n                "
+                          )
+                        ]
+                      )
+                    ]
+                  }
+                }
+              ]),
+              model: {
+                value: _vm.snackbar,
+                callback: function($$v) {
+                  _vm.snackbar = $$v
+                },
+                expression: "snackbar"
+              }
+            },
+            [_vm._v("\n            " + _vm._s(_vm.feedback) + "\n            ")]
+          )
         ],
         1
       )

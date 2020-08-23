@@ -33,7 +33,6 @@
 <template>
     <v-app>
         <v-card>
-            <v-alert v-model="successAlert" type="success" transition="fade-transition" dismissible>{{feedback}}</v-alert>
             <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" :single-expand="singleExpand" :expanded.sync="expanded" show-expand sort-by="name">
                 <template v-slot:top>
                     <!-- the toolbar -->
@@ -123,6 +122,14 @@
                     </td>
                 </template>
             </v-data-table>
+            <v-snackbar v-model="snackbar" :timeout="timeout">
+                {{ feedback }}
+                <template v-slot:action="{ attrs }">
+                    <v-btn color="teal" text v-bind="attrs" @click="snackbar = false">
+                        Close
+                    </v-btn>
+                </template>
+            </v-snackbar>
         </v-card>
     </v-app>
 </template>
@@ -145,7 +152,8 @@
                 departments: [],
                 roles: [],
                 editedIndex: -1,
-                successAlert: false,
+                snackbar: false,
+                timeout: 5000,
                 rules: {
                     required: (v) => !!v || 'Required.',
                     min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
@@ -289,17 +297,13 @@
                 .then(response => {
                     if (response.data.success) {
                         this.feedback = 'Changes for ' + editedItem.name + ' is saved.'
-                        this.successAlert = true
+                        this.snackbar = true
                         if ( editedIndex > -1 )
                             Object.assign(this.rows[editedIndex], editedItem)
                         else
                             this.rows.push(editedItem)
                     }
                 })
-
-                setTimeout(()=>{
-                    this.successAlert=false
-                    },10000)
 
                 /////if (this.editedIndex > -1) {
                     // push changes to server

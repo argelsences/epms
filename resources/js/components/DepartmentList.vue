@@ -184,7 +184,6 @@
                     <v-btn class="btn btn-sm btn-primary" @click="initialize">Reset</v-btn>
                 </template>
             </v-data-table>
-
             <v-snackbar v-model="snackbar" :timeout="timeout">
                 {{ feedback }}
                 <template v-slot:action="{ attrs }">
@@ -384,12 +383,11 @@
                 /////this.editedItem.role_name = filterRole[0].name;
                 console.log(editedItem)
                 axios.post('/api/departments/upsert', {
-                    department: editedItem,
+                    payload: editedItem,
                 })
                 .then(response => {
                     if (response.data.success) {
                         this.feedback = 'Changes for ' + editedItem.name + ' is saved.'
-                        this.successAlert = true
                         this.snackbar = true
                         if ( editedIndex > -1 )
                             Object.assign(this.rows[editedIndex], editedItem)
@@ -398,9 +396,9 @@
                     }
                 })
 
-                setTimeout(()=>{
+                /*setTimeout(()=>{
                     this.successAlert=false
-                    },10000)
+                    },10000)*/
 
                 /////if (this.editedIndex > -1) {
                     // push changes to server

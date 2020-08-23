@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Department;
 use Illuminate\Http\Request;
+use App\Http\Requests\DepartmentRequest;
+
 
 class DepartmentController extends Controller
 {
@@ -97,32 +99,28 @@ class DepartmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function upsert(Request $request)
+    public function upsert(DepartmentRequest $request)
     {
         if ( auth()->user()->can(['edit department', 'add department']) ){
             return response('Unauthorized', 403);
         }
+
+        // Retrieve the validated input data...
+        $validated = $request->validated();
+        dd($validated);
+
         $createSuccess = $updateSuccess = false;
-        $department = $request->post('department');
+        $department = $request->post('payload');
         
         if ( $department['id'] ){
             // retrieve the user object
             $theDepartment = Department::findOrFail($department['id']);
-
             // update the user object with updated details
-            $updateSuccess = $theDepartment->update([
-                'name' => $department['name'],
-                'url' => $department['url'],
-                'email' => $department['email'],
-            ]);
+            $updateSuccess = $theDepartment->update($department);
             //$department['updated_at'] = Carbon::now(env("APP_TIMEZONE"));
         }
         else{
-            $createSuccess = Department::create([
-                'name' => $department['name'],
-                'url' => $department['url'],
-                'email' => $department['email'],
-            ]);
+            $createSuccess = Department::create($department);
         }
         
         // return the same data compared to list to ensure using the same 

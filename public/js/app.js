@@ -2106,7 +2106,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -2303,18 +2302,18 @@ __webpack_require__.r(__webpack_exports__);
 
       console.log(editedItem);
       axios.post('/api/departments/upsert', {
-        department: editedItem
+        payload: editedItem
       }).then(function (response) {
         if (response.data.success) {
           _this3.feedback = 'Changes for ' + editedItem.name + ' is saved.';
-          _this3.successAlert = true;
           _this3.snackbar = true;
           if (editedIndex > -1) Object.assign(_this3.rows[editedIndex], editedItem);else _this3.rows.push(editedItem);
         }
       });
-      setTimeout(function () {
-        _this3.successAlert = false;
-      }, 10000); /////if (this.editedIndex > -1) {
+      /*setTimeout(()=>{
+          this.successAlert=false
+          },10000)*/
+      /////if (this.editedIndex > -1) {
       // push changes to server
       /////axios.post('/api/users/update', {
       /////user: editedItem,
@@ -2516,6 +2515,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -2533,7 +2539,8 @@ __webpack_require__.r(__webpack_exports__);
       departments: [],
       roles: [],
       editedIndex: -1,
-      successAlert: false,
+      snackbar: false,
+      timeout: 5000,
       rules: {
         required: function required(v) {
           return !!v || 'Required.';
@@ -2692,13 +2699,10 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         if (response.data.success) {
           _this5.feedback = 'Changes for ' + editedItem.name + ' is saved.';
-          _this5.successAlert = true;
+          _this5.snackbar = true;
           if (editedIndex > -1) Object.assign(_this5.rows[editedIndex], editedItem);else _this5.rows.push(editedItem);
         }
-      });
-      setTimeout(function () {
-        _this5.successAlert = false;
-      }, 10000); /////if (this.editedIndex > -1) {
+      }); /////if (this.editedIndex > -1) {
       // push changes to server
       /////axios.post('/api/users/update', {
       /////user: editedItem,
@@ -5028,25 +5032,6 @@ var render = function() {
       _c(
         "v-card",
         [
-          _c(
-            "v-alert",
-            {
-              attrs: {
-                type: "success",
-                transition: "fade-transition",
-                dismissible: ""
-              },
-              model: {
-                value: _vm.successAlert,
-                callback: function($$v) {
-                  _vm.successAlert = $$v
-                },
-                expression: "successAlert"
-              }
-            },
-            [_vm._v(_vm._s(_vm.feedback))]
-          ),
-          _vm._v(" "),
           _c("v-data-table", {
             attrs: {
               headers: _vm.headers,
@@ -5700,7 +5685,53 @@ var render = function() {
                 }
               }
             ])
-          })
+          }),
+          _vm._v(" "),
+          _c(
+            "v-snackbar",
+            {
+              attrs: { timeout: _vm.timeout },
+              scopedSlots: _vm._u([
+                {
+                  key: "action",
+                  fn: function(ref) {
+                    var attrs = ref.attrs
+                    return [
+                      _c(
+                        "v-btn",
+                        _vm._b(
+                          {
+                            attrs: { color: "teal", text: "" },
+                            on: {
+                              click: function($event) {
+                                _vm.snackbar = false
+                              }
+                            }
+                          },
+                          "v-btn",
+                          attrs,
+                          false
+                        ),
+                        [
+                          _vm._v(
+                            "\n                    Close\n                "
+                          )
+                        ]
+                      )
+                    ]
+                  }
+                }
+              ]),
+              model: {
+                value: _vm.snackbar,
+                callback: function($$v) {
+                  _vm.snackbar = $$v
+                },
+                expression: "snackbar"
+              }
+            },
+            [_vm._v("\n            " + _vm._s(_vm.feedback) + "\n            ")]
+          )
         ],
         1
       )

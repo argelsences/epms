@@ -2106,6 +2106,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -2115,7 +2123,7 @@ __webpack_require__.r(__webpack_exports__);
       dialog: false,
       isValid: true,
       search: '',
-      feedback: '',
+      feedback: [],
       rows: [],
       departments: [],
       roles: [],
@@ -2129,6 +2137,7 @@ __webpack_require__.r(__webpack_exports__);
       base_url: window.location.origin + '/',
       snackbar: false,
       timeout: 5000,
+      errors: [],
       //c_picker: '',
       //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
       rules: {
@@ -2305,34 +2314,18 @@ __webpack_require__.r(__webpack_exports__);
         payload: editedItem
       }).then(function (response) {
         if (response.data.success) {
+          _this3.errors = [];
           _this3.feedback = 'Changes for ' + editedItem.name + ' is saved.';
           _this3.snackbar = true;
           if (editedIndex > -1) Object.assign(_this3.rows[editedIndex], editedItem);else _this3.rows.push(editedItem);
         }
-      });
-      /*setTimeout(()=>{
-          this.successAlert=false
-          },10000)*/
-      /////if (this.editedIndex > -1) {
-      // push changes to server
-      /////axios.post('/api/users/update', {
-      /////user: editedItem,
-      /////})
-      /////.then(response => {
-      /////if (response.data.success) {
-      /////this.feedback = 'Changes for ' + editedItem.name + ' is saved.'
-      /////this.successAlert = true
-      /////Object.assign(this.rows[editedIndex], editedItem)
-      /////}
-      /////})
-      //Object.assign(this.rows[this.editedIndex], this.editedItem)
-      /////} else {
-      // perform the create action here
-      // action ...
-      /////this.rows.push(this.editedItem)
-      /////console.log(this.rows)
-      /////}
-      // close the dialog box
+      })["catch"](function (error) {
+        var messages = Object.values(error.response.data.errors);
+        _this3.feedback = "Error is encountered:";
+        _this3.errors = [].concat.apply([], messages);
+        _this3.snackbar = true;
+        console.log(_this3.errors);
+      }); // close the dialog box
 
       this.close();
     }
@@ -4948,7 +4941,40 @@ var render = function() {
                 expression: "snackbar"
               }
             },
-            [_vm._v("\n            " + _vm._s(_vm.feedback) + "\n            ")]
+            [
+              _vm._v(
+                "\n            " + _vm._s(_vm.feedback) + "\n            "
+              ),
+              _vm._l(_vm.errors, function(error, index) {
+                return _c(
+                  "v-list-item",
+                  { key: index },
+                  [
+                    _c(
+                      "v-list-item-icon",
+                      [
+                        _c("v-icon", { attrs: { color: "red darken-2" } }, [
+                          _vm._v("mdi-exclamation-thick")
+                        ])
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "v-list-item-content",
+                      [
+                        _c("v-list-item-title", {
+                          domProps: { textContent: _vm._s(error) }
+                        })
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              })
+            ],
+            2
           )
         ],
         1

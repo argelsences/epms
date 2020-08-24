@@ -186,6 +186,14 @@
             </v-data-table>
             <v-snackbar v-model="snackbar" :timeout="timeout">
                 {{ feedback }}
+                <v-list-item v-for="(error, index) in errors" :key="index">
+                    <v-list-item-icon>
+                        <v-icon color="red darken-2">mdi-exclamation-thick</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title v-text="error"></v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
                 <template v-slot:action="{ attrs }">
                     <v-btn color="teal" text v-bind="attrs" @click="snackbar = false">
                         Close
@@ -206,7 +214,7 @@
                 dialog: false,
                 isValid: true,
                 search : '',
-                feedback: '',
+                feedback: [],
                 rows: [],
                 departments: [],
                 roles: [],
@@ -220,6 +228,7 @@
                 base_url: window.location.origin + '/',
                 snackbar: false,
                 timeout: 5000,
+                errors: [],
                 //c_picker: '',
                 //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
 
@@ -387,6 +396,7 @@
                 })
                 .then(response => {
                     if (response.data.success) {
+                        this.errors = []
                         this.feedback = 'Changes for ' + editedItem.name + ' is saved.'
                         this.snackbar = true
                         if ( editedIndex > -1 )
@@ -395,34 +405,16 @@
                             this.rows.push(editedItem)
                     }
                 })
-
-                /*setTimeout(()=>{
-                    this.successAlert=false
-                    },10000)*/
-
-                /////if (this.editedIndex > -1) {
-                    // push changes to server
-                    /////axios.post('/api/users/update', {
-                        /////user: editedItem,
-                    /////})
-                    /////.then(response => {
-                        /////if (response.data.success) {
-                            /////this.feedback = 'Changes for ' + editedItem.name + ' is saved.'
-                            /////this.successAlert = true
-                            /////Object.assign(this.rows[editedIndex], editedItem)
-                        /////}
-                    /////})
-                    //Object.assign(this.rows[this.editedIndex], this.editedItem)
-                /////} else {
-                    // perform the create action here
-                    // action ...
-                    /////this.rows.push(this.editedItem)
-                    /////console.log(this.rows)
-                /////}
+                .catch( error => {
+                    let messages = Object.values(error.response.data.errors); 
+                    this.feedback = "Error is encountered:"
+                    this.errors = [].concat.apply([], messages)
+                    this.snackbar = true
+                    console.log(this.errors)
+                })
 
                 // close the dialog box
-                this.close()
-                
+                this.close()   
             },
         },
         created: function() {

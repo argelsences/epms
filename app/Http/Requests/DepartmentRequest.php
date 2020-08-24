@@ -49,4 +49,14 @@ class DepartmentRequest extends FormRequest
 
         $this->replace($input);
     }
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages() {
+        return [
+            'payload.email.unique' => 'The email has already been taken',
+        ];
+    }
 }

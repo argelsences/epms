@@ -5226,7 +5226,9 @@ var render = function() {
                                                         label: "Name",
                                                         rules: [
                                                           _vm.rules.required
-                                                        ]
+                                                        ],
+                                                        "prepend-icon":
+                                                          "mdi-information"
                                                       },
                                                       model: {
                                                         value:
@@ -5268,6 +5270,8 @@ var render = function() {
                                                               _vm.rules
                                                                 .emailValid
                                                             ],
+                                                            "prepend-icon":
+                                                              "mdi-email",
                                                             readonly: "",
                                                             disabled: ""
                                                           },
@@ -5296,7 +5300,9 @@ var render = function() {
                                                                 .required,
                                                               _vm.rules
                                                                 .emailValid
-                                                            ]
+                                                            ],
+                                                            "prepend-icon":
+                                                              "mdi-email"
                                                           },
                                                           model: {
                                                             value:
@@ -5344,7 +5350,9 @@ var render = function() {
                                                         rules: [
                                                           _vm.rules.required
                                                         ],
-                                                        hint: "Type to select"
+                                                        hint: "Type to select",
+                                                        "prepend-icon":
+                                                          "mdi-office-building"
                                                       },
                                                       model: {
                                                         value:
@@ -5389,6 +5397,8 @@ var render = function() {
                                                           _vm.rules.required
                                                         ],
                                                         "return-object": false,
+                                                        "prepend-icon":
+                                                          "mdi-tooltip-account",
                                                         hint:
                                                           "Type to select or add new item"
                                                       },
@@ -5438,6 +5448,8 @@ var render = function() {
                                                         rules: [
                                                           _vm.rules.required
                                                         ],
+                                                        "prepend-icon":
+                                                          "mdi-shield-account",
                                                         hint: "Type to select"
                                                       },
                                                       model: {
@@ -5486,7 +5498,9 @@ var render = function() {
                                                             label: "Password",
                                                             hint:
                                                               "At least 8 characters",
-                                                            counter: ""
+                                                            counter: "",
+                                                            "prepend-icon":
+                                                              "mdi-shield-key"
                                                           },
                                                           on: {
                                                             "click:append": function(
@@ -5528,7 +5542,9 @@ var render = function() {
                                                             label: "Password",
                                                             hint:
                                                               "At least 8 characters",
-                                                            counter: ""
+                                                            counter: "",
+                                                            "prepend-icon":
+                                                              "mdi-shield-key"
                                                           },
                                                           on: {
                                                             "click:append": function(

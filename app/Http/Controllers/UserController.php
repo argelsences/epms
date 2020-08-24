@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 
+use Illuminate\Validation\Rule;
+
 class UserController extends Controller
 {
     /**
@@ -71,12 +73,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function upsert(Request $request)
+    public function upsert(UserRequest $request)
     {
         if ( auth()->user()->can(['edit user', 'add user']) ){
             return response('Unauthorized', 403);
         }
-        $user = $request->post('user');
+        $user = $request->post('payload');
         
         if ( $user['id'] ){
             // retrieve the user object

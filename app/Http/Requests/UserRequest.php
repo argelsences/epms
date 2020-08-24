@@ -25,16 +25,34 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
+        $payload = $this->post('payload');
+        $id = $payload['id'];
+        $this->sanitize($payload);
+
         return [
-            'name' => [
-                'required', 'min:3'
-            ],
-            'email' => [
-                'required', 'email', Rule::unique((new User)->getTable())->ignore($this->route()->user->id ?? null)
-            ],
-            'password' => [
-                $this->route()->user ? 'nullable' : 'required', 'confirmed', 'min:6'
-            ]
+            '*.name' => ['required', 'min:3'],
+            '*.email' => ['required', 'email', Rule::unique((new User)->getTable())->ignore($id ?? null)],
+            '*.password' => [$id ? 'nullable' : 'required', 'min:8']
+        ];
+    }
+
+    /**
+     * Sanitization of variables using native PHP sanitization
+     */
+    private function sanitize($input){
+        // input fields here eg,
+        $input['name'] = filter_var($input['name'], FILTER_SANITIZE_STRING);
+
+        $this->replace($input);
+    }
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages() {
+        return [
+            'payload.email.unique' => 'The email has already been taken',
         ];
     }
 }

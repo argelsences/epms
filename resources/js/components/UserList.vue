@@ -123,7 +123,17 @@
                 </template>
             </v-data-table>
             <v-snackbar v-model="snackbar" :timeout="timeout">
-                {{ feedback }}
+                <v-list-item v-for="(feedback, index) in feedbacks" :key="index">
+                    <v-list-item-icon v-if="error">
+                        <v-icon color="red darken-2">mdi-exclamation-thick</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-icon v-else>
+                        <v-icon color="green darken-2">mdi-check-bold</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title v-text="feedback"></v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
                 <template v-slot:action="{ attrs }">
                     <v-btn color="teal" text v-bind="attrs" @click="snackbar = false">
                         Close
@@ -147,13 +157,14 @@
                 expanded: [],
                 singleExpand: true,
                 search : '',
-                feedback: '',
+                feedbacks: [],
                 rows: [],
                 departments: [],
                 roles: [],
                 editedIndex: -1,
                 snackbar: false,
                 timeout: 5000,
+                error: false,
                 rules: {
                     required: (v) => !!v || 'Required.',
                     min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
@@ -292,17 +303,25 @@
                 this.editedItem.role_name = filterRole[0].name;
 
                 axios.post('/api/users/upsert', {
-                    user: editedItem,
+                    payload: editedItem,
                 })
                 .then(response => {
                     if (response.data.success) {
-                        this.feedback = 'Changes for ' + editedItem.name + ' is saved.'
+                        this.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.'
                         this.snackbar = true
+                        this.error = false
                         if ( editedIndex > -1 )
                             Object.assign(this.rows[editedIndex], editedItem)
                         else
                             this.rows.push(editedItem)
                     }
+                })
+                .catch( error => {
+                    let messages = Object.values(error.response.data.errors); 
+                    this.feedbacks = [].concat.apply([], messages)
+                    this.snackbar = true
+                    this.error = true
+                    console.log(this.errors)
                 })
 
                 /////if (this.editedIndex > -1) {

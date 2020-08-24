@@ -26,9 +26,6 @@ class DepartmentRequest extends FormRequest
     public function rules()
     {
         $payload = $this->post('payload');
-        //$id = $payload['id'];
-        $email = $payload['email'];
-        $url = $payload['url'];
         $id = $payload['id'];
         $this->sanitize($payload);
 

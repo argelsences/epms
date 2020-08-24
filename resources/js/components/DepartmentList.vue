@@ -185,13 +185,15 @@
                 </template>
             </v-data-table>
             <v-snackbar v-model="snackbar" :timeout="timeout">
-                {{ feedback }}
-                <v-list-item v-for="(error, index) in errors" :key="index">
-                    <v-list-item-icon>
+                <v-list-item v-for="(feedback, index) in feedbacks" :key="index">
+                    <v-list-item-icon v-if="error">
                         <v-icon color="red darken-2">mdi-exclamation-thick</v-icon>
                     </v-list-item-icon>
+                    <v-list-item-icon v-else>
+                        <v-icon color="green darken-2">mdi-check-bold</v-icon>
+                    </v-list-item-icon>
                     <v-list-item-content>
-                        <v-list-item-title v-text="error"></v-list-item-title>
+                        <v-list-item-title v-text="feedback"></v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
                 <template v-slot:action="{ attrs }">
@@ -214,7 +216,7 @@
                 dialog: false,
                 isValid: true,
                 search : '',
-                feedback: [],
+                feedbacks: [],
                 rows: [],
                 departments: [],
                 roles: [],
@@ -228,7 +230,7 @@
                 base_url: window.location.origin + '/',
                 snackbar: false,
                 timeout: 5000,
-                errors: [],
+                error: false,
                 //c_picker: '',
                 //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
 
@@ -396,9 +398,9 @@
                 })
                 .then(response => {
                     if (response.data.success) {
-                        this.errors = []
-                        this.feedback = 'Changes for ' + editedItem.name + ' is saved.'
+                        this.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.'
                         this.snackbar = true
+                        this.error = false
                         if ( editedIndex > -1 )
                             Object.assign(this.rows[editedIndex], editedItem)
                         else
@@ -407,9 +409,9 @@
                 })
                 .catch( error => {
                     let messages = Object.values(error.response.data.errors); 
-                    this.feedback = "Error is encountered:"
-                    this.errors = [].concat.apply([], messages)
+                    this.feedbacks = [].concat.apply([], messages)
                     this.snackbar = true
+                    this.error = true
                     console.log(this.errors)
                 })
 

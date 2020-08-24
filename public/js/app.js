@@ -2114,6 +2114,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -2123,7 +2125,7 @@ __webpack_require__.r(__webpack_exports__);
       dialog: false,
       isValid: true,
       search: '',
-      feedback: [],
+      feedbacks: [],
       rows: [],
       departments: [],
       roles: [],
@@ -2137,7 +2139,7 @@ __webpack_require__.r(__webpack_exports__);
       base_url: window.location.origin + '/',
       snackbar: false,
       timeout: 5000,
-      errors: [],
+      error: false,
       //c_picker: '',
       //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
       rules: {
@@ -2314,16 +2316,16 @@ __webpack_require__.r(__webpack_exports__);
         payload: editedItem
       }).then(function (response) {
         if (response.data.success) {
-          _this3.errors = [];
-          _this3.feedback = 'Changes for ' + editedItem.name + ' is saved.';
+          _this3.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.';
           _this3.snackbar = true;
+          _this3.error = false;
           if (editedIndex > -1) Object.assign(_this3.rows[editedIndex], editedItem);else _this3.rows.push(editedItem);
         }
       })["catch"](function (error) {
         var messages = Object.values(error.response.data.errors);
-        _this3.feedback = "Error is encountered:";
-        _this3.errors = [].concat.apply([], messages);
+        _this3.feedbacks = [].concat.apply([], messages);
         _this3.snackbar = true;
+        _this3.error = true;
         console.log(_this3.errors);
       }); // close the dialog box
 
@@ -2515,6 +2517,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -2527,13 +2539,14 @@ __webpack_require__.r(__webpack_exports__);
       expanded: [],
       singleExpand: true,
       search: '',
-      feedback: '',
+      feedbacks: [],
       rows: [],
       departments: [],
       roles: [],
       editedIndex: -1,
       snackbar: false,
       timeout: 5000,
+      error: false,
       rules: {
         required: function required(v) {
           return !!v || 'Required.';
@@ -2688,13 +2701,20 @@ __webpack_require__.r(__webpack_exports__);
       });
       this.editedItem.role_name = filterRole[0].name;
       axios.post('/api/users/upsert', {
-        user: editedItem
+        payload: editedItem
       }).then(function (response) {
         if (response.data.success) {
-          _this5.feedback = 'Changes for ' + editedItem.name + ' is saved.';
+          _this5.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.';
           _this5.snackbar = true;
+          _this5.error = false;
           if (editedIndex > -1) Object.assign(_this5.rows[editedIndex], editedItem);else _this5.rows.push(editedItem);
         }
+      })["catch"](function (error) {
+        var messages = Object.values(error.response.data.errors);
+        _this5.feedbacks = [].concat.apply([], messages);
+        _this5.snackbar = true;
+        _this5.error = true;
+        console.log(_this5.errors);
       }); /////if (this.editedIndex > -1) {
       // push changes to server
       /////axios.post('/api/users/update', {
@@ -4941,40 +4961,45 @@ var render = function() {
                 expression: "snackbar"
               }
             },
-            [
-              _vm._v(
-                "\n            " + _vm._s(_vm.feedback) + "\n            "
-              ),
-              _vm._l(_vm.errors, function(error, index) {
-                return _c(
-                  "v-list-item",
-                  { key: index },
-                  [
-                    _c(
-                      "v-list-item-icon",
-                      [
-                        _c("v-icon", { attrs: { color: "red darken-2" } }, [
-                          _vm._v("mdi-exclamation-thick")
-                        ])
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "v-list-item-content",
-                      [
-                        _c("v-list-item-title", {
-                          domProps: { textContent: _vm._s(error) }
-                        })
-                      ],
-                      1
-                    )
-                  ],
-                  1
-                )
-              })
-            ],
-            2
+            _vm._l(_vm.feedbacks, function(feedback, index) {
+              return _c(
+                "v-list-item",
+                { key: index },
+                [
+                  _vm.error
+                    ? _c(
+                        "v-list-item-icon",
+                        [
+                          _c("v-icon", { attrs: { color: "red darken-2" } }, [
+                            _vm._v("mdi-exclamation-thick")
+                          ])
+                        ],
+                        1
+                      )
+                    : _c(
+                        "v-list-item-icon",
+                        [
+                          _c("v-icon", { attrs: { color: "green darken-2" } }, [
+                            _vm._v("mdi-check-bold")
+                          ])
+                        ],
+                        1
+                      ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item-content",
+                    [
+                      _c("v-list-item-title", {
+                        domProps: { textContent: _vm._s(feedback) }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            }),
+            1
           )
         ],
         1
@@ -5756,7 +5781,45 @@ var render = function() {
                 expression: "snackbar"
               }
             },
-            [_vm._v("\n            " + _vm._s(_vm.feedback) + "\n            ")]
+            _vm._l(_vm.feedbacks, function(feedback, index) {
+              return _c(
+                "v-list-item",
+                { key: index },
+                [
+                  _vm.error
+                    ? _c(
+                        "v-list-item-icon",
+                        [
+                          _c("v-icon", { attrs: { color: "red darken-2" } }, [
+                            _vm._v("mdi-exclamation-thick")
+                          ])
+                        ],
+                        1
+                      )
+                    : _c(
+                        "v-list-item-icon",
+                        [
+                          _c("v-icon", { attrs: { color: "green darken-2" } }, [
+                            _vm._v("mdi-check-bold")
+                          ])
+                        ],
+                        1
+                      ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item-content",
+                    [
+                      _c("v-list-item-title", {
+                        domProps: { textContent: _vm._s(feedback) }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            }),
+            1
           )
         ],
         1

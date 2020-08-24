@@ -111,6 +111,8 @@ class DepartmentController extends Controller
 
         $createSuccess = $updateSuccess = false;
         $department = $request->post('payload');
+        //////dd($department);
+        $department['page_bg_color'] = "#000000";
         
         if ( $department['id'] ){
             // retrieve the user object

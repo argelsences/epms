@@ -70,7 +70,7 @@
                                                     <!--<v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select"></v-autocomplete>-->
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">
-                                                    <v-text-field label="Logo" v-model="editedItem.logo_path" prepend-icon="mdi-camera-iris" ></v-text-field>
+                                                    <v-file-input :rules="[rules.required, rules.limitFileSize]" accept="image/png, image/jpeg, image/bmp" show-size clearable placeholder="Select a logo" prepend-icon="mdi-camera-iris" label="Logo" v-model="editedItem.logo_path"></v-file-input>
                                                 </v-col>
                                             </v-row>
                                             <v-row>
@@ -240,7 +240,7 @@
                     emailValid: (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
                     phoneValid: (v) => !v || /^(?=.*[0-9])[- +()x0-9]+$/.test(v) || 'Tel. # must be valid',
                     urlValid: (v) => !v || /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(v) || 'URL must be valid',
-                    //passwordMatch: (v) => !(v!==this.password) || 'Password do not match.'
+                    limitFileSize: (v) => !v || v.size < 2000000 || 'Logo size should be less than 2 MB!',
                 },
                 headers: [
                     {text: 'Name', value: 'name'},
@@ -392,6 +392,12 @@
                 // get role name based on role_id
                 /////var filterRole = this.roles.filter( role => role.id == editedItem.role_id );
                 /////this.editedItem.role_name = filterRole[0].name;
+
+                /*let files = this.$refs.dropzone.getAcceptedFiles();
+                if (files.length > 0 && files[0].filename ){
+                    this.item.image = files[0].filename;
+                }*/
+
                 console.log(editedItem)
                 axios.post('/api/departments/upsert', {
                     payload: editedItem,

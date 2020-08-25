@@ -105,14 +105,8 @@ class DepartmentController extends Controller
             return response('Unauthorized', 403);
         }
 
-        // Retrieve the validated input data...
-        /////$validated = $request->validated();
-        /////dd($validated);
-
         $createSuccess = $updateSuccess = false;
         $department = $request->post('payload');
-        //////dd($department);
-        $department['page_bg_color'] = "#000000";
         
         if ( $department['id'] ){
             // retrieve the user object

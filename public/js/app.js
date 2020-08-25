@@ -2155,8 +2155,10 @@ __webpack_require__.r(__webpack_exports__);
         },
         urlValid: function urlValid(v) {
           return !v || /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(v) || 'URL must be valid';
-        } //passwordMatch: (v) => !(v!==this.password) || 'Password do not match.'
-
+        },
+        limitFileSize: function limitFileSize(v) {
+          return !v || v.size < 2000000 || 'Logo size should be less than 2 MB!';
+        }
       },
       headers: [{
         text: 'Name',
@@ -2310,6 +2312,11 @@ __webpack_require__.r(__webpack_exports__);
       // get role name based on role_id
       /////var filterRole = this.roles.filter( role => role.id == editedItem.role_id );
       /////this.editedItem.role_name = filterRole[0].name;
+
+      /*let files = this.$refs.dropzone.getAcceptedFiles();
+      if (files.length > 0 && files[0].filename ){
+          this.item.image = files[0].filename;
+      }*/
 
       console.log(editedItem);
       axios.post('/api/departments/upsert', {
@@ -4016,11 +4023,22 @@ var render = function() {
                                                     }
                                                   },
                                                   [
-                                                    _c("v-text-field", {
+                                                    _c("v-file-input", {
                                                       attrs: {
-                                                        label: "Logo",
+                                                        rules: [
+                                                          _vm.rules.required,
+                                                          _vm.rules
+                                                            .limitFileSize
+                                                        ],
+                                                        accept:
+                                                          "image/png, image/jpeg, image/bmp",
+                                                        "show-size": "",
+                                                        clearable: "",
+                                                        placeholder:
+                                                          "Select a logo",
                                                         "prepend-icon":
-                                                          "mdi-camera-iris"
+                                                          "mdi-camera-iris",
+                                                        label: "Logo"
                                                       },
                                                       model: {
                                                         value:

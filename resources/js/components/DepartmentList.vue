@@ -70,7 +70,7 @@
                                                     <!--<v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select"></v-autocomplete>-->
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">
-                                                    <v-file-input :rules="[rules.required, rules.limitFileSize]" accept="image/png, image/jpeg, image/bmp" show-size clearable placeholder="Select a logo" prepend-icon="mdi-camera-iris" label="Logo" v-model="editedItem.logo_path"></v-file-input>
+                                                    <v-file-input v-model="editedItem.logo_path" :rules="[rules.limitFileSize]" accept="image/png, image/jpeg, image/bmp" show-size clearable placeholder="Select a logo" prepend-icon="mdi-camera-iris" label="Logo"></v-file-input>
                                                 </v-col>
                                             </v-row>
                                             <v-row>
@@ -231,6 +231,7 @@
                 snackbar: false,
                 timeout: 5000,
                 error: false,
+                logo: [],
                 //c_picker: '',
                 //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
 

@@ -2140,6 +2140,7 @@ __webpack_require__.r(__webpack_exports__);
       snackbar: false,
       timeout: 5000,
       error: false,
+      logo: [],
       //c_picker: '',
       //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
       rules: {
@@ -4026,7 +4027,6 @@ var render = function() {
                                                     _c("v-file-input", {
                                                       attrs: {
                                                         rules: [
-                                                          _vm.rules.required,
                                                           _vm.rules
                                                             .limitFileSize
                                                         ],

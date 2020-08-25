@@ -107,6 +107,10 @@ class DepartmentController extends Controller
 
         $createSuccess = $updateSuccess = false;
         $department = $request->post('payload');
+
+        //$photo_filename  = $photo->getClientOriginalName();
+        //$filename = $photo->storeAs('templates' . '/' . $template->id, $photo_filename);
+        dd($department);
         
         if ( $department['id'] ){
             // retrieve the user object

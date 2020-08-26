@@ -70,7 +70,9 @@
                                                     <!--<v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select"></v-autocomplete>-->
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">
-                                                    <v-file-input v-model="editedItem.logo_path" :rules="[rules.limitFileSize]" accept="image/png, image/jpeg, image/bmp" show-size clearable placeholder="Select a logo" prepend-icon="mdi-camera-iris" label="Logo"></v-file-input>
+                                                    <v-file-input v-model="logo" :rules="[rules.limitFileSize]" accept="image/png, image/jpeg, image/bmp" show-size clearable placeholder="Select a logo" prepend-icon="mdi-camera-iris" label="Logo"></v-file-input>
+                                                    <img v-if="editedItem.logo_path != null" :src="base_url + editedItem.logo_path" width="100" />
+                                                    <p>{{editedItem.logo_path}}</p>
                                                 </v-col>
                                             </v-row>
                                             <v-row>
@@ -255,7 +257,7 @@
                     email: '',
                     facebook: '',
                     instagram: '',
-                    logo_path: '',
+                    logo_path: null,
                     page_header_bg_color: '',
                     page_bg_color: '',
                     page_text_color: '',
@@ -270,7 +272,7 @@
                     facebook: '',
                     instagram: '',
                     department_name: '',
-                    logo_path: '',
+                    logo_path: null,
                     page_header_bg_color: '',
                     page_bg_color: '',
                     page_text_color: '',
@@ -398,10 +400,38 @@
                 if (files.length > 0 && files[0].filename ){
                     this.item.image = files[0].filename;
                 }*/
-
+                // test for forms
+                let formData = new FormData()
+                formData.append("logo", this.logo)
+                for(let [name, value] of formData) {
+                    console.log(`${name} = ${value}`); // key1=value1, then key2=value2
+                }
+                /////console.log(this.$refs.form)
+                // test for forms
+                /////console.log(editedItem.logo_path)
+                /*axios.post('/api/departments/uploadLogo', {
+                    payload: formData
+                },
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                    }
+                )*/
+                axios.post('/api/departments/uploadLogo', formData, {
+                    headers: {
+                    'Content-Type': 'multipart/form-data'
+                    }
+                })
+                .then(response => {
+                    if (response.data.success) {
+                        editedItem.logo_path = response.data.file_path
+                        //console.log(response.data.file_path)
+                    }
+                })
                 console.log(editedItem)
+                this.logo.push = editedItem.logo_path
+                /** Better yet to upload first the file, then get the link, then save in logo_path */
                 axios.post('/api/departments/upsert', {
-                    payload: editedItem,
+                    payload: editedItem
                 })
                 .then(response => {
                     if (response.data.success) {

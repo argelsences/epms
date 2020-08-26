@@ -25,6 +25,8 @@ Route::group(['middleware' => ['auth:api']], function(){
 
     Route::post('/users/upsert', 'UserController@upsert')->name('users.upsert');
     Route::post('/departments/upsert', 'DepartmentController@upsert')->name('departments.upsert');
+
+    Route::post('/departments/uploadLogo', 'DepartmentController@uploadLogo')->name('departments.uploadLogo');
     //Route::delete('/categories/{category}', 'CategoryController@destroy');
     /////Route::middleware('can:delete,category')->delete('/categories/{category}', 'CategoryController@destroy');
     //Route::post('/menu-items/add', 'MenuItemController@store');

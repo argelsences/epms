@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Department;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\DepartmentRequest;
 
 
@@ -107,10 +108,11 @@ class DepartmentController extends Controller
 
         $createSuccess = $updateSuccess = false;
         $department = $request->post('payload');
+        /////dd($request->all());
 
         //$photo_filename  = $photo->getClientOriginalName();
         //$filename = $photo->storeAs('templates' . '/' . $template->id, $photo_filename);
-        dd($department);
+        /////dd($department);
         
         if ( $department['id'] ){
             // retrieve the user object
@@ -126,5 +128,30 @@ class DepartmentController extends Controller
         // return the same data compared to list to ensure using the same 
         $success = ($createSuccess || $updateSuccess) ? true : false;
         return ['success' => $success,];
+    }
+
+    public function uploadLogo(Request $request){
+
+        // do not use original filename
+        $success = $filename = false;
+        // Upload all files
+        if ( null != $request->file('logo') ){
+            //foreach ($request->file('logo') as $logo) {
+                $logo = $request->file('logo');
+                //dd($logo);
+                $logo_filename  = $logo->getClientOriginalName();
+                //dd($logo_filename);
+                //$filename = $logo->storeAs('templates' . '/' . $template->id, $photo_filename);
+                /////$filename = $logo->storeAs('files' , $logo_filename);
+                $filename = $logo->store('files');
+                // specify location
+                // $filename = $logo->store('files', 'local');
+                //$file_path_data = $filename;
+            //}
+        }
+        // to access public files in url http://localhost:8000/files/eclOueMC57PBMVylqzhIiumaoGh72UHZFbEyjiz5.jpeg
+        
+        $success = null != $filename ? true : false;
+        return ['success' => $success, 'file_path' => $filename ];
     }
 }

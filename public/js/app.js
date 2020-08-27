@@ -2323,36 +2323,52 @@ __webpack_require__.r(__webpack_exports__);
       // get role name based on role_id
       /////var filterRole = this.roles.filter( role => role.id == editedItem.role_id );
       /////this.editedItem.role_name = filterRole[0].name;
+
+      /*let files = this.$refs.dropzone.getAcceptedFiles();
+      if (files.length > 0 && files[0].filename ){
+          this.item.image = files[0].filename;
+      }*/
       // create a new form, and append the logo
 
-      var formData = new FormData();
-      formData.append("logo", this.logo); // let us upload first the image, the the data
-
-      axios.post('/api/departments/uploadLogo', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+      var logo = this.logo;
+      axios.post('/api/departments/upsert', {
+        payload: editedItem
       }).then(function (response) {
+        // upload the file
+        //formData.append("id", editedItem.id)
+        /////console.log(formData)
+
+        /*for(let [name, value] of formData) {
+            console.log(`${name} = ${value}`); // key1=value1, then key2=value2
+        }*/
+        //console.log(logo)
+        var formData = new FormData();
+        formData.append("logo", logo);
+        axios.post('/api/departments/uploadLogo', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then(function (response) {
+          if (response.data.success) {
+            //if ( response.data.update_logo )
+            editedItem.logo_path = response.data.file_path;
+          }
+        });
+
         if (response.data.success) {
-          if (response.data.update_logo) editedItem.logo_path = response.data.file_path;
-          axios.post('/api/departments/upsert', {
-            payload: editedItem
-          }).then(function (response) {
-            if (response.data.success) {
-              _this3.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.';
-              _this3.snackbar = true;
-              _this3.error = false;
-              if (editedIndex > -1) Object.assign(_this3.rows[editedIndex], editedItem);else _this3.rows.push(editedItem);
-            }
-          })["catch"](function (error) {
-            var messages = Object.values(error.response.data.errors);
-            _this3.feedbacks = [].concat.apply([], messages);
-            _this3.snackbar = true;
-            _this3.error = true;
-            console.log(_this3.errors);
-          });
+          _this3.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.';
+          _this3.snackbar = true;
+          _this3.error = false;
+          if (editedIndex > -1) Object.assign(_this3.rows[editedIndex], editedItem);else _this3.rows.push(editedItem);
         }
-      }); // close the dialog box
+      })["catch"](function (error) {
+        var messages = Object.values(error.response.data.errors);
+        _this3.feedbacks = [].concat.apply([], messages);
+        _this3.snackbar = true;
+        _this3.error = true;
+        console.log(_this3.errors);
+      }); // let us upload first the image, the the data
+      // close the dialog box
 
       this.close();
     }

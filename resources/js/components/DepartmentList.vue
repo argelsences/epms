@@ -404,44 +404,62 @@
                 /////var filterRole = this.roles.filter( role => role.id == editedItem.role_id );
                 /////this.editedItem.role_name = filterRole[0].name;
 
+                /*let files = this.$refs.dropzone.getAcceptedFiles();
+                if (files.length > 0 && files[0].filename ){
+                    this.item.image = files[0].filename;
+                }*/
+
                 // create a new form, and append the logo
-                let formData = new FormData()
-                formData.append("logo", this.logo)
-            
-                // let us upload first the image, the the data
-                axios.post('/api/departments/uploadLogo', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
+                
+                var logo = this.logo
+
+                axios.post('/api/departments/upsert', {
+                    payload: editedItem,
                 })
                 .then(response => {
+                    // upload the file
+                    //formData.append("id", editedItem.id)
+                    /////console.log(formData)
+                    /*for(let [name, value] of formData) {
+                        console.log(`${name} = ${value}`); // key1=value1, then key2=value2
+                    }*/
+                    //console.log(logo)
+                    let formData = new FormData()
+                    formData.append("logo", logo)
+
+                    axios.post('/api/departments/uploadLogo', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    })
+                    .then(response => {
+                        if (response.data.success) {
+                            //if ( response.data.update_logo )
+                            editedItem.logo_path = response.data.file_path   
+                        }
+                    })
+
                     if (response.data.success) {
-                        if ( response.data.update_logo )
-                            editedItem.logo_path = response.data.file_path
-                            
-                        axios.post('/api/departments/upsert', {
-                            payload: editedItem,
-                        })
-                        .then(response => {
-                            if (response.data.success) {
-                                this.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.'
-                                this.snackbar = true
-                                this.error = false
-                                if ( editedIndex > -1 )
-                                    Object.assign(this.rows[editedIndex], editedItem)
-                                else
-                                    this.rows.push(editedItem)
-                            }
-                        })
-                        .catch( error => {
-                            let messages = Object.values(error.response.data.errors); 
-                            this.feedbacks = [].concat.apply([], messages)
-                            this.snackbar = true
-                            this.error = true
-                            console.log(this.errors)
-                        })
+                        this.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.'
+                        this.snackbar = true
+                        this.error = false
+                        if ( editedIndex > -1 )
+                            Object.assign(this.rows[editedIndex], editedItem)
+                        else
+                            this.rows.push(editedItem)
                     }
                 })
+                .catch( error => {
+                    let messages = Object.values(error.response.data.errors); 
+                    this.feedbacks = [].concat.apply([], messages)
+                    this.snackbar = true
+                    this.error = true
+                    console.log(this.errors)
+                })
+            
+                // let us upload first the image, the the data
+                
+                
                 // close the dialog box
                 this.close()   
             },

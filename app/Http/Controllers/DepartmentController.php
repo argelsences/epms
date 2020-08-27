@@ -106,7 +106,7 @@ class DepartmentController extends Controller
             return response('Unauthorized', 403);
         }
 
-        $createSuccess = $updateSuccess = false;
+        $upsertSuccess = false;
         $department = $request->post('payload');
         //dd($request->all());
 
@@ -118,24 +118,24 @@ class DepartmentController extends Controller
             // retrieve the user object
             $theDepartment = Department::findOrFail($department['id']);
             // update the user object with updated details
-            $updateSuccess = $theDepartment->update($department);
+            $upsertSuccess = $theDepartment->update($department);
             //$department['updated_at'] = Carbon::now(env("APP_TIMEZONE"));
         }
         else{
-            $createSuccess = Department::create($department);
+            $theDepartment = Department::create($department);
+            $upsertSuccess = ($theDepartment->id) ? true : false;
         }
-        
+        //dd($theDepartment->id);
         // return the same data compared to list to ensure using the same 
-        $success = ($createSuccess || $updateSuccess) ? true : false;
-        return ['success' => $success,];
+        $success = ($upsertSuccess) ? true : false;
+        return ['success' => $success, 'id' => $theDepartment->id];
     }
 
     public function uploadLogo(Request $request){
 
         // get the id too?
         // do not use original filename
-        $success = $filename = $update_logo = true;
-        /////dd($request->file);
+        $success = $filename = true;
         // Upload all files
         if ( null != $request->file('logo') ){
             //foreach ($request->file('logo') as $logo) {
@@ -156,7 +156,7 @@ class DepartmentController extends Controller
         }
         // to access public files in url http://localhost:8000/files/eclOueMC57PBMVylqzhIiumaoGh72UHZFbEyjiz5.jpeg
         
-        $success = null != $filename || null == $request->file('logo')? true : false;
-        return ['success' => $success, 'file_path' => $filename, 'update_logo' => $update_logo ];
+        $success = null != $filename ? true : false;
+        return ['success' => $success, 'file_path' => $filename ];
     }
 }

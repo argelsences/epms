@@ -70,8 +70,8 @@
                                                     <!--<v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select"></v-autocomplete>-->
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">    
-                                                    <v-file-input v-model="logo" :rules="[rules.limitFileSize]" accept="image/png, image/jpeg, image/bmp, image/jpg" show-size clearable placeholder="Select an image" 
-                                                    prepend-icon="mdi-camera-iris" label="Logo" persistentHint="true" chips
+                                                    <v-file-input v-model="logo"  accept="image/png, image/jpeg, image/bmp, image/jpg" show-size clearable placeholder="Select an image" 
+                                                    prepend-icon="mdi-camera-iris" label="Logo" persistentHint chips
                                                     hint="Selecting an image will replace the existing logo. Valid image formats are JPG, JPEG, PNG & BMP. Image size should not be greater than 2MB">
                                                     </v-file-input>        
                                                     <v-card v-if="editedItem.logo_path != null" class="my-2">
@@ -404,62 +404,44 @@
                 /////var filterRole = this.roles.filter( role => role.id == editedItem.role_id );
                 /////this.editedItem.role_name = filterRole[0].name;
 
-                /*let files = this.$refs.dropzone.getAcceptedFiles();
-                if (files.length > 0 && files[0].filename ){
-                    this.item.image = files[0].filename;
-                }*/
-                // test for forms
+                // create a new form, and append the logo
                 let formData = new FormData()
                 formData.append("logo", this.logo)
-                for(let [name, value] of formData) {
-                    console.log(`${name} = ${value}`); // key1=value1, then key2=value2
-                }
-                /////console.log(this.$refs.form)
-                // test for forms
-                /////console.log(editedItem.logo_path)
-                /*axios.post('/api/departments/uploadLogo', {
-                    payload: formData
-                },
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                    }
-                )*/
+            
+                // let us upload first the image, the the data
                 axios.post('/api/departments/uploadLogo', formData, {
                     headers: {
-                    'Content-Type': 'multipart/form-data'
+                        'Content-Type': 'multipart/form-data'
                     }
                 })
                 .then(response => {
                     if (response.data.success) {
-                        editedItem.logo_path = response.data.file_path
-                        //console.log(response.data.file_path)
+                        if ( response.data.update_logo )
+                            editedItem.logo_path = response.data.file_path
+                            
+                        axios.post('/api/departments/upsert', {
+                            payload: editedItem,
+                        })
+                        .then(response => {
+                            if (response.data.success) {
+                                this.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.'
+                                this.snackbar = true
+                                this.error = false
+                                if ( editedIndex > -1 )
+                                    Object.assign(this.rows[editedIndex], editedItem)
+                                else
+                                    this.rows.push(editedItem)
+                            }
+                        })
+                        .catch( error => {
+                            let messages = Object.values(error.response.data.errors); 
+                            this.feedbacks = [].concat.apply([], messages)
+                            this.snackbar = true
+                            this.error = true
+                            console.log(this.errors)
+                        })
                     }
                 })
-                console.log(editedItem)
-                this.logo.push = editedItem.logo_path
-                /** Better yet to upload first the file, then get the link, then save in logo_path */
-                axios.post('/api/departments/upsert', {
-                    payload: editedItem
-                })
-                .then(response => {
-                    if (response.data.success) {
-                        this.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.'
-                        this.snackbar = true
-                        this.error = false
-                        if ( editedIndex > -1 )
-                            Object.assign(this.rows[editedIndex], editedItem)
-                        else
-                            this.rows.push(editedItem)
-                    }
-                })
-                .catch( error => {
-                    let messages = Object.values(error.response.data.errors); 
-                    this.feedbacks = [].concat.apply([], messages)
-                    this.snackbar = true
-                    this.error = true
-                    console.log(this.errors)
-                })
-
                 // close the dialog box
                 this.close()   
             },

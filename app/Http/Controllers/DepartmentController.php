@@ -100,7 +100,7 @@ class DepartmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function upsert(DepartmentRequest $request)
+    public function upsert(Request $request)
     {
         if ( auth()->user()->can(['edit department', 'add department']) ){
             return response('Unauthorized', 403);
@@ -108,7 +108,7 @@ class DepartmentController extends Controller
 
         $createSuccess = $updateSuccess = false;
         $department = $request->post('payload');
-        /////dd($request->all());
+        //dd($request->all());
 
         //$photo_filename  = $photo->getClientOriginalName();
         //$filename = $photo->storeAs('templates' . '/' . $template->id, $photo_filename);
@@ -132,8 +132,10 @@ class DepartmentController extends Controller
 
     public function uploadLogo(Request $request){
 
+        // get the id too?
         // do not use original filename
-        $success = $filename = false;
+        $success = $filename = $update_logo = true;
+        /////dd($request->file);
         // Upload all files
         if ( null != $request->file('logo') ){
             //foreach ($request->file('logo') as $logo) {
@@ -149,9 +151,12 @@ class DepartmentController extends Controller
                 //$file_path_data = $filename;
             //}
         }
+        else {
+            $update_logo = false;
+        }
         // to access public files in url http://localhost:8000/files/eclOueMC57PBMVylqzhIiumaoGh72UHZFbEyjiz5.jpeg
         
-        $success = null != $filename ? true : false;
-        return ['success' => $success, 'file_path' => $filename ];
+        $success = null != $filename || null == $request->file('logo')? true : false;
+        return ['success' => $success, 'file_path' => $filename, 'update_logo' => $update_logo ];
     }
 }

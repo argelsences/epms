@@ -2132,6 +2132,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -4091,14 +4099,18 @@ var render = function() {
                                                             .limitFileSize
                                                         ],
                                                         accept:
-                                                          "image/png, image/jpeg, image/bmp",
+                                                          "image/png, image/jpeg, image/bmp, image/jpg",
                                                         "show-size": "",
                                                         clearable: "",
                                                         placeholder:
-                                                          "Select a logo",
+                                                          "Select an image",
                                                         "prepend-icon":
                                                           "mdi-camera-iris",
-                                                        label: "Logo"
+                                                        label: "Logo",
+                                                        persistentHint: "true",
+                                                        chips: "",
+                                                        hint:
+                                                          "Selecting an image will replace the existing logo. Valid image formats are JPG, JPEG, PNG & BMP. Image size should not be greater than 2MB"
                                                       },
                                                       model: {
                                                         value: _vm.logo,
@@ -4113,25 +4125,58 @@ var render = function() {
                                                     _vm._v(" "),
                                                     _vm.editedItem.logo_path !=
                                                     null
-                                                      ? _c("img", {
-                                                          attrs: {
-                                                            src:
-                                                              _vm.base_url +
-                                                              _vm.editedItem
-                                                                .logo_path,
-                                                            width: "100"
-                                                          }
-                                                        })
-                                                      : _vm._e(),
-                                                    _vm._v(" "),
-                                                    _c("p", [
-                                                      _vm._v(
-                                                        _vm._s(
-                                                          _vm.editedItem
-                                                            .logo_path
+                                                      ? _c(
+                                                          "v-card",
+                                                          {
+                                                            staticClass: "my-2"
+                                                          },
+                                                          [
+                                                            _c(
+                                                              "v-card-text",
+                                                              [
+                                                                _c("v-img", {
+                                                                  attrs: {
+                                                                    "lazy-src":
+                                                                      _vm.base_url +
+                                                                      _vm
+                                                                        .editedItem
+                                                                        .logo_path,
+                                                                    "max-height":
+                                                                      "150",
+                                                                    "max-width":
+                                                                      "250",
+                                                                    src:
+                                                                      _vm.base_url +
+                                                                      _vm
+                                                                        .editedItem
+                                                                        .logo_path
+                                                                  }
+                                                                }),
+                                                                _vm._v(" "),
+                                                                _c(
+                                                                  "v-divider",
+                                                                  {
+                                                                    staticClass:
+                                                                      "my-2"
+                                                                  }
+                                                                ),
+                                                                _vm._v(" "),
+                                                                _c("p", [
+                                                                  _vm._v(
+                                                                    _vm._s(
+                                                                      _vm
+                                                                        .editedItem
+                                                                        .logo_path
+                                                                    )
+                                                                  )
+                                                                ])
+                                                              ],
+                                                              1
+                                                            )
+                                                          ],
+                                                          1
                                                         )
-                                                      )
-                                                    ])
+                                                      : _vm._e()
                                                   ],
                                                   1
                                                 )

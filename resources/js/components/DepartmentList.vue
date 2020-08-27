@@ -69,10 +69,18 @@
                                                     <!--<v-select :items="departments" label="Department" item-text="name" item-value="id" v-model="editedItem.department_id" :rules="[rules.required]"></v-select>-->
                                                     <!--<v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select"></v-autocomplete>-->
                                                 </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-file-input v-model="logo" :rules="[rules.limitFileSize]" accept="image/png, image/jpeg, image/bmp" show-size clearable placeholder="Select a logo" prepend-icon="mdi-camera-iris" label="Logo"></v-file-input>
-                                                    <img v-if="editedItem.logo_path != null" :src="base_url + editedItem.logo_path" width="100" />
-                                                    <p>{{editedItem.logo_path}}</p>
+                                                <v-col cols="12" sm="12" md="6">    
+                                                    <v-file-input v-model="logo" :rules="[rules.limitFileSize]" accept="image/png, image/jpeg, image/bmp, image/jpg" show-size clearable placeholder="Select an image" 
+                                                    prepend-icon="mdi-camera-iris" label="Logo" persistentHint="true" chips
+                                                    hint="Selecting an image will replace the existing logo. Valid image formats are JPG, JPEG, PNG & BMP. Image size should not be greater than 2MB">
+                                                    </v-file-input>        
+                                                    <v-card v-if="editedItem.logo_path != null" class="my-2">
+                                                        <v-card-text>
+                                                            <v-img :lazy-src="base_url + editedItem.logo_path" max-height="150" max-width="250" :src="base_url + editedItem.logo_path"></v-img>
+                                                            <v-divider class="my-2"></v-divider>
+                                                            <p>{{editedItem.logo_path}}</p>
+                                                        </v-card-text>
+                                                    </v-card>
                                                 </v-col>
                                             </v-row>
                                             <v-row>

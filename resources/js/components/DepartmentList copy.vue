@@ -72,8 +72,7 @@
                                                 <v-col cols="12" sm="12" md="6">    
                                                     <v-file-input v-model="logo"  accept="image/png, image/jpeg, image/bmp, image/jpg" show-size clearable placeholder="Select an image" 
                                                     prepend-icon="mdi-camera-iris" label="Logo" persistentHint chips
-                                                    hint="Selecting an image will replace the existing logo. Valid image formats are JPG, JPEG, PNG & BMP. Image size should not be greater than 2MB"
-                                                    @change="uploadLogo">
+                                                    hint="Selecting an image will replace the existing logo. Valid image formats are JPG, JPEG, PNG & BMP. Image size should not be greater than 2MB">
                                                     </v-file-input>        
                                                     <v-card v-if="editedItem.logo_path != null" class="my-2">
                                                         <v-card-text>
@@ -383,9 +382,13 @@
                     // reset the form
                     this.$refs.form.reset();
                 })
+                
             },
             save () {
+
+
                 /** on change of input, upload the logo, then assign the path to logo path */
+                
                 this.$refs.form.validate()
                 // check if process is updating or creating
                 // if update, then replace the value of the current item with the value in the editedItem
@@ -394,16 +397,74 @@
                 // assign the edited item to a local var first to be able to be used for filter
                 var editedItem = this.editedItem
                 var editedIndex = this.editedIndex
+                /*var filterDepartment = this.departments.filter(function(department) {
+                        return department.id ==  editItem.department_id
+                });*/
+                // use ES6, filter can only access local variables
+                // get departmeletnt name based on department_id
+                /////var filterDepartment = this.departments.filter( department => department.id == editedItem.department_id );
+                /////this.editedItem.department_name = filterDepartment[0].name;
+                // get role name based on role_id
+                /////var filterRole = this.roles.filter( role => role.id == editedItem.role_id );
+                /////this.editedItem.role_name = filterRole[0].name;
+
+                /*let files = this.$refs.dropzone.getAcceptedFiles();
+                if (files.length > 0 && files[0].filename ){
+                    this.item.image = files[0].filename;
+                }*/
+
+                // create a new form, and append the logo
+                
+                var logo = this.logo
 
                 axios.post('/api/departments/upsert', {
                     payload: editedItem,
                 })
                 .then(response => {
+                    // upload the file
+                    //formData.append("id", editedItem.id)
+                    /////console.log(formData)
+                    /*for(let [name, value] of formData) {
+                        console.log(`${name} = ${value}`); // key1=value1, then key2=value2
+                    }*/
+                    //console.log(logo)
+                    let formData = new FormData()
+                    formData.append('logo', logo)
+                    formData.append('id', response.data.id)
+
+                    /*axios.post('/api/departments/uploadLogo', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    })
+                    .then(response => {
+                        if (response.data.success) {
+                            //if ( response.data.update_logo )
+                            editedItem.logo_path = response.data.file_path 
+                            //return  response.data.file_path 
+                            /////thePath => { return response.data.file_path  } 
+                            //this.setLogoPath(response.data.file_path )
+                            return response.data.file_path
+                        }
+                    })*/
+                    let path = this.setLogoPath(formData).then(response=> {
+                        //editedItem.logo_path = response[0].file_path 
+                        //console.log(response[0])
+                        return response
+                    })
+
+                    //path.then( result => {
+                        //console.log(result) // "Some User token"
+                    //})
+                    /////console.log(path)
+                    
+
                     if (response.data.success) {
+                        console.log(path)
                         this.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.'
                         this.snackbar = true
                         this.error = false
-
+                        //console.log(editedIndex)
                         if ( editedIndex > -1 )
                             Object.assign(this.rows[editedIndex], editedItem)
                         else
@@ -415,28 +476,40 @@
                     this.feedbacks = [].concat.apply([], messages)
                     this.snackbar = true
                     this.error = true
+                    //console.log(this.errors)
                 })
             
                 // let us upload first the image, the the data
+                
+                
                 // close the dialog box
                 this.close()   
             },
-            uploadLogo(){
-                let formData = new FormData()
-                formData.append('logo', this.logo)
-
-                axios.post('/api/departments/uploadLogo', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                })
-                .then(response => {
-                    if (response.data.success) {
-                        // set the path on the global editedItem
-                        this.editedItem.logo_path = response.data.file_path 
-                    }
-                })
-            },
+            async setLogoPath(formData) {
+                //console.log(path)
+                //this.editedItem.logo_path = path
+                
+                    var data = []
+                    await axios.post('/api/departments/uploadLogo', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    })
+                    .then(response => {
+                        if (response.data.success) {
+                            //if ( response.data.update_logo )
+                            ////editedItem.logo_path = response.data.file_path 
+                            //return  response.data.file_path 
+                            /////thePath => { return response.data.file_path  } 
+                            //this.setLogoPath(response.data.file_path )
+                            data.push(response.data)
+                            //console.log(data)
+                            //return data
+                        }
+                    })
+                    //console.log(data)
+                    return data
+            }
         },
         created: function() {
             this.initialize();

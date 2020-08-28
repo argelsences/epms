@@ -2126,6 +2126,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -2306,6 +2307,7 @@ __webpack_require__.r(__webpack_exports__);
     save: function save() {
       var _this3 = this;
 
+      /** on change of input, upload the logo, then assign the path to logo path */
       this.$refs.form.validate(); // check if process is updating or creating
       // if update, then replace the value of the current item with the value in the editedItem
       // if creating, then push the edited item into the object
@@ -2313,48 +2315,9 @@ __webpack_require__.r(__webpack_exports__);
 
       var editedItem = this.editedItem;
       var editedIndex = this.editedIndex;
-      /*var filterDepartment = this.departments.filter(function(department) {
-              return department.id ==  editItem.department_id
-      });*/
-      // use ES6, filter can only access local variables
-      // get department name based on department_id
-      /////var filterDepartment = this.departments.filter( department => department.id == editedItem.department_id );
-      /////this.editedItem.department_name = filterDepartment[0].name;
-      // get role name based on role_id
-      /////var filterRole = this.roles.filter( role => role.id == editedItem.role_id );
-      /////this.editedItem.role_name = filterRole[0].name;
-
-      /*let files = this.$refs.dropzone.getAcceptedFiles();
-      if (files.length > 0 && files[0].filename ){
-          this.item.image = files[0].filename;
-      }*/
-      // create a new form, and append the logo
-
-      var logo = this.logo;
       axios.post('/api/departments/upsert', {
         payload: editedItem
       }).then(function (response) {
-        // upload the file
-        //formData.append("id", editedItem.id)
-        /////console.log(formData)
-
-        /*for(let [name, value] of formData) {
-            console.log(`${name} = ${value}`); // key1=value1, then key2=value2
-        }*/
-        //console.log(logo)
-        var formData = new FormData();
-        formData.append("logo", logo);
-        axios.post('/api/departments/uploadLogo', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }).then(function (response) {
-          if (response.data.success) {
-            //if ( response.data.update_logo )
-            editedItem.logo_path = response.data.file_path;
-          }
-        });
-
         if (response.data.success) {
           _this3.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.';
           _this3.snackbar = true;
@@ -2366,11 +2329,26 @@ __webpack_require__.r(__webpack_exports__);
         _this3.feedbacks = [].concat.apply([], messages);
         _this3.snackbar = true;
         _this3.error = true;
-        console.log(_this3.errors);
       }); // let us upload first the image, the the data
       // close the dialog box
 
       this.close();
+    },
+    uploadLogo: function uploadLogo() {
+      var _this4 = this;
+
+      var formData = new FormData();
+      formData.append('logo', this.logo);
+      axios.post('/api/departments/uploadLogo', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (response) {
+        if (response.data.success) {
+          // set the path on the global editedItem
+          _this4.editedItem.logo_path = response.data.file_path;
+        }
+      });
     }
   },
   created: function created() {
@@ -4072,6 +4050,9 @@ var render = function() {
                                                         chips: "",
                                                         hint:
                                                           "Selecting an image will replace the existing logo. Valid image formats are JPG, JPEG, PNG & BMP. Image size should not be greater than 2MB"
+                                                      },
+                                                      on: {
+                                                        change: _vm.uploadLogo
                                                       },
                                                       model: {
                                                         value: _vm.logo,

@@ -108,7 +108,6 @@ class DepartmentController extends Controller
 
         $upsertSuccess = false;
         $department = $request->post('payload');
-        //dd($request->all());
 
         //$photo_filename  = $photo->getClientOriginalName();
         //$filename = $photo->storeAs('templates' . '/' . $template->id, $photo_filename);
@@ -131,11 +130,14 @@ class DepartmentController extends Controller
         return ['success' => $success, 'id' => $theDepartment->id];
     }
 
-    public function uploadLogo(Request $request){
+    // comment later
+    public function uploadLogoss(Request $request){
 
         // get the id too?
         // do not use original filename
-        $success = $filename = true;
+        $success = $file_path = false;
+        //dd($request->all());
+        $department = Department::findOrFail($request->input('id'));
         // Upload all files
         if ( null != $request->file('logo') ){
             //foreach ($request->file('logo') as $logo) {
@@ -145,18 +147,57 @@ class DepartmentController extends Controller
                 //dd($logo_filename);
                 //$filename = $logo->storeAs('templates' . '/' . $template->id, $photo_filename);
                 /////$filename = $logo->storeAs('files' , $logo_filename);
-                $filename = $logo->store('files');
+                $file_path = $logo->store('files');
                 // specify location
                 // $filename = $logo->store('files', 'local');
                 //$file_path_data = $filename;
+                $department->update([
+                    'logo_path' => $file_path,
+                ]);
             //}
         }
         else {
-            $update_logo = false;
+            $file_path = $department->logo_path;
         }
         // to access public files in url http://localhost:8000/files/eclOueMC57PBMVylqzhIiumaoGh72UHZFbEyjiz5.jpeg
         
-        $success = null != $filename ? true : false;
-        return ['success' => $success, 'file_path' => $filename ];
+        $success = $file_path ? true : false;
+        return ['success' => $success, 'file_path' => $file_path ];
+    }
+
+    public function uploadLogo(Request $request){
+
+        // get the id too?
+        // do not use original filename
+        $success = $file_path = false;
+        //dd($request->all());
+        /////$department = Department::findOrFail($request->input('id'));
+        // Upload all files
+        if ( null != $request->file('logo') ){
+            //foreach ($request->file('logo') as $logo) {
+                $logo = $request->file('logo');
+                //dd($logo);
+                $logo_filename  = $logo->getClientOriginalName();
+                //dd($logo_filename);
+                //$filename = $logo->storeAs('templates' . '/' . $template->id, $photo_filename);
+                /////$filename = $logo->storeAs('files' , $logo_filename);
+                $file_path = $logo->store('files');
+                // specify location
+                // $filename = $logo->store('files', 'local');
+                //$file_path_data = $filename;
+                /*
+                $department->update([
+                    'logo_path' => $file_path,
+                ]);
+                */
+            //}
+        }
+        /*else {
+            $file_path = $department->logo_path;
+        }*/
+        // to access public files in url http://localhost:8000/files/eclOueMC57PBMVylqzhIiumaoGh72UHZFbEyjiz5.jpeg
+        
+        $success = $file_path ? true : false;
+        return ['success' => $success, 'file_path' => $file_path ];
     }
 }

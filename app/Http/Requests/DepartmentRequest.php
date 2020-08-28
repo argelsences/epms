@@ -53,7 +53,11 @@ class DepartmentRequest extends FormRequest
      */
     public function messages() {
         return [
+            'payload.name.required' => 'The name is required',
+            'payload.email.required' => 'The email is required',
+            'payload.url.required' => 'The URI is required',
             'payload.email.unique' => 'The email has already been taken',
+            'payload.url.unique' => 'The URI has already been taken',
         ];
     }
 }

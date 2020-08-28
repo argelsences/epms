@@ -2127,6 +2127,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -2150,7 +2152,7 @@ __webpack_require__.r(__webpack_exports__);
       snackbar: false,
       timeout: 5000,
       error: false,
-      logo: [],
+      logo: null,
       //c_picker: '',
       //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
       rules: {
@@ -2169,6 +2171,11 @@ __webpack_require__.r(__webpack_exports__);
         },
         limitFileSize: function limitFileSize(v) {
           return !v || v.size < 2000000 || 'Logo size should be less than 2 MB!';
+        },
+        limitFileSizeMultiple: function limitFileSizeMultiple(files) {
+          return !files || !files.some(function (file) {
+            return file.size > 2e6;
+          }) || 'Avatar size should be less than 2 MB!';
         }
       },
       headers: [{
@@ -2194,7 +2201,8 @@ __webpack_require__.r(__webpack_exports__);
         page_bg_color: '',
         page_text_color: '',
         google_analytics_code: '',
-        google_tag_manager_code: ''
+        google_tag_manager_code: '',
+        url: ''
       },
       defaultItem: {
         id: 0,
@@ -2209,7 +2217,8 @@ __webpack_require__.r(__webpack_exports__);
         page_bg_color: '',
         page_text_color: '',
         google_analytics_code: '',
-        google_tag_manager_code: ''
+        google_tag_manager_code: '',
+        url: ''
       }
     };
   },
@@ -2222,12 +2231,12 @@ __webpack_require__.r(__webpack_exports__);
         return this.editedIndex === -1 ? '' : this.rows[this.editedIndex].department.name
     },*/
     swatchStyleHeaderBGColor: function swatchStyleHeaderBGColor() {
-      var menu = this.menu;
-      var background = this.editedItem.page_header_bg_color; // ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
+      var menu = this.menu; //var background = this.editedItem.page_header_bg_color
+      // ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
 
-      if (this.editedItem.page_header_bg_color == '' || this.editedItem.page_header_bg_color == null) background = '#1976D2';
+      if (this.editedItem.page_header_bg_color == '' || this.editedItem.page_header_bg_color == null) this.editedItem.page_header_bg_color = '#1976D2';
       return {
-        backgroundColor: background,
+        backgroundColor: this.editedItem.page_header_bg_color,
         cursor: 'pointer',
         height: '30px',
         width: '30px',
@@ -2236,12 +2245,11 @@ __webpack_require__.r(__webpack_exports__);
       };
     },
     swatchStyleBGColor: function swatchStyleBGColor() {
-      var menu = this.menu;
-      var background = this.editedItem.page_bg_color; // ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
+      var menu = this.menu; // ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
 
-      if (this.editedItem.page_bg_color == '' || this.editedItem.page_bg_color == null) background = '#1976D2';
+      if (this.editedItem.page_bg_color == '' || this.editedItem.page_bg_color == null) this.editedItem.page_bg_color = '#1976D2';
       return {
-        backgroundColor: background,
+        backgroundColor: this.editedItem.page_bg_color,
         cursor: 'pointer',
         height: '30px',
         width: '30px',
@@ -2250,12 +2258,11 @@ __webpack_require__.r(__webpack_exports__);
       };
     },
     swatchStyleTextColor: function swatchStyleTextColor() {
-      var menu = this.menu;
-      var background = this.editedItem.page_text_color; // ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
+      var menu = this.menu; // ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
 
-      if (this.editedItem.page_text_color == '' || this.editedItem.page_text_color == null) background = '#1976D2';
+      if (this.editedItem.page_text_color == '' || this.editedItem.page_text_color == null) this.editedItem.page_text_color = '#1976D2';
       return {
-        backgroundColor: background,
+        backgroundColor: this.editedItem.page_text_color,
         cursor: 'pointer',
         height: '30px',
         width: '30px',
@@ -2318,6 +2325,7 @@ __webpack_require__.r(__webpack_exports__);
         payload: this.editedItem
       }).then(function (response) {
         if (response.data.success) {
+          _this3.feedbacks = [];
           _this3.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.';
           _this3.snackbar = true;
           _this3.error = false;
@@ -2328,33 +2336,40 @@ __webpack_require__.r(__webpack_exports__);
               this.rows.push(editedItem)
           */
 
-          if (editedIndex > -1) Object.assign(_this3.rows[editedIndex], response.data.item);else _this3.rows.push(response.data.item);
+          if (editedIndex > -1) Object.assign(_this3.rows[editedIndex], response.data.item);else _this3.rows.push(response.data.item); // close the dialog box
+
+          _this3.close();
         }
       })["catch"](function (error) {
         var messages = Object.values(error.response.data.errors);
         _this3.feedbacks = [].concat.apply([], messages);
         _this3.snackbar = true;
         _this3.error = true;
-      }); // let us upload first the image, the the data
-      // close the dialog box
-
-      this.close();
+      });
     },
     uploadLogo: function uploadLogo() {
       var _this4 = this;
 
-      var formData = new FormData();
-      formData.append('logo', this.logo);
-      axios.post('/api/departments/uploadLogo', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then(function (response) {
-        if (response.data.success) {
-          // set the path on the global editedItem
-          _this4.editedItem.logo_path = response.data.file_path;
-        }
-      });
+      if (this.logo) {
+        var formData = new FormData();
+        formData.append('logo', this.logo);
+        axios.post('/api/departments/uploadLogo', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then(function (response) {
+          if (response.data.success) {
+            // set the path on the global editedItem
+            _this4.editedItem.logo_path = response.data.file_path;
+          }
+        })["catch"](function (error) {
+          var messages = Object.values(error.response.data.errors);
+          _this4.feedbacks = [].concat.apply([], messages);
+          _this4.snackbar = true;
+          _this4.error = true;
+          _this4.logo = null;
+        });
+      }
     }
   },
   created: function created() {
@@ -3821,7 +3836,7 @@ var render = function() {
                         _c(
                           "v-dialog",
                           {
-                            attrs: { "max-width": "800px" },
+                            attrs: { width: "80%", scrollable: "" },
                             scopedSlots: _vm._u([
                               {
                                 key: "activator",
@@ -3874,6 +3889,8 @@ var render = function() {
                                     _vm._v(_vm._s(_vm.formTitle))
                                   ])
                                 ]),
+                                _vm._v(" "),
+                                _c("v-divider"),
                                 _vm._v(" "),
                                 _c(
                                   "v-card-text",
@@ -4045,7 +4062,10 @@ var render = function() {
                                                       attrs: {
                                                         accept:
                                                           "image/png, image/jpeg, image/bmp, image/jpg",
-                                                        "show-size": "",
+                                                        rule: [
+                                                          _vm.rules
+                                                            .limitFileSize
+                                                        ],
                                                         clearable: "",
                                                         placeholder:
                                                           "Select an image",
@@ -4281,7 +4301,9 @@ var render = function() {
                                               [
                                                 _c("v-subheader", [
                                                   _c("h4", [
-                                                    _vm._v("Typography")
+                                                    _vm._v(
+                                                      "Backgrounds & Colors"
+                                                    )
                                                   ])
                                                 ])
                                               ],
@@ -4874,6 +4896,8 @@ var render = function() {
                                   ],
                                   1
                                 ),
+                                _vm._v(" "),
+                                _c("v-divider"),
                                 _vm._v(" "),
                                 _c(
                                   "v-card-actions",

@@ -40,7 +40,7 @@
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details ></v-text-field>
                         <v-spacer></v-spacer>
                         <!-- the dialog box -->        
-                        <v-dialog v-model="dialog" max-width="800px">
+                        <v-dialog v-model="dialog"  width="80%" scrollable>
                             <template v-slot:activator="{ on, attrs }">
                                 <v-btn class="mb-2 btn btn-sm btn-primary" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Department</v-btn>
                             </template>
@@ -49,6 +49,7 @@
                                     <!-- formTitle is  a computed property based on action edit or new -->
                                     <span class="headline">{{ formTitle }}</span>
                                 </v-card-title>
+                                <v-divider></v-divider>
                                 <v-card-text>
                                     <v-container>
                                         <v-form v-model="isValid" ref="form">
@@ -70,7 +71,7 @@
                                                     <!--<v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select"></v-autocomplete>-->
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">    
-                                                    <v-file-input v-model="logo"  accept="image/png, image/jpeg, image/bmp, image/jpg" show-size clearable placeholder="Select an image" 
+                                                    <v-file-input v-model="logo" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select an image" 
                                                     prepend-icon="mdi-camera-iris" label="Logo" persistentHint chips
                                                     hint="Selecting an image will replace the existing logo. Valid image formats are JPG, JPEG, PNG & BMP. Image size should not be greater than 2MB"
                                                     @change="uploadLogo">
@@ -102,7 +103,7 @@
                                                 </v-col>
                                             </v-row>
                                             <v-row>
-                                                <v-subheader><h4>Typography</h4></v-subheader>
+                                                <v-subheader><h4>Backgrounds & Colors</h4></v-subheader>
                                             </v-row>
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="4">
@@ -168,6 +169,7 @@
                                         </v-form>
                                     </v-container>
                                 </v-card-text>
+                                <v-divider></v-divider>
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
                                     <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
@@ -241,7 +243,7 @@
                 snackbar: false,
                 timeout: 5000,
                 error: false,
-                logo: [],
+                logo: null,
                 //c_picker: '',
                 //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
 
@@ -252,6 +254,7 @@
                     phoneValid: (v) => !v || /^(?=.*[0-9])[- +()x0-9]+$/.test(v) || 'Tel. # must be valid',
                     urlValid: (v) => !v || /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(v) || 'URL must be valid',
                     limitFileSize: (v) => !v || v.size < 2000000 || 'Logo size should be less than 2 MB!',
+                    limitFileSizeMultiple: files => !files || !files.some(file => file.size > 2e6) || 'Avatar size should be less than 2 MB!'
                 },
                 headers: [
                     {text: 'Name', value: 'name'},
@@ -271,6 +274,7 @@
                     page_text_color: '',
                     google_analytics_code: '',
                     google_tag_manager_code: '',
+                    url: '',
                 },
                 defaultItem: {
                     id: 0,
@@ -286,6 +290,7 @@
                     page_text_color: '',
                     google_analytics_code: '',
                     google_tag_manager_code: '',
+                    url: '',
                 },
             }
         },
@@ -298,13 +303,13 @@
             },*/ 
             swatchStyleHeaderBGColor() {
                 const { menu } = this
-                var background = this.editedItem.page_header_bg_color
+                //var background = this.editedItem.page_header_bg_color
                 // ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
                 if (this.editedItem.page_header_bg_color == '' || this.editedItem.page_header_bg_color == null )
-                    background = '#1976D2'
+                    this.editedItem.page_header_bg_color = '#1976D2'
                     
                 return {
-                    backgroundColor: background,
+                    backgroundColor: this.editedItem.page_header_bg_color,
                     cursor: 'pointer',
                     height: '30px',
                     width: '30px',
@@ -314,13 +319,12 @@
             },
             swatchStyleBGColor() {
                 const { menu } = this
-                var background = this.editedItem.page_bg_color
                 // ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
                 if (this.editedItem.page_bg_color == '' || this.editedItem.page_bg_color == null )
-                    background = '#1976D2'
+                    this.editedItem.page_bg_color = '#1976D2'
                     
                 return {
-                    backgroundColor: background,
+                    backgroundColor: this.editedItem.page_bg_color,
                     cursor: 'pointer',
                     height: '30px',
                     width: '30px',
@@ -330,13 +334,12 @@
             },
             swatchStyleTextColor() {
                 const { menu } = this
-                var background = this.editedItem.page_text_color
                 // ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
                 if (this.editedItem.page_text_color == '' || this.editedItem.page_text_color == null )
-                    background = '#1976D2'
+                    this.editedItem.page_text_color = '#1976D2'
                     
                 return {
-                    backgroundColor: background,
+                    backgroundColor: this.editedItem.page_text_color,
                     cursor: 'pointer',
                     height: '30px',
                     width: '30px',
@@ -399,6 +402,7 @@
                 })
                 .then(response => {
                     if (response.data.success) {
+                        this.feedbacks = []
                         this.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.'
                         this.snackbar = true
                         this.error = false
@@ -412,6 +416,9 @@
                             Object.assign(this.rows[editedIndex], response.data.item)
                         else
                             this.rows.push(response.data.item)
+
+                        // close the dialog box
+                        this.close()  
                     }
                 })
                 .catch( error => {
@@ -420,26 +427,32 @@
                     this.snackbar = true
                     this.error = true
                 })
-            
-                // let us upload first the image, the the data
-                // close the dialog box
-                this.close()   
+              
             },
             uploadLogo(){
-                let formData = new FormData()
-                formData.append('logo', this.logo)
+                if ( this.logo ){
+                    let formData = new FormData()
+                    formData.append('logo', this.logo)
 
-                axios.post('/api/departments/uploadLogo', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                })
-                .then(response => {
-                    if (response.data.success) {
-                        // set the path on the global editedItem
-                        this.editedItem.logo_path = response.data.file_path 
-                    }
-                })
+                    axios.post('/api/departments/uploadLogo', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    })
+                    .then(response => {
+                        if (response.data.success) {
+                            // set the path on the global editedItem
+                            this.editedItem.logo_path = response.data.file_path 
+                        }
+                    })
+                    .catch( error => {
+                        let messages = Object.values(error.response.data.errors); 
+                        this.feedbacks = [].concat.apply([], messages)
+                        this.snackbar = true
+                        this.error = true
+                        this.logo = null
+                    })
+                }
             },
         },
         created: function() {

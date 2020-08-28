@@ -2141,7 +2141,6 @@ __webpack_require__.r(__webpack_exports__);
       departments: [],
       roles: [],
       editedIndex: -1,
-      //successAlert: false,
       color: '#1976D2',
       mask: '?#XXXXXX',
       menu_header_bg: false,
@@ -2316,13 +2315,20 @@ __webpack_require__.r(__webpack_exports__);
       var editedItem = this.editedItem;
       var editedIndex = this.editedIndex;
       axios.post('/api/departments/upsert', {
-        payload: editedItem
+        payload: this.editedItem
       }).then(function (response) {
         if (response.data.success) {
           _this3.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.';
           _this3.snackbar = true;
           _this3.error = false;
-          if (editedIndex > -1) Object.assign(_this3.rows[editedIndex], editedItem);else _this3.rows.push(editedItem);
+          /*
+          if ( editedIndex > -1 )
+              Object.assign(this.rows[editedIndex], editedItem)
+          else
+              this.rows.push(editedItem)
+          */
+
+          if (editedIndex > -1) Object.assign(_this3.rows[editedIndex], response.data.item);else _this3.rows.push(response.data.item);
         }
       })["catch"](function (error) {
         var messages = Object.values(error.response.data.errors);

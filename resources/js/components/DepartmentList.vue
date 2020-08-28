@@ -232,7 +232,6 @@
                 departments: [],
                 roles: [],
                 editedIndex: -1,
-                //successAlert: false,
                 color: '#1976D2',
                 mask: '?#XXXXXX',
                 menu_header_bg: false,
@@ -396,18 +395,23 @@
                 var editedIndex = this.editedIndex
 
                 axios.post('/api/departments/upsert', {
-                    payload: editedItem,
+                    payload: this.editedItem,
                 })
                 .then(response => {
                     if (response.data.success) {
                         this.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.'
                         this.snackbar = true
                         this.error = false
-
+                        /*
                         if ( editedIndex > -1 )
                             Object.assign(this.rows[editedIndex], editedItem)
                         else
                             this.rows.push(editedItem)
+                        */
+                        if ( editedIndex > -1 )
+                            Object.assign(this.rows[editedIndex], response.data.item)
+                        else
+                            this.rows.push(response.data.item)
                     }
                 })
                 .catch( error => {

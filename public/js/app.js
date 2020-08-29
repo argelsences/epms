@@ -2353,6 +2353,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.logo) {
         var formData = new FormData();
         formData.append('logo', this.logo);
+        if (this.editedItem.id) formData.append('id', this.editedItem.id);
         axios.post('/api/departments/uploadLogo', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'

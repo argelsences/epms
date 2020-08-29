@@ -433,6 +433,9 @@
                 if ( this.logo ){
                     let formData = new FormData()
                     formData.append('logo', this.logo)
+                    
+                    if ( this.editedItem.id )
+                        formData.append('id', this.editedItem.id)
 
                     axios.post('/api/departments/uploadLogo', formData, {
                         headers: {

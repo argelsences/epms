@@ -130,6 +130,10 @@ class DepartmentController extends Controller
      */
     public function uploadLogo(Request $request){
 
+        if ( auth()->user()->can(['edit department', 'add department']) ){
+            return response('Unauthorized', 403);
+        }
+
         $validatedData = $request->validate([
             "logo" => "nullable|sometimes|image|mimes:jpeg,bmp,png,jpg|max:2000"
         ]);

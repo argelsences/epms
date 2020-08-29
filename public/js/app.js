@@ -4820,12 +4820,12 @@ var render = function() {
                                                     }
                                                   },
                                                   [
-                                                    _c("v-textarea", {
+                                                    _c("v-text-field", {
                                                       attrs: {
                                                         label:
-                                                          "Google Analytics code",
+                                                          "Google Analytics ID",
                                                         hint:
-                                                          "Paste the code here"
+                                                          "Input the ID here"
                                                       },
                                                       model: {
                                                         value:
@@ -4858,12 +4858,12 @@ var render = function() {
                                                     }
                                                   },
                                                   [
-                                                    _c("v-textarea", {
+                                                    _c("v-text-field", {
                                                       attrs: {
                                                         label:
-                                                          "Google Tag Manager code",
+                                                          "Google Tag Manager ID",
                                                         hint:
-                                                          "Paste the code here"
+                                                          "Input the ID here"
                                                       },
                                                       model: {
                                                         value:

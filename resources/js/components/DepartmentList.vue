@@ -160,10 +160,10 @@
                                             </v-row>
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="6">
-                                                    <v-textarea label="Google Analytics code" hint="Paste the code here" v-model="editedItem.google_analytics_code"></v-textarea>
+                                                    <v-text-field label="Google Analytics ID" hint="Input the ID here" v-model="editedItem.google_analytics_code"></v-text-field>
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">
-                                                    <v-textarea label="Google Tag Manager code" hint="Paste the code here" v-model="editedItem.google_tag_manager_code"></v-textarea>
+                                                    <v-text-field label="Google Tag Manager ID" hint="Input the ID here" v-model="editedItem.google_tag_manager_code"></v-text-field>
                                                 </v-col>
                                             </v-row>
                                         </v-form>

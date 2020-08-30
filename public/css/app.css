@@ -10972,7 +10972,9 @@ a.text-dark:focus {
 }
 
 .sidebar .vue-sidebar .theme--light.v-application,
-.navbar.bg-dark .vue-sidebar .theme--light.v-application {
+.navbar.bg-dark .vue-sidebar .theme--light.v-application,
+.sidebar .vue-sidebar .navigation,
+.navbar.bg-dark .vue-sidebar .navigation {
   background-color: #283149 !important;
   background: #283149 !important;
 }
@@ -10984,6 +10986,21 @@ a.text-dark:focus {
   padding-left: 0px !important;
 }
 
+.sidebar .nav-card,
+.navbar.bg-dark .nav-card {
+  height: calc(100vh -75px);
+}
+
+.sidebar .sidebar-wrapper,
+.navbar.bg-dark .sidebar-wrapper {
+  overflow-y: hidden;
+}
+
+.sidebar .v-navigation-drawer,
+.navbar.bg-dark .v-navigation-drawer {
+  width: auto !important;
+}
+
 .sidebar[data-color=green] li.active > a,
 [data-color=green].navbar.bg-dark li.active > a {
   background-color: #00818a;
@@ -10993,6 +11010,10 @@ a.text-dark:focus {
 
 .navbar.bg-dark {
   box-shadow: none;
+}
+
+.navbar.navbar-absolute {
+  z-index: 1 !important;
 }
 
 .form-control {
@@ -11008,6 +11029,7 @@ a.text-dark:focus {
 .card .card-header {
   border-radius: 0 !important;
   box-shadow: none !important;
+  z-index: 1 !important;
 }
 
 .card-header-primary {

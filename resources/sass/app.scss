@@ -51,10 +51,13 @@ $secondary_font_color: #eeeeee;
         @include no-box-shadow-border-radius;
     }
     .logo a {color: $primary!important;}
-    .vue-sidebar .theme--light.v-application {
+    .vue-sidebar .theme--light.v-application, .vue-sidebar .navigation {
         background-color: $nav-color!important;background: $nav-color!important;
     }
     .vue-sidebar .v-application ol, .v-application ul{padding-left:0px!important;}
+    .nav-card { height:calc(100vh -75px);}
+    .sidebar-wrapper{ overflow-y: hidden;}
+    .v-navigation-drawer {width:auto!important;}
 }
 
 .sidebar[data-color="green"] li.active>a {
@@ -67,6 +70,9 @@ $secondary_font_color: #eeeeee;
     @extend .sidebar;
     box-shadow: none;
 }
+//.main-panel .navbar {position: sticky;}
+//.main-panel>.content{margin-top: 70px;}
+.navbar.navbar-absolute{z-index:1!important;}
 // content body changes
 // form field
 .form-control{
@@ -78,6 +84,7 @@ $secondary_font_color: #eeeeee;
     border: 1px solid rgba(64, 75, 105, .25);
     .card-header{
         @include no-box-shadow-border-radius;
+        z-index: 1!important;
     }
 }
 .card-header-primary{

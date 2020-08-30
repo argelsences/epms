@@ -10971,6 +10971,19 @@ a.text-dark:focus {
   color: #00818a !important;
 }
 
+.sidebar .vue-sidebar .theme--light.v-application,
+.navbar.bg-dark .vue-sidebar .theme--light.v-application {
+  background-color: #283149 !important;
+  background: #283149 !important;
+}
+
+.sidebar .vue-sidebar .v-application ol,
+.navbar.bg-dark .vue-sidebar .v-application ol,
+.sidebar .v-application ul,
+.navbar.bg-dark .v-application ul {
+  padding-left: 0px !important;
+}
+
 .sidebar[data-color=green] li.active > a,
 [data-color=green].navbar.bg-dark li.active > a {
   background-color: #00818a;

@@ -51,6 +51,10 @@ $secondary_font_color: #eeeeee;
         @include no-box-shadow-border-radius;
     }
     .logo a {color: $primary!important;}
+    .vue-sidebar .theme--light.v-application {
+        background-color: $nav-color!important;background: $nav-color!important;
+    }
+    .vue-sidebar .v-application ol, .v-application ul{padding-left:0px!important;}
 }
 
 .sidebar[data-color="green"] li.active>a {

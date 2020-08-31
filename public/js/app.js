@@ -2250,6 +2250,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -2514,6 +2517,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
 //
 //
 //
@@ -3896,7 +3902,7 @@ var render = function() {
       _c(
         "v-navigation-drawer",
         {
-          attrs: { app: "", "expand-on-hover": _vm.expandOnHover, dark: "" },
+          attrs: { app: "", "expand-on-hover": _vm.expandOnHover },
           model: {
             value: _vm.drawer,
             callback: function($$v) {
@@ -4042,7 +4048,19 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("v-app", [_c("h4", [_vm._v("Dashboard")])])
+  return _c(
+    "v-app",
+    [
+      _c("div", { staticClass: "text-h4 text-left" }, [_vm._v("Dashboard")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "text-subtitle-1 text-left" }, [
+        _vm._v("In here you see the overview")
+      ]),
+      _vm._v(" "),
+      _c("v-divider")
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -4069,6 +4087,14 @@ var render = function() {
   return _c(
     "v-app",
     [
+      _c("div", { staticClass: "text-h4 text-left" }, [_vm._v("Departments")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "text-subtitle-1 text-left" }, [
+        _vm._v("You can manage the departments here")
+      ]),
+      _vm._v(" "),
+      _c("v-divider"),
+      _vm._v(" "),
       _c(
         "v-card",
         [
@@ -5417,6 +5443,14 @@ var render = function() {
   return _c(
     "v-app",
     [
+      _c("div", { staticClass: "text-h4 text-left" }, [_vm._v("Users")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "text-subtitle-1 text-left" }, [
+        _vm._v("You can manage your users here")
+      ]),
+      _vm._v(" "),
+      _c("v-divider"),
+      _vm._v(" "),
       _c(
         "v-card",
         [

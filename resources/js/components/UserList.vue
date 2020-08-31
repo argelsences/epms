@@ -32,6 +32,9 @@
 -->
 <template>
     <v-app>
+        <div class="text-h4 text-left">Users</div>
+        <div class="text-subtitle-1 text-left">You can manage your users here</div>
+        <v-divider></v-divider>
         <v-card>
             <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" :single-expand="singleExpand" :expanded.sync="expanded" show-expand sort-by="name">
                 <template v-slot:top>

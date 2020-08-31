@@ -11090,3 +11090,7 @@ a.text-dark:focus {
   z-index: 200;
 }
 
+.v-navigation-drawer a:hover {
+  text-decoration: none;
+}
+

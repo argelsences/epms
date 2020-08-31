@@ -1,5 +1,7 @@
 <template>
     <v-app>
-        <h4>Dashboard</h4>
+        <div class="text-h4 text-left">Dashboard</div>
+        <div class="text-subtitle-1 text-left">In here you see the overview</div>
+        <v-divider></v-divider>
     </v-app>
 </template>

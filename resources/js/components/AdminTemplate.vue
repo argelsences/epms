@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-model="drawer" app :expand-on-hover="expandOnHover" dark>
+    <v-navigation-drawer v-model="drawer" app :expand-on-hover="expandOnHover" >
       <v-list dense>
         <v-list-item link :to="{name: `dashboard`}">
           <v-list-item-action>

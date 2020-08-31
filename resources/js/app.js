@@ -27,6 +27,7 @@ window.Vue.use(VueMask);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 //Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('admin-template', require('./components/AdminTemplate.vue').default);
 Vue.component('user-list', require('./components/UserList.vue').default);
 Vue.component('department-list', require('./components/DepartmentList.vue').default);
 Vue.component('admin-menu', require('./components/AdminMenu.vue').default);

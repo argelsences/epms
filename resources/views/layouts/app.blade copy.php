@@ -26,7 +26,7 @@
               <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                   @csrf
               </form>
-              <admin-template></admin-template>
+              @include('layouts.page_templates.auth')
           @endauth
           @guest()
               @include('layouts.page_templates.guest')

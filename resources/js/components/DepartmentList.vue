@@ -457,9 +457,13 @@
                     })
                 }
             },
+            setHedeaderTitle(){
+                document.title = 'Departments - Event Publication and Poster Management System (EPPMS)';
+            }
         },
         created: function() {
-            this.initialize();
+            this.setHedeaderTitle()
+            this.initialize()
         },
     }
 </script>

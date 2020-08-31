@@ -28,9 +28,9 @@ window.Vue.use(VueMask);
 
 //Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('admin-template', require('./components/AdminTemplate.vue').default);
+Vue.component('dashboard', require('./components/Dashboard.vue').default);
 Vue.component('user-list', require('./components/UserList.vue').default);
 Vue.component('department-list', require('./components/DepartmentList.vue').default);
-Vue.component('admin-menu', require('./components/AdminMenu.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

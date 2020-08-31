@@ -348,11 +348,15 @@
                 this.close()
                 
             },
+            setHedeaderTitle(){
+                document.title = 'Users - Event Publication and Poster Management System (EPPMS)';
+            }
         },
         created: function() {
-            this.initialize();
-            this.getDepartments();
-            this.getRoles();
+            this.setHedeaderTitle()
+            this.initialize()
+            this.getDepartments()
+            this.getRoles()
         },
     }
 </script>

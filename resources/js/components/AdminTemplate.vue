@@ -1,86 +1,54 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer
-      v-model="drawer"
-      app
-    >
+    <v-navigation-drawer v-model="drawer" app :expand-on-hover="expandOnHover" dark>
       <v-list dense>
-        <v-list-item link>
+        <v-list-item link :to="{name: `dashboard`}">
           <v-list-item-action>
-            <v-icon>mdi-home</v-icon>
+            <v-icon>mdi-view-dashboard-outline</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Home</v-list-item-title>
+            <v-list-item-title>Dashboard</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link>
+        <v-list-item link :to="{name: `departments`}">
           <v-list-item-action>
-            <v-icon>mdi-email</v-icon>
+            <v-icon>mdi-office-building</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Contact</v-list-item-title>
+            <v-list-item-title>Departments</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link :to="{name: `users`}">
+          <v-list-item-action>
+            <v-icon>mdi-account-multiple</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Users</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      <!--<template v-slot:append>
+        <div class="pa-2">
+          <v-btn block>Logout</v-btn>
+        </div>
+      </template>-->
     </v-navigation-drawer>
 
-    <v-navigation-drawer
-                            v-model="drawer"
-                            app
-                            >
-                            <v-list>
-                                <v-list-item link>
-                                    <v-list-item-icon>
-                                        <v-icon>mdi-office-building-outline</v-icon>
-                                    </v-list-item-icon>
-                                    <v-list-item-content>
-                                        <v-list-item-title>
-                                            <router-link :to="{name: `departments`}">Departments</router-link>
-                                        </v-list-item-title>
-                                    </v-list-item-content>
-                                    <v-list-item-content>
-                                        <v-list-item-title>
-                                            <router-link :to="{name: `users`}">Users</router-link>
-                                        </v-list-item-title>
-                                    </v-list-item-content>
-                                </v-list-item>
-                            </v-list>
-
-                            <!--<template v-slot:append>
-                                <div class="pa-2">
-                                <v-btn block>Logout</v-btn>
-                                </div>
-                            </template>-->
-                            </v-navigation-drawer>
-
-    <v-app-bar
-      app
-      color="indigo"
-      dark
-    >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+    <v-app-bar app class="cyan darken-4" dark>
+      <!--<v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>-->
       <v-toolbar-title>EPPMS</v-toolbar-title>
     </v-app-bar>
 
     <v-main>
-      <v-container
-        class="fill-height"
-        fluid
-      >
-        <v-row
-          align="center"
-          justify="center"
-        >
+      <v-container class="fill-height" fluid >
+        <v-row align="center" justify="center">
           <v-col class="text-center">
             <router-view ></router-view>
           </v-col>
         </v-row>
       </v-container>
     </v-main>
-    <v-footer
-      color="indigo"
-      app
-    >
+    <v-footer app class="cyan darken-4" dark >
       <span class="white--text">&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
@@ -88,6 +56,7 @@
 
 <script>
   import VueRouter from 'vue-router';
+  import Dashboard from './Dashboard.vue';
   import DepartmentList from './DepartmentList.vue';
   import UserList from './UserList.vue';
   export default {
@@ -97,6 +66,7 @@
 
     data: () => ({
       drawer: null,
+      expandOnHover: true,
     }),
     router: new VueRouter({
       mode: 'history',
@@ -105,22 +75,31 @@
           {
               path: '/departments',
               name: 'departments',
-              component: DepartmentList
+              component: DepartmentList,
+              meta: {title: 'Departments'}
           },
           {
               path: '/',
-              redirect: {name: ''}
+              name: 'dashboard',
+              component: Dashboard,
+              meta: {title: 'Dashboard'}
           },
           {
               path: '/users',
               name: 'users',
-              component: UserList
+              component: UserList,
+              meta: {title: 'Users'}
           },
           {
               path: '*',
               redirect: '/'
           }
       ]
-    })
+    }),
+    watch: {
+      '$route' (to, from) {
+        document.title = to.meta.title + ' - Event Publication and Poster Management System (EPPMS)' || 'Event Publication and Poster Management System (EPPMS)'
+      }
+    },
   }
 </script>

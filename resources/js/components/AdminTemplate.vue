@@ -36,7 +36,12 @@
 
     <v-app-bar app class="cyan darken-4" dark>
       <!--<v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>-->
+      <v-app-bar-nav-icon></v-app-bar-nav-icon>
       <v-toolbar-title>EPPMS</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn href="#" icon>
+        <v-icon>mdi-exit-run</v-icon>
+      </v-btn>
     </v-app-bar>
 
     <v-main>
@@ -64,10 +69,12 @@
       source: String,
     },
 
-    data: () => ({
-      drawer: null,
-      expandOnHover: true,
-    }),
+    data() {
+      return {
+        drawer: null,
+        expandOnHover: true,
+      }  
+    },
     router: new VueRouter({
       mode: 'history',
       base: 'web-admin',

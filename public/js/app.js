@@ -1968,6 +1968,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -3982,7 +3987,20 @@ var render = function() {
       _c(
         "v-app-bar",
         { staticClass: "cyan darken-4", attrs: { app: "", dark: "" } },
-        [_c("v-toolbar-title", [_vm._v("EPPMS")])],
+        [
+          _c("v-app-bar-nav-icon"),
+          _vm._v(" "),
+          _c("v-toolbar-title", [_vm._v("EPPMS")]),
+          _vm._v(" "),
+          _c("v-spacer"),
+          _vm._v(" "),
+          _c(
+            "v-btn",
+            { attrs: { href: "#", icon: "" } },
+            [_c("v-icon", [_vm._v("mdi-exit-run")])],
+            1
+          )
+        ],
         1
       ),
       _vm._v(" "),

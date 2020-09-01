@@ -26,6 +26,14 @@
             <v-list-item-title>Users</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item link :to="{name: `speakers`}">
+          <v-list-item-action>
+            <v-icon>mdi-bullhorn</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Speakers</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
       <!--<template v-slot:append>
         <div class="pa-2">
@@ -36,10 +44,9 @@
 
     <v-app-bar app class="cyan darken-4" dark>
       <!--<v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>-->
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
       <v-toolbar-title>EPPMS</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn href="#" icon>
+      <v-btn onclick="event.preventDefault();document.getElementById('logout-form').submit();" icon>
         <v-icon>mdi-exit-run</v-icon>
       </v-btn>
     </v-app-bar>
@@ -64,6 +71,8 @@
   import Dashboard from './Dashboard.vue';
   import DepartmentList from './DepartmentList.vue';
   import UserList from './UserList.vue';
+  import SpeakerList from './SpeakerList.vue';
+
   export default {
     props: {
       source: String,
@@ -96,6 +105,12 @@
               name: 'users',
               component: UserList,
               meta: {title: 'Users'}
+          },
+          {
+              path: '/speakers',
+              name: 'speakers',
+              component: SpeakerList,
+              meta: {title: 'Speakers'}
           },
           {
               path: '*',

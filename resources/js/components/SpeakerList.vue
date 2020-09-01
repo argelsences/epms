@@ -32,59 +32,57 @@
 -->
 <template>
     <v-app>
-        <div class="text-h4 text-left">Users</div>
-        <div class="text-subtitle-1 text-left">You can manage your users here</div>
+        <div class="text-h4 text-left">Speakers</div>
+        <div class="text-subtitle-1 text-left">You can manage the event speakers here</div>
         <v-divider></v-divider>
         <v-card>
-            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" :single-expand="singleExpand" :expanded.sync="expanded" show-expand sort-by="name">
+            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" sort-by="name">
                 <template v-slot:top>
                     <!-- the toolbar -->
                     <v-toolbar flat color="white">
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details ></v-text-field>
                         <v-spacer></v-spacer>
                         <!-- the dialog box -->        
-                        <v-dialog v-model="dialog" width="80%" scrollable>
+                        <v-dialog v-model="dialog"  width="80%" scrollable>
                             <template v-slot:activator="{ on, attrs }">
-                                <v-btn class="mb-2 btn btn-sm btn-primary" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> User</v-btn>
+                                <v-btn class="mb-2 btn btn-sm btn-primary" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Speaker</v-btn>
                             </template>
                             <v-card>
                                 <v-card-title>
-                                    <!-- formTitle is a computed property based on action edit or new -->
+                                    <!-- formTitle is  a computed property based on action edit or new -->
                                     <span class="headline">{{ formTitle }}</span>
                                 </v-card-title>
                                 <v-divider></v-divider>
                                 <v-card-text>
                                     <v-container>
-                                        <v-form v-model="valid" ref="form" @submit.prevent="" lazy-validation>
+                                        <v-form v-model="isValid" ref="form">
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="6">
-                                                    <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-information"></v-text-field>
+                                                    <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">
-                                                    <v-text-field v-if="editedIndex > -1" v-model="editedItem.email" label="Email" :rules="[rules.required, rules.emailValid]" prepend-icon="mdi-email" readonly disabled></v-text-field>
-                                                    <v-text-field v-else v-model="editedItem.email" label="Email" :rules="[rules.required, rules.emailValid]" prepend-icon="mdi-email"></v-text-field>
+                                                    <v-file-input v-model="photo" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select an image" 
+                                                    prepend-icon="mdi-camera-iris" label="Photo" persistentHint chips
+                                                    hint="Selecting an image will replace the existing photo. Valid image formats are JPG, JPEG, PNG & BMP. Image size should not be greater than 2MB"
+                                                    @change="uploadLogo">
+                                                    </v-file-input>        
+                                                    <v-card v-if="editedItem.photo != null" class="my-2">
+                                                        <v-card-text>
+                                                            <v-img :lazy-src="base_url + editedItem.photo" max-height="150" max-width="250" :src="base_url + editedItem.photo"></v-img>
+                                                            <v-divider class="my-2"></v-divider>
+                                                            <p>{{editedItem.photo}}</p>
+                                                        </v-card-text>
+                                                    </v-card>
+                                                </v-col>
+                                            </v-row>
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="12">
+                                                    <v-textarea counter label="Profile" v-model="editedItem.profile" prepend-icon="mdi-face-profile"></v-textarea>
                                                 </v-col>
                                             </v-row>
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="6">
-                                                    <!--<v-text-field v-model="editedItem.department_id" label="Department" :rules="[rules.required]"></v-text-field>-->
-                                                    <!--<v-select :items="departments" label="Department" item-text="name" item-value="id" v-model="editedItem.department_id" :rules="[rules.required]"></v-select>-->
                                                     <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <!--<v-text-field v-model="editedItem.designation" label="Designation" :rules="[rules.required]"></v-text-field>-->
-                                                    <v-combobox v-model="editedItem.designation" :items="rows" item-text="designation" item-value="designation"  label="Designation" :rules="[rules.required]" :return-object="false" prepend-icon="mdi-tooltip-account" hint="Type to select or add new item"></v-combobox>
-                                                </v-col>
-                                            </v-row>
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <!--<v-text-field label="Password" type="password" v-model="password" :rules="[rules.required, rules.min]"></v-text-field>-->
-                                                    <v-autocomplete v-model="editedItem.role_id" :items="roles" item-text="name" item-value="id"  label="Role" :rules="[rules.required]" prepend-icon="mdi-shield-account" hint="Type to select"></v-autocomplete>
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <!--<v-text-field v-if="editedIndex == -1" label="Confirm Password" type="password" v-model="passwordConfirm" :rules="[rules.required,rules.passwordMatch]"></v-text-field>-->
-                                                    <v-text-field v-if="editedIndex > -1" v-model="editedItem.password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.min]" :type="showPassword ? 'text' : 'password'" label="Password" hint="At least 8 characters" counter @click:append="showPassword = !showPassword" prepend-icon="mdi-shield-key"></v-text-field>
-                                                    <v-text-field v-else v-model="editedItem.password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="showPassword ? 'text' : 'password'" label="Password" hint="At least 8 characters" counter @click:append="showPassword = !showPassword" prepend-icon="mdi-shield-key"></v-text-field>
                                                 </v-col>
                                             </v-row>
                                         </v-form>
@@ -94,7 +92,7 @@
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
                                     <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                                    <v-btn color="blue darken-1" :disabled="!valid" text @click="save">Save</v-btn>
+                                    <v-btn color="blue darken-1" :disabled="!isValid" text @click="save">Save</v-btn>
                                 </v-card-actions>
                             </v-card>
                         </v-dialog>
@@ -102,29 +100,16 @@
                     </v-toolbar>
                 <!-- the toolbar -->
                 </template>
-                <!--<template v-slot:item.id="{ item }">
-                    {{rows.map(function(x) {return x.id; }).indexOf(item.id)+1}}
-                </template>-->
+                <template v-slot:item.photo="{ item }">
+                    <v-img v-if="item.photo" :src="base_url + item.photo" alt="" aspect-ratio="1.7"></v-img>
+                    <v-icon size="100px" v-else>mdi-account-box</v-icon>
+                </template>
                 <template v-slot:item.actions="{ item }">
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                     <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
                 </template>
                 <template v-slot:no-data>
                     <v-btn class="btn btn-sm btn-primary" @click="initialize">Reset</v-btn>
-                </template>
-                <template v-slot:expanded-item="{ headers, item }" flat>
-                    <td :colspan="headers.length/2">
-                        <v-chip class="ma-2" color="grey darken-3" label text-color="white"> 
-                            <v-icon left>mdi-email</v-icon>Email
-                        </v-chip>
-                        {{ item.email }}
-                    </td>
-                    <td :colspan="headers.length/2" flat>
-                        <v-chip class="ma-2" color="grey darken-3" label text-color="white"> 
-                            <v-icon left>mdi-face</v-icon>Designation
-                        </v-chip>
-                        {{ item.designation }}
-                    </td>
                 </template>
             </v-data-table>
             <v-snackbar v-model="snackbar" :timeout="timeout">
@@ -157,82 +142,60 @@
         data() {
             return {
                 dialog: false,
-                valid: true,
-                showPassword: false,
-                expanded: [],
-                singleExpand: true,
+                isValid: true,
                 search : '',
                 feedbacks: [],
                 rows: [],
                 departments: [],
                 roles: [],
                 editedIndex: -1,
+                color: '#1976D2',
+                mask: '?#XXXXXX',
+                menu_header_bg: false,
+                menu_bg: false,
+                menu_text_color: false,
+                base_url: window.location.origin + '/',
                 snackbar: false,
                 timeout: 5000,
                 error: false,
+                photo: null,
+                //c_picker: '',
+                //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
+
                 rules: {
                     required: (v) => !!v || 'Required.',
-                    min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
+                    /////min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
                     emailValid: (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
-                    //passwordMatch: (v) => !(v!==this.password) || 'Password do not match.'
+                    phoneValid: (v) => !v || /^(?=.*[0-9])[- +()x0-9]+$/.test(v) || 'Tel. # must be valid',
+                    urlValid: (v) => !v || /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(v) || 'URL must be valid',
+                    limitFileSize: (v) => !v || v.size < 2000000 || 'Logo size should be less than 2 MB!',
+                    limitFileSizeMultiple: files => !files || !files.some(file => file.size > 2e6) || 'Avatar size should be less than 2 MB!'
                 },
                 headers: [
+                    {text: 'Photo', value: 'photo'},
                     {text: 'Name', value: 'name'},
-                    {text: 'Department', value: 'department_name'},
-                    {text: 'Role', value: 'role_name'},
                     {text: 'Actions', value: 'actions', sortable: false },
                 ],
                 editedItem: {
                     id: 0,
                     name: '',
-                    designation: '',
-                    email: '',
+                    profile: '',
+                    photo: null,
                     department_id: '',
-                    department_name: '',
-                    role_id: '',
-                    role_name: '',
-                    department: {
-                        id: 0,
-                        name: '',
-                    },
-                    roles : [
-                        { 
-                            id: 0,
-                            name: '',
-                        },
-                    ],
-                    password: '',
                 },
                 defaultItem: {
                     id: 0,
                     name: '',
-                    designation: '',
-                    email: '',
+                    profile: '',
+                    photo: null,
                     department_id: '',
-                    department_name: '',
-                    role_id: '',
-                    role_name: '',
-                    department: {
-                        id: 0,
-                        name: '',
-                    },
-                    roles : [
-                        { 
-                            id: 0,
-                            name: '',
-                        },
-                    ],
-                    password: '',
                 },
             }
         },
         computed: {
             formTitle () {
-                return this.editedIndex === -1 ? 'New User' : 'Edit User'
+                return this.editedIndex === -1 ? 'New Speaker' : 'Edit Speaker'
             },
-            /*departmentName () {
-                return this.editedIndex === -1 ? '' : this.rows[this.editedIndex].department.name
-            },*/ 
         },
         watch: {
             dialog (val) {
@@ -243,22 +206,15 @@
         },
         methods: {
             initialize: function() {
-                axios.get('/api/users')
+                axios.get('/api/speakers')
                 .then( response => {
                     this.rows = response.data;
                 });
-                //console.log("the rows" + this.rows)
             },
             getDepartments: function() {
                 axios.get('/api/departments')
                 .then( response => {
                     this.departments = response.data;
-                });
-            },
-            getRoles: function() {
-                axios.get('/api/roles')
-                .then( response => {
-                    this.roles = response.data;
                 });
             },
             editItem (item) {
@@ -284,10 +240,9 @@
                     // reset the form
                     this.$refs.form.reset();
                 })
-                
             },
-
             save () {
+                /** on change of input, upload the logo, then assign the path to logo path */
                 this.$refs.form.validate()
                 // check if process is updating or creating
                 // if update, then replace the value of the current item with the value in the editedItem
@@ -296,29 +251,29 @@
                 // assign the edited item to a local var first to be able to be used for filter
                 var editedItem = this.editedItem
                 var editedIndex = this.editedIndex
-                /*var filterDepartment = this.departments.filter(function(department) {
-                        return department.id ==  editItem.department_id
-                });*/
-                // use ES6, filter can only access local variables
-                // get department name based on department_id
-                var filterDepartment = this.departments.filter( department => department.id == editedItem.department_id );
-                this.editedItem.department_name = filterDepartment[0].name;
-                // get role name based on role_id
-                var filterRole = this.roles.filter( role => role.id == editedItem.role_id );
-                this.editedItem.role_name = filterRole[0].name;
 
-                axios.post('/api/users/upsert', {
-                    payload: editedItem,
+                axios.post('/api/speakers/upsert', {
+                    payload: this.editedItem,
                 })
                 .then(response => {
                     if (response.data.success) {
+                        this.feedbacks = []
                         this.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.'
                         this.snackbar = true
                         this.error = false
+                        /*
                         if ( editedIndex > -1 )
                             Object.assign(this.rows[editedIndex], editedItem)
                         else
                             this.rows.push(editedItem)
+                        */
+                        if ( editedIndex > -1 )
+                            Object.assign(this.rows[editedIndex], response.data.item)
+                        else
+                            this.rows.push(response.data.item)
+
+                        // close the dialog box
+                        this.close()  
                     }
                 })
                 .catch( error => {
@@ -326,42 +281,45 @@
                     this.feedbacks = [].concat.apply([], messages)
                     this.snackbar = true
                     this.error = true
-                    console.log(this.errors)
                 })
+              
+            },
+            uploadLogo(){
+                if ( this.photo ){
+                    let formData = new FormData()
+                    formData.append('photo', this.photo)
+                    
+                    if ( this.editedItem.id )
+                        formData.append('id', this.editedItem.id)
 
-                /////if (this.editedIndex > -1) {
-                    // push changes to server
-                    /////axios.post('/api/users/update', {
-                        /////user: editedItem,
-                    /////})
-                    /////.then(response => {
-                        /////if (response.data.success) {
-                            /////this.feedback = 'Changes for ' + editedItem.name + ' is saved.'
-                            /////this.successAlert = true
-                            /////Object.assign(this.rows[editedIndex], editedItem)
-                        /////}
-                    /////})
-                    //Object.assign(this.rows[this.editedIndex], this.editedItem)
-                /////} else {
-                    // perform the create action here
-                    // action ...
-                    /////this.rows.push(this.editedItem)
-                    /////console.log(this.rows)
-                /////}
-
-                // close the dialog box
-                this.close()
-                
+                    axios.post('/api/speakers/uploadPhoto', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    })
+                    .then(response => {
+                        if (response.data.success) {
+                            // set the path on the global editedItem
+                            this.editedItem.photo = response.data.file_path 
+                        }
+                    })
+                    .catch( error => {
+                        let messages = Object.values(error.response.data.errors); 
+                        this.feedbacks = [].concat.apply([], messages)
+                        this.snackbar = true
+                        this.error = true
+                        this.logo = null
+                    })
+                }
             },
             setHedeaderTitle(){
-                document.title = 'Users - Event Publication and Poster Management System (EPPMS)';
+                document.title = 'Speakers - Event Publication and Poster Management System (EPPMS)';
             }
         },
         created: function() {
             this.setHedeaderTitle()
             this.initialize()
             this.getDepartments()
-            this.getRoles()
         },
     }
 </script>

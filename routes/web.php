@@ -63,7 +63,8 @@ Route::prefix('web-admin')->middleware('auth')->group(function(){
 
 Route::group(['prefix' => 'web-admin','middleware' => ['role:Super Administrator|Administrator']], function () {
 	Route::get('users', 'UserController@index')->name('users.index');
-	Route::get('departments', 'DepartmentController@index')->name('deparrments.index');
+	Route::get('departments', 'DepartmentController@index')->name('departments.index');
+	Route::get('speakers', 'SpeakerController@index')->name('speakers.index');
 });
 
 /////Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');

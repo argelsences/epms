@@ -31,6 +31,7 @@ Vue.component('admin-template', require('./components/AdminTemplate.vue').defaul
 Vue.component('dashboard', require('./components/Dashboard.vue').default);
 Vue.component('user-list', require('./components/UserList.vue').default);
 Vue.component('department-list', require('./components/DepartmentList.vue').default);
+Vue.component('speaker-list', require('./components/SpeakerList.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

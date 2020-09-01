@@ -88,13 +88,23 @@ class DepartmentController extends Controller
     }
     /**
      * API function
+     * 
+     * List all departments
+     * 
      */
     public function list(Department $model){
+        
+        if ( auth()->user()->can(['list department']) ){
+            return response('Unauthorized', 403);
+        }
+
         return response()->json(($model::orderBy('name', 'ASC')->get()));
     }
 
     /**
      * Update the specified resource in storage.
+     * 
+     * API
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -126,6 +136,9 @@ class DepartmentController extends Controller
     }
     /**
      * Upload a logo
+     * 
+     * API
+     * 
      * @TODO: place this as a helper function
      */
     public function uploadLogo(Request $request){

@@ -12,5 +12,10 @@ class SpeakerSeeder extends Seeder
     public function run()
     {
         //
+        // check if environment is development, then proceed to factory
+        if (App::environment('local')) {
+            // create 50 random departments
+            factory('App\Speaker', 20)->create();
+        }
     }
 }

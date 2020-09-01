@@ -35,6 +35,19 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      <template v-slot:prepend>
+        <v-list dense>
+          <v-list-item href="#">
+            <v-list-item-action>
+              <v-icon>mdi-account-circle-outline</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>Account Name</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+        <v-divider></v-divider>
+      </template>
       <!--<template v-slot:append>
         <div class="pa-2">
           <v-btn block>Logout</v-btn>

@@ -1981,6 +1981,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4273,6 +4286,47 @@ var render = function() {
         "v-navigation-drawer",
         {
           attrs: { app: "", "expand-on-hover": _vm.expandOnHover },
+          scopedSlots: _vm._u([
+            {
+              key: "prepend",
+              fn: function() {
+                return [
+                  _c(
+                    "v-list",
+                    { attrs: { dense: "" } },
+                    [
+                      _c(
+                        "v-list-item",
+                        { attrs: { href: "#" } },
+                        [
+                          _c(
+                            "v-list-item-action",
+                            [
+                              _c("v-icon", [
+                                _vm._v("mdi-account-circle-outline")
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item-content",
+                            [_c("v-list-item-title", [_vm._v("Account Name")])],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-divider")
+                ]
+              },
+              proxy: true
+            }
+          ]),
           model: {
             value: _vm.drawer,
             callback: function($$v) {

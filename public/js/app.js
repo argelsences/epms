@@ -4326,25 +4326,6 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "v-list-item",
-                { attrs: { link: "", to: { name: "users" } } },
-                [
-                  _c(
-                    "v-list-item-action",
-                    [_c("v-icon", [_vm._v("mdi-account-multiple")])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item-content",
-                    [_c("v-list-item-title", [_vm._v("Users")])],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-list-item",
                 { attrs: { link: "", to: { name: "speakers" } } },
                 [
                   _c(
@@ -4356,6 +4337,25 @@ var render = function() {
                   _c(
                     "v-list-item-content",
                     [_c("v-list-item-title", [_vm._v("Speakers")])],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-list-item",
+                { attrs: { link: "", to: { name: "users" } } },
+                [
+                  _c(
+                    "v-list-item-action",
+                    [_c("v-icon", [_vm._v("mdi-account-multiple")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item-content",
+                    [_c("v-list-item-title", [_vm._v("Users")])],
                     1
                   )
                 ],
@@ -6278,7 +6278,9 @@ var render = function() {
                           attrs: {
                             src: _vm.base_url + item.photo,
                             alt: "",
-                            "aspect-ratio": "1.7"
+                            "aspect-ratio": ".7",
+                            "max-height": "100px",
+                            "max-width": "100px"
                           }
                         })
                       : _c("v-icon", { attrs: { size: "100px" } }, [

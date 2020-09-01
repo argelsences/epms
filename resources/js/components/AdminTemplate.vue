@@ -18,20 +18,20 @@
             <v-list-item-title>Departments</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link :to="{name: `users`}">
-          <v-list-item-action>
-            <v-icon>mdi-account-multiple</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Users</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
         <v-list-item link :to="{name: `speakers`}">
           <v-list-item-action>
             <v-icon>mdi-bullhorn</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Speakers</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link :to="{name: `users`}">
+          <v-list-item-action>
+            <v-icon>mdi-account-multiple</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Users</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>

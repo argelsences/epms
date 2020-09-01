@@ -123,7 +123,7 @@ class SpeakerController extends Controller
             //$department['updated_at'] = Carbon::now(env("APP_TIMEZONE"));
         }
         else{
-            $theSpeaker = Speaker::create($department);
+            $theSpeaker = Speaker::create($speaker);
             $upsertSuccess = ($theSpeaker->id) ? true : false;
         }
         // return the same data compared to list to ensure using the same 

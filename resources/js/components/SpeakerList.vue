@@ -101,7 +101,7 @@
                 <!-- the toolbar -->
                 </template>
                 <template v-slot:item.photo="{ item }">
-                    <v-img v-if="item.photo" :src="base_url + item.photo" alt="" aspect-ratio="1.7"></v-img>
+                    <v-img v-if="item.photo" :src="base_url + item.photo" alt="" aspect-ratio=".7" max-height="100px" max-width="100px"></v-img>
                     <v-icon size="100px" v-else>mdi-account-box</v-icon>
                 </template>
                 <template v-slot:item.actions="{ item }">

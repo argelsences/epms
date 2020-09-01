@@ -1994,6 +1994,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2006,7 +2016,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       drawer: null,
-      expandOnHover: true
+      expandOnHover: true,
+      profile: []
     };
   },
   router: new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
@@ -2049,6 +2060,18 @@ __webpack_require__.r(__webpack_exports__);
     '$route': function $route(to, from) {
       document.title = to.meta.title + ' - Event Publication and Poster Management System (EPPMS)' || false;
     }
+  },
+  methods: {
+    getProfile: function getProfile() {
+      var _this = this;
+
+      axios.get('/api/profile').then(function (response) {
+        _this.profile = response.data;
+      });
+    }
+  },
+  created: function created() {
+    this.getProfile();
   }
 });
 
@@ -4285,7 +4308,11 @@ var render = function() {
       _c(
         "v-navigation-drawer",
         {
-          attrs: { app: "", "expand-on-hover": _vm.expandOnHover },
+          attrs: {
+            app: "",
+            "expand-on-hover": _vm.expandOnHover,
+            "mobile-breakpoint": "800"
+          },
           scopedSlots: _vm._u([
             {
               key: "prepend",
@@ -4297,7 +4324,6 @@ var render = function() {
                     [
                       _c(
                         "v-list-item",
-                        { attrs: { href: "#" } },
                         [
                           _c(
                             "v-list-item-action",
@@ -4311,7 +4337,56 @@ var render = function() {
                           _vm._v(" "),
                           _c(
                             "v-list-item-content",
-                            [_c("v-list-item-title", [_vm._v("Account Name")])],
+                            [
+                              _c(
+                                "v-list-item-title",
+                                [
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass: "text-subtitle-2 text-left"
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                " +
+                                          _vm._s(_vm.profile.name) +
+                                          "\n              "
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    { staticClass: "text-caption text-left" },
+                                    [
+                                      _vm._v(
+                                        "\n                " +
+                                          _vm._s(_vm.profile.designation) +
+                                          "\n              "
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-btn",
+                                    {
+                                      attrs: {
+                                        "x-small": "",
+                                        color: "cyan darken-2",
+                                        tile: "",
+                                        outlined: ""
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                Profile\n              "
+                                      )
+                                    ]
+                                  )
+                                ],
+                                1
+                              )
+                            ],
                             1
                           )
                         ],
@@ -5714,8 +5789,9 @@ var render = function() {
                       {
                         staticClass: "ma-2",
                         attrs: {
-                          color: "teal",
-                          "text-color": "white",
+                          color: "cyan darken-2",
+                          tile: "",
+                          outlined: "",
                           label: "",
                           href: item.url,
                           target: "blank"

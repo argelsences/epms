@@ -7,6 +7,7 @@ use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use Auth;
 
 use Illuminate\Validation\Rule;
 
@@ -30,7 +31,6 @@ class UserController extends Controller
     public function create()
     {
         //
-        dd(["here"]);
     }
 
     /**
@@ -134,7 +134,6 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         //
-        dd($user);
     }
     /**
      * API to return all users
@@ -176,9 +175,17 @@ class UserController extends Controller
      * API to return all roles
      */
     public function getAllRoles (Role $model){
+
+        if (auth()->user()->can(['list role'])){
+            return response('Unauthorized', 403);
+        }
+
         return response()->json(($model::orderBy('name', 'ASC')->get(['id','name'])));
     }
 
+    /**
+     * Assign role to a user
+     */
     private function storeRole( User $user, $role_id ){
         
         $assignedRole = false;
@@ -191,6 +198,16 @@ class UserController extends Controller
         }
 
         return $assignedRole;
+    }
+
+    /**
+     * API
+     * 
+     * Retrieve profile of the current logged in user
+     */
+    public function getProfile(){
+        $user = Auth::user();
+        return response()->json( $user );
     }
 
 }

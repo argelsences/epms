@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-model="drawer" app :expand-on-hover="expandOnHover" >
+    <v-navigation-drawer v-model="drawer" app :expand-on-hover="expandOnHover" mobile-breakpoint="800">
       <v-list dense>
         <v-list-item link :to="{name: `dashboard`}">
           <v-list-item-action>
@@ -37,12 +37,22 @@
       </v-list>
       <template v-slot:prepend>
         <v-list dense>
-          <v-list-item href="#">
+          <v-list-item>
             <v-list-item-action>
               <v-icon>mdi-account-circle-outline</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title>Account Name</v-list-item-title>
+              <v-list-item-title>
+                <div class="text-subtitle-2 text-left">
+                  {{profile.name}}
+                </div>
+                <div class="text-caption text-left">
+                  {{profile.designation}}
+                </div>
+                <v-btn x-small color="cyan darken-2" tile outlined>
+                  Profile
+                </v-btn>
+              </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -95,6 +105,7 @@
       return {
         drawer: null,
         expandOnHover: true,
+        profile: [],
       }  
     },
     router: new VueRouter({
@@ -135,6 +146,17 @@
       '$route' (to, from) {
         document.title = to.meta.title + ' - Event Publication and Poster Management System (EPPMS)' || 'Event Publication and Poster Management System (EPPMS)'
       }
+    },
+    methods: {
+      getProfile: function() {
+        axios.get('/api/profile')
+          .then( response => {
+              this.profile = response.data;
+          });
+      },
+    },
+    created: function() {
+      this.getProfile()
     },
   }
 </script>

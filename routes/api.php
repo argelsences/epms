@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['auth:api']], function(){
     // users
     Route::get('/users', 'UserController@list')->name('users.list');
+    Route::get('/profile', 'UserController@getProfile')->name('user.profile');
     Route::post('/users/upsert', 'UserController@upsert')->name('users.upsert');
     // roles
     Route::get('/roles', 'UserController@getAllRoles')->name('users.roles');

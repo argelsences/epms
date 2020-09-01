@@ -185,7 +185,7 @@
                 <!-- the toolbar -->
                 </template>
                 <template v-slot:item.url="{ item }">
-                    <v-chip class="ma-2" color="teal" text-color="white" label :href="item.url" target="blank">
+                    <v-chip class="ma-2" color="cyan darken-2" tile outlined label :href="item.url" target="blank">
                         <v-avatar left>
                             <v-icon>mdi-link</v-icon>
                         </v-avatar>

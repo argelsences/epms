@@ -18,6 +18,14 @@
             <v-list-item-title>Departments</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item link :to="{name: `venues`}">
+          <v-list-item-action>
+            <v-icon>mdi-map-marker</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Venues</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item link :to="{name: `speakers`}">
           <v-list-item-action>
             <v-icon>mdi-bullhorn</v-icon>
@@ -95,6 +103,7 @@
   import DepartmentList from './DepartmentList.vue';
   import UserList from './UserList.vue';
   import SpeakerList from './SpeakerList.vue';
+  import VenueList from './VenueList.vue';
 
   export default {
     props: {
@@ -135,6 +144,12 @@
               name: 'speakers',
               component: SpeakerList,
               meta: {title: 'Speakers'}
+          },
+          {
+              path: '/venues',
+              name: 'venues',
+              component: VenueList,
+              meta: {title: 'Venues'}
           },
           {
               path: '*',

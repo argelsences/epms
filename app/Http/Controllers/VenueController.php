@@ -15,6 +15,7 @@ class VenueController extends Controller
     public function index()
     {
         //
+        return view('admin.departments.list');
     }
 
     /**
@@ -81,5 +82,53 @@ class VenueController extends Controller
     public function destroy(Venue $venue)
     {
         //
+    }
+    /**
+     * API function
+     * 
+     * List all departments
+     * 
+     */
+    public function list(Venue $model){
+        
+        if ( auth()->user()->can(['list venue']) ){
+            return response('Unauthorized', 403);
+        }
+
+        return response()->json(($model::orderBy('name', 'ASC')->get()));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     * 
+     * API
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function upsert(DepartmentRequest $request)
+    {
+        if ( auth()->user()->can(['edit department', 'add department']) ){
+            return response('Unauthorized', 403);
+        }
+
+        $upsertSuccess = false;
+        $department = $request->post('payload');
+
+        if ( $department['id'] ){
+            // retrieve the user object
+            $theDepartment = Department::findOrFail($department['id']);
+            // update the user object with updated details
+            $theDepartment = tap($theDepartment)->update($department);
+            //$department['updated_at'] = Carbon::now(env("APP_TIMEZONE"));
+        }
+        else{
+            $theDepartment = Department::create($department);
+            $upsertSuccess = ($theDepartment->id) ? true : false;
+        }
+        // return the same data compared to list to ensure using the same 
+        $success = ($theDepartment) ? true : false;
+        return ['success' => $success, 'item' => $theDepartment];
     }
 }

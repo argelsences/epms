@@ -1913,6 +1913,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DepartmentList_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DepartmentList.vue */ "./resources/js/components/DepartmentList.vue");
 /* harmony import */ var _UserList_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UserList.vue */ "./resources/js/components/UserList.vue");
 /* harmony import */ var _SpeakerList_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./SpeakerList.vue */ "./resources/js/components/SpeakerList.vue");
+/* harmony import */ var _VenueList_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./VenueList.vue */ "./resources/js/components/VenueList.vue");
 //
 //
 //
@@ -2004,6 +2005,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -2050,6 +2060,13 @@ __webpack_require__.r(__webpack_exports__);
       component: _SpeakerList_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
       meta: {
         title: 'Speakers'
+      }
+    }, {
+      path: '/venues',
+      name: 'venues',
+      component: _VenueList_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
+      meta: {
+        title: 'Venues'
       }
     }, {
       path: '*',
@@ -3297,6 +3314,440 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/VenueList.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/VenueList.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mounted: function mounted() {
+    console.log('Component mounted');
+  },
+  data: function data() {
+    return {
+      dialog: false,
+      isValid: true,
+      search: '',
+      feedbacks: [],
+      rows: [],
+      departments: [],
+      roles: [],
+      editedIndex: -1,
+      color: '#1976D2',
+      mask: '?#XXXXXX',
+      menu_header_bg: false,
+      menu_bg: false,
+      menu_text_color: false,
+      base_url: window.location.origin + '/',
+      snackbar: false,
+      timeout: 5000,
+      error: false,
+      logo: null,
+      //c_picker: '',
+      //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
+      rules: {
+        required: function required(v) {
+          return !!v || 'Required.';
+        },
+        /////min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
+        emailValid: function emailValid(v) {
+          return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid';
+        },
+        phoneValid: function phoneValid(v) {
+          return !v || /^(?=.*[0-9])[- +()x0-9]+$/.test(v) || 'Tel. # must be valid';
+        },
+        urlValid: function urlValid(v) {
+          return !v || /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(v) || 'URL must be valid';
+        },
+        limitFileSize: function limitFileSize(v) {
+          return !v || v.size < 2000000 || 'Logo size should be less than 2 MB!';
+        },
+        limitFileSizeMultiple: function limitFileSizeMultiple(files) {
+          return !files || !files.some(function (file) {
+            return file.size > 2e6;
+          }) || 'Avatar size should be less than 2 MB!';
+        }
+      },
+      headers: [{
+        text: 'Name',
+        value: 'name'
+      }, {
+        text: 'Address',
+        value: 'addresses'
+      }, {
+        text: 'Actions',
+        value: 'actions',
+        sortable: false
+      }],
+      editedItem: {
+        id: 0,
+        name: '',
+        address_line_1: '',
+        address_line_2: '',
+        country: '',
+        state: '',
+        postcode: '',
+        lat: '',
+        "long": ''
+      },
+      defaultItem: {
+        id: 0,
+        name: '',
+        address_line_1: '',
+        address_line_2: '',
+        country: '',
+        state: '',
+        post_code: '',
+        lat: null,
+        "long": ''
+      }
+    };
+  },
+  computed: {
+    formTitle: function formTitle() {
+      return this.editedIndex === -1 ? 'New Venue' : 'Edit Venue';
+    }
+    /*departmentName () {
+        return this.editedIndex === -1 ? '' : this.rows[this.editedIndex].department.name
+    },*/
+
+  },
+  watch: {
+    dialog: function dialog(val) {
+      // if val is true, then statement is true, if not the default value is this.close
+      // eg. the_title = title || "Error"; if title is true, the the value of the_title is the value of title, else the value of the_title is "Error"
+      val || this.close();
+    }
+  },
+  methods: {
+    initialize: function initialize() {
+      var _this = this;
+
+      axios.get('/api/venues').then(function (response) {
+        _this.rows = response.data;
+      });
+    },
+    editItem: function editItem(item) {
+      this.editedIndex = this.rows.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+    deleteItem: function deleteItem(item) {
+      var index = this.rows.indexOf(item);
+      confirm('Are you sure you want to delete this item?') && this.rows.splice(index, 1);
+    },
+    close: function close() {
+      var _this2 = this;
+
+      // make sure the dialog box is closed
+      this.dialog = false; // next action is to make sure that the value of editedItem is on default, and re-initialize the editedIndex value
+
+      this.$nextTick(function () {
+        // reset the defaultItem object
+        _this2.editedItem = Object.assign({}, _this2.defaultItem); // reset the edit flag
+
+        _this2.editedIndex = -1; // reset the form
+
+        _this2.$refs.form.reset();
+      });
+    },
+    save: function save() {
+      var _this3 = this;
+
+      /** on change of input, upload the logo, then assign the path to logo path */
+      this.$refs.form.validate(); // check if process is updating or creating
+      // if update, then replace the value of the current item with the value in the editedItem
+      // if creating, then push the edited item into the object
+      // assign the edited item to a local var first to be able to be used for filter
+
+      var editedItem = this.editedItem;
+      var editedIndex = this.editedIndex;
+      axios.post('/api/departments/upsert', {
+        payload: this.editedItem
+      }).then(function (response) {
+        if (response.data.success) {
+          _this3.feedbacks = [];
+          _this3.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.';
+          _this3.snackbar = true;
+          _this3.error = false;
+          /*
+          if ( editedIndex > -1 )
+              Object.assign(this.rows[editedIndex], editedItem)
+          else
+              this.rows.push(editedItem)
+          */
+
+          if (editedIndex > -1) Object.assign(_this3.rows[editedIndex], response.data.item);else _this3.rows.push(response.data.item); // close the dialog box
+
+          _this3.close();
+        }
+      })["catch"](function (error) {
+        var messages = Object.values(error.response.data.errors);
+        _this3.feedbacks = [].concat.apply([], messages);
+        _this3.snackbar = true;
+        _this3.error = true;
+      });
+    },
+    uploadLogo: function uploadLogo() {
+      var _this4 = this;
+
+      if (this.logo) {
+        var formData = new FormData();
+        formData.append('logo', this.logo);
+        if (this.editedItem.id) formData.append('id', this.editedItem.id);
+        axios.post('/api/departments/uploadLogo', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then(function (response) {
+          if (response.data.success) {
+            // set the path on the global editedItem
+            _this4.editedItem.logo_path = response.data.file_path;
+          }
+        })["catch"](function (error) {
+          var messages = Object.values(error.response.data.errors);
+          _this4.feedbacks = [].concat.apply([], messages);
+          _this4.snackbar = true;
+          _this4.error = true;
+          _this4.logo = null;
+        });
+      }
+    },
+    setHedeaderTitle: function setHedeaderTitle() {
+      document.title = 'Venues - Event Publication and Poster Management System (EPPMS)';
+    }
+  },
+  created: function created() {
+    this.setHedeaderTitle();
+    this.initialize();
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/process/browser.js":
 /*!*****************************************!*\
   !*** ./node_modules/process/browser.js ***!
@@ -4447,6 +4898,25 @@ var render = function() {
                   _c(
                     "v-list-item-content",
                     [_c("v-list-item-title", [_vm._v("Departments")])],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-list-item",
+                { attrs: { link: "", to: { name: "venues" } } },
+                [
+                  _c(
+                    "v-list-item-action",
+                    [_c("v-icon", [_vm._v("mdi-map-marker")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item-content",
+                    [_c("v-list-item-title", [_vm._v("Venues")])],
                     1
                   )
                 ],
@@ -7269,6 +7739,1346 @@ var render = function() {
                     )
                   ]
                 }
+              }
+            ])
+          }),
+          _vm._v(" "),
+          _c(
+            "v-snackbar",
+            {
+              attrs: { timeout: _vm.timeout },
+              scopedSlots: _vm._u([
+                {
+                  key: "action",
+                  fn: function(ref) {
+                    var attrs = ref.attrs
+                    return [
+                      _c(
+                        "v-btn",
+                        _vm._b(
+                          {
+                            attrs: { color: "teal", text: "" },
+                            on: {
+                              click: function($event) {
+                                _vm.snackbar = false
+                              }
+                            }
+                          },
+                          "v-btn",
+                          attrs,
+                          false
+                        ),
+                        [
+                          _vm._v(
+                            "\n                    Close\n                "
+                          )
+                        ]
+                      )
+                    ]
+                  }
+                }
+              ]),
+              model: {
+                value: _vm.snackbar,
+                callback: function($$v) {
+                  _vm.snackbar = $$v
+                },
+                expression: "snackbar"
+              }
+            },
+            _vm._l(_vm.feedbacks, function(feedback, index) {
+              return _c(
+                "v-list-item",
+                { key: index },
+                [
+                  _vm.error
+                    ? _c(
+                        "v-list-item-icon",
+                        [
+                          _c("v-icon", { attrs: { color: "red darken-2" } }, [
+                            _vm._v("mdi-exclamation-thick")
+                          ])
+                        ],
+                        1
+                      )
+                    : _c(
+                        "v-list-item-icon",
+                        [
+                          _c("v-icon", { attrs: { color: "green darken-2" } }, [
+                            _vm._v("mdi-check-bold")
+                          ])
+                        ],
+                        1
+                      ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item-content",
+                    [
+                      _c("v-list-item-title", {
+                        domProps: { textContent: _vm._s(feedback) }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            }),
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/VenueList.vue?vue&type=template&id=cbca695c&":
+/*!************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/VenueList.vue?vue&type=template&id=cbca695c& ***!
+  \************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-app",
+    [
+      _c("div", { staticClass: "text-h4 text-left" }, [_vm._v("Venues")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "text-subtitle-1 text-left" }, [
+        _vm._v("You can manage the event venues here")
+      ]),
+      _vm._v(" "),
+      _c("v-divider"),
+      _vm._v(" "),
+      _c(
+        "v-card",
+        [
+          _c("v-data-table", {
+            attrs: {
+              headers: _vm.headers,
+              items: _vm.rows,
+              search: _vm.search,
+              "items-per-page": 20,
+              "sort-by": "name"
+            },
+            scopedSlots: _vm._u([
+              {
+                key: "top",
+                fn: function() {
+                  return [
+                    _c(
+                      "v-toolbar",
+                      { attrs: { flat: "", color: "white" } },
+                      [
+                        _c("v-text-field", {
+                          attrs: {
+                            "append-icon": "search",
+                            label: "Search",
+                            "single-line": "",
+                            "hide-details": ""
+                          },
+                          model: {
+                            value: _vm.search,
+                            callback: function($$v) {
+                              _vm.search = $$v
+                            },
+                            expression: "search"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("v-spacer"),
+                        _vm._v(" "),
+                        _c(
+                          "v-dialog",
+                          {
+                            attrs: { width: "80%", scrollable: "" },
+                            scopedSlots: _vm._u([
+                              {
+                                key: "activator",
+                                fn: function(ref) {
+                                  var on = ref.on
+                                  var attrs = ref.attrs
+                                  return [
+                                    _c(
+                                      "v-btn",
+                                      _vm._g(
+                                        _vm._b(
+                                          {
+                                            staticClass:
+                                              "mb-2 btn btn-sm btn-primary"
+                                          },
+                                          "v-btn",
+                                          attrs,
+                                          false
+                                        ),
+                                        on
+                                      ),
+                                      [
+                                        _c(
+                                          "i",
+                                          { staticClass: "material-icons " },
+                                          [_vm._v("add_box")]
+                                        ),
+                                        _vm._v(" Venue")
+                                      ]
+                                    )
+                                  ]
+                                }
+                              }
+                            ]),
+                            model: {
+                              value: _vm.dialog,
+                              callback: function($$v) {
+                                _vm.dialog = $$v
+                              },
+                              expression: "dialog"
+                            }
+                          },
+                          [
+                            _vm._v(" "),
+                            _c(
+                              "v-card",
+                              [
+                                _c("v-card-title", [
+                                  _c("span", { staticClass: "headline" }, [
+                                    _vm._v(_vm._s(_vm.formTitle))
+                                  ])
+                                ]),
+                                _vm._v(" "),
+                                _c("v-divider"),
+                                _vm._v(" "),
+                                _c(
+                                  "v-card-text",
+                                  [
+                                    _c(
+                                      "v-container",
+                                      [
+                                        _c(
+                                          "v-form",
+                                          {
+                                            ref: "form",
+                                            model: {
+                                              value: _vm.isValid,
+                                              callback: function($$v) {
+                                                _vm.isValid = $$v
+                                              },
+                                              expression: "isValid"
+                                            }
+                                          },
+                                          [
+                                            _c(
+                                              "v-row",
+                                              [
+                                                _c("v-subheader", [
+                                                  _c("h4", [_vm._v("Details")])
+                                                ])
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-row",
+                                              [
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "6"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        label: "Name",
+                                                        rules: [
+                                                          _vm.rules.required
+                                                        ],
+                                                        "prepend-icon":
+                                                          "mdi-information"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedItem.name,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedItem,
+                                                            "name",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedItem.name"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "6"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        label: "Email",
+                                                        rules: [
+                                                          _vm.rules.required,
+                                                          _vm.rules.emailValid
+                                                        ],
+                                                        "prepend-icon":
+                                                          "mdi-email"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedItem.email,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedItem,
+                                                            "email",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedItem.email"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-row",
+                                              [
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "6"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        label: "Tel. #",
+                                                        rules: [
+                                                          _vm.rules.phoneValid
+                                                        ],
+                                                        "prepend-icon":
+                                                          "mdi-phone"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedItem.phone,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedItem,
+                                                            "phone",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedItem.phone"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "6"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-file-input", {
+                                                      attrs: {
+                                                        accept:
+                                                          "image/png, image/jpeg, image/bmp, image/jpg",
+                                                        rule: [
+                                                          _vm.rules
+                                                            .limitFileSize
+                                                        ],
+                                                        clearable: "",
+                                                        placeholder:
+                                                          "Select an image",
+                                                        "prepend-icon":
+                                                          "mdi-camera-iris",
+                                                        label: "Logo",
+                                                        persistentHint: "",
+                                                        chips: "",
+                                                        hint:
+                                                          "Selecting an image will replace the existing logo. Valid image formats are JPG, JPEG, PNG & BMP. Image size should not be greater than 2MB"
+                                                      },
+                                                      on: {
+                                                        change: _vm.uploadLogo
+                                                      },
+                                                      model: {
+                                                        value: _vm.logo,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.logo = $$v
+                                                        },
+                                                        expression: "logo"
+                                                      }
+                                                    }),
+                                                    _vm._v(" "),
+                                                    _vm.editedItem.logo_path !=
+                                                    null
+                                                      ? _c(
+                                                          "v-card",
+                                                          {
+                                                            staticClass: "my-2"
+                                                          },
+                                                          [
+                                                            _c(
+                                                              "v-card-text",
+                                                              [
+                                                                _c("v-img", {
+                                                                  attrs: {
+                                                                    "lazy-src":
+                                                                      _vm.base_url +
+                                                                      _vm
+                                                                        .editedItem
+                                                                        .logo_path,
+                                                                    "max-height":
+                                                                      "150",
+                                                                    "max-width":
+                                                                      "250",
+                                                                    src:
+                                                                      _vm.base_url +
+                                                                      _vm
+                                                                        .editedItem
+                                                                        .logo_path
+                                                                  }
+                                                                }),
+                                                                _vm._v(" "),
+                                                                _c(
+                                                                  "v-divider",
+                                                                  {
+                                                                    staticClass:
+                                                                      "my-2"
+                                                                  }
+                                                                ),
+                                                                _vm._v(" "),
+                                                                _c("p", [
+                                                                  _vm._v(
+                                                                    _vm._s(
+                                                                      _vm
+                                                                        .editedItem
+                                                                        .logo_path
+                                                                    )
+                                                                  )
+                                                                ])
+                                                              ],
+                                                              1
+                                                            )
+                                                          ],
+                                                          1
+                                                        )
+                                                      : _vm._e()
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-row",
+                                              [
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "12"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        label: "Department URI",
+                                                        "prepend-icon":
+                                                          "mdi-link",
+                                                        prefix: _vm.base_url,
+                                                        rules: [
+                                                          _vm.rules.required
+                                                        ]
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedItem.url,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedItem,
+                                                            "url",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedItem.url"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-row",
+                                              [
+                                                _c("v-subheader", [
+                                                  _c("h4", [
+                                                    _vm._v("Social Media")
+                                                  ])
+                                                ])
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-row",
+                                              [
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "6"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        label: "Facebook URL",
+                                                        rules: [
+                                                          _vm.rules.urlValid
+                                                        ],
+                                                        "prepend-icon":
+                                                          "mdi-facebook"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedItem
+                                                            .facebook,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedItem,
+                                                            "facebook",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedItem.facebook"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "6"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        label: "Instagram URL",
+                                                        rules: [
+                                                          _vm.rules.urlValid
+                                                        ],
+                                                        "prepend-icon":
+                                                          "mdi-instagram"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedItem
+                                                            .instagram,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedItem,
+                                                            "instagram",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedItem.instagram"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-row",
+                                              [
+                                                _c("v-subheader", [
+                                                  _c("h4", [
+                                                    _vm._v(
+                                                      "Backgrounds & Colors"
+                                                    )
+                                                  ])
+                                                ])
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-row",
+                                              [
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "4"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      directives: [
+                                                        {
+                                                          name: "mask",
+                                                          rawName: "v-mask",
+                                                          value: _vm.mask,
+                                                          expression: "mask"
+                                                        }
+                                                      ],
+                                                      staticClass: "ma-0 pa-0",
+                                                      attrs: {
+                                                        "hide-details": "",
+                                                        label:
+                                                          "Page header bg color",
+                                                        outlined: "",
+                                                        readonly: "",
+                                                        placeholder: _vm.color
+                                                      },
+                                                      scopedSlots: _vm._u([
+                                                        {
+                                                          key: "append",
+                                                          fn: function() {
+                                                            return [
+                                                              _c(
+                                                                "v-menu",
+                                                                {
+                                                                  attrs: {
+                                                                    top: "",
+                                                                    "nudge-bottom":
+                                                                      "105",
+                                                                    "nudge-left":
+                                                                      "16",
+                                                                    "close-on-content-click": false
+                                                                  },
+                                                                  scopedSlots: _vm._u(
+                                                                    [
+                                                                      {
+                                                                        key:
+                                                                          "activator",
+                                                                        fn: function(
+                                                                          ref
+                                                                        ) {
+                                                                          var on =
+                                                                            ref.on
+                                                                          return [
+                                                                            _c(
+                                                                              "div",
+                                                                              _vm._g(
+                                                                                {
+                                                                                  style:
+                                                                                    _vm.swatchStyleHeaderBGColor
+                                                                                },
+                                                                                on
+                                                                              )
+                                                                            )
+                                                                          ]
+                                                                        }
+                                                                      }
+                                                                    ]
+                                                                  ),
+                                                                  model: {
+                                                                    value:
+                                                                      _vm.menu_header_bg,
+                                                                    callback: function(
+                                                                      $$v
+                                                                    ) {
+                                                                      _vm.menu_header_bg = $$v
+                                                                    },
+                                                                    expression:
+                                                                      "menu_header_bg"
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _vm._v(" "),
+                                                                  _c(
+                                                                    "v-card",
+                                                                    [
+                                                                      _c(
+                                                                        "v-card-text",
+                                                                        {
+                                                                          staticClass:
+                                                                            "pa-0"
+                                                                        },
+                                                                        [
+                                                                          _c(
+                                                                            "v-color-picker",
+                                                                            {
+                                                                              attrs: {
+                                                                                mode:
+                                                                                  "hexa",
+                                                                                "hide-mode-switch":
+                                                                                  "",
+                                                                                flat:
+                                                                                  ""
+                                                                              },
+                                                                              model: {
+                                                                                value:
+                                                                                  _vm
+                                                                                    .editedItem
+                                                                                    .page_header_bg_color,
+                                                                                callback: function(
+                                                                                  $$v
+                                                                                ) {
+                                                                                  _vm.$set(
+                                                                                    _vm.editedItem,
+                                                                                    "page_header_bg_color",
+                                                                                    $$v
+                                                                                  )
+                                                                                },
+                                                                                expression:
+                                                                                  "editedItem.page_header_bg_color"
+                                                                              }
+                                                                            }
+                                                                          )
+                                                                        ],
+                                                                        1
+                                                                      )
+                                                                    ],
+                                                                    1
+                                                                  )
+                                                                ],
+                                                                1
+                                                              )
+                                                            ]
+                                                          },
+                                                          proxy: true
+                                                        }
+                                                      ]),
+                                                      model: {
+                                                        value:
+                                                          _vm.editedItem
+                                                            .page_header_bg_color,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedItem,
+                                                            "page_header_bg_color",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedItem.page_header_bg_color"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "4"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      directives: [
+                                                        {
+                                                          name: "mask",
+                                                          rawName: "v-mask",
+                                                          value: _vm.mask,
+                                                          expression: "mask"
+                                                        }
+                                                      ],
+                                                      staticClass: "ma-0 pa-0",
+                                                      attrs: {
+                                                        "hide-details": "",
+                                                        label: "Page bg color",
+                                                        outlined: "",
+                                                        readonly: "",
+                                                        placeholder: _vm.color
+                                                      },
+                                                      scopedSlots: _vm._u([
+                                                        {
+                                                          key: "append",
+                                                          fn: function() {
+                                                            return [
+                                                              _c(
+                                                                "v-menu",
+                                                                {
+                                                                  attrs: {
+                                                                    top: "",
+                                                                    "nudge-bottom":
+                                                                      "105",
+                                                                    "nudge-left":
+                                                                      "16",
+                                                                    "close-on-content-click": false
+                                                                  },
+                                                                  scopedSlots: _vm._u(
+                                                                    [
+                                                                      {
+                                                                        key:
+                                                                          "activator",
+                                                                        fn: function(
+                                                                          ref
+                                                                        ) {
+                                                                          var on =
+                                                                            ref.on
+                                                                          return [
+                                                                            _c(
+                                                                              "div",
+                                                                              _vm._g(
+                                                                                {
+                                                                                  style:
+                                                                                    _vm.swatchStyleBGColor
+                                                                                },
+                                                                                on
+                                                                              )
+                                                                            )
+                                                                          ]
+                                                                        }
+                                                                      }
+                                                                    ]
+                                                                  ),
+                                                                  model: {
+                                                                    value:
+                                                                      _vm.menu_bg,
+                                                                    callback: function(
+                                                                      $$v
+                                                                    ) {
+                                                                      _vm.menu_bg = $$v
+                                                                    },
+                                                                    expression:
+                                                                      "menu_bg"
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _vm._v(" "),
+                                                                  _c(
+                                                                    "v-card",
+                                                                    [
+                                                                      _c(
+                                                                        "v-card-text",
+                                                                        {
+                                                                          staticClass:
+                                                                            "pa-0"
+                                                                        },
+                                                                        [
+                                                                          _c(
+                                                                            "v-color-picker",
+                                                                            {
+                                                                              attrs: {
+                                                                                mode:
+                                                                                  "hexa",
+                                                                                "hide-mode-switch":
+                                                                                  "",
+                                                                                flat:
+                                                                                  ""
+                                                                              },
+                                                                              model: {
+                                                                                value:
+                                                                                  _vm
+                                                                                    .editedItem
+                                                                                    .page_bg_color,
+                                                                                callback: function(
+                                                                                  $$v
+                                                                                ) {
+                                                                                  _vm.$set(
+                                                                                    _vm.editedItem,
+                                                                                    "page_bg_color",
+                                                                                    $$v
+                                                                                  )
+                                                                                },
+                                                                                expression:
+                                                                                  "editedItem.page_bg_color"
+                                                                              }
+                                                                            }
+                                                                          )
+                                                                        ],
+                                                                        1
+                                                                      )
+                                                                    ],
+                                                                    1
+                                                                  )
+                                                                ],
+                                                                1
+                                                              )
+                                                            ]
+                                                          },
+                                                          proxy: true
+                                                        }
+                                                      ]),
+                                                      model: {
+                                                        value:
+                                                          _vm.editedItem
+                                                            .page_bg_color,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedItem,
+                                                            "page_bg_color",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedItem.page_bg_color"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "4"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      directives: [
+                                                        {
+                                                          name: "mask",
+                                                          rawName: "v-mask",
+                                                          value: _vm.mask,
+                                                          expression: "mask"
+                                                        }
+                                                      ],
+                                                      staticClass: "ma-0 pa-0",
+                                                      attrs: {
+                                                        "hide-details": "",
+                                                        label:
+                                                          "Page text color",
+                                                        outlined: "",
+                                                        readonly: "",
+                                                        placeholder: _vm.color
+                                                      },
+                                                      scopedSlots: _vm._u([
+                                                        {
+                                                          key: "append",
+                                                          fn: function() {
+                                                            return [
+                                                              _c(
+                                                                "v-menu",
+                                                                {
+                                                                  attrs: {
+                                                                    top: "",
+                                                                    "nudge-bottom":
+                                                                      "105",
+                                                                    "nudge-left":
+                                                                      "16",
+                                                                    "close-on-content-click": false
+                                                                  },
+                                                                  scopedSlots: _vm._u(
+                                                                    [
+                                                                      {
+                                                                        key:
+                                                                          "activator",
+                                                                        fn: function(
+                                                                          ref
+                                                                        ) {
+                                                                          var on =
+                                                                            ref.on
+                                                                          return [
+                                                                            _c(
+                                                                              "div",
+                                                                              _vm._g(
+                                                                                {
+                                                                                  style:
+                                                                                    _vm.swatchStyleTextColor
+                                                                                },
+                                                                                on
+                                                                              )
+                                                                            )
+                                                                          ]
+                                                                        }
+                                                                      }
+                                                                    ]
+                                                                  ),
+                                                                  model: {
+                                                                    value:
+                                                                      _vm.menu_text_color,
+                                                                    callback: function(
+                                                                      $$v
+                                                                    ) {
+                                                                      _vm.menu_text_color = $$v
+                                                                    },
+                                                                    expression:
+                                                                      "menu_text_color"
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _vm._v(" "),
+                                                                  _c(
+                                                                    "v-card",
+                                                                    [
+                                                                      _c(
+                                                                        "v-card-text",
+                                                                        {
+                                                                          staticClass:
+                                                                            "pa-0"
+                                                                        },
+                                                                        [
+                                                                          _c(
+                                                                            "v-color-picker",
+                                                                            {
+                                                                              attrs: {
+                                                                                mode:
+                                                                                  "hexa",
+                                                                                "hide-mode-switch":
+                                                                                  "",
+                                                                                flat:
+                                                                                  ""
+                                                                              },
+                                                                              model: {
+                                                                                value:
+                                                                                  _vm
+                                                                                    .editedItem
+                                                                                    .page_text_color,
+                                                                                callback: function(
+                                                                                  $$v
+                                                                                ) {
+                                                                                  _vm.$set(
+                                                                                    _vm.editedItem,
+                                                                                    "page_text_color",
+                                                                                    $$v
+                                                                                  )
+                                                                                },
+                                                                                expression:
+                                                                                  "editedItem.page_text_color"
+                                                                              }
+                                                                            }
+                                                                          )
+                                                                        ],
+                                                                        1
+                                                                      )
+                                                                    ],
+                                                                    1
+                                                                  )
+                                                                ],
+                                                                1
+                                                              )
+                                                            ]
+                                                          },
+                                                          proxy: true
+                                                        }
+                                                      ]),
+                                                      model: {
+                                                        value:
+                                                          _vm.editedItem
+                                                            .page_text_color,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedItem,
+                                                            "page_text_color",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedItem.page_text_color"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-row",
+                                              [
+                                                _c("v-subheader", [
+                                                  _c(
+                                                    "h4",
+                                                    { staticClass: "mt-6" },
+                                                    [_vm._v("Statistics code")]
+                                                  )
+                                                ])
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-row",
+                                              [
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "6"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        label:
+                                                          "Google Analytics ID",
+                                                        hint:
+                                                          "Input the ID here"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedItem
+                                                            .google_analytics_code,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedItem,
+                                                            "google_analytics_code",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedItem.google_analytics_code"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "6"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        label:
+                                                          "Google Tag Manager ID",
+                                                        hint:
+                                                          "Input the ID here"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedItem
+                                                            .google_tag_manager_code,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedItem,
+                                                            "google_tag_manager_code",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedItem.google_tag_manager_code"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c("v-divider"),
+                                _vm._v(" "),
+                                _c(
+                                  "v-card-actions",
+                                  [
+                                    _c("v-spacer"),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        attrs: {
+                                          color: "blue darken-1",
+                                          text: ""
+                                        },
+                                        on: { click: _vm.close }
+                                      },
+                                      [_vm._v("Cancel")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        attrs: {
+                                          color: "blue darken-1",
+                                          disabled: !_vm.isValid,
+                                          text: ""
+                                        },
+                                        on: { click: _vm.save }
+                                      },
+                                      [_vm._v("Save")]
+                                    )
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ]
+                },
+                proxy: true
+              },
+              {
+                key: "item.addresses",
+                fn: function(ref) {
+                  var item = ref.item
+                  return [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(item.address_line_1) +
+                        " " +
+                        _vm._s(item.address_line_2) +
+                        "  \n            "
+                    )
+                  ]
+                }
+              },
+              {
+                key: "item.actions",
+                fn: function(ref) {
+                  var item = ref.item
+                  return [
+                    _c(
+                      "v-icon",
+                      {
+                        staticClass: "mr-2",
+                        attrs: { small: "" },
+                        on: {
+                          click: function($event) {
+                            return _vm.editItem(item)
+                          }
+                        }
+                      },
+                      [_vm._v("mdi-pencil")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "v-icon",
+                      {
+                        attrs: { small: "" },
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteItem(item)
+                          }
+                        }
+                      },
+                      [_vm._v("mdi-delete")]
+                    )
+                  ]
+                }
+              },
+              {
+                key: "no-data",
+                fn: function() {
+                  return [
+                    _c(
+                      "v-btn",
+                      {
+                        staticClass: "btn btn-sm btn-primary",
+                        on: { click: _vm.initialize }
+                      },
+                      [_vm._v("Reset")]
+                    )
+                  ]
+                },
+                proxy: true
               }
             ])
           }),
@@ -66311,6 +68121,7 @@ Vue.component('dashboard', __webpack_require__(/*! ./components/Dashboard.vue */
 Vue.component('user-list', __webpack_require__(/*! ./components/UserList.vue */ "./resources/js/components/UserList.vue")["default"]);
 Vue.component('department-list', __webpack_require__(/*! ./components/DepartmentList.vue */ "./resources/js/components/DepartmentList.vue")["default"]);
 Vue.component('speaker-list', __webpack_require__(/*! ./components/SpeakerList.vue */ "./resources/js/components/SpeakerList.vue")["default"]);
+Vue.component('venue-list', __webpack_require__(/*! ./components/VenueList.vue */ "./resources/js/components/VenueList.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -66648,6 +68459,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UserList_vue_vue_type_template_id_3c9e9bf4___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UserList_vue_vue_type_template_id_3c9e9bf4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/VenueList.vue":
+/*!***********************************************!*\
+  !*** ./resources/js/components/VenueList.vue ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _VenueList_vue_vue_type_template_id_cbca695c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./VenueList.vue?vue&type=template&id=cbca695c& */ "./resources/js/components/VenueList.vue?vue&type=template&id=cbca695c&");
+/* harmony import */ var _VenueList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./VenueList.vue?vue&type=script&lang=js& */ "./resources/js/components/VenueList.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _VenueList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _VenueList_vue_vue_type_template_id_cbca695c___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _VenueList_vue_vue_type_template_id_cbca695c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/VenueList.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/VenueList.vue?vue&type=script&lang=js&":
+/*!************************************************************************!*\
+  !*** ./resources/js/components/VenueList.vue?vue&type=script&lang=js& ***!
+  \************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_VenueList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./VenueList.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/VenueList.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_VenueList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/VenueList.vue?vue&type=template&id=cbca695c&":
+/*!******************************************************************************!*\
+  !*** ./resources/js/components/VenueList.vue?vue&type=template&id=cbca695c& ***!
+  \******************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_VenueList_vue_vue_type_template_id_cbca695c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./VenueList.vue?vue&type=template&id=cbca695c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/VenueList.vue?vue&type=template&id=cbca695c&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_VenueList_vue_vue_type_template_id_cbca695c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_VenueList_vue_vue_type_template_id_cbca695c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

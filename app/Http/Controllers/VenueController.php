@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Venue;
+use App\Country;
 use Illuminate\Http\Request;
 
 class VenueController extends Controller
@@ -130,5 +131,17 @@ class VenueController extends Controller
         // return the same data compared to list to ensure using the same 
         $success = ($theDepartment) ? true : false;
         return ['success' => $success, 'item' => $theDepartment];
+    }
+    /**
+     * API
+     * 
+     * Get countries
+     */
+    public function countries(Country $country){
+
+        if ( auth()->user()->can(['list venue']) ){
+            return response('Unauthorized', 403);
+        }
+        return response()->json($country->all('countries'));
     }
 }

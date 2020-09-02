@@ -2327,6 +2327,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -3433,115 +3439,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -3556,16 +3453,17 @@ __webpack_require__.r(__webpack_exports__);
       departments: [],
       roles: [],
       editedIndex: -1,
-      color: '#1976D2',
-      mask: '?#XXXXXX',
-      menu_header_bg: false,
-      menu_bg: false,
-      menu_text_color: false,
+      //color: '#1976D2',
+      //mask: '?#XXXXXX',
+      //menu_header_bg: false,
+      //menu_bg: false,
+      //menu_text_color: false,
       base_url: window.location.origin + '/',
       snackbar: false,
       timeout: 5000,
       error: false,
-      logo: null,
+      //logo: null,
+      countries: [],
       //c_picker: '',
       //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
       rules: {
@@ -3650,6 +3548,14 @@ __webpack_require__.r(__webpack_exports__);
         _this.rows = response.data;
       });
     },
+    getCountries: function getCountries() {
+      var _this2 = this;
+
+      axios.get('/api/countries').then(function (response) {
+        _this2.countries = response.data;
+        console.log(_this2.countries);
+      });
+    },
     editItem: function editItem(item) {
       this.editedIndex = this.rows.indexOf(item);
       this.editedItem = Object.assign({}, item);
@@ -3660,22 +3566,22 @@ __webpack_require__.r(__webpack_exports__);
       confirm('Are you sure you want to delete this item?') && this.rows.splice(index, 1);
     },
     close: function close() {
-      var _this2 = this;
+      var _this3 = this;
 
       // make sure the dialog box is closed
       this.dialog = false; // next action is to make sure that the value of editedItem is on default, and re-initialize the editedIndex value
 
       this.$nextTick(function () {
         // reset the defaultItem object
-        _this2.editedItem = Object.assign({}, _this2.defaultItem); // reset the edit flag
+        _this3.editedItem = Object.assign({}, _this3.defaultItem); // reset the edit flag
 
-        _this2.editedIndex = -1; // reset the form
+        _this3.editedIndex = -1; // reset the form
 
-        _this2.$refs.form.reset();
+        _this3.$refs.form.reset();
       });
     },
     save: function save() {
-      var _this3 = this;
+      var _this4 = this;
 
       /** on change of input, upload the logo, then assign the path to logo path */
       this.$refs.form.validate(); // check if process is updating or creating
@@ -3689,10 +3595,10 @@ __webpack_require__.r(__webpack_exports__);
         payload: this.editedItem
       }).then(function (response) {
         if (response.data.success) {
-          _this3.feedbacks = [];
-          _this3.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.';
-          _this3.snackbar = true;
-          _this3.error = false;
+          _this4.feedbacks = [];
+          _this4.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.';
+          _this4.snackbar = true;
+          _this4.error = false;
           /*
           if ( editedIndex > -1 )
               Object.assign(this.rows[editedIndex], editedItem)
@@ -3700,19 +3606,19 @@ __webpack_require__.r(__webpack_exports__);
               this.rows.push(editedItem)
           */
 
-          if (editedIndex > -1) Object.assign(_this3.rows[editedIndex], response.data.item);else _this3.rows.push(response.data.item); // close the dialog box
+          if (editedIndex > -1) Object.assign(_this4.rows[editedIndex], response.data.item);else _this4.rows.push(response.data.item); // close the dialog box
 
-          _this3.close();
+          _this4.close();
         }
       })["catch"](function (error) {
         var messages = Object.values(error.response.data.errors);
-        _this3.feedbacks = [].concat.apply([], messages);
-        _this3.snackbar = true;
-        _this3.error = true;
+        _this4.feedbacks = [].concat.apply([], messages);
+        _this4.snackbar = true;
+        _this4.error = true;
       });
     },
     uploadLogo: function uploadLogo() {
-      var _this4 = this;
+      var _this5 = this;
 
       if (this.logo) {
         var formData = new FormData();
@@ -3725,14 +3631,14 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (response) {
           if (response.data.success) {
             // set the path on the global editedItem
-            _this4.editedItem.logo_path = response.data.file_path;
+            _this5.editedItem.logo_path = response.data.file_path;
           }
         })["catch"](function (error) {
           var messages = Object.values(error.response.data.errors);
-          _this4.feedbacks = [].concat.apply([], messages);
-          _this4.snackbar = true;
-          _this4.error = true;
-          _this4.logo = null;
+          _this5.feedbacks = [].concat.apply([], messages);
+          _this5.snackbar = true;
+          _this5.error = true;
+          _this5.logo = null;
         });
       }
     },
@@ -3743,6 +3649,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     this.setHedeaderTitle();
     this.initialize();
+    this.getCountries();
   }
 });
 
@@ -5219,9 +5126,24 @@ var render = function() {
                                             _c(
                                               "v-row",
                                               [
-                                                _c("v-subheader", [
-                                                  _c("h4", [_vm._v("Details")])
-                                                ])
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "12"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-subheader", [
+                                                      _c("h4", [
+                                                        _vm._v("Details")
+                                                      ])
+                                                    ])
+                                                  ],
+                                                  1
+                                                )
                                               ],
                                               1
                                             ),
@@ -5604,13 +5526,26 @@ var render = function() {
                                             _c(
                                               "v-row",
                                               [
-                                                _c("v-subheader", [
-                                                  _c("h4", [
-                                                    _vm._v(
-                                                      "Backgrounds & Colors"
-                                                    )
-                                                  ])
-                                                ])
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "12"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-subheader", [
+                                                      _c("h4", [
+                                                        _vm._v(
+                                                          "Backgrounds & Colors"
+                                                        )
+                                                      ])
+                                                    ])
+                                                  ],
+                                                  1
+                                                )
                                               ],
                                               1
                                             ),
@@ -6100,13 +6035,30 @@ var render = function() {
                                             _c(
                                               "v-row",
                                               [
-                                                _c("v-subheader", [
-                                                  _c(
-                                                    "h4",
-                                                    { staticClass: "mt-6" },
-                                                    [_vm._v("Statistics code")]
-                                                  )
-                                                ])
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "12"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-subheader", [
+                                                      _c(
+                                                        "h4",
+                                                        { staticClass: "mt-6" },
+                                                        [
+                                                          _vm._v(
+                                                            "Statistics code"
+                                                          )
+                                                        ]
+                                                      )
+                                                    ])
+                                                  ],
+                                                  1
+                                                )
                                               ],
                                               1
                                             ),
@@ -7985,23 +7937,13 @@ var render = function() {
                                             _c(
                                               "v-row",
                                               [
-                                                _c("v-subheader", [
-                                                  _c("h4", [_vm._v("Details")])
-                                                ])
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-row",
-                                              [
                                                 _c(
                                                   "v-col",
                                                   {
                                                     attrs: {
                                                       cols: "12",
                                                       sm: "12",
-                                                      md: "6"
+                                                      md: "12"
                                                     }
                                                   },
                                                   [
@@ -8032,6 +7974,50 @@ var render = function() {
                                                     })
                                                   ],
                                                   1
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-row",
+                                              [
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "6"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-textarea", {
+                                                      attrs: {
+                                                        counter: "",
+                                                        label: "Address Line 1",
+                                                        "prepend-icon":
+                                                          "mdi-map"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedItem
+                                                            .address_line_1,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedItem,
+                                                            "address_line_1",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedItem.address_line_1"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
                                                 ),
                                                 _vm._v(" "),
                                                 _c(
@@ -8044,30 +8030,28 @@ var render = function() {
                                                     }
                                                   },
                                                   [
-                                                    _c("v-text-field", {
+                                                    _c("v-textarea", {
                                                       attrs: {
-                                                        label: "Email",
-                                                        rules: [
-                                                          _vm.rules.required,
-                                                          _vm.rules.emailValid
-                                                        ],
+                                                        counter: "",
+                                                        label: "Address Line 2",
                                                         "prepend-icon":
-                                                          "mdi-email"
+                                                          "mdi-map"
                                                       },
                                                       model: {
                                                         value:
-                                                          _vm.editedItem.email,
+                                                          _vm.editedItem
+                                                            .address_line_2,
                                                         callback: function(
                                                           $$v
                                                         ) {
                                                           _vm.$set(
                                                             _vm.editedItem,
-                                                            "email",
+                                                            "address_line_2",
                                                             $$v
                                                           )
                                                         },
                                                         expression:
-                                                          "editedItem.email"
+                                                          "editedItem.address_line_2"
                                                       }
                                                     })
                                                   ],
@@ -8092,7 +8076,43 @@ var render = function() {
                                                   [
                                                     _c("v-text-field", {
                                                       attrs: {
-                                                        label: "Tel. #",
+                                                        label: "State",
+                                                        "prepend-icon":
+                                                          "mdi-email"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedItem.state,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedItem,
+                                                            "state",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedItem.state"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "6"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        label: "Postcode",
                                                         rules: [
                                                           _vm.rules.phoneValid
                                                         ],
@@ -8101,18 +8121,68 @@ var render = function() {
                                                       },
                                                       model: {
                                                         value:
-                                                          _vm.editedItem.phone,
+                                                          _vm.editedItem
+                                                            .postcode,
                                                         callback: function(
                                                           $$v
                                                         ) {
                                                           _vm.$set(
                                                             _vm.editedItem,
-                                                            "phone",
+                                                            "postcode",
                                                             $$v
                                                           )
                                                         },
                                                         expression:
-                                                          "editedItem.phone"
+                                                          "editedItem.postcode"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-row",
+                                              [
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "6"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-select", {
+                                                      attrs: {
+                                                        items: _vm.countries,
+                                                        label: "Country",
+                                                        "item-text": "name",
+                                                        "item-value": "name",
+                                                        rules: [
+                                                          _vm.rules.required
+                                                        ],
+                                                        "prepend-icon":
+                                                          "mdi-earth"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedItem
+                                                            .country,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedItem,
+                                                            "country",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedItem.country"
                                                       }
                                                     })
                                                   ],
@@ -8129,829 +8199,87 @@ var render = function() {
                                                     }
                                                   },
                                                   [
-                                                    _c("v-file-input", {
-                                                      attrs: {
-                                                        accept:
-                                                          "image/png, image/jpeg, image/bmp, image/jpg",
-                                                        rule: [
-                                                          _vm.rules
-                                                            .limitFileSize
-                                                        ],
-                                                        clearable: "",
-                                                        placeholder:
-                                                          "Select an image",
-                                                        "prepend-icon":
-                                                          "mdi-camera-iris",
-                                                        label: "Logo",
-                                                        persistentHint: "",
-                                                        chips: "",
-                                                        hint:
-                                                          "Selecting an image will replace the existing logo. Valid image formats are JPG, JPEG, PNG & BMP. Image size should not be greater than 2MB"
-                                                      },
-                                                      on: {
-                                                        change: _vm.uploadLogo
-                                                      },
-                                                      model: {
-                                                        value: _vm.logo,
-                                                        callback: function(
-                                                          $$v
-                                                        ) {
-                                                          _vm.logo = $$v
-                                                        },
-                                                        expression: "logo"
-                                                      }
-                                                    }),
-                                                    _vm._v(" "),
-                                                    _vm.editedItem.logo_path !=
-                                                    null
-                                                      ? _c(
-                                                          "v-card",
+                                                    _c(
+                                                      "v-row",
+                                                      [
+                                                        _c(
+                                                          "v-col",
                                                           {
-                                                            staticClass: "my-2"
+                                                            attrs: {
+                                                              cols: "12",
+                                                              sm: "12",
+                                                              md: "6"
+                                                            }
                                                           },
                                                           [
-                                                            _c(
-                                                              "v-card-text",
-                                                              [
-                                                                _c("v-img", {
-                                                                  attrs: {
-                                                                    "lazy-src":
-                                                                      _vm.base_url +
-                                                                      _vm
-                                                                        .editedItem
-                                                                        .logo_path,
-                                                                    "max-height":
-                                                                      "150",
-                                                                    "max-width":
-                                                                      "250",
-                                                                    src:
-                                                                      _vm.base_url +
-                                                                      _vm
-                                                                        .editedItem
-                                                                        .logo_path
-                                                                  }
-                                                                }),
-                                                                _vm._v(" "),
-                                                                _c(
-                                                                  "v-divider",
-                                                                  {
-                                                                    staticClass:
-                                                                      "my-2"
-                                                                  }
-                                                                ),
-                                                                _vm._v(" "),
-                                                                _c("p", [
-                                                                  _vm._v(
-                                                                    _vm._s(
-                                                                      _vm
-                                                                        .editedItem
-                                                                        .logo_path
-                                                                    )
+                                                            _c("v-text-field", {
+                                                              attrs: {
+                                                                label:
+                                                                  "Latitude",
+                                                                "prepend-icon":
+                                                                  "mdi-map-marker"
+                                                              },
+                                                              model: {
+                                                                value:
+                                                                  _vm.editedItem
+                                                                    .lat,
+                                                                callback: function(
+                                                                  $$v
+                                                                ) {
+                                                                  _vm.$set(
+                                                                    _vm.editedItem,
+                                                                    "lat",
+                                                                    $$v
                                                                   )
-                                                                ])
-                                                              ],
-                                                              1
-                                                            )
+                                                                },
+                                                                expression:
+                                                                  "editedItem.lat"
+                                                              }
+                                                            })
+                                                          ],
+                                                          1
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "v-col",
+                                                          {
+                                                            attrs: {
+                                                              cols: "12",
+                                                              sm: "12",
+                                                              md: "6"
+                                                            }
+                                                          },
+                                                          [
+                                                            _c("v-text-field", {
+                                                              attrs: {
+                                                                label:
+                                                                  "Longtitude",
+                                                                "prepend-icon":
+                                                                  "mdi-map-marker"
+                                                              },
+                                                              model: {
+                                                                value:
+                                                                  _vm.editedItem
+                                                                    .long,
+                                                                callback: function(
+                                                                  $$v
+                                                                ) {
+                                                                  _vm.$set(
+                                                                    _vm.editedItem,
+                                                                    "long",
+                                                                    $$v
+                                                                  )
+                                                                },
+                                                                expression:
+                                                                  "editedItem.long"
+                                                              }
+                                                            })
                                                           ],
                                                           1
                                                         )
-                                                      : _vm._e()
-                                                  ],
-                                                  1
-                                                )
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-row",
-                                              [
-                                                _c(
-                                                  "v-col",
-                                                  {
-                                                    attrs: {
-                                                      cols: "12",
-                                                      sm: "12",
-                                                      md: "12"
-                                                    }
-                                                  },
-                                                  [
-                                                    _c("v-text-field", {
-                                                      attrs: {
-                                                        label: "Department URI",
-                                                        "prepend-icon":
-                                                          "mdi-link",
-                                                        prefix: _vm.base_url,
-                                                        rules: [
-                                                          _vm.rules.required
-                                                        ]
-                                                      },
-                                                      model: {
-                                                        value:
-                                                          _vm.editedItem.url,
-                                                        callback: function(
-                                                          $$v
-                                                        ) {
-                                                          _vm.$set(
-                                                            _vm.editedItem,
-                                                            "url",
-                                                            $$v
-                                                          )
-                                                        },
-                                                        expression:
-                                                          "editedItem.url"
-                                                      }
-                                                    })
-                                                  ],
-                                                  1
-                                                )
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-row",
-                                              [
-                                                _c("v-subheader", [
-                                                  _c("h4", [
-                                                    _vm._v("Social Media")
-                                                  ])
-                                                ])
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-row",
-                                              [
-                                                _c(
-                                                  "v-col",
-                                                  {
-                                                    attrs: {
-                                                      cols: "12",
-                                                      sm: "12",
-                                                      md: "6"
-                                                    }
-                                                  },
-                                                  [
-                                                    _c("v-text-field", {
-                                                      attrs: {
-                                                        label: "Facebook URL",
-                                                        rules: [
-                                                          _vm.rules.urlValid
-                                                        ],
-                                                        "prepend-icon":
-                                                          "mdi-facebook"
-                                                      },
-                                                      model: {
-                                                        value:
-                                                          _vm.editedItem
-                                                            .facebook,
-                                                        callback: function(
-                                                          $$v
-                                                        ) {
-                                                          _vm.$set(
-                                                            _vm.editedItem,
-                                                            "facebook",
-                                                            $$v
-                                                          )
-                                                        },
-                                                        expression:
-                                                          "editedItem.facebook"
-                                                      }
-                                                    })
-                                                  ],
-                                                  1
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "v-col",
-                                                  {
-                                                    attrs: {
-                                                      cols: "12",
-                                                      sm: "12",
-                                                      md: "6"
-                                                    }
-                                                  },
-                                                  [
-                                                    _c("v-text-field", {
-                                                      attrs: {
-                                                        label: "Instagram URL",
-                                                        rules: [
-                                                          _vm.rules.urlValid
-                                                        ],
-                                                        "prepend-icon":
-                                                          "mdi-instagram"
-                                                      },
-                                                      model: {
-                                                        value:
-                                                          _vm.editedItem
-                                                            .instagram,
-                                                        callback: function(
-                                                          $$v
-                                                        ) {
-                                                          _vm.$set(
-                                                            _vm.editedItem,
-                                                            "instagram",
-                                                            $$v
-                                                          )
-                                                        },
-                                                        expression:
-                                                          "editedItem.instagram"
-                                                      }
-                                                    })
-                                                  ],
-                                                  1
-                                                )
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-row",
-                                              [
-                                                _c("v-subheader", [
-                                                  _c("h4", [
-                                                    _vm._v(
-                                                      "Backgrounds & Colors"
+                                                      ],
+                                                      1
                                                     )
-                                                  ])
-                                                ])
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-row",
-                                              [
-                                                _c(
-                                                  "v-col",
-                                                  {
-                                                    attrs: {
-                                                      cols: "12",
-                                                      sm: "12",
-                                                      md: "4"
-                                                    }
-                                                  },
-                                                  [
-                                                    _c("v-text-field", {
-                                                      directives: [
-                                                        {
-                                                          name: "mask",
-                                                          rawName: "v-mask",
-                                                          value: _vm.mask,
-                                                          expression: "mask"
-                                                        }
-                                                      ],
-                                                      staticClass: "ma-0 pa-0",
-                                                      attrs: {
-                                                        "hide-details": "",
-                                                        label:
-                                                          "Page header bg color",
-                                                        outlined: "",
-                                                        readonly: "",
-                                                        placeholder: _vm.color
-                                                      },
-                                                      scopedSlots: _vm._u([
-                                                        {
-                                                          key: "append",
-                                                          fn: function() {
-                                                            return [
-                                                              _c(
-                                                                "v-menu",
-                                                                {
-                                                                  attrs: {
-                                                                    top: "",
-                                                                    "nudge-bottom":
-                                                                      "105",
-                                                                    "nudge-left":
-                                                                      "16",
-                                                                    "close-on-content-click": false
-                                                                  },
-                                                                  scopedSlots: _vm._u(
-                                                                    [
-                                                                      {
-                                                                        key:
-                                                                          "activator",
-                                                                        fn: function(
-                                                                          ref
-                                                                        ) {
-                                                                          var on =
-                                                                            ref.on
-                                                                          return [
-                                                                            _c(
-                                                                              "div",
-                                                                              _vm._g(
-                                                                                {
-                                                                                  style:
-                                                                                    _vm.swatchStyleHeaderBGColor
-                                                                                },
-                                                                                on
-                                                                              )
-                                                                            )
-                                                                          ]
-                                                                        }
-                                                                      }
-                                                                    ]
-                                                                  ),
-                                                                  model: {
-                                                                    value:
-                                                                      _vm.menu_header_bg,
-                                                                    callback: function(
-                                                                      $$v
-                                                                    ) {
-                                                                      _vm.menu_header_bg = $$v
-                                                                    },
-                                                                    expression:
-                                                                      "menu_header_bg"
-                                                                  }
-                                                                },
-                                                                [
-                                                                  _vm._v(" "),
-                                                                  _c(
-                                                                    "v-card",
-                                                                    [
-                                                                      _c(
-                                                                        "v-card-text",
-                                                                        {
-                                                                          staticClass:
-                                                                            "pa-0"
-                                                                        },
-                                                                        [
-                                                                          _c(
-                                                                            "v-color-picker",
-                                                                            {
-                                                                              attrs: {
-                                                                                mode:
-                                                                                  "hexa",
-                                                                                "hide-mode-switch":
-                                                                                  "",
-                                                                                flat:
-                                                                                  ""
-                                                                              },
-                                                                              model: {
-                                                                                value:
-                                                                                  _vm
-                                                                                    .editedItem
-                                                                                    .page_header_bg_color,
-                                                                                callback: function(
-                                                                                  $$v
-                                                                                ) {
-                                                                                  _vm.$set(
-                                                                                    _vm.editedItem,
-                                                                                    "page_header_bg_color",
-                                                                                    $$v
-                                                                                  )
-                                                                                },
-                                                                                expression:
-                                                                                  "editedItem.page_header_bg_color"
-                                                                              }
-                                                                            }
-                                                                          )
-                                                                        ],
-                                                                        1
-                                                                      )
-                                                                    ],
-                                                                    1
-                                                                  )
-                                                                ],
-                                                                1
-                                                              )
-                                                            ]
-                                                          },
-                                                          proxy: true
-                                                        }
-                                                      ]),
-                                                      model: {
-                                                        value:
-                                                          _vm.editedItem
-                                                            .page_header_bg_color,
-                                                        callback: function(
-                                                          $$v
-                                                        ) {
-                                                          _vm.$set(
-                                                            _vm.editedItem,
-                                                            "page_header_bg_color",
-                                                            $$v
-                                                          )
-                                                        },
-                                                        expression:
-                                                          "editedItem.page_header_bg_color"
-                                                      }
-                                                    })
-                                                  ],
-                                                  1
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "v-col",
-                                                  {
-                                                    attrs: {
-                                                      cols: "12",
-                                                      sm: "12",
-                                                      md: "4"
-                                                    }
-                                                  },
-                                                  [
-                                                    _c("v-text-field", {
-                                                      directives: [
-                                                        {
-                                                          name: "mask",
-                                                          rawName: "v-mask",
-                                                          value: _vm.mask,
-                                                          expression: "mask"
-                                                        }
-                                                      ],
-                                                      staticClass: "ma-0 pa-0",
-                                                      attrs: {
-                                                        "hide-details": "",
-                                                        label: "Page bg color",
-                                                        outlined: "",
-                                                        readonly: "",
-                                                        placeholder: _vm.color
-                                                      },
-                                                      scopedSlots: _vm._u([
-                                                        {
-                                                          key: "append",
-                                                          fn: function() {
-                                                            return [
-                                                              _c(
-                                                                "v-menu",
-                                                                {
-                                                                  attrs: {
-                                                                    top: "",
-                                                                    "nudge-bottom":
-                                                                      "105",
-                                                                    "nudge-left":
-                                                                      "16",
-                                                                    "close-on-content-click": false
-                                                                  },
-                                                                  scopedSlots: _vm._u(
-                                                                    [
-                                                                      {
-                                                                        key:
-                                                                          "activator",
-                                                                        fn: function(
-                                                                          ref
-                                                                        ) {
-                                                                          var on =
-                                                                            ref.on
-                                                                          return [
-                                                                            _c(
-                                                                              "div",
-                                                                              _vm._g(
-                                                                                {
-                                                                                  style:
-                                                                                    _vm.swatchStyleBGColor
-                                                                                },
-                                                                                on
-                                                                              )
-                                                                            )
-                                                                          ]
-                                                                        }
-                                                                      }
-                                                                    ]
-                                                                  ),
-                                                                  model: {
-                                                                    value:
-                                                                      _vm.menu_bg,
-                                                                    callback: function(
-                                                                      $$v
-                                                                    ) {
-                                                                      _vm.menu_bg = $$v
-                                                                    },
-                                                                    expression:
-                                                                      "menu_bg"
-                                                                  }
-                                                                },
-                                                                [
-                                                                  _vm._v(" "),
-                                                                  _c(
-                                                                    "v-card",
-                                                                    [
-                                                                      _c(
-                                                                        "v-card-text",
-                                                                        {
-                                                                          staticClass:
-                                                                            "pa-0"
-                                                                        },
-                                                                        [
-                                                                          _c(
-                                                                            "v-color-picker",
-                                                                            {
-                                                                              attrs: {
-                                                                                mode:
-                                                                                  "hexa",
-                                                                                "hide-mode-switch":
-                                                                                  "",
-                                                                                flat:
-                                                                                  ""
-                                                                              },
-                                                                              model: {
-                                                                                value:
-                                                                                  _vm
-                                                                                    .editedItem
-                                                                                    .page_bg_color,
-                                                                                callback: function(
-                                                                                  $$v
-                                                                                ) {
-                                                                                  _vm.$set(
-                                                                                    _vm.editedItem,
-                                                                                    "page_bg_color",
-                                                                                    $$v
-                                                                                  )
-                                                                                },
-                                                                                expression:
-                                                                                  "editedItem.page_bg_color"
-                                                                              }
-                                                                            }
-                                                                          )
-                                                                        ],
-                                                                        1
-                                                                      )
-                                                                    ],
-                                                                    1
-                                                                  )
-                                                                ],
-                                                                1
-                                                              )
-                                                            ]
-                                                          },
-                                                          proxy: true
-                                                        }
-                                                      ]),
-                                                      model: {
-                                                        value:
-                                                          _vm.editedItem
-                                                            .page_bg_color,
-                                                        callback: function(
-                                                          $$v
-                                                        ) {
-                                                          _vm.$set(
-                                                            _vm.editedItem,
-                                                            "page_bg_color",
-                                                            $$v
-                                                          )
-                                                        },
-                                                        expression:
-                                                          "editedItem.page_bg_color"
-                                                      }
-                                                    })
-                                                  ],
-                                                  1
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "v-col",
-                                                  {
-                                                    attrs: {
-                                                      cols: "12",
-                                                      sm: "12",
-                                                      md: "4"
-                                                    }
-                                                  },
-                                                  [
-                                                    _c("v-text-field", {
-                                                      directives: [
-                                                        {
-                                                          name: "mask",
-                                                          rawName: "v-mask",
-                                                          value: _vm.mask,
-                                                          expression: "mask"
-                                                        }
-                                                      ],
-                                                      staticClass: "ma-0 pa-0",
-                                                      attrs: {
-                                                        "hide-details": "",
-                                                        label:
-                                                          "Page text color",
-                                                        outlined: "",
-                                                        readonly: "",
-                                                        placeholder: _vm.color
-                                                      },
-                                                      scopedSlots: _vm._u([
-                                                        {
-                                                          key: "append",
-                                                          fn: function() {
-                                                            return [
-                                                              _c(
-                                                                "v-menu",
-                                                                {
-                                                                  attrs: {
-                                                                    top: "",
-                                                                    "nudge-bottom":
-                                                                      "105",
-                                                                    "nudge-left":
-                                                                      "16",
-                                                                    "close-on-content-click": false
-                                                                  },
-                                                                  scopedSlots: _vm._u(
-                                                                    [
-                                                                      {
-                                                                        key:
-                                                                          "activator",
-                                                                        fn: function(
-                                                                          ref
-                                                                        ) {
-                                                                          var on =
-                                                                            ref.on
-                                                                          return [
-                                                                            _c(
-                                                                              "div",
-                                                                              _vm._g(
-                                                                                {
-                                                                                  style:
-                                                                                    _vm.swatchStyleTextColor
-                                                                                },
-                                                                                on
-                                                                              )
-                                                                            )
-                                                                          ]
-                                                                        }
-                                                                      }
-                                                                    ]
-                                                                  ),
-                                                                  model: {
-                                                                    value:
-                                                                      _vm.menu_text_color,
-                                                                    callback: function(
-                                                                      $$v
-                                                                    ) {
-                                                                      _vm.menu_text_color = $$v
-                                                                    },
-                                                                    expression:
-                                                                      "menu_text_color"
-                                                                  }
-                                                                },
-                                                                [
-                                                                  _vm._v(" "),
-                                                                  _c(
-                                                                    "v-card",
-                                                                    [
-                                                                      _c(
-                                                                        "v-card-text",
-                                                                        {
-                                                                          staticClass:
-                                                                            "pa-0"
-                                                                        },
-                                                                        [
-                                                                          _c(
-                                                                            "v-color-picker",
-                                                                            {
-                                                                              attrs: {
-                                                                                mode:
-                                                                                  "hexa",
-                                                                                "hide-mode-switch":
-                                                                                  "",
-                                                                                flat:
-                                                                                  ""
-                                                                              },
-                                                                              model: {
-                                                                                value:
-                                                                                  _vm
-                                                                                    .editedItem
-                                                                                    .page_text_color,
-                                                                                callback: function(
-                                                                                  $$v
-                                                                                ) {
-                                                                                  _vm.$set(
-                                                                                    _vm.editedItem,
-                                                                                    "page_text_color",
-                                                                                    $$v
-                                                                                  )
-                                                                                },
-                                                                                expression:
-                                                                                  "editedItem.page_text_color"
-                                                                              }
-                                                                            }
-                                                                          )
-                                                                        ],
-                                                                        1
-                                                                      )
-                                                                    ],
-                                                                    1
-                                                                  )
-                                                                ],
-                                                                1
-                                                              )
-                                                            ]
-                                                          },
-                                                          proxy: true
-                                                        }
-                                                      ]),
-                                                      model: {
-                                                        value:
-                                                          _vm.editedItem
-                                                            .page_text_color,
-                                                        callback: function(
-                                                          $$v
-                                                        ) {
-                                                          _vm.$set(
-                                                            _vm.editedItem,
-                                                            "page_text_color",
-                                                            $$v
-                                                          )
-                                                        },
-                                                        expression:
-                                                          "editedItem.page_text_color"
-                                                      }
-                                                    })
-                                                  ],
-                                                  1
-                                                )
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-row",
-                                              [
-                                                _c("v-subheader", [
-                                                  _c(
-                                                    "h4",
-                                                    { staticClass: "mt-6" },
-                                                    [_vm._v("Statistics code")]
-                                                  )
-                                                ])
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-row",
-                                              [
-                                                _c(
-                                                  "v-col",
-                                                  {
-                                                    attrs: {
-                                                      cols: "12",
-                                                      sm: "12",
-                                                      md: "6"
-                                                    }
-                                                  },
-                                                  [
-                                                    _c("v-text-field", {
-                                                      attrs: {
-                                                        label:
-                                                          "Google Analytics ID",
-                                                        hint:
-                                                          "Input the ID here"
-                                                      },
-                                                      model: {
-                                                        value:
-                                                          _vm.editedItem
-                                                            .google_analytics_code,
-                                                        callback: function(
-                                                          $$v
-                                                        ) {
-                                                          _vm.$set(
-                                                            _vm.editedItem,
-                                                            "google_analytics_code",
-                                                            $$v
-                                                          )
-                                                        },
-                                                        expression:
-                                                          "editedItem.google_analytics_code"
-                                                      }
-                                                    })
-                                                  ],
-                                                  1
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "v-col",
-                                                  {
-                                                    attrs: {
-                                                      cols: "12",
-                                                      sm: "12",
-                                                      md: "6"
-                                                    }
-                                                  },
-                                                  [
-                                                    _c("v-text-field", {
-                                                      attrs: {
-                                                        label:
-                                                          "Google Tag Manager ID",
-                                                        hint:
-                                                          "Input the ID here"
-                                                      },
-                                                      model: {
-                                                        value:
-                                                          _vm.editedItem
-                                                            .google_tag_manager_code,
-                                                        callback: function(
-                                                          $$v
-                                                        ) {
-                                                          _vm.$set(
-                                                            _vm.editedItem,
-                                                            "google_tag_manager_code",
-                                                            $$v
-                                                          )
-                                                        },
-                                                        expression:
-                                                          "editedItem.google_tag_manager_code"
-                                                      }
-                                                    })
                                                   ],
                                                   1
                                                 )
@@ -9067,16 +8395,7 @@ var render = function() {
               {
                 key: "no-data",
                 fn: function() {
-                  return [
-                    _c(
-                      "v-btn",
-                      {
-                        staticClass: "btn btn-sm btn-primary",
-                        on: { click: _vm.initialize }
-                      },
-                      [_vm._v("Reset")]
-                    )
-                  ]
+                  return [_vm._v('" btn-primary" @click="initialize">Reset')]
                 },
                 proxy: true
               }

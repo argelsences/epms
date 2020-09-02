@@ -57,7 +57,9 @@
                                     <v-container>
                                         <v-form v-model="isValid" ref="form">
                                             <v-row>
-                                                <v-subheader><h4>Details</h4></v-subheader>
+                                                <v-col cols="12" sm="12" md="12">
+                                                    <v-subheader><h4>Details</h4></v-subheader>
+                                                </v-col>
                                             </v-row>
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="6">
@@ -106,7 +108,9 @@
                                                 </v-col>
                                             </v-row>
                                             <v-row>
-                                                <v-subheader><h4>Backgrounds & Colors</h4></v-subheader>
+                                                <v-col cols="12" sm="12" md="12">
+                                                    <v-subheader><h4>Backgrounds & Colors</h4></v-subheader>
+                                                </v-col>
                                             </v-row>
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="4">
@@ -159,7 +163,9 @@
                                                 </v-col>
                                             </v-row>
                                             <v-row>
-                                                <v-subheader><h4 class="mt-6">Statistics code</h4></v-subheader>
+                                                <v-col cols="12" sm="12" md="12">
+                                                    <v-subheader><h4 class="mt-6">Statistics code</h4></v-subheader>
+                                                </v-col>
                                             </v-row>
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="6">

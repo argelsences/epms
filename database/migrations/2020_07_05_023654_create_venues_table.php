@@ -16,13 +16,13 @@ class CreateVenuesTable extends Migration
         Schema::create('venues', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('address_line_1');
-            $table->string('address_line_2');
-            $table->string('country');
-            $table->string('state');
-            $table->string('postcode');
-            $table->string('lat');
-            $table->string('long');
+            $table->string('address_line_1')->nullable();
+            $table->string('address_line_2')->nullable();
+            $table->string('country')->nullable();
+            $table->string('state')->nullable();
+            $table->string('postcode')->nullable();
+            $table->string('lat')->nullable();
+            $table->string('long')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

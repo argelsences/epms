@@ -9,12 +9,41 @@ window.axios = require('axios');
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 import Vuetify from 'vuetify';
-import VueMask from 'v-mask'
+import VueMask from 'v-mask';
+import * as VueGoogleMaps from 'vue2-google-maps';
 
 window.Vue = require('vue');
 window.Vue.use(Vuetify);
 window.Vue.use(VueMask);
 
+// initialize vue2-google-maps
+window.Vue.use(VueGoogleMaps, {
+    load: {
+      key: 'YOUR_API_TOKEN',
+      libraries: 'places', // This is required if you use the Autocomplete plugin
+      // OR: libraries: 'places,drawing'
+      // OR: libraries: 'places,drawing,visualization'
+      // (as you require)
+  
+      //// If you want to set the version, you can do so:
+      // v: '3.26',
+    },
+  
+    //// If you intend to programmatically custom event listener code
+    //// (e.g. `this.$refs.gmap.$on('zoom_changed', someFunc)`)
+    //// instead of going through Vue templates (e.g. `<GmapMap @zoom_changed="someFunc">`)
+    //// you might need to turn this on.
+    // autobindAllEvents: false,
+  
+    //// If you want to manually install components, e.g.
+    //// import {GmapMarker} from 'vue2-google-maps/src/components/marker'
+    //// Vue.component('GmapMarker', GmapMarker)
+    //// then set installComponents to 'false'.
+    //// If you want to automatically install all the components this property must be set to 'true':
+    installComponents: true
+  })
+  // initialize vue2-google-maps
+  
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

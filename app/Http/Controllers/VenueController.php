@@ -108,29 +108,28 @@ class VenueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function upsert(DepartmentRequest $request)
+    public function upsert(Request $request)
     {
-        if ( auth()->user()->can(['edit department', 'add department']) ){
+        if ( auth()->user()->can(['edit venue', 'add venue']) ){
             return response('Unauthorized', 403);
         }
 
         $upsertSuccess = false;
-        $department = $request->post('payload');
+        $venue = $request->post('payload');
 
-        if ( $department['id'] ){
+        if ( $venue['id'] ){
             // retrieve the user object
-            $theDepartment = Department::findOrFail($department['id']);
+            $theVenue = Venue::findOrFail($venue['id']);
             // update the user object with updated details
-            $theDepartment = tap($theDepartment)->update($department);
-            //$department['updated_at'] = Carbon::now(env("APP_TIMEZONE"));
+            $theVenue = tap($theVenue)->update($venue);
         }
         else{
-            $theDepartment = Department::create($department);
-            $upsertSuccess = ($theDepartment->id) ? true : false;
+            $theVenue = Venue::create($venue);
+            $upsertSuccess = ($theVenue->id) ? true : false;
         }
         // return the same data compared to list to ensure using the same 
-        $success = ($theDepartment) ? true : false;
-        return ['success' => $success, 'item' => $theDepartment];
+        $success = ($theVenue) ? true : false;
+        return ['success' => $success, 'item' => $theVenue];
     }
     /**
      * API

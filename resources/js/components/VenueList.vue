@@ -42,12 +42,12 @@
                                                     <v-text-field v-model="editedItem.state" label="State" prepend-icon="mdi-email" ></v-text-field> 
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">
-                                                    <v-text-field v-model="editedItem.postcode" label="Postcode" :rules="[rules.phoneValid]" prepend-icon="mdi-phone" ></v-text-field>
+                                                    <v-text-field v-model="editedItem.postcode" label="Postcode" prepend-icon="mdi-phone" ></v-text-field>
                                                 </v-col>
                                             </v-row>
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="6">
-                                                    <v-select :items="countries" label="Country" item-text="name" item-value="name" v-model="editedItem.country" :rules="[rules.required]" prepend-icon="mdi-earth"></v-select>
+                                                    <v-select :items="countries" label="Country" item-text="name" item-value="name" v-model="editedItem.country"  prepend-icon="mdi-earth"></v-select>
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">
                                                     <v-row>
@@ -83,7 +83,7 @@
                     <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
                 </template>
                 <template v-slot:no-data>
-                    <v-btn class="btn btn-sm:rules="[rules.required, rules.emailValid]" btn-primary" @click="initialize">Reset</v-btn>
+                    <v-btn class="btn btn-sm btn-primary" @click="initialize">Reset</v-btn>
                 </template>
             </v-data-table>
             <v-snackbar v-model="snackbar" :timeout="timeout">
@@ -239,7 +239,7 @@
                 var editedItem = this.editedItem
                 var editedIndex = this.editedIndex
 
-                axios.post('/api/departments/upsert', {
+                axios.post('/api/venues/upsert', {
                     payload: this.editedItem,
                 })
                 .then(response => {

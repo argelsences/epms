@@ -3455,6 +3455,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
@@ -3670,10 +3674,13 @@ __webpack_require__.r(__webpack_exports__);
     },
     // receives a place object via the autocomplete component
     setPlace: function setPlace(place) {
+      //console.log(place.latLng)
+      //console.log(place.latLng.lng())
       this.currentPlace = place;
     },
     addMarker: function addMarker() {
       if (this.currentPlace) {
+        // set the value for lat long here
         var marker = {
           lat: this.currentPlace.geometry.location.lat(),
           lng: this.currentPlace.geometry.location.lng()
@@ -9292,6 +9299,25 @@ var render = function() {
                                                 }
                                               },
                                               [
+                                                _c("gmap-autocomplete", {
+                                                  attrs: {
+                                                    options: {
+                                                      fields: ["geometry"]
+                                                    }
+                                                  },
+                                                  on: {
+                                                    place_changed: _vm.setPlace
+                                                  }
+                                                }),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "button",
+                                                  {
+                                                    on: { click: _vm.addMarker }
+                                                  },
+                                                  [_vm._v("Add")]
+                                                ),
+                                                _vm._v(" "),
                                                 _c(
                                                   "gmap-map",
                                                   {

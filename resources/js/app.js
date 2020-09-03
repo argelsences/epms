@@ -19,7 +19,7 @@ window.Vue.use(VueMask);
 // initialize vue2-google-maps
 window.Vue.use(VueGoogleMaps, {
     load: {
-      key: 'YOUR_API_TOKEN',
+      key: 'AIzaSyC85SAldoyqwtIvtD04Xz18TgYD-ud_bIU',
       libraries: 'places', // This is required if you use the Autocomplete plugin
       // OR: libraries: 'places,drawing'
       // OR: libraries: 'places,drawing,visualization'
@@ -43,7 +43,7 @@ window.Vue.use(VueGoogleMaps, {
     installComponents: true
   })
   // initialize vue2-google-maps
-  
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

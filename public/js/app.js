@@ -3439,9 +3439,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted');
+    this.geolocate();
   },
   data: function data() {
     return {
@@ -3466,6 +3483,13 @@ __webpack_require__.r(__webpack_exports__);
       countries: [],
       //c_picker: '',
       //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
+      center: {
+        lat: 45.508,
+        lng: -73.587
+      },
+      markers: [],
+      places: [],
+      currentPlace: null,
       rules: {
         required: function required(v) {
           return !!v || 'Required.';
@@ -3553,7 +3577,6 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('/api/countries').then(function (response) {
         _this2.countries = response.data;
-        console.log(_this2.countries);
       });
     },
     editItem: function editItem(item) {
@@ -3644,6 +3667,34 @@ __webpack_require__.r(__webpack_exports__);
     },
     setHedeaderTitle: function setHedeaderTitle() {
       document.title = 'Venues - Event Publication and Poster Management System (EPPMS)';
+    },
+    // receives a place object via the autocomplete component
+    setPlace: function setPlace(place) {
+      this.currentPlace = place;
+    },
+    addMarker: function addMarker() {
+      if (this.currentPlace) {
+        var marker = {
+          lat: this.currentPlace.geometry.location.lat(),
+          lng: this.currentPlace.geometry.location.lng()
+        };
+        this.markers.push({
+          position: marker
+        });
+        this.places.push(this.currentPlace);
+        this.center = marker;
+        this.currentPlace = null;
+      }
+    },
+    geolocate: function geolocate() {
+      var _this6 = this;
+
+      navigator.geolocation.getCurrentPosition(function (position) {
+        _this6.center = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+      });
     }
   },
   created: function created() {
@@ -9219,6 +9270,59 @@ var render = function() {
                                                       1
                                                     )
                                                   ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-row",
+                                          [
+                                            _c(
+                                              "v-col",
+                                              {
+                                                attrs: {
+                                                  cols: "12",
+                                                  sm: "12",
+                                                  md: "12"
+                                                }
+                                              },
+                                              [
+                                                _c(
+                                                  "gmap-map",
+                                                  {
+                                                    staticStyle: {
+                                                      width: "100%",
+                                                      height: "400px"
+                                                    },
+                                                    attrs: {
+                                                      center: _vm.center,
+                                                      zoom: 12
+                                                    }
+                                                  },
+                                                  _vm._l(_vm.markers, function(
+                                                    m,
+                                                    index
+                                                  ) {
+                                                    return _c("gmap-marker", {
+                                                      key: index,
+                                                      attrs: {
+                                                        position: m.position
+                                                      },
+                                                      on: {
+                                                        click: function(
+                                                          $event
+                                                        ) {
+                                                          _vm.center =
+                                                            m.position
+                                                        }
+                                                      }
+                                                    })
+                                                  }),
                                                   1
                                                 )
                                               ],
@@ -70911,7 +71015,7 @@ window.Vue.use(v_mask__WEBPACK_IMPORTED_MODULE_1__["default"]); // initialize vu
 
 window.Vue.use(vue2_google_maps__WEBPACK_IMPORTED_MODULE_2__, {
   load: {
-    key: 'YOUR_API_TOKEN',
+    key: 'AIzaSyC85SAldoyqwtIvtD04Xz18TgYD-ud_bIU',
     libraries: 'places' // This is required if you use the Autocomplete plugin
     // OR: libraries: 'places,drawing'
     // OR: libraries: 'places,drawing,visualization'

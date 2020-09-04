@@ -30,6 +30,44 @@
                                                 </v-col>
                                             </v-row>
                                             <v-row>
+                                                <v-col cols="12" sm="12" md="12">
+                                                    <div class="v-input  theme--light v-text-field ">
+                                                        <div class="v-input__prepend-outer">
+                                                            <div class="v-input__icon v-input__icon--prepend">
+                                                                <i aria-hidden="true" class="v-icon notranslate mdi mdi-home-search theme--light"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="v-input__control">
+                                                            <div class="v-input__slot">
+                                                                <div class="v-text-field__slot">
+                                                                    <label for="gplace" class="v-label theme--light" style="left: 0px; right: auto; position: absolute;"></label>
+                                                                    <gmap-autocomplete class="w-50" style="width: 100%" id="gplace" 
+                                                                        @place_changed="setPlace" :options="{fields: ['geometry', 'address_component']}">
+                                                                    </gmap-autocomplete>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--<button @click="addMarker">Add</button>
+                                                    <gmap-map
+                                                        :center="center"
+                                                        :zoom="12"
+                                                        style="width:100%;  height: 400px;"
+                                                        >
+                                                        <gmap-marker
+                                                            :key="index"
+                                                            v-for="(m, index) in markers"
+                                                            :position="m.position"
+                                                            @click="center=m.position"
+                                                        ></gmap-marker>
+                                                    </gmap-map>-->
+                                                    <v-alert color="#1f4068" dark icon="mdi-help" border="left">
+                                                        Enter a location, or input the details manually
+                                                    </v-alert>
+
+                                                </v-col>
+                                            </v-row>
+                                            <v-row>
                                                 <v-col cols="12" sm="12" md="6">
                                                     <v-textarea counter label="Address Line 1" v-model="editedItem.address_line_1" prepend-icon="mdi-map"></v-textarea>
                                                 </v-col>
@@ -61,26 +99,6 @@
                                                 </v-col>
                                             </v-row>
                                         </v-form>
-                                        <v-row>
-                                            <v-col cols="12" sm="12" md="12">
-                                                <gmap-autocomplete class="w-50" style="width: 100%" 
-                                                    @place_changed="setPlace" :options="{fields: ['geometry', 'address_component']}">
-                                                </gmap-autocomplete>
-                                                <!--<button @click="addMarker">Add</button>
-                                                <gmap-map
-                                                    :center="center"
-                                                    :zoom="12"
-                                                    style="width:100%;  height: 400px;"
-                                                    >
-                                                    <gmap-marker
-                                                        :key="index"
-                                                        v-for="(m, index) in markers"
-                                                        :position="m.position"
-                                                        @click="center=m.position"
-                                                    ></gmap-marker>
-                                                </gmap-map>-->
-                                            </v-col>
-                                        </v-row>
                                     </v-container>
                                 </v-card-text>
                                 <v-divider></v-divider>
@@ -141,22 +159,11 @@
                 search : '',
                 feedbacks: [],
                 rows: [],
-                departments: [],
-                roles: [],
                 editedIndex: -1,
-                //color: '#1976D2',
-                //mask: '?#XXXXXX',
-                //menu_header_bg: false,
-                //menu_bg: false,
-                //menu_text_color: false,
-                base_url: window.location.origin + '/',
                 snackbar: false,
                 timeout: 5000,
                 error: false,
-                //logo: null,
                 countries: [],
-                //c_picker: '',
-                //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
                 center: { lat: 45.508, lng: -73.587 },
                 markers: [],
                 places: [],
@@ -165,11 +172,6 @@
                 rules: {
                     required: (v) => !!v || 'Required.',
                     /////min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
-                    emailValid: (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
-                    phoneValid: (v) => !v || /^(?=.*[0-9])[- +()x0-9]+$/.test(v) || 'Tel. # must be valid',
-                    urlValid: (v) => !v || /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(v) || 'URL must be valid',
-                    limitFileSize: (v) => !v || v.size < 2000000 || 'Logo size should be less than 2 MB!',
-                    limitFileSizeMultiple: files => !files || !files.some(file => file.size > 2e6) || 'Avatar size should be less than 2 MB!'
                 },
                 headers: [
                     {text: 'Name', value: 'name'},
@@ -295,58 +297,32 @@
                 })
               
             },
-            uploadLogo(){
-                if ( this.logo ){
-                    let formData = new FormData()
-                    formData.append('logo', this.logo)
-                    
-                    if ( this.editedItem.id )
-                        formData.append('id', this.editedItem.id)
-
-                    axios.post('/api/departments/uploadLogo', formData, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        }
-                    })
-                    .then(response => {
-                        if (response.data.success) {
-                            // set the path on the global editedItem
-                            this.editedItem.logo_path = response.data.file_path 
-                        }
-                    })
-                    .catch( error => {
-                        let messages = Object.values(error.response.data.errors); 
-                        this.feedbacks = [].concat.apply([], messages)
-                        this.snackbar = true
-                        this.error = true
-                        this.logo = null
-                    })
-                }
-            },
             setHedeaderTitle(){
                 document.title = 'Venues - Event Publication and Poster Management System (EPPMS)';
             },
 
             // receives a place object via the autocomplete component
             setPlace(place) {
-                //console.log(place.latLng)
-                //console.log(place.latLng.lng())
                 this.currentPlace = place
                 // set the address without country and zip code
-
                 if (this.currentPlace) {
                     let address_components = this.currentPlace.address_components
                     let address_details = {
                         country: '',
-                        postal_code: ''
+                        postal_code: '',
+                        formatted_address: '',
                     };
                     address_components.forEach( function(address_component){
                         if ( address_component.types[0] == 'country')
                             address_details.country = address_component.long_name
                         else if ( address_component.types[0] == 'postal_code')
                             address_details.postal_code = address_component.long_name
+                        else
+                            address_details.formatted_address = address_details.formatted_address + ' ' + address_component.long_name
                     });
-                    // set the country and postcode
+                    
+                    // set the country, postcode, long, lat and address
+                    this.editedItem.address_line_1 = address_details.formatted_address
                     this.editedItem.country = address_details.country
                     this.editedItem.postcode = address_details.postal_code
                     this.editedItem.lat = this.currentPlace.geometry.location.lat()
@@ -391,7 +367,7 @@
                     lng: position.coords.longitude
                     };
                 });
-            }
+            },
 
         },
         created: function() {

@@ -3459,6 +3459,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted'); /////this.geolocate()
@@ -3470,22 +3488,11 @@ __webpack_require__.r(__webpack_exports__);
       search: '',
       feedbacks: [],
       rows: [],
-      departments: [],
-      roles: [],
       editedIndex: -1,
-      //color: '#1976D2',
-      //mask: '?#XXXXXX',
-      //menu_header_bg: false,
-      //menu_bg: false,
-      //menu_text_color: false,
-      base_url: window.location.origin + '/',
       snackbar: false,
       timeout: 5000,
       error: false,
-      //logo: null,
       countries: [],
-      //c_picker: '',
-      //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
       center: {
         lat: 45.508,
         lng: -73.587
@@ -3496,25 +3503,8 @@ __webpack_require__.r(__webpack_exports__);
       rules: {
         required: function required(v) {
           return !!v || 'Required.';
-        },
-        /////min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
-        emailValid: function emailValid(v) {
-          return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid';
-        },
-        phoneValid: function phoneValid(v) {
-          return !v || /^(?=.*[0-9])[- +()x0-9]+$/.test(v) || 'Tel. # must be valid';
-        },
-        urlValid: function urlValid(v) {
-          return !v || /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(v) || 'URL must be valid';
-        },
-        limitFileSize: function limitFileSize(v) {
-          return !v || v.size < 2000000 || 'Logo size should be less than 2 MB!';
-        },
-        limitFileSizeMultiple: function limitFileSizeMultiple(files) {
-          return !files || !files.some(function (file) {
-            return file.size > 2e6;
-          }) || 'Avatar size should be less than 2 MB!';
-        }
+        } /////min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
+
       },
       headers: [{
         text: 'Name',
@@ -3643,50 +3633,25 @@ __webpack_require__.r(__webpack_exports__);
         _this4.error = true;
       });
     },
-    uploadLogo: function uploadLogo() {
-      var _this5 = this;
-
-      if (this.logo) {
-        var formData = new FormData();
-        formData.append('logo', this.logo);
-        if (this.editedItem.id) formData.append('id', this.editedItem.id);
-        axios.post('/api/departments/uploadLogo', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }).then(function (response) {
-          if (response.data.success) {
-            // set the path on the global editedItem
-            _this5.editedItem.logo_path = response.data.file_path;
-          }
-        })["catch"](function (error) {
-          var messages = Object.values(error.response.data.errors);
-          _this5.feedbacks = [].concat.apply([], messages);
-          _this5.snackbar = true;
-          _this5.error = true;
-          _this5.logo = null;
-        });
-      }
-    },
     setHedeaderTitle: function setHedeaderTitle() {
       document.title = 'Venues - Event Publication and Poster Management System (EPPMS)';
     },
     // receives a place object via the autocomplete component
     setPlace: function setPlace(place) {
-      //console.log(place.latLng)
-      //console.log(place.latLng.lng())
       this.currentPlace = place; // set the address without country and zip code
 
       if (this.currentPlace) {
         var address_components = this.currentPlace.address_components;
         var address_details = {
           country: '',
-          postal_code: ''
+          postal_code: '',
+          formatted_address: ''
         };
         address_components.forEach(function (address_component) {
-          if (address_component.types[0] == 'country') address_details.country = address_component.long_name;else if (address_component.types[0] == 'postal_code') address_details.postal_code = address_component.long_name;
-        }); // set the country and postcode
+          if (address_component.types[0] == 'country') address_details.country = address_component.long_name;else if (address_component.types[0] == 'postal_code') address_details.postal_code = address_component.long_name;else address_details.formatted_address = address_details.formatted_address + ' ' + address_component.long_name;
+        }); // set the country, postcode, long, lat and address
 
+        this.editedItem.address_line_1 = address_details.formatted_address;
         this.editedItem.country = address_details.country;
         this.editedItem.postcode = address_details.postal_code;
         this.editedItem.lat = this.currentPlace.geometry.location.lat();
@@ -3726,10 +3691,10 @@ __webpack_require__.r(__webpack_exports__);
         }
     },*/
     geolocate: function geolocate() {
-      var _this6 = this;
+      var _this5 = this;
 
       navigator.geolocation.getCurrentPosition(function (position) {
-        _this6.center = {
+        _this5.center = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
@@ -9022,6 +8987,152 @@ var render = function() {
                                                     attrs: {
                                                       cols: "12",
                                                       sm: "12",
+                                                      md: "12"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c(
+                                                      "div",
+                                                      {
+                                                        staticClass:
+                                                          "v-input  theme--light v-text-field "
+                                                      },
+                                                      [
+                                                        _c(
+                                                          "div",
+                                                          {
+                                                            staticClass:
+                                                              "v-input__prepend-outer"
+                                                          },
+                                                          [
+                                                            _c(
+                                                              "div",
+                                                              {
+                                                                staticClass:
+                                                                  "v-input__icon v-input__icon--prepend"
+                                                              },
+                                                              [
+                                                                _c("i", {
+                                                                  staticClass:
+                                                                    "v-icon notranslate mdi mdi-home-search theme--light",
+                                                                  attrs: {
+                                                                    "aria-hidden":
+                                                                      "true"
+                                                                  }
+                                                                })
+                                                              ]
+                                                            )
+                                                          ]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "div",
+                                                          {
+                                                            staticClass:
+                                                              "v-input__control"
+                                                          },
+                                                          [
+                                                            _c(
+                                                              "div",
+                                                              {
+                                                                staticClass:
+                                                                  "v-input__slot"
+                                                              },
+                                                              [
+                                                                _c(
+                                                                  "div",
+                                                                  {
+                                                                    staticClass:
+                                                                      "v-text-field__slot"
+                                                                  },
+                                                                  [
+                                                                    _c(
+                                                                      "label",
+                                                                      {
+                                                                        staticClass:
+                                                                          "v-label theme--light",
+                                                                        staticStyle: {
+                                                                          left:
+                                                                            "0px",
+                                                                          right:
+                                                                            "auto",
+                                                                          position:
+                                                                            "absolute"
+                                                                        },
+                                                                        attrs: {
+                                                                          for:
+                                                                            "gplace"
+                                                                        }
+                                                                      }
+                                                                    ),
+                                                                    _vm._v(" "),
+                                                                    _c(
+                                                                      "gmap-autocomplete",
+                                                                      {
+                                                                        staticClass:
+                                                                          "w-50",
+                                                                        staticStyle: {
+                                                                          width:
+                                                                            "100%"
+                                                                        },
+                                                                        attrs: {
+                                                                          id:
+                                                                            "gplace",
+                                                                          options: {
+                                                                            fields: [
+                                                                              "geometry",
+                                                                              "address_component"
+                                                                            ]
+                                                                          }
+                                                                        },
+                                                                        on: {
+                                                                          place_changed:
+                                                                            _vm.setPlace
+                                                                        }
+                                                                      }
+                                                                    )
+                                                                  ],
+                                                                  1
+                                                                )
+                                                              ]
+                                                            )
+                                                          ]
+                                                        )
+                                                      ]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "v-alert",
+                                                      {
+                                                        attrs: {
+                                                          color: "#1f4068",
+                                                          dark: "",
+                                                          icon: "mdi-help",
+                                                          border: "left"
+                                                        }
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          "\n                                                    Enter a location, or input the details manually\n                                                "
+                                                        )
+                                                      ]
+                                                    )
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-row",
+                                              [
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
                                                       md: "6"
                                                     }
                                                   },
@@ -9311,43 +9422,6 @@ var render = function() {
                                                   ],
                                                   1
                                                 )
-                                              ],
-                                              1
-                                            )
-                                          ],
-                                          1
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "v-row",
-                                          [
-                                            _c(
-                                              "v-col",
-                                              {
-                                                attrs: {
-                                                  cols: "12",
-                                                  sm: "12",
-                                                  md: "12"
-                                                }
-                                              },
-                                              [
-                                                _c("gmap-autocomplete", {
-                                                  staticClass: "w-50",
-                                                  staticStyle: {
-                                                    width: "100%"
-                                                  },
-                                                  attrs: {
-                                                    options: {
-                                                      fields: [
-                                                        "geometry",
-                                                        "address_component"
-                                                      ]
-                                                    }
-                                                  },
-                                                  on: {
-                                                    place_changed: _vm.setPlace
-                                                  }
-                                                })
                                               ],
                                               1
                                             )

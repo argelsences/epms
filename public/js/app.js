@@ -3461,8 +3461,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
-    console.log('Component mounted');
-    this.geolocate();
+    console.log('Component mounted'); /////this.geolocate()
   },
   data: function data() {
     return {
@@ -3546,7 +3545,7 @@ __webpack_require__.r(__webpack_exports__);
         address_line_2: '',
         country: '',
         state: '',
-        post_code: '',
+        postcode: '',
         lat: null,
         "long": ''
       }
@@ -3676,23 +3675,56 @@ __webpack_require__.r(__webpack_exports__);
     setPlace: function setPlace(place) {
       //console.log(place.latLng)
       //console.log(place.latLng.lng())
-      this.currentPlace = place;
-    },
-    addMarker: function addMarker() {
+      this.currentPlace = place; // set the address without country and zip code
+
       if (this.currentPlace) {
-        // set the value for lat long here
-        var marker = {
-          lat: this.currentPlace.geometry.location.lat(),
-          lng: this.currentPlace.geometry.location.lng()
+        var address_components = this.currentPlace.address_components;
+        var address_details = {
+          country: '',
+          postal_code: ''
         };
-        this.markers.push({
-          position: marker
-        });
-        this.places.push(this.currentPlace);
-        this.center = marker;
-        this.currentPlace = null;
+        address_components.forEach(function (address_component) {
+          if (address_component.types[0] == 'country') address_details.country = address_component.long_name;else if (address_component.types[0] == 'postal_code') address_details.postal_code = address_component.long_name;
+        }); // set the country and postcode
+
+        this.editedItem.country = address_details.country;
+        this.editedItem.postcode = address_details.postal_code;
+        this.editedItem.lat = this.currentPlace.geometry.location.lat();
+        this.editedItem["long"] = this.currentPlace.geometry.location.lng();
       }
     },
+
+    /*
+    addMarker() {
+        if (this.currentPlace) {
+            //console.log(this.currentPlace.address_components)
+            let address_components = this.currentPlace.address_components
+            let address_details = {
+                country: '',
+                postal_code: ''
+            };
+            address_components.forEach( function(address_component){
+                if ( address_component.types[0] == 'country')
+                    address_details.country = address_component.long_name
+                else if ( address_component.types[0] == 'postal_code')
+                    address_details.postal_code = address_component.long_name
+            });
+            // set the country and postcode
+            this.editedItem.country = address_details.country
+            this.editedItem.postcode = address_details.postal_code
+            // set the value for lat long here
+            const marker = {
+                lat: this.currentPlace.geometry.location.lat(),
+                lng: this.currentPlace.geometry.location.lng()
+            };
+            this.editedItem.lat = marker.lat
+            this.editedItem.long = marker.lng
+            this.markers.push({ position: marker });
+            this.places.push(this.currentPlace);
+            this.center = marker;
+            this.currentPlace = null;
+        }
+    },*/
     geolocate: function geolocate() {
       var _this6 = this;
 
@@ -9300,57 +9332,22 @@ var render = function() {
                                               },
                                               [
                                                 _c("gmap-autocomplete", {
+                                                  staticClass: "w-50",
+                                                  staticStyle: {
+                                                    width: "100%"
+                                                  },
                                                   attrs: {
                                                     options: {
-                                                      fields: ["geometry"]
+                                                      fields: [
+                                                        "geometry",
+                                                        "address_component"
+                                                      ]
                                                     }
                                                   },
                                                   on: {
                                                     place_changed: _vm.setPlace
                                                   }
-                                                }),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "button",
-                                                  {
-                                                    on: { click: _vm.addMarker }
-                                                  },
-                                                  [_vm._v("Add")]
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "gmap-map",
-                                                  {
-                                                    staticStyle: {
-                                                      width: "100%",
-                                                      height: "400px"
-                                                    },
-                                                    attrs: {
-                                                      center: _vm.center,
-                                                      zoom: 12
-                                                    }
-                                                  },
-                                                  _vm._l(_vm.markers, function(
-                                                    m,
-                                                    index
-                                                  ) {
-                                                    return _c("gmap-marker", {
-                                                      key: index,
-                                                      attrs: {
-                                                        position: m.position
-                                                      },
-                                                      on: {
-                                                        click: function(
-                                                          $event
-                                                        ) {
-                                                          _vm.center =
-                                                            m.position
-                                                        }
-                                                      }
-                                                    })
-                                                  }),
-                                                  1
-                                                )
+                                                })
                                               ],
                                               1
                                             )

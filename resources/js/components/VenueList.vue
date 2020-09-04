@@ -63,10 +63,10 @@
                                         </v-form>
                                         <v-row>
                                             <v-col cols="12" sm="12" md="12">
-                                                <gmap-autocomplete
-                                                    @place_changed="setPlace" :options="{fields: ['geometry']}">
+                                                <gmap-autocomplete class="w-50" style="width: 100%" 
+                                                    @place_changed="setPlace" :options="{fields: ['geometry', 'address_component']}">
                                                 </gmap-autocomplete>
-                                                <button @click="addMarker">Add</button>
+                                                <!--<button @click="addMarker">Add</button>
                                                 <gmap-map
                                                     :center="center"
                                                     :zoom="12"
@@ -78,7 +78,7 @@
                                                         :position="m.position"
                                                         @click="center=m.position"
                                                     ></gmap-marker>
-                                                </gmap-map>
+                                                </gmap-map>-->
                                             </v-col>
                                         </v-row>
                                     </v-container>
@@ -132,7 +132,7 @@
     export default {
         mounted() {
             console.log('Component mounted')
-            this.geolocate()
+            /////this.geolocate()
         },
         data() {
             return {
@@ -194,7 +194,7 @@
                     address_line_2: '',
                     country: '',
                     state: '',
-                    post_code: '',
+                    postcode: '',
                     lat: null,
                     long: '',
                 },
@@ -332,20 +332,58 @@
                 //console.log(place.latLng)
                 //console.log(place.latLng.lng())
                 this.currentPlace = place
+                // set the address without country and zip code
+
+                if (this.currentPlace) {
+                    let address_components = this.currentPlace.address_components
+                    let address_details = {
+                        country: '',
+                        postal_code: ''
+                    };
+                    address_components.forEach( function(address_component){
+                        if ( address_component.types[0] == 'country')
+                            address_details.country = address_component.long_name
+                        else if ( address_component.types[0] == 'postal_code')
+                            address_details.postal_code = address_component.long_name
+                    });
+                    // set the country and postcode
+                    this.editedItem.country = address_details.country
+                    this.editedItem.postcode = address_details.postal_code
+                    this.editedItem.lat = this.currentPlace.geometry.location.lat()
+                    this.editedItem.long = this.currentPlace.geometry.location.lng()
+                }
             },
+            /*
             addMarker() {
                 if (this.currentPlace) {
+                    //console.log(this.currentPlace.address_components)
+                    let address_components = this.currentPlace.address_components
+                    let address_details = {
+                        country: '',
+                        postal_code: ''
+                    };
+                    address_components.forEach( function(address_component){
+                        if ( address_component.types[0] == 'country')
+                            address_details.country = address_component.long_name
+                        else if ( address_component.types[0] == 'postal_code')
+                            address_details.postal_code = address_component.long_name
+                    });
+                    // set the country and postcode
+                    this.editedItem.country = address_details.country
+                    this.editedItem.postcode = address_details.postal_code
                     // set the value for lat long here
                     const marker = {
                         lat: this.currentPlace.geometry.location.lat(),
                         lng: this.currentPlace.geometry.location.lng()
                     };
+                    this.editedItem.lat = marker.lat
+                    this.editedItem.long = marker.lng
                     this.markers.push({ position: marker });
                     this.places.push(this.currentPlace);
                     this.center = marker;
                     this.currentPlace = null;
                 }
-            },
+            },*/
             geolocate: function() {
                 navigator.geolocation.getCurrentPosition(position => {
                     this.center = {

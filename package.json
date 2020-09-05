@@ -25,6 +25,7 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "tiptap-vuetify": "^2.24.0",
         "v-mask": "^2.2.3",
         "vue-router": "^3.4.3",
         "vue2-google-maps": "^0.10.7",

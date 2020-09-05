@@ -11,6 +11,11 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 import Vuetify from 'vuetify';
 import VueMask from 'v-mask';
 import * as VueGoogleMaps from 'vue2-google-maps';
+import { TiptapVuetifyPlugin } from 'tiptap-vuetify'
+// tiptap CSS
+import 'tiptap-vuetify/dist/main.css'
+
+const vuetify = new Vuetify()
 
 window.Vue = require('vue');
 window.Vue.use(Vuetify);
@@ -42,7 +47,14 @@ window.Vue.use(VueGoogleMaps, {
     //// If you want to automatically install all the components this property must be set to 'true':
     installComponents: true
   })
-  // initialize vue2-google-maps
+
+// use this package's plugin
+Vue.use(TiptapVuetifyPlugin, {
+    // the next line is important! You need to provide the Vuetify Object to this place.
+    vuetify, // same as "vuetify: vuetify"
+    // optional, default to 'md' (default vuetify icons before v2.0.0)
+    iconsGroup: 'md'
+  })
 
 /**
  * The following block of code may be used to automatically register your
@@ -70,6 +82,7 @@ Vue.component('venue-list', require('./components/VenueList.vue').default);
  */
 
 const app = new Vue({
-    vuetify: new Vuetify,
+    //vuetify: new Vuetify,
+    vuetify: vuetify,
     el: '#app',
 });

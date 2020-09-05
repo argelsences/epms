@@ -45,7 +45,7 @@
                         <!-- the dialog box -->        
                         <v-dialog v-model="dialog"  width="80%" scrollable>
                             <template v-slot:activator="{ on, attrs }">
-                                <v-btn class="mb-2 btn btn-sm btn-primary" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Speaker</v-btn>
+                                <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Speaker</v-btn>
                             </template>
                             <v-card>
                                 <v-card-title>
@@ -77,7 +77,16 @@
                                             </v-row>
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="12">
-                                                    <v-textarea counter label="Profile" v-model="editedItem.profile" prepend-icon="mdi-face-profile"></v-textarea>
+                                                    <!--<v-textarea counter label="Profile" v-model="editedItem.profile" prepend-icon="mdi-face-profile"></v-textarea>-->
+                                                    <v-chip pill="false" class="mb-6">
+                                                        <v-icon left>mdi-face-profile</v-icon>
+                                                        Profile
+                                                    </v-chip>
+                                                    <tiptap-vuetify
+                                                        v-model="editedItem.profile"
+                                                        :extensions="extensions"
+                                                        id="profile"
+                                                    ></tiptap-vuetify>
                                                 </v-col>
                                             </v-row>
                                             <v-row>
@@ -135,7 +144,11 @@
 </template>
 
 <script>
+    // import the component and the necessary extensions
+    import { TiptapVuetify, Heading, Bold, Italic, Strike, Underline, Code, Paragraph, BulletList, OrderedList, ListItem, Link, Blockquote, HardBreak, HorizontalRule, History } from 'tiptap-vuetify'
     export default {
+        // specify TiptapVuetify component in "components"
+        components: { TiptapVuetify },
         mounted() {
             console.log('Component mounted');
         },
@@ -161,6 +174,33 @@
                 photo: null,
                 //c_picker: '',
                 //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
+
+                // declare extensions you want to use
+                extensions: [
+                History,
+                Blockquote,
+                Link,
+                Underline,
+                Strike,
+                Italic,
+                ListItem,
+                BulletList,
+                OrderedList,
+                [Heading, {
+                    options: {
+                    levels: [1, 2, 3]
+                    }
+                }],
+                Bold,
+                Code,
+                HorizontalRule,
+                Paragraph,
+                HardBreak
+                ],
+                content: `
+                    <h1>Yay Headlines!</h1>
+                    <p>All these <strong>cool tags</strong> are working now.</p>
+                `,
 
                 rules: {
                     required: (v) => !!v || 'Required.',

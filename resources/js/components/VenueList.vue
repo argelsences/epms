@@ -13,7 +13,7 @@
                         <!-- the dialog box -->        
                         <v-dialog v-model="dialog"  width="80%" scrollable>
                             <template v-slot:activator="{ on, attrs }">
-                                <v-btn class="mb-2 btn btn-sm btn-primary" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Venue</v-btn>
+                                <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Venue</v-btn>
                             </template>
                             <v-card>
                                 <v-card-title>
@@ -61,7 +61,7 @@
                                                             @click="center=m.position"
                                                         ></gmap-marker>
                                                     </gmap-map>-->
-                                                    <v-alert color="#1f4068" dark icon="mdi-help" border="left">
+                                                    <v-alert color="#1b1c25"  dark icon="mdi-help" border="left">
                                                         Enter a location, or input the details manually
                                                     </v-alert>
 

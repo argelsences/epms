@@ -45,7 +45,7 @@
                         <!-- the dialog box -->        
                         <v-dialog v-model="dialog"  width="80%" scrollable>
                             <template v-slot:activator="{ on, attrs }">
-                                <v-btn class="mb-2 btn btn-sm btn-primary" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Department</v-btn>
+                                <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Department</v-btn>
                             </template>
                             <v-card>
                                 <v-card-title>

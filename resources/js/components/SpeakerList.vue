@@ -60,12 +60,20 @@
                                                 <v-col cols="12" sm="12" md="6">
                                                     <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
                                                 </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-file-input v-model="photo" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select an image" 
+                                                <v-col cols="12" sm="12" md="6" v-cloak @drop.prevent="addDropFile" @dragover.prevent>
+                                                    <v-file-input v-model="photo" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping an image here" 
                                                     prepend-icon="mdi-camera-iris" label="Photo" persistentHint chips
                                                     hint="Selecting an image will replace the existing photo. Valid image formats are JPG, JPEG, PNG & BMP. Image size should not be greater than 2MB"
                                                     @change="uploadLogo">
                                                     </v-file-input>        
+                                                    
+                                                </v-col>
+                                            </v-row>
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="6">
                                                     <v-card v-if="editedItem.photo != null" class="my-2">
                                                         <v-card-text>
                                                             <v-img :lazy-src="base_url + editedItem.photo" max-height="150" max-width="250" :src="base_url + editedItem.photo"></v-img>
@@ -78,7 +86,7 @@
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="12">
                                                     <!--<v-textarea counter label="Profile" v-model="editedItem.profile" prepend-icon="mdi-face-profile"></v-textarea>-->
-                                                    <v-chip pill="false" class="mb-6">
+                                                    <v-chip class="mb-6">
                                                         <v-icon left>mdi-face-profile</v-icon>
                                                         Profile
                                                     </v-chip>
@@ -86,12 +94,13 @@
                                                         v-model="editedItem.profile"
                                                         :extensions="extensions"
                                                         id="profile"
+                                                        min-height="400"
                                                     ></tiptap-vuetify>
                                                 </v-col>
                                             </v-row>
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="6">
-                                                    <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
+                                                    
                                                 </v-col>
                                             </v-row>
                                         </v-form>
@@ -354,6 +363,10 @@
             },
             setHedeaderTitle(){
                 document.title = 'Speakers - Event Publication and Poster Management System (EPPMS)';
+            },
+            addDropFile(e) { 
+                this.file = e.dataTransfer.files[0]
+                console.log(this.file) 
             }
         },
         created: function() {

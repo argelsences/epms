@@ -43,7 +43,7 @@
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details ></v-text-field>
                         <v-spacer></v-spacer>
                         <!-- the dialog box -->        
-                        <v-dialog v-model="dialog"  width="80%" scrollable>
+                        <v-dialog v-model="dialog"  width="80%" scrollable fullscreen>
                             <template v-slot:activator="{ on, attrs }">
                                 <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Department</v-btn>
                             </template>
@@ -51,6 +51,10 @@
                                 <v-card-title>
                                     <!-- formTitle is  a computed property based on action edit or new -->
                                     <span class="headline">{{ formTitle }}</span>
+                                    <v-spacer></v-spacer>
+                                    <v-btn absolute dark fab middle right color="pink" @click="close">
+                                        <v-icon x-large>mdi-close</v-icon>
+                                    </v-btn>
                                 </v-card-title>
                                 <v-divider></v-divider>
                                 <v-card-text>

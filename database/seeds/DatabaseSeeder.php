@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             VenueSeeder::class,
             RolesAndPermissionSeeder::class,
             UsersTableSeeder::class,
+            EventSeeder::class,
         ]);
     }
 }

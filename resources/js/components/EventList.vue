@@ -45,7 +45,7 @@
                         <!-- the dialog box -->        
                         <v-dialog v-model="dialog"  width="80%" scrollable fullscreen>
                             <template v-slot:activator="{ on, attrs }">
-                                <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Speaker</v-btn>
+                                <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Event</v-btn>
                             </template>
                             <v-card>
                                 <v-card-title>
@@ -121,10 +121,6 @@
                         <!-- the dialog box -->
                     </v-toolbar>
                 <!-- the toolbar -->
-                </template>
-                <template v-slot:item.photo="{ item }">
-                    <v-img v-if="item.photo" :src="base_url + item.photo" alt="" aspect-ratio=".7" max-height="100px" max-width="100px"></v-img>
-                    <v-icon size="100px" v-else>mdi-account-box</v-icon>
                 </template>
                 <template v-slot:item.actions="{ item }">
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
@@ -225,8 +221,9 @@
                     limitFileSizeMultiple: files => !files || !files.some(file => file.size > 2e6) || 'Avatar size should be less than 2 MB!'
                 },
                 headers: [
-                    {text: 'Photo', value: 'photo'},
-                    {text: 'Name', value: 'name'},
+                    {text: 'Title', value: 'title'},
+                    {text: 'Start Date', value: 'start_date'},
+                    {text: 'Venue', value: 'venue_id'},
                     {text: 'Actions', value: 'actions', sortable: false },
                 ],
                 editedItem: {
@@ -259,7 +256,7 @@
         },
         methods: {
             initialize: function() {
-                axios.get('/api/speakers')
+                axios.get('/api/events')
                 .then( response => {
                     this.rows = response.data;
                 });

@@ -12,7 +12,7 @@
         </v-list-item>
         <v-list-item link :to="{name: `events`}">
           <v-list-item-action>
-            <v-icon>mdi-account-multiple</v-icon>
+            <v-icon>mdi-calendar</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Events</v-list-item-title>

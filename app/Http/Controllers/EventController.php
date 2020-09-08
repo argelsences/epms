@@ -15,6 +15,7 @@ class EventController extends Controller
     public function index()
     {
         //
+        return view('admin.events.list');
     }
 
     /**
@@ -81,5 +82,19 @@ class EventController extends Controller
     public function destroy(Event $event)
     {
         //
+    }
+    /**
+     * API function
+     * 
+     * List all departments
+     * 
+     */
+    public function list(Event $model){
+        
+        if ( auth()->user()->can(['list event']) ){
+            return response('Unauthorized', 403);
+        }
+
+        return response()->json(($model::orderBy('name', 'ASC')->get()));
     }
 }

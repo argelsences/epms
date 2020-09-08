@@ -10,6 +10,14 @@
             <v-list-item-title>Dashboard</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item link :to="{name: `events`}">
+          <v-list-item-action>
+            <v-icon>mdi-account-multiple</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Events</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item link :to="{name: `departments`}">
           <v-list-item-action>
             <v-icon>mdi-office-building</v-icon>
@@ -104,6 +112,7 @@
   import UserList from './UserList.vue';
   import SpeakerList from './SpeakerList.vue';
   import VenueList from './VenueList.vue';
+  import EventList from './EventList.vue';
 
   export default {
     props: {
@@ -121,6 +130,12 @@
       mode: 'history',
       base: 'web-admin',
       routes: [
+          {
+              path: '/events',
+              name: 'events',
+              component: EventList,
+              meta: {title: 'Events'}
+          },
           {
               path: '/departments',
               name: 'departments',

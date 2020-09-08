@@ -39,6 +39,8 @@ Route::group(['middleware' => ['auth:api']], function(){
     Route::post('/venues/uploadPhoto', 'VenueController@uploadPhoto')->name('venues.uploadPhoto');
     // countries, read only
     Route::get('/countries', 'VenueController@countries')->name('countries.list');
+    // Events
+    Route::get('/events', 'EventController@list')->name('events.list');
     //Route::delete('/categories/{category}', 'CategoryController@destroy');
     /////Route::middleware('can:delete,category')->delete('/categories/{category}', 'CategoryController@destroy');
     //Route::post('/menu-items/add', 'MenuItemController@store');

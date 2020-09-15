@@ -75,6 +75,7 @@ Vue.component('department-list', require('./components/DepartmentList.vue').defa
 Vue.component('speaker-list', require('./components/SpeakerList.vue').default);
 Vue.component('venue-list', require('./components/VenueList.vue').default);
 Vue.component('event-list', require('./components/EventList.vue').default);
+Vue.component('template-list', require('./components/TemplateList.vue').default);
 
 
 /**

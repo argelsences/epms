@@ -18,12 +18,12 @@
             <v-list-item-title>Events</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link :to="{name: `departments`}">
+        <v-list-item link :to="{name: `speakers`}">
           <v-list-item-action>
-            <v-icon>mdi-office-building</v-icon>
+            <v-icon>mdi-bullhorn</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Departments</v-list-item-title>
+            <v-list-item-title>Speakers</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item link :to="{name: `venues`}">
@@ -34,12 +34,20 @@
             <v-list-item-title>Venues</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link :to="{name: `speakers`}">
+        <v-list-item link :to="{name: `templates`}">
           <v-list-item-action>
-            <v-icon>mdi-bullhorn</v-icon>
+            <v-icon>mdi-panorama</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Speakers</v-list-item-title>
+            <v-list-item-title>Templates</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link :to="{name: `departments`}">
+          <v-list-item-action>
+            <v-icon>mdi-office-building</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Departments</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item link :to="{name: `users`}">
@@ -113,6 +121,7 @@
   import SpeakerList from './SpeakerList.vue';
   import VenueList from './VenueList.vue';
   import EventList from './EventList.vue';
+  import TemplateList from './TemplateList.vue';
 
   export default {
     props: {
@@ -165,6 +174,12 @@
               name: 'venues',
               component: VenueList,
               meta: {title: 'Venues'}
+          },
+          {
+              path: '/templates',
+              name: 'templates',
+              component: TemplateList,
+              meta: {title: 'Templates'}
           },
           {
               path: '*',

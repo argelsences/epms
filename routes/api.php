@@ -41,6 +41,8 @@ Route::group(['middleware' => ['auth:api']], function(){
     Route::get('/countries', 'VenueController@countries')->name('countries.list');
     // Events
     Route::get('/events', 'EventController@list')->name('events.list');
+    // Templates
+    Route::get('/templates', 'TemplateController@list')->name('templates.list');
     //Route::delete('/categories/{category}', 'CategoryController@destroy');
     /////Route::middleware('can:delete,category')->delete('/categories/{category}', 'CategoryController@destroy');
     //Route::post('/menu-items/add', 'MenuItemController@store');

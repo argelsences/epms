@@ -27,141 +27,90 @@
                                 <v-divider></v-divider>
                                 <v-card-text>
                                     <v-container>
-
-                                        <v-window v-model="step">
-                                            <v-window-item :value="1">
-                                                <!--
+                                        <v-window v-model="templateMethod">
+                                            <v-window-item value="templateChoice">
                                                 <v-card-text>
-                                                <v-text-field
-                                                    label="Email"
-                                                    value="john@vuetifyjs.com"
-                                                ></v-text-field>
-                                                    <span class="caption grey--text text--darken-1">
-                                                    This is the email you will use to login to your Vuetify account
-                                                </span>
+                                                    <div class="text-h5 text-left">How do you want to create the template?</div>
+                                                    <v-radio-group v-model="templateMethod" >
+                                                        <v-radio label="Uploading HTML, CSS, and image files" value="upload"></v-radio>
+                                                        <v-radio label="By HTML, CSS source code and uploading image files" value="code"></v-radio>
+                                                        <v-radio label="By using drawing canvas." value="canvas"></v-radio>
+                                                    </v-radio-group>
                                                 </v-card-text>
-                                                -->
-                                                <div class="text-h5 text-left">How do you want to create the template?</div>
-                                                <v-radio-group v-model="templateMethod" >
-                                                    <v-radio label="Uploading HTML, CSS, and image files" value="upload"></v-radio>
-                                                    <v-radio label="By HTML, CSS source code and uploading image files" value="code"></v-radio>
-                                                    <v-radio label="By using drawing canvas." value="canvas"></v-radio>
-                                                </v-radio-group>
                                             </v-window-item>
 
                                             <v-window-item value="upload">
                                                 <v-card-text>
-                                                <v-text-field
-                                                    label="Password"
-                                                    type="password"
-                                                ></v-text-field>
-                                                <v-text-field
-                                                    label="Confirm Password"
-                                                    type="password"
-                                                ></v-text-field>
-                                                <span class="caption grey--text text--darken-1">
-                                                    Please enter a password for your account
-                                                </span>
+                                                    <v-form v-model="isValid" ref="form">
+                                                        <v-row>
+                                                            <v-col cols="12" sm="12" md="12">
+                                                                <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row>
+                                                            <v-col cols="12" sm="12" md="6">
+                                                                <v-textarea counter label="Description" v-model="editedItem.description" prepend-icon="mdi-map" rows="10"></v-textarea>
+                                                            </v-col>
+                                                            <v-col cols="12" sm="12" md="6">
+                                                                <v-row>
+                                                                    <v-col cols="12" sm="12" md="12">
+                                                                        <v-file-input v-model="html_code" class="mb-8" accept=".html" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
+                                                                            prepend-icon="mdi-camera-iris" label="HTML File" persistentHint chips
+                                                                            hint="Uploading a new file will replace the existing template code. Only accept HTML file. File size should not be greater than 2MB"
+                                                                            @change="uploadLogo">
+                                                                        </v-file-input>
+                                                                    </v-col>
+                                                                </v-row>
+                                                                <v-row>
+                                                                    <v-col cols="12" sm="12" md="12">
+                                                                        <v-file-input v-model="css_code" class="mb-8" accept=".css" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
+                                                                            prepend-icon="mdi-camera-iris" label="CSS File" persistentHint chips
+                                                                            hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB"
+                                                                            @change="uploadLogo">
+                                                                        </v-file-input>
+                                                                    </v-col>
+                                                                </v-row>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row>
+                                                            <v-col cols="12" sm="12" md="6">
+                                                                <v-text-field v-model="editedItem.state" label="State" prepend-icon="mdi-email" ></v-text-field> 
+                                                            </v-col>
+                                                            <v-col cols="12" sm="12" md="6">
+                                                                <v-text-field v-model="editedItem.postcode" label="Postcode" prepend-icon="mdi-phone" ></v-text-field>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row>
+                                                            <v-col cols="12" sm="12" md="6">
+                                                                <v-select :items="countries" label="Country" item-text="name" item-value="name" v-model="editedItem.country"  prepend-icon="mdi-earth"></v-select>
+                                                            </v-col>
+                                                            <v-col cols="12" sm="12" md="6">
+                                                                <v-row>
+                                                                    <v-col cols="12" sm="12" md="6">
+                                                                        <v-text-field v-model="editedItem.lat" label="Latitude" prepend-icon="mdi-map-marker"></v-text-field>
+                                                                    </v-col>
+                                                                    <v-col cols="12" sm="12" md="6">
+                                                                        <v-text-field v-model="editedItem.long" label="Longtitude"  prepend-icon="mdi-map-marker"></v-text-field>
+                                                                    </v-col>
+                                                                </v-row>
+                                                            </v-col>
+                                                        </v-row>
+                                                    </v-form>
                                                 </v-card-text>
                                             </v-window-item>
 
                                             <v-window-item value="code">
-                                                <div class="pa-4 text-center">
-                                                <v-img
-                                                    class="mb-4"
-                                                    contain
-                                                    height="128"
-                                                    src="https://cdn.vuetifyjs.com/images/logos/v.svg"
-                                                ></v-img>
-                                                <h3 class="title font-weight-light mb-2">Welcome to Vuetify</h3>
-                                                <span class="caption grey--text">Thanks for signing up!</span>
-                                                </div>
+                                                <v-card-text>
+                                                    <p>Code</p>
+                                                </v-card-text>
+                                            </v-window-item>
+
+                                            <v-window-item value="canvas">
+                                                <v-card-text>
+                                                    <p>Canvas</p>
+                                                </v-card-text>
                                             </v-window-item>
                                         </v-window>
-
-
-
-
-
-
-
-
-                                        <v-form v-model="isValid" ref="form">
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="12">
-                                                    <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
-                                                </v-col>
-                                            </v-row>
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="12">
-                                                    <div class="v-input  theme--light v-text-field ">
-                                                        <div class="v-input__prepend-outer">
-                                                            <div class="v-input__icon v-input__icon--prepend">
-                                                                <i aria-hidden="true" class="v-icon notranslate mdi mdi-home-search theme--light"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div class="v-input__control">
-                                                            <div class="v-input__slot">
-                                                                <div class="v-text-field__slot">
-                                                                    <label for="gplace" class="v-label theme--light" style="left: 0px; right: auto; position: absolute;"></label>
-                                                                    <gmap-autocomplete class="w-50" style="width: 100%" id="gplace" 
-                                                                        @place_changed="setPlace" :options="{fields: ['geometry', 'address_component']}">
-                                                                    </gmap-autocomplete>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--<button @click="addMarker">Add</button>
-                                                    <gmap-map
-                                                        :center="center"
-                                                        :zoom="12"
-                                                        style="width:100%;  height: 400px;"
-                                                        >
-                                                        <gmap-marker
-                                                            :key="index"
-                                                            v-for="(m, index) in markers"
-                                                            :position="m.position"
-                                                            @click="center=m.position"
-                                                        ></gmap-marker>
-                                                    </gmap-map>-->
-                                                    <v-alert color="#1b1c25"  dark icon="mdi-help" border="left">
-                                                        Enter a location, or input the details manually
-                                                    </v-alert>
-
-                                                </v-col>
-                                            </v-row>
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-textarea counter label="Address Line 1" v-model="editedItem.address_line_1" prepend-icon="mdi-map"></v-textarea>
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-textarea counter label="Address Line 2" v-model="editedItem.address_line_2" prepend-icon="mdi-map"></v-textarea>   
-                                                </v-col>
-                                            </v-row>
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-text-field v-model="editedItem.state" label="State" prepend-icon="mdi-email" ></v-text-field> 
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-text-field v-model="editedItem.postcode" label="Postcode" prepend-icon="mdi-phone" ></v-text-field>
-                                                </v-col>
-                                            </v-row>
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-select :items="countries" label="Country" item-text="name" item-value="name" v-model="editedItem.country"  prepend-icon="mdi-earth"></v-select>
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-row>
-                                                        <v-col cols="12" sm="12" md="6">
-                                                            <v-text-field v-model="editedItem.lat" label="Latitude" prepend-icon="mdi-map-marker"></v-text-field>
-                                                        </v-col>
-                                                        <v-col cols="12" sm="12" md="6">
-                                                            <v-text-field v-model="editedItem.long" label="Longtitude"  prepend-icon="mdi-map-marker"></v-text-field>
-                                                        </v-col>
-                                                    </v-row>
-                                                </v-col>
-                                            </v-row>
-                                        </v-form>
                                     </v-container>
                                 </v-card-text>
                                 <v-divider></v-divider>
@@ -175,20 +124,21 @@
                                 
                                 <v-card-actions>
                                     <v-btn
-                                        :disabled="step === 1"
+                                        :disabled="templateMethod === 'templateChoice'"
                                         text
-                                        @click="step--"
+                                        @click="templateMethod='templateChoice'"
                                     >
                                         Back
                                     </v-btn>
                                     <v-spacer></v-spacer>
+                                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
                                     <v-btn
-                                        :disabled="step === 3"
-                                        color="primary"
-                                        depressed
-                                        @click="step=templateMethod"
+                                        :disabled="templateMethod === 'templateChoice'"
+                                        color="blue darken-1"
+                                        text
+                                        @click="templateMethod"
                                     >
-                                        Next
+                                        Save
                                     </v-btn>
                                 </v-card-actions>
 
@@ -261,28 +211,24 @@
                 editedItem: {
                     id: 0,
                     name: '',
-                    address_line_1: '',
-                    address_line_2: '',
-                    country: '',
-                    state: '',
-                    postcode: '',
-                    lat: '',
-                    long: '',
+                    description: '',
+                    file_path: '',
+                    template_code: '',
+                    department_id: '',
+                    html_code: '',
+                    css_code: '',
                 },
                 defaultItem: {
                     id: 0,
                     name: '',
-                    address_line_1: '',
-                    address_line_2: '',
-                    country: '',
-                    state: '',
-                    postcode: '',
-                    lat: null,
-                    long: '',
+                    description: '',
+                    file_path: '',
+                    template_code: '',
+                    department_id: '',
+                    html_code: '',
+                    css_code: '',
                 },
-
-                step: 1,
-                templateMethod: 'upload',
+                templateMethod: '',
             }
         },
         computed: {
@@ -456,7 +402,6 @@
         created: function() {
             this.setHedeaderTitle()
             this.initialize()
-            this.getCountries()
         },
     }
 </script>

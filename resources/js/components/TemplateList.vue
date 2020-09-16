@@ -43,8 +43,19 @@
                                                 <v-card-text>
                                                     <v-form v-model="isValid" ref="form">
                                                         <v-row>
-                                                            <v-col cols="12" sm="12" md="12">
+                                                            <v-col cols="12" sm="12" md="6">
                                                                 <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
+                                                            </v-col>
+                                                            <v-col cols="12" sm="12" md="6">
+                                                                <v-row>
+                                                                    <v-col cols="12" sm="12" md="12">
+                                                                        <v-file-input v-model="editedItem.html_code" class="" accept=".html" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
+                                                                            prepend-icon="mdi-camera-iris" label="HTML File" persistentHint chips
+                                                                            hint="Uploading a new file will replace the existing template code. Only accept HTML file. File size should not be greater than 2MB"
+                                                                            @change="uploadLogo">
+                                                                        </v-file-input>
+                                                                    </v-col>
+                                                                </v-row>
                                                             </v-col>
                                                         </v-row>
                                                         <v-row>
@@ -54,43 +65,20 @@
                                                             <v-col cols="12" sm="12" md="6">
                                                                 <v-row>
                                                                     <v-col cols="12" sm="12" md="12">
-                                                                        <v-file-input v-model="html_code" class="mb-8" accept=".html" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
-                                                                            prepend-icon="mdi-camera-iris" label="HTML File" persistentHint chips
-                                                                            hint="Uploading a new file will replace the existing template code. Only accept HTML file. File size should not be greater than 2MB"
-                                                                            @change="uploadLogo">
-                                                                        </v-file-input>
-                                                                    </v-col>
-                                                                </v-row>
-                                                                <v-row>
-                                                                    <v-col cols="12" sm="12" md="12">
-                                                                        <v-file-input v-model="css_code" class="mb-8" accept=".css" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
+                                                                        <v-file-input v-model="editedItem.css_code" class="mb-8" accept=".css" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
                                                                             prepend-icon="mdi-camera-iris" label="CSS File" persistentHint chips
                                                                             hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB"
                                                                             @change="uploadLogo">
                                                                         </v-file-input>
                                                                     </v-col>
                                                                 </v-row>
-                                                            </v-col>
-                                                        </v-row>
-                                                        <v-row>
-                                                            <v-col cols="12" sm="12" md="6">
-                                                                <v-text-field v-model="editedItem.state" label="State" prepend-icon="mdi-email" ></v-text-field> 
-                                                            </v-col>
-                                                            <v-col cols="12" sm="12" md="6">
-                                                                <v-text-field v-model="editedItem.postcode" label="Postcode" prepend-icon="mdi-phone" ></v-text-field>
-                                                            </v-col>
-                                                        </v-row>
-                                                        <v-row>
-                                                            <v-col cols="12" sm="12" md="6">
-                                                                <v-select :items="countries" label="Country" item-text="name" item-value="name" v-model="editedItem.country"  prepend-icon="mdi-earth"></v-select>
-                                                            </v-col>
-                                                            <v-col cols="12" sm="12" md="6">
                                                                 <v-row>
-                                                                    <v-col cols="12" sm="12" md="6">
-                                                                        <v-text-field v-model="editedItem.lat" label="Latitude" prepend-icon="mdi-map-marker"></v-text-field>
-                                                                    </v-col>
-                                                                    <v-col cols="12" sm="12" md="6">
-                                                                        <v-text-field v-model="editedItem.long" label="Longtitude"  prepend-icon="mdi-map-marker"></v-text-field>
+                                                                    <v-col cols="12" sm="12" md="12">
+                                                                        <v-file-input v-model="editedItem.images" class="mb-8" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
+                                                                            prepend-icon="mdi-camera-iris" label="Images" persistentHint chips
+                                                                            hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB"
+                                                                            @change="uploadLogo">
+                                                                        </v-file-input> 
                                                                     </v-col>
                                                                 </v-row>
                                                             </v-col>
@@ -101,13 +89,73 @@
 
                                             <v-window-item value="code">
                                                 <v-card-text>
-                                                    <p>Code</p>
+                                                    <v-form v-model="isValid" ref="form">
+                                                        <v-row>
+                                                            <v-col cols="12" sm="12" md="12">
+                                                                <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row>
+                                                            <v-col cols="12" sm="12" md="12">
+                                                                <v-textarea counter label="Description" v-model="editedItem.description" prepend-icon="mdi-map" rows="10"></v-textarea>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row>
+                                                            <v-col cols="12" sm="12" md="12">
+                                                                <v-textarea counter label="HTML Code" v-model="editedItem.html_code" prepend-icon="mdi-map" rows="10" persistentHint hint="Paste your HTML code here"></v-textarea>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row>
+                                                            <v-col cols="12" sm="12" md="12">
+                                                                <v-textarea counter label="CSS Code" v-model="editedItem.css_code" prepend-icon="mdi-map" rows="10" persistentHint hint="Paste your CSS code here"></v-textarea>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row>
+                                                            <v-col cols="12" sm="12" md="12">
+                                                                <v-file-input v-model="editedItem.images" class="mb-8" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping file/s here" 
+                                                                    prepend-icon="mdi-camera-iris" label="Images" persistentHint chips
+                                                                    hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB"
+                                                                    @change="uploadLogo">
+                                                                </v-file-input> 
+                                                            </v-col>
+                                                        </v-row>
+                                                    </v-form>
                                                 </v-card-text>
                                             </v-window-item>
 
                                             <v-window-item value="canvas">
                                                 <v-card-text>
-                                                    <p>Canvas</p>
+                                                    <v-form v-model="isValid" ref="form">
+                                                        <v-row>
+                                                            <v-col cols="12" sm="12" md="12">
+                                                                <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row>
+                                                            <v-col cols="12" sm="12" md="12">
+                                                                <v-textarea counter label="Description" v-model="editedItem.description" prepend-icon="mdi-map" rows="10"></v-textarea>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row>
+                                                            <v-col cols="12" sm="12" md="12">
+                                                                <v-textarea counter label="HTML Code" v-model="editedItem.html_code" prepend-icon="mdi-map" rows="10" persistentHint hint="Paste your HTML code here"></v-textarea>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row>
+                                                            <v-col cols="12" sm="12" md="12">
+                                                                <v-textarea counter label="CSS Code" v-model="editedItem.css_code" prepend-icon="mdi-map" rows="10" persistentHint hint="Paste your CSS code here"></v-textarea>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row>
+                                                            <v-col cols="12" sm="12" md="12">
+                                                                <v-file-input v-model="editedItem.images" class="mb-8" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping file/s here" 
+                                                                    prepend-icon="mdi-camera-iris" label="Images" persistentHint chips
+                                                                    hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB"
+                                                                    @change="uploadLogo">
+                                                                </v-file-input> 
+                                                            </v-col>
+                                                        </v-row>
+                                                    </v-form>
                                                 </v-card-text>
                                             </v-window-item>
                                         </v-window>
@@ -217,6 +265,7 @@
                     department_id: '',
                     html_code: '',
                     css_code: '',
+                    images: null,
                 },
                 defaultItem: {
                     id: 0,
@@ -227,6 +276,7 @@
                     department_id: '',
                     html_code: '',
                     css_code: '',
+                    images: null,
                 },
                 templateMethod: '',
             }
@@ -280,7 +330,9 @@
                     // reset the edit flag
                     this.editedIndex = -1
                     // reset the form
-                    this.$refs.form.reset();
+                    this.$refs.form.reset()
+                    // reset window
+                    this.templateMethod = ''
                 })
             },
             save () {

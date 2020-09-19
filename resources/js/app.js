@@ -11,15 +11,24 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 import Vuetify from 'vuetify';
 import VueMask from 'v-mask';
 import * as VueGoogleMaps from 'vue2-google-maps';
-import { TiptapVuetifyPlugin } from 'tiptap-vuetify'
-// tiptap CSS
+import { TiptapVuetifyPlugin } from 'tiptap-vuetify';
+/////import DrawerJs from '@vadjs/drawerjs/src/Drawer';
+// tiptap CSSs
 import 'tiptap-vuetify/dist/main.css'
+// drawerjs css
+import '@vadjs/drawerjs/dist/drawerJs.min.css' 
+/////import '@vadjs/drawerjs/dist/drawerJs.standalone.js'
 
 const vuetify = new Vuetify()
 
 window.Vue = require('vue');
 window.Vue.use(Vuetify);
 window.Vue.use(VueMask);
+
+
+/// drawerJS
+/////window.Vue.use(DrawerJs);
+
 
 // initialize vue2-google-maps
 window.Vue.use(VueGoogleMaps, {

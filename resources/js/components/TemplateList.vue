@@ -39,7 +39,7 @@
                                                 </v-card-text>
                                             </v-window-item>
 
-                                            <v-window-item value="upload">
+                                            <v-window-item value="upload" >
                                                 <v-card-text>
                                                     <v-form v-model="isValid" ref="form">
                                                         <v-row>
@@ -123,7 +123,7 @@
                                                 </v-card-text>
                                             </v-window-item>
 
-                                            <v-window-item value="canvas">
+                                            <v-window-item value="canvas" eager>
                                                 <v-card-text>
                                                     <v-form v-model="isValid" ref="form">
                                                         <v-row>
@@ -139,6 +139,7 @@
                                                         <v-row>
                                                             <v-col cols="12" sm="12" md="12">
                                                                 <v-textarea counter label="HTML Code" v-model="editedItem.html_code" prepend-icon="mdi-map" rows="10" persistentHint hint="Paste your HTML code here"></v-textarea>
+                                                                <div id="canvas-editor" ref="canvasEditor" style="position: absolute; left: 100px; top: 200px;">here</div>
                                                             </v-col>
                                                         </v-row>
                                                         <v-row>
@@ -295,6 +296,14 @@
                 // eg. the_title = title || "Error"; if title is true, the the value of the_title is the value of title, else the value of the_title is "Error"
                 val || this.close()
             },
+        
+            templateMethod(val) {
+                this.templateMethod = val
+                console.log(val)
+                if ( val == 'canvas')
+                    this.setCanvasEditor()
+                return val
+            }
         },
         methods: {
             initialize: function() {
@@ -410,48 +419,94 @@
                     this.editedItem.long = this.currentPlace.geometry.location.lng()
                 }
             },
-            /*
-            addMarker() {
-                if (this.currentPlace) {
-                    //console.log(this.currentPlace.address_components)
-                    let address_components = this.currentPlace.address_components
-                    let address_details = {
-                        country: '',
-                        postal_code: ''
-                    };
-                    address_components.forEach( function(address_component){
-                        if ( address_component.types[0] == 'country')
-                            address_details.country = address_component.long_name
-                        else if ( address_component.types[0] == 'postal_code')
-                            address_details.postal_code = address_component.long_name
-                    });
-                    // set the country and postcode
-                    this.editedItem.country = address_details.country
-                    this.editedItem.postcode = address_details.postal_code
-                    // set the value for lat long here
-                    const marker = {
-                        lat: this.currentPlace.geometry.location.lat(),
-                        lng: this.currentPlace.geometry.location.lng()
-                    };
-                    this.editedItem.lat = marker.lat
-                    this.editedItem.long = marker.lng
-                    this.markers.push({ position: marker });
-                    this.places.push(this.currentPlace);
-                    this.center = marker;
-                    this.currentPlace = null;
-                }
-            },*/
-            geolocate: function() {
-                navigator.geolocation.getCurrentPosition(position => {
-                    this.center = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                    };
-                });
-            },
+            uploadLogo(){
+                if ( this.logo ){
+                    let formData = new FormData()
+                    formData.append('logo', this.logo)
+                    
+                    if ( this.editedItem.id )
+                        formData.append('id', this.editedItem.id)
 
+                    axios.post('/api/departments/uploadLogo', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    })
+                    .then(response => {
+                        if (response.data.success) {
+                            // set the path on the global editedItem
+                            this.editedItem.logo_path = response.data.file_path 
+                        }
+                    })
+                    .catch( error => {
+                        let messages = Object.values(error.response.data.errors); 
+                        this.feedbacks = [].concat.apply([], messages)
+                        this.snackbar = true
+                        this.error = true
+                        this.logo = null
+                    })
+                }
+            },
+            setCanvasEditor(){
+                var drawerPlugins = [
+                    // Drawing tools
+                    'Pencil',
+                    'Eraser',
+                    'Text',
+                    'Line',
+                    'ArrowOneSide',
+                    'ArrowTwoSide',
+                    'Triangle',
+                    'Rectangle',
+                    'Circle',
+                    'Image',
+                    'BackgroundImage',
+                    'Polygon',
+
+                    // Drawing options
+                    //'ColorHtml5',
+                    'Color',
+                    'ShapeBorder',
+                    'BrushSize',
+                    'OpacityOption',
+                    'LineWidth',
+                    'StrokeWidth',
+
+                    'Resize',
+                    'ShapeContextMenu',
+                    'CloseButton',
+                    'OvercanvasPopup',
+                    'OpenPopupButton',
+                    'MinimizeButton',
+                    'ToggleVisibilityButton',
+                    'MovableFloatingMode',
+
+                    'TextLineHeight',
+                    'TextAlign',
+
+                    'TextFontFamily',
+                    'TextFontSize',
+                    'TextFontWeight',
+                    'TextFontStyle',
+                    'TextDecoration',
+                    'TextColor',
+                    'TextBackgroundColor'
+                ];
+                var drawer = new DrawerJs.Drawer(null, {
+                    /////texts: customLocalization,
+                    plugins: drawerPlugins,
+                    defaultImageUrl: '/images/drawer.jpg',
+                    defaultActivePlugin : { name : 'Pencil', mode : 'lastUsed'},
+                }, 600, 600);
+                document.getElementById('canvas-editor').innerHTML += drawer.getHtml()
+                drawer.onInsert();
+            },
         },
+        updated: function(){
+            console.log(this.templateMethod)
+        }, 
         created: function() {
+            /////this.setCanvasEditor()
             this.setHedeaderTitle()
             this.initialize()
         },

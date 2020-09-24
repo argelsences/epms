@@ -16,3 +16,4 @@ mix.js('resources/js/app.js', 'public/js')
 
 //mix.minify(['resources/js/drawerJs.standalone.js',]);
 mix.scripts(['resources/js/drawerJs.standalone.min.js',],'public/js/drawerJs.js');
+mix.styles(['resources/css/drawerJs.min.css',],'public/css/drawerJs.css');

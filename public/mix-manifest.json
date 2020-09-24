@@ -1,6 +1,6 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
-    "/resources/js/drawerJs.standalone.min.js": "/resources/js/drawerJs.standalone.min.js",
-    "/js/drawerJs.js": "/js/drawerJs.js"
+    "/js/drawerJs.js": "/js/drawerJs.js",
+    "/css/drawerJs.css": "/css/drawerJs.css"
 }

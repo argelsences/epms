@@ -16,8 +16,10 @@ import { TiptapVuetifyPlugin } from 'tiptap-vuetify';
 // tiptap CSSs
 import 'tiptap-vuetify/dist/main.css'
 // drawerjs css
-import '@vadjs/drawerjs/dist/drawerJs.min.css' 
+/////import '@vadjs/drawerjs/dist/drawerJs.min.css' 
 /////import '@vadjs/drawerjs/dist/drawerJs.standalone.js'
+
+import Route from './routes.js'
 
 const vuetify = new Vuetify()
 
@@ -85,6 +87,12 @@ Vue.component('speaker-list', require('./components/SpeakerList.vue').default);
 Vue.component('venue-list', require('./components/VenueList.vue').default);
 Vue.component('event-list', require('./components/EventList.vue').default);
 Vue.component('template-list', require('./components/TemplateList.vue').default);
+Vue.component('html-canvas', require('./components/HTMLCanvas.vue').default);
+
+Vue.component('template-choice', require('./components/templates/TemplateChoice.vue').default);
+Vue.component('by-upload', require('./components/templates/TemplateByUpload.vue').default);
+Vue.component('by-code', require('./components/templates/TemplateByCode.vue').default);
+Vue.component('by-canvas', require('./components/templates/TemplateByCanvas.vue').default);
 
 
 /**
@@ -96,5 +104,6 @@ Vue.component('template-list', require('./components/TemplateList.vue').default)
 const app = new Vue({
     //vuetify: new Vuetify,
     vuetify: vuetify,
+    router: Route,
     el: '#app',
 });

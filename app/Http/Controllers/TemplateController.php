@@ -84,6 +84,37 @@ class TemplateController extends Controller
         //
     }
     /**
+     * Additional component paths
+     */
+    /**
+     * For template creation choices
+     */
+    public function template_choice() {
+        //
+        return view('admin.templates.template_choice');
+    }
+    /**
+     * For creating templates by uploading
+     */
+    public function by_upload() {
+        //
+        return view('admin.templates.by_upload');
+    }
+    /** 
+     * For creating templates by code
+     */
+    public function by_code() {
+        //
+        return view('admin.templates.by_code');
+    }
+    /** 
+     * For creating templates by canvas
+     */
+    public function by_canvas() {
+        //
+        return view('admin.templates.by_canvas');
+    }
+    /**
      * API function
      * 
      * List all departments

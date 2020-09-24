@@ -10,191 +10,7 @@
                     <v-toolbar flat color="white">
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details ></v-text-field>
                         <v-spacer></v-spacer>
-                        <!-- the dialog box -->        
-                        <v-dialog v-model="dialog"  width="80%" scrollable fullscreen>
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Template</v-btn>
-                            </template>
-                            <v-card>
-                                <v-card-title>
-                                    <!-- formTitle is  a computed property based on action edit or new -->
-                                    <span class="headline">{{ formTitle }}</span>
-                                    <v-spacer></v-spacer>
-                                    <v-btn absolute dark fab middle right color="pink" @click="close">
-                                        <v-icon x-large>mdi-close</v-icon>
-                                    </v-btn>
-                                </v-card-title>
-                                <v-divider></v-divider>
-                                <v-card-text>
-                                    <v-container>
-                                        <v-window v-model="templateMethod">
-                                            <v-window-item value="templateChoice">
-                                                <v-card-text>
-                                                    <div class="text-h5 text-left">How do you want to create the template?</div>
-                                                    <v-radio-group v-model="templateMethod" >
-                                                        <v-radio label="Uploading HTML, CSS, and image files" value="upload"></v-radio>
-                                                        <v-radio label="By HTML, CSS source code and uploading image files" value="code"></v-radio>
-                                                        <v-radio label="By using drawing canvas." value="canvas"></v-radio>
-                                                    </v-radio-group>
-                                                </v-card-text>
-                                            </v-window-item>
-
-                                            <v-window-item value="upload" >
-                                                <v-card-text>
-                                                    <v-form v-model="isValid" ref="form">
-                                                        <v-row>
-                                                            <v-col cols="12" sm="12" md="6">
-                                                                <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
-                                                            </v-col>
-                                                            <v-col cols="12" sm="12" md="6">
-                                                                <v-row>
-                                                                    <v-col cols="12" sm="12" md="12">
-                                                                        <v-file-input v-model="editedItem.html_code" class="" accept=".html" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
-                                                                            prepend-icon="mdi-camera-iris" label="HTML File" persistentHint chips
-                                                                            hint="Uploading a new file will replace the existing template code. Only accept HTML file. File size should not be greater than 2MB"
-                                                                            @change="uploadLogo">
-                                                                        </v-file-input>
-                                                                    </v-col>
-                                                                </v-row>
-                                                            </v-col>
-                                                        </v-row>
-                                                        <v-row>
-                                                            <v-col cols="12" sm="12" md="6">
-                                                                <v-textarea counter label="Description" v-model="editedItem.description" prepend-icon="mdi-map" rows="10"></v-textarea>
-                                                            </v-col>
-                                                            <v-col cols="12" sm="12" md="6">
-                                                                <v-row>
-                                                                    <v-col cols="12" sm="12" md="12">
-                                                                        <v-file-input v-model="editedItem.css_code" class="mb-8" accept=".css" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
-                                                                            prepend-icon="mdi-camera-iris" label="CSS File" persistentHint chips
-                                                                            hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB"
-                                                                            @change="uploadLogo">
-                                                                        </v-file-input>
-                                                                    </v-col>
-                                                                </v-row>
-                                                                <v-row>
-                                                                    <v-col cols="12" sm="12" md="12">
-                                                                        <v-file-input v-model="editedItem.images" class="mb-8" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
-                                                                            prepend-icon="mdi-camera-iris" label="Images" persistentHint chips
-                                                                            hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB"
-                                                                            @change="uploadLogo">
-                                                                        </v-file-input> 
-                                                                    </v-col>
-                                                                </v-row>
-                                                            </v-col>
-                                                        </v-row>
-                                                    </v-form>
-                                                </v-card-text>
-                                            </v-window-item>
-
-                                            <v-window-item value="code">
-                                                <v-card-text>
-                                                    <v-form v-model="isValid" ref="form">
-                                                        <v-row>
-                                                            <v-col cols="12" sm="12" md="12">
-                                                                <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
-                                                            </v-col>
-                                                        </v-row>
-                                                        <v-row>
-                                                            <v-col cols="12" sm="12" md="12">
-                                                                <v-textarea counter label="Description" v-model="editedItem.description" prepend-icon="mdi-map" rows="10"></v-textarea>
-                                                            </v-col>
-                                                        </v-row>
-                                                        <v-row>
-                                                            <v-col cols="12" sm="12" md="12">
-                                                                <v-textarea counter label="HTML Code" v-model="editedItem.html_code" prepend-icon="mdi-map" rows="10" persistentHint hint="Paste your HTML code here"></v-textarea>
-                                                            </v-col>
-                                                        </v-row>
-                                                        <v-row>
-                                                            <v-col cols="12" sm="12" md="12">
-                                                                <v-textarea counter label="CSS Code" v-model="editedItem.css_code" prepend-icon="mdi-map" rows="10" persistentHint hint="Paste your CSS code here"></v-textarea>
-                                                            </v-col>
-                                                        </v-row>
-                                                        <v-row>
-                                                            <v-col cols="12" sm="12" md="12">
-                                                                <v-file-input v-model="editedItem.images" class="mb-8" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping file/s here" 
-                                                                    prepend-icon="mdi-camera-iris" label="Images" persistentHint chips
-                                                                    hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB"
-                                                                    @change="uploadLogo">
-                                                                </v-file-input> 
-                                                            </v-col>
-                                                        </v-row>
-                                                    </v-form>
-                                                </v-card-text>
-                                            </v-window-item>
-
-                                            <v-window-item value="canvas" eager>
-                                                <v-card-text>
-                                                    <v-form v-model="isValid" ref="form">
-                                                        <v-row>
-                                                            <v-col cols="12" sm="12" md="12">
-                                                                <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
-                                                            </v-col>
-                                                        </v-row>
-                                                        <v-row>
-                                                            <v-col cols="12" sm="12" md="12">
-                                                                <v-textarea counter label="Description" v-model="editedItem.description" prepend-icon="mdi-map" rows="10"></v-textarea>
-                                                            </v-col>
-                                                        </v-row>
-                                                        <v-row>
-                                                            <v-col cols="12" sm="12" md="12">
-                                                                <v-textarea counter label="HTML Code" v-model="editedItem.html_code" prepend-icon="mdi-map" rows="10" persistentHint hint="Paste your HTML code here"></v-textarea>
-                                                                <div id="canvas-editor" ref="canvasEditor" style="position: absolute; left: 100px; top: 200px;">here</div>
-                                                            </v-col>
-                                                        </v-row>
-                                                        <v-row>
-                                                            <v-col cols="12" sm="12" md="12">
-                                                                <v-textarea counter label="CSS Code" v-model="editedItem.css_code" prepend-icon="mdi-map" rows="10" persistentHint hint="Paste your CSS code here"></v-textarea>
-                                                            </v-col>
-                                                        </v-row>
-                                                        <v-row>
-                                                            <v-col cols="12" sm="12" md="12">
-                                                                <v-file-input v-model="editedItem.images" class="mb-8" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping file/s here" 
-                                                                    prepend-icon="mdi-camera-iris" label="Images" persistentHint chips
-                                                                    hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB"
-                                                                    @change="uploadLogo">
-                                                                </v-file-input> 
-                                                            </v-col>
-                                                        </v-row>
-                                                    </v-form>
-                                                </v-card-text>
-                                            </v-window-item>
-                                        </v-window>
-                                    </v-container>
-                                </v-card-text>
-                                <v-divider></v-divider>
-                                <!--
-                                <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                                    <v-btn color="blue darken-1" :disabled="!isValid" text @click="save">Save</v-btn>
-                                </v-card-actions>
-                                -->
-                                
-                                <v-card-actions>
-                                    <v-btn
-                                        :disabled="templateMethod === 'templateChoice'"
-                                        text
-                                        @click="templateMethod='templateChoice'"
-                                    >
-                                        Back
-                                    </v-btn>
-                                    <v-spacer></v-spacer>
-                                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                                    <v-btn
-                                        :disabled="templateMethod === 'templateChoice'"
-                                        color="blue darken-1"
-                                        text
-                                        @click="templateMethod"
-                                    >
-                                        Save
-                                    </v-btn>
-                                </v-card-actions>
-
-
-                            </v-card>
-                        </v-dialog>
-                        <!-- the dialog box -->
+                        <v-btn color="#1f4068" v-on:click="redirectToChoice" class="white--text" ><i class="material-icons ">add_box</i> Template</v-btn>
                     </v-toolbar>
                 <!-- the toolbar -->
                 </template>
@@ -228,6 +44,7 @@
                 </template>
             </v-snackbar>
         </v-card>
+        <!--<router-view ></router-view>-->
     </v-app>
 </template>
 
@@ -285,10 +102,7 @@
         computed: {
             formTitle () {
                 return this.editedIndex === -1 ? 'New Template' : 'Edit Template'
-            },
-            /*departmentName () {
-                return this.editedIndex === -1 ? '' : this.rows[this.editedIndex].department.name
-            },*/ 
+            }, 
         },
         watch: {
             dialog (val) {
@@ -296,14 +110,6 @@
                 // eg. the_title = title || "Error"; if title is true, the the value of the_title is the value of title, else the value of the_title is "Error"
                 val || this.close()
             },
-        
-            templateMethod(val) {
-                this.templateMethod = val
-                console.log(val)
-                if ( val == 'canvas')
-                    this.setCanvasEditor()
-                return val
-            }
         },
         methods: {
             initialize: function() {
@@ -390,35 +196,6 @@
             setHedeaderTitle(){
                 document.title = 'Templates - Event Publication and Poster Management System (EPPMS)';
             },
-
-            // receives a place object via the autocomplete component
-            setPlace(place) {
-                this.currentPlace = place
-                // set the address without country and zip code
-                if (this.currentPlace) {
-                    let address_components = this.currentPlace.address_components
-                    let address_details = {
-                        country: '',
-                        postal_code: '',
-                        formatted_address: '',
-                    };
-                    address_components.forEach( function(address_component){
-                        if ( address_component.types[0] == 'country')
-                            address_details.country = address_component.long_name
-                        else if ( address_component.types[0] == 'postal_code')
-                            address_details.postal_code = address_component.long_name
-                        else
-                            address_details.formatted_address = address_details.formatted_address + ' ' + address_component.long_name
-                    });
-                    
-                    // set the country, postcode, long, lat and address
-                    this.editedItem.address_line_1 = address_details.formatted_address
-                    this.editedItem.country = address_details.country
-                    this.editedItem.postcode = address_details.postal_code
-                    this.editedItem.lat = this.currentPlace.geometry.location.lat()
-                    this.editedItem.long = this.currentPlace.geometry.location.lng()
-                }
-            },
             uploadLogo(){
                 if ( this.logo ){
                     let formData = new FormData()
@@ -447,59 +224,9 @@
                     })
                 }
             },
-            setCanvasEditor(){
-                var drawerPlugins = [
-                    // Drawing tools
-                    'Pencil',
-                    'Eraser',
-                    'Text',
-                    'Line',
-                    'ArrowOneSide',
-                    'ArrowTwoSide',
-                    'Triangle',
-                    'Rectangle',
-                    'Circle',
-                    'Image',
-                    'BackgroundImage',
-                    'Polygon',
-
-                    // Drawing options
-                    //'ColorHtml5',
-                    'Color',
-                    'ShapeBorder',
-                    'BrushSize',
-                    'OpacityOption',
-                    'LineWidth',
-                    'StrokeWidth',
-
-                    'Resize',
-                    'ShapeContextMenu',
-                    'CloseButton',
-                    'OvercanvasPopup',
-                    'OpenPopupButton',
-                    'MinimizeButton',
-                    'ToggleVisibilityButton',
-                    'MovableFloatingMode',
-
-                    'TextLineHeight',
-                    'TextAlign',
-
-                    'TextFontFamily',
-                    'TextFontSize',
-                    'TextFontWeight',
-                    'TextFontStyle',
-                    'TextDecoration',
-                    'TextColor',
-                    'TextBackgroundColor'
-                ];
-                var drawer = new DrawerJs.Drawer(null, {
-                    /////texts: customLocalization,
-                    plugins: drawerPlugins,
-                    defaultImageUrl: '/images/drawer.jpg',
-                    defaultActivePlugin : { name : 'Pencil', mode : 'lastUsed'},
-                }, 600, 600);
-                document.getElementById('canvas-editor').innerHTML += drawer.getHtml()
-                drawer.onInsert();
+            redirectToChoice() {
+                //this.$router.push('/template/create-choice')
+                this.$router.push({name: 'template-choice'})
             },
         },
         updated: function(){
@@ -509,6 +236,7 @@
             /////this.setCanvasEditor()
             this.setHedeaderTitle()
             this.initialize()
+            /////window.addEventListener("resize", this.canvasResize);
         },
     }
 </script>

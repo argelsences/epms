@@ -114,6 +114,7 @@
 </template>
 
 <script>
+  /*
   import VueRouter from 'vue-router';
   import Dashboard from './Dashboard.vue';
   import DepartmentList from './DepartmentList.vue';
@@ -122,6 +123,7 @@
   import VenueList from './VenueList.vue';
   import EventList from './EventList.vue';
   import TemplateList from './TemplateList.vue';
+  */
 
   export default {
     props: {
@@ -135,6 +137,7 @@
         profile: [],
       }  
     },
+    /*
     router: new VueRouter({
       mode: 'history',
       base: 'web-admin',
@@ -187,6 +190,7 @@
           }
       ]
     }),
+    */
     watch: {
       '$route' (to, from) {
         document.title = to.meta.title + ' - Event Publication and Poster Management System (EPPMS)' || 'Event Publication and Poster Management System (EPPMS)'

@@ -68,6 +68,12 @@ Route::group(['prefix' => 'web-admin','middleware' => ['role:Super Administrator
 	Route::get('venues', 'VenueController@index')->name('venues.index');
 	Route::get('events', 'EventController@index')->name('events.index');
 	Route::get('templates', 'TemplateController@index')->name('templates.index');
+
+	Route::get('/template/template-choice', 'TemplateController@template_choice')->name('templates.template_choice');
+	Route::get('/templates/by-upload', 'TemplateController@by_upload')->name('templates.by_upload');
+	Route::get('/templates/by-code', 'TemplateController@by_code')->name('templates.by_code');
+	Route::get('/templates/by-canvas', 'TemplateController@by_canvas')->name('templates.by_canvas');
+	
 });
 
 /////Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');

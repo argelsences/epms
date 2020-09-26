@@ -128,4 +128,10 @@ class TemplateController extends Controller
 
         return response()->json(($model::orderBy('name', 'ASC')->get()));
     }
+    /**
+     * Saving codes from template choice of upload
+     */
+    public function save_template(Request $request) {
+        dd($request->all());
+    }
 }

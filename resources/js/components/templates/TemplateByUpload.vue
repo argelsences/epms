@@ -17,7 +17,7 @@
                                         <v-file-input v-model="editedItem.html_code" class="" accept=".html" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
                                             prepend-icon="mdi-camera-iris" label="HTML File" persistentHint chips
                                             hint="Uploading a new file will replace the existing template code. Only accept HTML file. File size should not be greater than 2MB"
-                                            @change="uploadLogo">
+                                            >
                                         </v-file-input>
                                     </v-col>
                                 </v-row>
@@ -32,8 +32,7 @@
                                     <v-col cols="12" sm="12" md="12">
                                         <v-file-input v-model="editedItem.css_code" class="mb-8" accept=".css" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
                                             prepend-icon="mdi-camera-iris" label="CSS File" persistentHint chips
-                                            hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB"
-                                            @change="uploadLogo">
+                                            hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB">
                                         </v-file-input>
                                     </v-col>
                                 </v-row>
@@ -42,7 +41,8 @@
                                         <v-file-input v-model="editedItem.images" class="mb-8" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
                                             prepend-icon="mdi-camera-iris" label="Images" persistentHint chips
                                             hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB"
-                                            @change="uploadLogo">
+                                            multiple
+                                            >
                                         </v-file-input> 
                                     </v-col>
                                 </v-row>
@@ -71,7 +71,7 @@
                     :disabled="templateMethod === 'templateChoice'"
                     color="blue darken-1"
                     text
-                    :to="{name: `template-choice`}"
+                    @click="save"
                 >
                     Save
                 </v-btn>
@@ -192,8 +192,31 @@
                 var editedItem = this.editedItem
                 var editedIndex = this.editedIndex
 
-                axios.post('/api/venues/upsert', {
+                // form data
+                let formData = new FormData()
+                formData.append('html_code', this.editedItem.html_code)
+                formData.append('css_code', this.editedItem.html_code)
+                formData.append('images', this.editedItem.images)
+                formData.append('name', this.editedItem.name)
+                formData.append('description', this.editedItem.description)
+
+                /*axios.post('/api/templates/save-template', {
                     payload: this.editedItem,
+                })*/
+                /*axios.post('/api/templates/save-template', 
+                    {
+                        payload: this.editedItem,
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    }
+                )*/
+                axios.post('/api/templates/save-template', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
                 })
                 .then(response => {
                     if (response.data.success) {

@@ -55,17 +55,23 @@
                 <v-btn
                     :disabled="templateMethod === 'templateChoice'"
                     text
-                    @click="templateMethod='templateChoice'"
+                    :to="{name: `template-choice`}"
                 >
-                    Back
+                    Back to choices
                 </v-btn>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                <v-btn 
+                    color="blue darken-1" 
+                    text 
+                    :to="{name: `templates`}"
+                >
+                    Go back to Template List
+                </v-btn>
                 <v-btn
                     :disabled="templateMethod === 'templateChoice'"
                     color="blue darken-1"
                     text
-                    @click="templateMethod"
+                    :to="{name: `template-choice`}"
                 >
                     Save
                 </v-btn>

@@ -114,16 +114,6 @@
 </template>
 
 <script>
-  /*
-  import VueRouter from 'vue-router';
-  import Dashboard from './Dashboard.vue';
-  import DepartmentList from './DepartmentList.vue';
-  import UserList from './UserList.vue';
-  import SpeakerList from './SpeakerList.vue';
-  import VenueList from './VenueList.vue';
-  import EventList from './EventList.vue';
-  import TemplateList from './TemplateList.vue';
-  */
 
   export default {
     props: {
@@ -137,60 +127,6 @@
         profile: [],
       }  
     },
-    /*
-    router: new VueRouter({
-      mode: 'history',
-      base: 'web-admin',
-      routes: [
-          {
-              path: '/events',
-              name: 'events',
-              component: EventList,
-              meta: {title: 'Events'}
-          },
-          {
-              path: '/departments',
-              name: 'departments',
-              component: DepartmentList,
-              meta: {title: 'Departments'}
-          },
-          {
-              path: '/',
-              name: 'dashboard',
-              component: Dashboard,
-              meta: {title: 'Dashboard'}
-          },
-          {
-              path: '/users',
-              name: 'users',
-              component: UserList,
-              meta: {title: 'Users'}
-          },
-          {
-              path: '/speakers',
-              name: 'speakers',
-              component: SpeakerList,
-              meta: {title: 'Speakers'}
-          },
-          {
-              path: '/venues',
-              name: 'venues',
-              component: VenueList,
-              meta: {title: 'Venues'}
-          },
-          {
-              path: '/templates',
-              name: 'templates',
-              component: TemplateList,
-              meta: {title: 'Templates'}
-          },
-          {
-              path: '*',
-              redirect: '/'
-          }
-      ]
-    }),
-    */
     watch: {
       '$route' (to, from) {
         document.title = to.meta.title + ' - Event Publication and Poster Management System (EPPMS)' || 'Event Publication and Poster Management System (EPPMS)'

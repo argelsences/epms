@@ -36,19 +36,23 @@
             </v-card-text>
             <v-card-actions>
                 <v-btn
-                    :disabled="templateMethod === 'templateChoice'"
                     text
-                    @click="templateMethod='templateChoice'"
+                    @click="exitCanvas(`template-choice`)"
                 >
-                    Back
+                    Back to choices
                 </v-btn>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                <v-btn 
+                    color="blue darken-1" 
+                    text 
+                    @click="exitCanvas(`templates`)"
+                >
+                    Go back to Template List
+                </v-btn>
                 <v-btn
-                    :disabled="templateMethod === 'templateChoice'"
                     color="blue darken-1"
                     text
-                    @click="templateMethod"
+                    @click="exitCanvas(`template-choice`)"
                 >
                     Save
                 </v-btn>
@@ -57,9 +61,7 @@
     </v-app>
 </template>
 <script>
-    import HTMLCanvas from '../HTMLCanvas.vue'
     export default {
-        components: { HTMLCanvas },
         mounted() {
             console.log('Component mounted')
             this.$nextTick(() => {
@@ -112,48 +114,15 @@
                 templateMethod: '',
                 drawerPlugins: [
                     // Drawing tools
-                    'Pencil',
-                    'Eraser',
-                    'Text',
-                    'Line',
-                    'ArrowOneSide',
-                    'ArrowTwoSide',
-                    'Triangle',
-                    'Rectangle',
-                    'Circle',
-                    'Polygon',
-                    'Image',
-                    'BackgroundImage',
-                    'ImageCrop',
-
+                    'Pencil','Eraser','Text','Line','ArrowOneSide','ArrowTwoSide','Triangle',
+                    'Rectangle','Circle','Polygon','Image','BackgroundImage','ImageCrop',
                     // Drawing options
                     //'ColorHtml5',
-                    'Color',
-                    'ShapeBorder',
-                    'BrushSize',
-                    'Resize',
-                    'ShapeContextMenu',
-                    'MovableFloatingMode',
-                    'CloseButton',
-                    'MinimizeButton',
-                    'FullscreenModeButton',
-                    'ToggleVisibilityButton',
-                    'OvercanvasPopup',
-                    'OpenPopupButton',
-                    'Zoom',
-                    'OpacityOption',
-                    'LineWidth',
-                    'StrokeWidth',
-
-                    'TextLineHeight',
-                    'TextAlign',
-                    'TextFontFamily',
-                    'TextFontSize',
-                    'TextFontWeight',
-                    'TextFontStyle',
-                    'TextDecoration',
-                    'TextColor',
-                    'TextBackgroundColor'
+                    'Color','ShapeBorder','BrushSize','Resize','ShapeContextMenu','MovableFloatingMode',
+                    'CloseButton','MinimizeButton','FullscreenModeButton','ToggleVisibilityButton','OvercanvasPopup',
+                    'OpenPopupButton','Zoom','OpacityOption','LineWidth','StrokeWidth','TextLineHeight',
+                    'TextAlign','TextFontFamily','TextFontSize','TextFontWeight','TextFontStyle','TextDecoration',
+                    'TextColor','TextBackgroundColor'
                 ],
                 drawerPluginConfig: {
                     ShapeBorder: {
@@ -238,6 +207,7 @@
                         cropIsActive: false
                     }
                 },
+                canvas: null,
             }
         },
         computed: {
@@ -482,9 +452,11 @@
                     align: 'inline',
                 }, this.getCanvasWidth(), this.getCanvasHeight());
 
-                $('#canvas-editor').append(canvas.getHtml());
-                canvas.onInsert();
-                canvas.api.startEditing();
+                this.canvas = canvas
+
+                $('#canvas-editor').append(this.canvas.getHtml());
+                this.canvas.onInsert();
+                this.canvas.api.startEditing();
             },
             getCanvasWidth() {
                 //var viewportWidth = $(window).width();
@@ -498,6 +470,10 @@
                 /////return height;
                 return 842;
             },
+            exitCanvas(exitRoute){
+                this.canvas.api.stopEditing();
+                this.$router.push({name: exitRoute})
+            }
         },
         updated: function(){
             console.log(this.templateMethod)

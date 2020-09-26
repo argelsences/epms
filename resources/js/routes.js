@@ -2,12 +2,12 @@ import Vue from 'vue'
 import VueRouter from 'vue-router';
 
 import Dashboard from './components/Dashboard.vue';
-import DepartmentList from './components/DepartmentList.vue';
-import UserList from './components/UserList.vue';
-import SpeakerList from './components/SpeakerList.vue';
-import VenueList from './components/VenueList.vue';
-import EventList from './components/EventList.vue';
-import TemplateList from './components/TemplateList.vue';
+import DepartmentList from './components/departments/DepartmentList.vue';
+import UserList from './components/users/UserList.vue';
+import SpeakerList from './components/speakers/SpeakerList.vue';
+import VenueList from './components/venues/VenueList.vue';
+import EventList from './components/events/EventList.vue';
+import TemplateList from './components/templates/TemplateList.vue';
 import TemplateUpload from './components/templates/TemplateByUpload.vue'
 import TemplateCode from './components/templates/TemplateByCode.vue'
 import TemplateCanvas from './components/templates/TemplateByCanvas.vue'

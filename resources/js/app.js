@@ -81,14 +81,12 @@ Vue.use(TiptapVuetifyPlugin, {
 //Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('admin-template', require('./components/AdminTemplate.vue').default);
 Vue.component('dashboard', require('./components/Dashboard.vue').default);
-Vue.component('user-list', require('./components/UserList.vue').default);
-Vue.component('department-list', require('./components/DepartmentList.vue').default);
-Vue.component('speaker-list', require('./components/SpeakerList.vue').default);
-Vue.component('venue-list', require('./components/VenueList.vue').default);
-Vue.component('event-list', require('./components/EventList.vue').default);
-Vue.component('template-list', require('./components/TemplateList.vue').default);
-Vue.component('html-canvas', require('./components/HTMLCanvas.vue').default);
-
+Vue.component('user-list', require('./components/users/UserList.vue').default);
+Vue.component('department-list', require('./components/departments/DepartmentList.vue').default);
+Vue.component('speaker-list', require('./components/speakers/SpeakerList.vue').default);
+Vue.component('venue-list', require('./components/venues/VenueList.vue').default);
+Vue.component('event-list', require('./components/events/EventList.vue').default);
+Vue.component('template-list', require('./components/templates/TemplateList.vue').default);
 Vue.component('template-choice', require('./components/templates/TemplateChoice.vue').default);
 Vue.component('by-upload', require('./components/templates/TemplateByUpload.vue').default);
 Vue.component('by-code', require('./components/templates/TemplateByCode.vue').default);

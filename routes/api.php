@@ -43,7 +43,7 @@ Route::group(['middleware' => ['auth:api']], function(){
     Route::get('/events', 'EventController@list')->name('events.list');
     // Templates
     Route::get('/templates', 'TemplateController@list')->name('templates.list');
-    Route::post('/templates/save-template', 'TemplateController@save_template')->name('templates.save_template');
+    Route::post('/templates/upsert', 'TemplateController@upsert')->name('templates.upsert');
     //Route::delete('/categories/{category}', 'CategoryController@destroy');
     /////Route::middleware('can:delete,category')->delete('/categories/{category}', 'CategoryController@destroy');
     //Route::post('/menu-items/add', 'MenuItemController@store');

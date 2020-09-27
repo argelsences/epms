@@ -14,8 +14,8 @@
                             <v-col cols="12" sm="12" md="6">
                                 <v-row>
                                     <v-col cols="12" sm="12" md="12">
-                                        <v-file-input v-model="editedItem.html_code" class="" accept=".html" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
-                                            prepend-icon="mdi-camera-iris" label="HTML File" persistentHint chips
+                                        <v-file-input v-model="editedItem.html_code" class="" accept=".html" :rule="[rules.limitFileSize,rules.required]" clearable placeholder="Select by clicking or dropping a file here" 
+                                            prepend-icon="mdi-language-html5" label="HTML File" persistentHint chips
                                             hint="Uploading a new file will replace the existing template code. Only accept HTML file. File size should not be greater than 2MB"
                                             >
                                         </v-file-input>
@@ -25,13 +25,13 @@
                         </v-row>
                         <v-row>
                             <v-col cols="12" sm="12" md="6">
-                                <v-textarea counter label="Description" v-model="editedItem.description" prepend-icon="mdi-map" rows="10"></v-textarea>
+                                <v-textarea counter label="Description" v-model="editedItem.description" prepend-icon="mdi-typewriter" rows="10"></v-textarea>
                             </v-col>
                             <v-col cols="12" sm="12" md="6">
                                 <v-row>
                                     <v-col cols="12" sm="12" md="12">
                                         <v-file-input v-model="editedItem.css_code" class="mb-8" accept=".css" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
-                                            prepend-icon="mdi-camera-iris" label="CSS File" persistentHint chips
+                                            prepend-icon="mdi-language-css3" label="CSS File" persistentHint chips
                                             hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB">
                                         </v-file-input>
                                     </v-col>
@@ -71,7 +71,7 @@
                     :disabled="templateMethod === 'templateChoice'"
                     color="blue darken-1"
                     text
-                    @click="save"
+                    v-on:click="save()"
                 >
                     Save
                 </v-btn>
@@ -114,7 +114,7 @@
                     department_id: '',
                     html_code: null,
                     css_code: null,
-                    images: null,
+                    images: [],
                 },
                 defaultItem: {
                     id: 0,
@@ -125,7 +125,7 @@
                     department_id: '',
                     html_code: null,
                     css_code: null,
-                    images: null,
+                    images: [],
                 },
                 templateMethod: '',
             }
@@ -194,30 +194,21 @@
 
                 // form data
                 let formData = new FormData()
+                formData.append('id', this.editedItem.id)
                 formData.append('html_code', this.editedItem.html_code)
-                formData.append('css_code', this.editedItem.html_code)
-                formData.append('images', this.editedItem.images)
+                formData.append('css_code', this.editedItem.css_code)
                 formData.append('name', this.editedItem.name)
                 formData.append('description', this.editedItem.description)
+                formData.append('method', 'upload')
+                
+                // add multiple images
+                for (let i = 0 ; i < Object.keys(this.editedItem.images).length; i++){
+                    formData.append("images[]", this.editedItem.images[i])
+                }
+                
+                let formHeader = { headers: { 'Content-Type': 'multipart/form-data' } }
 
-                /*axios.post('/api/templates/save-template', {
-                    payload: this.editedItem,
-                })*/
-                /*axios.post('/api/templates/save-template', 
-                    {
-                        payload: this.editedItem,
-                    },
-                    {
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        }
-                    }
-                )*/
-                axios.post('/api/templates/save-template', formData, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        }
-                })
+                axios.post('/api/templates/upsert', formData, formHeader)
                 .then(response => {
                     if (response.data.success) {
                         this.feedbacks = []
@@ -260,7 +251,7 @@
 
                     axios.post('/api/departments/uploadLogo', formData, {
                         headers: {
-                            'Content-Type': 'multipart/form-data'
+                            'Content-Type': 'multipart/form-data',
                         }
                     })
                     .then(response => {

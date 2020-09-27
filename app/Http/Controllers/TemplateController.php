@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Template;
 use Illuminate\Http\Request;
 use Storage;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Rules\CSSValidator;
+use App\Rules\HTMLValidator;
 
 class TemplateController extends Controller
 {
@@ -143,16 +144,24 @@ class TemplateController extends Controller
             $this->create_by_upload($request);
         }
         
-        
     }
 
     /**
      * TODO
-     * 1. check the HTML for any javascript tags, if found throw an error and do not proceed
-     * 2. Make sure correct files are uploaded
+     * 1. check the HTML for any javascript tags, if found throw an error and do not proceed DONE
+     * 2. Make sure correct files are uploaded DONE
+     * 3. Work on the return value of promise in the template
+     * 4. Generate screenshot
+     * 5. Store files (HTML, CSS, Images)
+     * 6. Edit function
+     * 7. Upload by code
      */
     private function create_by_upload(Request $request){
         
+        // validate first the files
+        $this->validate($request, ['css_code' => new CSSValidator]);
+        $this->validate($request, ['html_code' => new HTMLValidator]);
+
         $html_code = $css_code = "";
         $template = [];
 

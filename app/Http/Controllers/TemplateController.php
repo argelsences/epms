@@ -151,10 +151,11 @@ class TemplateController extends Controller
      * 1. check the HTML for any javascript tags, if found throw an error and do not proceed DONE
      * 2. Make sure correct files are uploaded DONE
      * 3. Work on the return value of promise in the template
-     * 4. Generate screenshot
-     * 5. Store files (HTML, CSS, Images)
-     * 6. Edit function
-     * 7. Upload by code
+     * 4. Add department in interface and store it DONE
+     * 5. Generate screenshot
+     * 6. Store files (HTML, CSS, Images)
+     * 7. Edit function
+     * 8. Upload by code
      */
     private function create_by_upload(Request $request){
         
@@ -163,15 +164,19 @@ class TemplateController extends Controller
         $this->validate($request, ['html_code' => new HTMLValidator]);
 
         $html_code = $css_code = "";
-        $template = [];
+        $template_arr  = $file_path_data = [];
+
+        // assign inputs
+        $html_file = $request->file('html_code');
+        $css_file = $request->file('css_code');
 
         // get content of the html file
-        if ($request->hasFile('html_code') && $request->file('html_code')->isValid()) {
-            $html_code = $request->file('html_code')->get();
+        if ($request->hasFile('html_code') && $html_file->isValid()) {
+            $html_code = $html_file->get();
         }
         // get content of the css file
-        if ($request->hasFile('css_code') && $request->file('css_code')->isValid()) {
-            $css_code = $request->file('css_code')->get();
+        if ($request->hasFile('css_code') && $css_file->isValid()) {
+            $css_code = $css_file->get();
             $css_code_inline = "<style scoped>$css_code</style>";
             $html_code = substr_replace($html_code , $css_code_inline, strpos($html_code, '</head>'), 0);
         }
@@ -198,29 +203,68 @@ class TemplateController extends Controller
         // encode the template
         $html_code = htmlentities($html_code, ENT_QUOTES, 'UTF-8');
         
-        $template = [
+        $template_arr = [
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'file_path' => '',
             'template_code' => $html_code, 
-            'department_id' => 1,           
+            'department_id' => $request->input('department_id'),           
         ];
 
         //echo html_entity_decode($template['template_code'], ENT_QUOTES, 'UTF-8');
 
         if ($request->input('id')){
             // retrieve the user object
-            $theTemplate = Template::findOrFail($request->input('id'));
+            $template = Template::findOrFail($request->input('id'));
             // update the user object with updated details
-            $theTemplate = tap($theTemplate)->update($template);
+            $template = tap($template)->update($template_arr);
         }
         else {
-            $theTemplate = Template::create($template);
-            $upsertSuccess = ($theTemplate->id) ? true : false;
+            $template = Template::create($template_arr);
+            $upsertSuccess = ($template->id) ? true : false;
         }
 
+        // upload the template files here
+        // we need the template id to be returned first
+        // approach is to remove first the content of the template folder, then reupload the file
+        /**
+         * TODO: some of the condition here are repetition of what was done on top
+         */
+
+        // upload the html file
+        if ($request->hasFile('html_code') && $html_file->isValid()) {
+            $html_filename = $html_file->getClientOriginalName();
+            $html_path = $html_file->storeAs('templates' . '/' . $template->id , $html_filename);
+            $file_path_data['html_code'] = $html_filename;
+        }
+        // upload the css file
+        if ($request->hasFile('css_code') && $css_file->isValid()) {
+            $css_filename = $css_file->getClientOriginalName();
+            $css_path = $css_file->storeAs('templates' . '/' . $template->id , $css_filename);
+            $file_path_data['css_code'] = $css_filename;
+        }
+
+        // Upload all images
+        if ($request->hasFile('images')) {
+            foreach ($images as $image) {
+                $image_filename  = $image->getClientOriginalName();
+                $image_path = $image->storeAs('templates' . '/' . $template->id, $image_filename);
+                $file_path_data['images'][] = $image_filename;
+            }
+        }
+
+        // store the path, though virtually this can be assumed as templates/{id}
+        $file_path_data['path'] = Storage::disk('local')->path('templates');
+
+        // serialize the file_path_data
+        $serialized_data = serialize($file_path_data);
+
+        // update the file path
+        $template->file_path = $serialized_data;
+        $template->update();
+
         // return the same data compared to list to ensure using the same 
-        $success = ($theTemplate) ? true : false;
-        return ['success' => $success, 'item' => $theTemplate];
+        $success = ($template) ? true : false;
+        return ['success' => $success, 'item' => $template];
     }
 }

@@ -48,6 +48,13 @@
                                 </v-row>
                             </v-col>
                         </v-row>
+                        <v-row>
+                            <v-col cols="12" sm="12" md="6">
+                                <!--<v-text-field v-model="editedItem.department_id" label="Department" :rules="[rules.required]"></v-text-field>-->
+                                <!--<v-select :items="departments" label="Department" item-text="name" item-value="id" v-model="editedItem.department_id" :rules="[rules.required]"></v-select>-->
+                                <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
+                            </v-col>
+                        </v-row>
                     </v-form>
                 </v-container>
             </v-card-text>
@@ -95,6 +102,7 @@
                 snackbar: false,
                 timeout: 5000,
                 error: false,
+                departments: [],
                 rules: {
                     required: (v) => !!v || 'Required.',
                     /////min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
@@ -115,6 +123,8 @@
                     html_code: null,
                     css_code: null,
                     images: [],
+                    department_id: '',
+                    department_name: '',
                 },
                 defaultItem: {
                     id: 0,
@@ -126,6 +136,8 @@
                     html_code: null,
                     css_code: null,
                     images: [],
+                    department_id: '',
+                    department_name: '',
                 },
                 templateMethod: '',
             }
@@ -143,10 +155,16 @@
             },
         },
         methods: {
-            initialize: function() {
+            /*initialize: function() {
                 axios.get('/api/templates')
                 .then( response => {
                     this.rows = response.data;
+                });
+            },*/
+            getDepartments: function() {
+                axios.get('/api/departments')
+                .then( response => {
+                    this.departments = response.data;
                 });
             },
             getCountries() {
@@ -199,6 +217,7 @@
                 formData.append('css_code', this.editedItem.css_code)
                 formData.append('name', this.editedItem.name)
                 formData.append('description', this.editedItem.description)
+                formData.append('department_id', this.editedItem.department_id)
                 formData.append('method', 'upload')
                 
                 // add multiple images
@@ -275,7 +294,8 @@
         }, 
         created: function() {
             this.setHedeaderTitle()
-            this.initialize()
+            this.getDepartments()
+            //this.initialize()
         },
     }
 </script>

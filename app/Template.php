@@ -11,4 +11,8 @@ class Template extends Model
     use SoftDeletes;
 
     protected $fillable = [ 'name', 'description', 'file_path', 'template_code', 'department_id'];
+
+    public function getFilePathAttribute($value){
+        return unserialize($value);
+    }
 }

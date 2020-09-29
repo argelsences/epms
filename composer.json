@@ -19,6 +19,7 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.1",
         "mews/purifier": "^3.3",
+        "spatie/browsershot": "^3.39",
         "spatie/laravel-permission": "^3.13"
     },
     "require-dev": {

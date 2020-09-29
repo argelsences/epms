@@ -7,9 +7,15 @@ use Illuminate\Http\Request;
 use Storage;
 use App\Rules\CSSValidator;
 use App\Rules\HTMLValidator;
+use EPPMS;
 
 class TemplateController extends Controller
 {
+    protected $templates;
+
+    public function __construct(Template $templates){
+        $this->templates = $templates;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -153,7 +159,7 @@ class TemplateController extends Controller
      * 3. Work on the return value of promise in the template
      * 4. Add department in interface and store it DONE
      * 5. Generate screenshot
-     * 6. Store files (HTML, CSS, Images)
+     * 6. Store files (HTML, CSS, Images) DONE
      * 7. Edit function
      * 8. Upload by code
      */
@@ -215,7 +221,8 @@ class TemplateController extends Controller
 
         if ($request->input('id')){
             // retrieve the user object
-            $template = Template::findOrFail($request->input('id'));
+            //$template = Template::findOrFail($request->input('id'));
+            $template = $this->templates->findOrFail($request->input('id'));
             // update the user object with updated details
             $template = tap($template)->update($template_arr);
         }
@@ -254,7 +261,7 @@ class TemplateController extends Controller
         }
 
         // store the path, though virtually this can be assumed as templates/{id}
-        $file_path_data['path'] = Storage::disk('local')->path('templates');
+        $file_path_data['path'] = Storage::disk('local')->path('templates/'.$template->id);
 
         // serialize the file_path_data
         $serialized_data = serialize($file_path_data);
@@ -263,8 +270,15 @@ class TemplateController extends Controller
         $template->file_path = $serialized_data;
         $template->update();
 
+        // lets generate a thumbnail
+        $the_thumbnail = $this->thumbnail($template);
+
         // return the same data compared to list to ensure using the same 
         $success = ($template) ? true : false;
         return ['success' => $success, 'item' => $template];
+    }
+
+    public function thumbnail(Template $template){
+        return EPPMS::thumbnail($template);
     }
 }

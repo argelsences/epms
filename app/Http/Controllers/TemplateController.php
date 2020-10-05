@@ -223,7 +223,6 @@ class TemplateController extends Controller
 
         if ($request->input('id')){
             // retrieve the user object
-            //$template = Template::findOrFail($request->input('id'));
             $template = $this->templates->findOrFail($request->input('id'));
             // update the user object with updated details
             $template = tap($template)->update($template_arr);
@@ -263,8 +262,8 @@ class TemplateController extends Controller
         }
 
         // store the path, though virtually this can be assumed as templates/{id}
-        //$file_path_data['path'] = Storage::disk('local')->path('templates/'.$template->id);
-        $file_path_data['path'] = ('storage/templates/'.$template->id);
+        $file_path_data['path'] = Storage::disk('local')->path('templates/'.$template->id);
+        /////$file_path_data['path'] = ('storage/app/templates/'.$template->id);
 
         // serialize the file_path_data
         $serialized_data = serialize($file_path_data);
@@ -287,7 +286,7 @@ class TemplateController extends Controller
 
     public function screenshot($id){
         $template = $this->templates->findOrFail($id);
-        //dd($template->file_path['path']);
+        
         return EPPMS::getScreenshot($template->file_path['path']);
     }
 }

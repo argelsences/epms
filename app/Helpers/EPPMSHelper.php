@@ -36,15 +36,13 @@ class EPPMSHelper {
      */
     public function getScreenshot($path){
 
-        //$template = Template::findOrFail($id);
-        //$file_path = $template->file_path;
-        //$storagePath = Storage::disk('local')->path($path. '/' .'screenshot.jpg');
-        //dd($path);
-        //$the_image = base64_decode($path);
-        //dd($the_image);
-        //return Image::make($the_image)->response('jpg', $quality);
         $storage_path = $path . '/screenshot.jpg';
-        dd($storage_path);
-        return Image::make($storage_path)->response();
+
+        if (file_exists($storage_path)) {
+            return response()->file($storage_path, array('Content-Type' =>'image/jpeg'));
+        }
+
+        abort(404);
+
     }
 }

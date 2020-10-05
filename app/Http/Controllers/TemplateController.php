@@ -157,7 +157,7 @@ class TemplateController extends Controller
      * TODO
      * 1. check the HTML for any javascript tags, if found throw an error and do not proceed DONE
      * 2. Make sure correct files are uploaded DONE
-     * 3. Work on the return value of promise in the template
+     * 3. Work on the return value of promise in the template DONE
      * 4. Add department in interface and store it DONE
      * 5. Generate screenshot (need to do html_entity_decode) DONE
      * 6. Store files (HTML, CSS, Images) DONE
@@ -281,7 +281,11 @@ class TemplateController extends Controller
         return ['success' => $success, 'item' => $template];
     }
 
-    public function thumbnail(Template $template){
+    private function create_by_code (){
+
+    }
+
+    private function thumbnail(Template $template){
         return EPPMS::thumbnail($template);
     }
 

@@ -15,7 +15,11 @@
                 <!-- the toolbar -->
                 </template>
                 <template v-slot:item.screenshot="{ item }">
-                    {{item.file_path}}
+                    <!--<v-img v-if="item.photo" :src="base_url + item.photo" alt="" aspect-ratio=".7" max-height="100px" max-width="100px"></v-img>
+                    <v-icon size="100px" v-else>mdi-account-box</v-icon>-->
+                   <!-- <v-img src="/api/templates/screenshot/`item.id`" @error="imageUrl='alt-image.jpg'"></v-img>-->
+                   <!--<img :src="imageUrl(item)" ></img>-->
+                   <v-img :src="imageUrl(item)" @error="imageUrl='alt-image.jpg'"></v-img>
                 </template>
                 <template v-slot:item.actions="{ item }">
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
@@ -226,6 +230,9 @@
             redirectToChoice() {
                 //this.$router.push('/template/create-choice')
                 this.$router.push({name: 'template-choice'})
+            },
+            imageUrl(item) {
+                return "/webadmin/templates/screenshot/" + item.id
             },
         },
         updated: function(){

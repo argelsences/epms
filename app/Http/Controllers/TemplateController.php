@@ -158,10 +158,12 @@ class TemplateController extends Controller
      * 2. Make sure correct files are uploaded DONE
      * 3. Work on the return value of promise in the template
      * 4. Add department in interface and store it DONE
-     * 5. Generate screenshot
+     * 5. Generate screenshot (need to do html_entity_decode)
      * 6. Store files (HTML, CSS, Images) DONE
      * 7. Edit function
      * 8. Upload by code
+     * 9. Create ServiceProvider and Facade DONE
+     * 10. Install browsershot and puppeteer DONE
      */
     private function create_by_upload(Request $request){
         
@@ -261,7 +263,8 @@ class TemplateController extends Controller
         }
 
         // store the path, though virtually this can be assumed as templates/{id}
-        $file_path_data['path'] = Storage::disk('local')->path('templates/'.$template->id);
+        //$file_path_data['path'] = Storage::disk('local')->path('templates/'.$template->id);
+        $file_path_data['path'] = ('storage/templates/'.$template->id);
 
         // serialize the file_path_data
         $serialized_data = serialize($file_path_data);
@@ -280,5 +283,11 @@ class TemplateController extends Controller
 
     public function thumbnail(Template $template){
         return EPPMS::thumbnail($template);
+    }
+
+    public function screenshot($id){
+        $template = $this->templates->findOrFail($id);
+        //dd($template->file_path['path']);
+        return EPPMS::getScreenshot($template->file_path['path']);
     }
 }

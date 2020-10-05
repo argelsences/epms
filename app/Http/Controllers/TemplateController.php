@@ -147,9 +147,10 @@ class TemplateController extends Controller
         }
 
         if ($request->input('method') == 'upload'){
-            $this->create_by_upload($request);
+            $return = $this->create_by_upload($request);
         }
         
+        return $return;
     }
 
     /**
@@ -158,7 +159,7 @@ class TemplateController extends Controller
      * 2. Make sure correct files are uploaded DONE
      * 3. Work on the return value of promise in the template
      * 4. Add department in interface and store it DONE
-     * 5. Generate screenshot (need to do html_entity_decode)
+     * 5. Generate screenshot (need to do html_entity_decode) DONE
      * 6. Store files (HTML, CSS, Images) DONE
      * 7. Edit function
      * 8. Upload by code

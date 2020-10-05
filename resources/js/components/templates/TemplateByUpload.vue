@@ -83,6 +83,26 @@
                     Save
                 </v-btn>
             </v-card-actions>
+
+            <v-snackbar v-model="snackbar" :timeout="timeout">
+                <v-list-item v-for="(feedback, index) in feedbacks" :key="index">
+                    <v-list-item-icon v-if="error">
+                        <v-icon color="red darken-2">mdi-exclamation-thick</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-icon v-else>
+                        <v-icon color="green darken-2">mdi-check-bold</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title v-text="feedback"></v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <template v-slot:action="{ attrs }">
+                    <v-btn color="teal" text v-bind="attrs" @click="snackbar = false">
+                        Close
+                    </v-btn>
+                </template>
+            </v-snackbar>
+
         </v-card>
     </v-app>
 </template>
@@ -167,12 +187,6 @@
                     this.departments = response.data;
                 });
             },
-            getCountries() {
-                axios.get('/api/countries')
-                .then( response => {
-                    this.countries = response.data;
-                });
-            },
             editItem (item) {
                 this.editedIndex = this.rows.indexOf(item)
                 this.editedItem = Object.assign({}, item)
@@ -198,6 +212,8 @@
                     // reset window
                     this.templateMethod = ''
                 })
+
+                 setTimeout(() => { this.$router.push({name: 'templates'}) },1500);
             },
             save () {
                 /** on change of input, upload the logo, then assign the path to logo path */

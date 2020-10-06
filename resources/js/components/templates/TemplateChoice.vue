@@ -6,10 +6,11 @@
         <v-row>
             <v-col cols="12" sm="12" md="12">
                 <v-card>
+                    <v-card-title>How do you want to create the template?</v-card-title>
                     <v-card-text>
                         <v-container>
                             <v-list class="text-left">
-                                <v-list-item link :to="{name: `add-by-upload`}">
+                                <v-list-item link :to="{name: `add-by-upload`}" class="mb-5">
                                     <v-list-item-action>
                                         <v-icon>mdi-view-dashboard-outline</v-icon>
                                     </v-list-item-action>
@@ -17,7 +18,7 @@
                                         <v-list-item-title>Uploading HTML, CSS, and image files</v-list-item-title>
                                     </v-list-item-content>
                                 </v-list-item>
-                                <v-list-item link :to="{name: `add-by-code`}">
+                                <v-list-item link :to="{name: `add-by-code`}" class="mb-5">
                                     <v-list-item-action>
                                         <v-icon>mdi-calendar</v-icon>
                                     </v-list-item-action>
@@ -25,7 +26,7 @@
                                         <v-list-item-title>By HTML, CSS source code and uploading image files</v-list-item-title>
                                     </v-list-item-content>
                                 </v-list-item>
-                                <v-list-item link :to="{name: `add-by-canvas`}">
+                                <v-list-item link :to="{name: `add-by-canvas`}" class="mb-5">
                                     <v-list-item-action>
                                         <v-icon>mdi-bullhorn</v-icon>
                                     </v-list-item-action>

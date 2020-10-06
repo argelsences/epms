@@ -149,6 +149,10 @@ class TemplateController extends Controller
         if ($request->input('method') == 'upload'){
             $return = $this->create_by_upload($request);
         }
+
+        if ($request->input('method') == 'code'){
+            $return = $this->create_by_code($request);
+        }
         
         return $return;
     }
@@ -281,8 +285,8 @@ class TemplateController extends Controller
         return ['success' => $success, 'item' => $template];
     }
 
-    private function create_by_code (){
-
+    private function create_by_code (Request $request){
+        dd($request);
     }
 
     private function thumbnail(Template $template){

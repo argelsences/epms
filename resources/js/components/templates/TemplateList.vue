@@ -11,29 +11,29 @@
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details ></v-text-field>
                         <v-spacer></v-spacer>
                         <v-btn color="#1f4068" v-on:click="redirectToChoice" class="white--text" ><i class="material-icons ">add_box</i> Template</v-btn>
+                        <v-dialog v-model="dialog" hide-overlay transition="dialog-bottom-transition" scrollable fullscreen >
+                            <v-card tile>
+                                <v-card-text>
+                                    <v-container fill-height>
+                                        <v-row justify="center" align="center">
+                                            <v-col cols="12" sm="4">
+                                                <v-img :src="theImageSrc" @error="imageUrl='alt-image.jpg'" :aspect-ratio="3/4" height="auto" ></v-img>
+                                            </v-col>
+                                        </v-row>
+                                    </v-container> 
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+                                   
+                                </v-card-actions>
+                            </v-card>
+                    </v-dialog>
                     </v-toolbar>
                 <!-- the toolbar -->
                 </template>
                 <template v-slot:item.screenshot="{ item }">
-                    <!--<v-img v-if="item.photo" :src="base_url + item.photo" alt="" aspect-ratio=".7" max-height="100px" max-width="100px"></v-img>
-                    <v-icon size="100px" v-else>mdi-account-box</v-icon>-->
-                   <!-- <v-img src="/api/templates/screenshot/`item.id`" @error="imageUrl='alt-image.jpg'"></v-img>-->
-                   <!--<img :src="imageUrl(item)" ></img>-->
-                   <v-img :src="imageUrl(item)" @error="imageUrl='alt-image.jpg'" max-height="140px" max-width="100px" @click="dialog=true"></v-img>
-                   <v-dialog v-model="dialog" hide-overlay transition="dialog-bottom-transition" max-width="600px" >
-                        <v-card tile>
-                            <v-toolbar flat dark color="primary">
-                                <v-btn icon dark @click="dialog = false">
-                                    <v-icon>mdi-close</v-icon>
-                                </v-btn>
-                                <v-toolbar-title>Template Preview</v-toolbar-title>
-                                <v-spacer></v-spacer>
-                            </v-toolbar>
-                            <v-card-text>
-                                <v-img :src="imageUrl(item)" @error="imageUrl='alt-image.jpg'"></v-img>
-                            </v-card-text>
-                        </v-card>
-                    </v-dialog>
+                   <v-img :src="`/web-admin/templates/screenshot/${item.id}`" @error="imageUrl='alt-image.jpg'" max-height="133px" max-width="100px" @click.stop="imageDialogUrl(item)"></v-img>
                 </template>
                 <template v-slot:item.actions="{ item }">
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
@@ -81,6 +81,7 @@
                 snackbar: false,
                 timeout: 5000,
                 error: false,
+                theImageSrc: '',
                 rules: {
                     required: (v) => !!v || 'Required.',
                     /////min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
@@ -217,8 +218,9 @@
                 //this.$router.push('/template/create-choice')
                 this.$router.push({name: 'template-choice'})
             },
-            imageUrl(item) {
-                return "/web-admin/templates/screenshot/" + item.id
+            imageDialogUrl(item){
+                this.dialog = true
+                this.theImageSrc = "/web-admin/templates/screenshot/" + item.id
             },
         },
         updated: function(){

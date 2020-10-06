@@ -289,8 +289,6 @@ class TemplateController extends Controller
 
     private function create_by_code (Request $request){
          // validate first the files
-         //$this->validate($request, ['css_code' => new CSSValidator]);
-         //$this->validate($request, ['html_code' => new HTMLValidator]);
  
          $html_code = $css_code = "";
          $template_arr  = $file_path_data = [];

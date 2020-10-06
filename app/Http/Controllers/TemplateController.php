@@ -166,9 +166,11 @@ class TemplateController extends Controller
      * 5. Generate screenshot (need to do html_entity_decode) DONE
      * 6. Store files (HTML, CSS, Images) DONE
      * 7. Edit function
-     * 8. Upload by code
+     * 8. Upload by code DONE
      * 9. Create ServiceProvider and Facade DONE
      * 10. Install browsershot and puppeteer DONE
+     * 11. Template and poster preview
+     * 12. Poster list and media generation
      */
     private function create_by_upload(Request $request){
         

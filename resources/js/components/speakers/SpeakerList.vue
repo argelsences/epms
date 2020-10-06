@@ -29,6 +29,31 @@
 10. Fix the message output after successful create or update
 11. Push changes to API backend
 12. Force form reset
+
+
+<v-file-input 
+   @change="Preview_image"
+   v-model="image"
+   >
+</v-file-input>
+<v-img :src="url"></v-img>
+Script: event sent automatically no need to send it
+
+  new Vue({
+  el: '#app',
+  data() {
+    return {
+      url: null,
+      image: null,
+    }
+  },
+  methods: {
+    Preview_image() {
+      this.url= URL.createObjectURL(this.image)
+    }
+  }
+})
+
 -->
 <template>
     <v-app>

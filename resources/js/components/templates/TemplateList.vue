@@ -19,7 +19,21 @@
                     <v-icon size="100px" v-else>mdi-account-box</v-icon>-->
                    <!-- <v-img src="/api/templates/screenshot/`item.id`" @error="imageUrl='alt-image.jpg'"></v-img>-->
                    <!--<img :src="imageUrl(item)" ></img>-->
-                   <v-img :src="imageUrl(item)" @error="imageUrl='alt-image.jpg'" max-height="140px" max-width="100px"></v-img>
+                   <v-img :src="imageUrl(item)" @error="imageUrl='alt-image.jpg'" max-height="140px" max-width="100px" @click="dialog=true"></v-img>
+                   <v-dialog v-model="dialog" hide-overlay transition="dialog-bottom-transition" max-width="600px" >
+                        <v-card tile>
+                            <v-toolbar flat dark color="primary">
+                                <v-btn icon dark @click="dialog = false">
+                                    <v-icon>mdi-close</v-icon>
+                                </v-btn>
+                                <v-toolbar-title>Template Preview</v-toolbar-title>
+                                <v-spacer></v-spacer>
+                            </v-toolbar>
+                            <v-card-text>
+                                <v-img :src="imageUrl(item)" @error="imageUrl='alt-image.jpg'"></v-img>
+                            </v-card-text>
+                        </v-card>
+                    </v-dialog>
                 </template>
                 <template v-slot:item.actions="{ item }">
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
@@ -198,34 +212,6 @@
             },
             setHedeaderTitle(){
                 document.title = 'Templates - Event Publication and Poster Management System (EPPMS)';
-            },
-            uploadLogo(){
-                if ( this.logo ){
-                    let formData = new FormData()
-                    formData.append('logo', this.logo)
-                    
-                    if ( this.editedItem.id )
-                        formData.append('id', this.editedItem.id)
-
-                    axios.post('/api/departments/uploadLogo', formData, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        }
-                    })
-                    .then(response => {
-                        if (response.data.success) {
-                            // set the path on the global editedItem
-                            this.editedItem.logo_path = response.data.file_path 
-                        }
-                    })
-                    .catch( error => {
-                        let messages = Object.values(error.response.data.errors); 
-                        this.feedbacks = [].concat.apply([], messages)
-                        this.snackbar = true
-                        this.error = true
-                        this.logo = null
-                    })
-                }
             },
             redirectToChoice() {
                 //this.$router.push('/template/create-choice')

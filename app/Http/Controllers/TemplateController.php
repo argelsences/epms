@@ -165,7 +165,7 @@ class TemplateController extends Controller
      * 4. Add department in interface and store it DONE
      * 5. Generate screenshot (need to do html_entity_decode) DONE
      * 6. Store files (HTML, CSS, Images) DONE
-     * 7. Edit function
+     * 7. Edit function (add method in data for template to know what template is used)
      * 8. Upload by code DONE
      * 9. Create ServiceProvider and Facade DONE
      * 10. Install browsershot and puppeteer DONE

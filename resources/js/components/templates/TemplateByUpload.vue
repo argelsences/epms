@@ -315,8 +315,6 @@
             },
             setEditItems(item){
                 this.editedItem = item
-                /////this.editedItem.css_code = item.file_path.css_code
-                console.log(item.file_path.css_code)
             },
         },
         updated: function(){

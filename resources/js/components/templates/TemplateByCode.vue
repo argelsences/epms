@@ -258,6 +258,9 @@
             setHedeaderTitle(){
                 document.title = 'Templates - Event Publication and Poster Management System (EPPMS)';
             },
+            setEditItems(item){
+                this.editedItem = item
+            },
         },
         updated: function(){
             console.log(this.templateMethod)
@@ -266,6 +269,8 @@
             this.setHedeaderTitle()
             this.getDepartments()
             //this.initialize()
+            if (this.$route.params.id)
+                this.setEditItems(this.$route.params)
         },
     }
 </script>

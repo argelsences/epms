@@ -25,10 +25,9 @@
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
                                     <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-                                   
                                 </v-card-actions>
                             </v-card>
-                    </v-dialog>
+                        </v-dialog>
                     </v-toolbar>
                 <!-- the toolbar -->
                 </template>
@@ -146,6 +145,7 @@
                 this.editedIndex = this.rows.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 this.dialog = true
+                this.$router.push({name: 'add-by-upload', params: this.editedItem})
             },
 
             deleteItem (item) {
@@ -163,7 +163,7 @@
                     // reset the edit flag
                     this.editedIndex = -1
                     // reset the form
-                    this.$refs.form.reset()
+                    /////this.$refs.form.reset()
                     // reset window
                     this.templateMethod = ''
                 })

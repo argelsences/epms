@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <div class="text-h4 text-left">Create template by uploading files</div>
+        <div class="text-h4 text-left">{{formTitle}} by uploading files</div>
         <div class="text-subtitle-1 text-left">In here you see the overview</div>
         <v-divider></v-divider>
         <v-card>
@@ -13,12 +13,15 @@
                             </v-col>
                             <v-col cols="12" sm="12" md="6">
                                 <v-row>
-                                    <v-col cols="12" sm="12" md="12">
+                                    <v-col cols="12" sm="12" md="12" justify="left" align="left">
                                         <v-file-input v-model="editedItem.html_code" class="" accept=".html" :rule="[rules.limitFileSize,rules.required]" clearable placeholder="Select by clicking or dropping a file here" 
                                             prepend-icon="mdi-language-html5" label="HTML File" persistentHint chips
                                             hint="Uploading a new file will replace the existing template code. Only accept HTML file. File size should not be greater than 2MB"
                                             >
                                         </v-file-input>
+                                        <v-chip class="ma-2" v-if="editedItem.id">
+                                            <v-icon left>mdi-file</v-icon> {{editedItem.file_path.html_code}}
+                                        </v-chip>
                                     </v-col>
                                 </v-row>
                             </v-col>
@@ -29,21 +32,27 @@
                             </v-col>
                             <v-col cols="12" sm="12" md="6">
                                 <v-row>
-                                    <v-col cols="12" sm="12" md="12">
+                                    <v-col cols="12" sm="12" md="12" justify="left" align="left">
                                         <v-file-input v-model="editedItem.css_code" class="mb-8" accept=".css" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
                                             prepend-icon="mdi-language-css3" label="CSS File" persistentHint chips
                                             hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB">
                                         </v-file-input>
+                                        <v-chip class="ma-2" v-if="editedItem.id">
+                                            <v-icon left>mdi-file</v-icon> {{editedItem.file_path.css_code}}
+                                        </v-chip>
                                     </v-col>
                                 </v-row>
                                 <v-row>
-                                    <v-col cols="12" sm="12" md="12">
+                                    <v-col cols="12" sm="12" md="12" justify="left" align="left">
                                         <v-file-input v-model="editedItem.images" class="mb-8" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
                                             prepend-icon="mdi-camera-iris" label="Images" persistentHint chips
                                             hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB"
                                             multiple
                                             >
-                                        </v-file-input> 
+                                        </v-file-input>
+                                        <v-chip class="ma-2" v-for="image in editedItem.file_path.images" :key="editedItem.id" v-if="editedItem.id">
+                                            <v-icon left>mdi-file</v-icon> {{image}}
+                                        </v-chip> 
                                     </v-col>
                                 </v-row>
                             </v-col>
@@ -164,7 +173,7 @@
         },
         computed: {
             formTitle () {
-                return this.editedIndex === -1 ? 'New Template' : 'Edit Template'
+                return this.editedItem.id ? 'Edit Template' : 'New Template'
             }, 
         },
         watch: {
@@ -304,6 +313,11 @@
                     })
                 }
             },
+            setEditItems(item){
+                this.editedItem = item
+                /////this.editedItem.css_code = item.file_path.css_code
+                console.log(item.file_path.css_code)
+            },
         },
         updated: function(){
             console.log(this.templateMethod)
@@ -312,6 +326,9 @@
             this.setHedeaderTitle()
             this.getDepartments()
             //this.initialize()
+            //this.editedItem = this.$route.params
+            if (this.$route.params.id)
+                this.setEditItems(this.$route.params)
         },
     }
 </script>

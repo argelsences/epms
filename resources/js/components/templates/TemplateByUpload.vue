@@ -6,17 +6,39 @@
         <v-card>
             <v-card-text>
                 <v-container>
+                    <v-row v-if="editedItem.id">
+                            <v-col cols="12" sm="12" md="6">
+                            </v-col>
+                            <v-col cols="12" sm="12" md="6">
+                                <v-switch v-model="switchFile" label="Update files"></v-switch>
+                            </v-col>
+                    </v-row>
                     <v-form v-model="isValid" ref="form">
                         <v-row>
                             <v-col cols="12" sm="12" md="6">
-                                <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
+                                <v-row>
+                                    <v-col cols="12" sm="12" md="12">
+                                        <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col cols="12" sm="12" md="12">
+                                        <v-textarea counter label="Description" v-model="editedItem.description" prepend-icon="mdi-typewriter" rows="5"></v-textarea>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col cols="12" sm="12" md="12">
+                                        <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
+                                    </v-col>
+                                </v-row>
                             </v-col>
                             <v-col cols="12" sm="12" md="6">
                                 <v-row>
-                                    <v-col cols="12" sm="12" md="12" justify="left" align="left">
-                                        <v-file-input v-model="editedItem.html_code" class="" accept=".html" :rule="[rules.limitFileSize,rules.required]" clearable placeholder="Select by clicking or dropping a file here" 
+                                    <v-col cols="12" sm="12" md="12">
+                                        <v-file-input v-model="editedItem.html_code" class="mb-8" accept=".html" :rule="[rules.limitFileSize,rules.required]" clearable placeholder="Select by clicking or dropping a file here" 
                                             prepend-icon="mdi-language-html5" label="HTML File" persistentHint chips
                                             hint="Uploading a new file will replace the existing template code. Only accept HTML file. File size should not be greater than 2MB"
+                                            :disabled="!switchFile"
                                             >
                                         </v-file-input>
                                         <v-chip class="ma-2 white--text" v-if="editedItem.id" color="blue darken-1" >
@@ -24,18 +46,13 @@
                                         </v-chip>
                                     </v-col>
                                 </v-row>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col cols="12" sm="12" md="6">
-                                <v-textarea counter label="Description" v-model="editedItem.description" prepend-icon="mdi-typewriter" rows="10"></v-textarea>
-                            </v-col>
-                            <v-col cols="12" sm="12" md="6">
                                 <v-row>
-                                    <v-col cols="12" sm="12" md="12" justify="left" align="left">
+                                    <v-col cols="12" sm="12" md="12">
                                         <v-file-input v-model="editedItem.css_code" class="mb-8" accept=".css" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
                                             prepend-icon="mdi-language-css3" label="CSS File" persistentHint chips
-                                            hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB">
+                                            hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB"
+                                            :disabled="!switchFile"
+                                            >
                                         </v-file-input>
                                         <v-chip class="ma-2 white--text" v-if="editedItem.id" color="blue darken-1">
                                             <v-icon left>mdi-file</v-icon> {{editedItem.file_path.css_code}}
@@ -43,25 +60,19 @@
                                     </v-col>
                                 </v-row>
                                 <v-row>
-                                    <v-col cols="12" sm="12" md="12" justify="left" align="left">
+                                    <v-col cols="12" sm="12" md="12">
                                         <v-file-input v-model="editedItem.images" class="mb-8" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
                                             prepend-icon="mdi-camera-iris" label="Images" persistentHint chips
                                             hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB"
                                             multiple
+                                            :disabled="!switchFile"
                                             >
                                         </v-file-input>
                                         <v-chip class="ma-2 white--text" v-for="image in editedItem.file_path.images" :key="editedItem.id" v-if="editedItem.id" color="blue darken-1">
                                             <v-icon left>mdi-file</v-icon> {{image}}
-                                        </v-chip> 
+                                        </v-chip>
                                     </v-col>
                                 </v-row>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col cols="12" sm="12" md="6">
-                                <!--<v-text-field v-model="editedItem.department_id" label="Department" :rules="[rules.required]"></v-text-field>-->
-                                <!--<v-select :items="departments" label="Department" item-text="name" item-value="id" v-model="editedItem.department_id" :rules="[rules.required]"></v-select>-->
-                                <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
                             </v-col>
                         </v-row>
                     </v-form>
@@ -134,6 +145,7 @@
                 timeout: 5000,
                 error: false,
                 departments: [],
+                switchFile: false,
                 rules: {
                     required: (v) => !!v || 'Required.',
                     /////min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
@@ -351,6 +363,8 @@
             console.log(this.$route.params)
             if (this.$route.params.id)
                 this.setEditItems(this.$route.params)
+            else
+                this.switchFile = true
         },
     }
 </script>

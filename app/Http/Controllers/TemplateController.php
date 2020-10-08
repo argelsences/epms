@@ -190,10 +190,12 @@ class TemplateController extends Controller
             // check if we are updating
             if ($request->input('id')){
                 // retrieve the html_code from DB
-                $html_code = $this->templates->findOrFail($request->input('id'))->template_code;
+                /////html_entity_decode($template->template_code, ENT_QUOTES, 'UTF-8');
+                $html_code = html_entity_decode($this->templates->findOrFail($request->input('id'))->template_code, ENT_QUOTES, 'UTF-8');
             }
         }
-
+        
+        
         // get content of the css file, validate only when there is a file present
         if ($request->hasFile('css_code') && $css_file->isValid()) {
             $this->validate($request, ['css_code' => new CSSValidator]);
@@ -201,7 +203,7 @@ class TemplateController extends Controller
             $css_code_inline = "<style scoped>$css_code</style>";
             $html_code = substr_replace($html_code , $css_code_inline, strpos($html_code, '</head>'), 0);
         }
-
+        
         // process images
         if ($request->hasFile('images')) {
             $images = $request->file('images');

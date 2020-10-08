@@ -173,10 +173,6 @@ class TemplateController extends Controller
      * 12. Poster list and media generation
      */
     private function create_by_upload(Request $request){
-        
-        // validate first the files
-        $this->validate($request, ['css_code' => new CSSValidator]);
-        $this->validate($request, ['html_code' => new HTMLValidator]);
 
         $html_code = $css_code = "";
         $template_arr  = $file_path_data = [];
@@ -185,12 +181,22 @@ class TemplateController extends Controller
         $html_file = $request->file('html_code');
         $css_file = $request->file('css_code');
 
-        // get content of the html file
+        // get content of the html file, validate only when there is a file present
         if ($request->hasFile('html_code') && $html_file->isValid()) {
+            $this->validate($request, ['html_code' => new HTMLValidator]);
             $html_code = $html_file->get();
         }
-        // get content of the css file
+        else{
+            // check if we are updating
+            if ($request->input('id')){
+                // retrieve the html_code from DB
+                $html_code = $this->templates->findOrFail($request->input('id'))->template_code;
+            }
+        }
+
+        // get content of the css file, validate only when there is a file present
         if ($request->hasFile('css_code') && $css_file->isValid()) {
+            $this->validate($request, ['css_code' => new CSSValidator]);
             $css_code = $css_file->get();
             $css_code_inline = "<style scoped>$css_code</style>";
             $html_code = substr_replace($html_code , $css_code_inline, strpos($html_code, '</head>'), 0);
@@ -215,15 +221,22 @@ class TemplateController extends Controller
             }
             
         }
+
+        /**
+         * Check for any new files, then use them, if none, then just use what was in the database and skip other updates. 
+         * If there is an ID then it is an update, if none, then it is create
+         */
         // encode the template
         $html_code = htmlentities($html_code, ENT_QUOTES, 'UTF-8');
+        /////dd($html_code);
+        
         
         $template_arr = [
             'name' => $request->input('name'),
             'description' => $request->input('description'),
-            'file_path' => '',
             'template_code' => $html_code, 
-            'department_id' => $request->input('department_id'),           
+            'department_id' => $request->input('department_id'),  
+            'method' => $request->input('method'),         
         ];
 
         //echo html_entity_decode($template['template_code'], ENT_QUOTES, 'UTF-8');
@@ -235,6 +248,8 @@ class TemplateController extends Controller
             $template = tap($template)->update($template_arr);
         }
         else {
+            // we do not have value for the file paths first, just include an empty string
+            $template_arr['file_path'] = '';
             $template = Template::create($template_arr);
             $upsertSuccess = ($template->id) ? true : false;
         }
@@ -247,16 +262,32 @@ class TemplateController extends Controller
          */
 
         // upload the html file
+        // can make this inline with code on top?
         if ($request->hasFile('html_code') && $html_file->isValid()) {
             $html_filename = $html_file->getClientOriginalName();
             $html_path = $html_file->storeAs('templates' . '/' . $template->id , $html_filename);
             $file_path_data['html_code'] = $html_filename;
         }
+        else{
+            // check if we are updating
+            if ($request->input('id')){
+                // retrieve the html_code from DB
+                $file_path_data['html_code'] = $this->templates->findOrFail($request->input('id'))->file_path['html_code'];
+            }
+        }
+
         // upload the css file
         if ($request->hasFile('css_code') && $css_file->isValid()) {
             $css_filename = $css_file->getClientOriginalName();
             $css_path = $css_file->storeAs('templates' . '/' . $template->id , $css_filename);
             $file_path_data['css_code'] = $css_filename;
+        }
+        else{
+            // check if we are updating
+            if ($request->input('id')){
+                // retrieve the html_code from DB
+                $file_path_data['css_code'] = $this->templates->findOrFail($request->input('id'))->file_path['css_code'];
+            }
         }
 
         // Upload all images
@@ -330,7 +361,8 @@ class TemplateController extends Controller
              'description' => $request->input('description'),
              'file_path' => '',
              'template_code' => $html_code, 
-             'department_id' => $request->input('department_id'),           
+             'department_id' => $request->input('department_id'),
+             'method' => $request->input('method'),            
          ];
  
          //echo html_entity_decode($template['template_code'], ENT_QUOTES, 'UTF-8');

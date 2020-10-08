@@ -32,7 +32,7 @@
                 <!-- the toolbar -->
                 </template>
                 <template v-slot:item.screenshot="{ item }">
-                   <v-img :src="`/web-admin/templates/screenshot/${item.id}`" @error="imageUrl='alt-image.jpg'" max-height="133px" max-width="100px" @click.stop="imageDialogUrl(item)"></v-img>
+                   <v-img :src="`/web-admin/templates/screenshot/${item.id}?rnd=${cacheKey}`" @error="imageUrl='alt-image.jpg'" max-height="133px" max-width="100px" @click.stop="imageDialogUrl(item)" ></v-img>
                 </template>
                 <template v-slot:item.actions="{ item }">
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
@@ -81,6 +81,7 @@
                 timeout: 5000,
                 error: false,
                 theImageSrc: '',
+                cacheKey: +new Date(),
                 rules: {
                     required: (v) => !!v || 'Required.',
                     /////min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',

@@ -19,7 +19,7 @@
                                             hint="Uploading a new file will replace the existing template code. Only accept HTML file. File size should not be greater than 2MB"
                                             >
                                         </v-file-input>
-                                        <v-chip class="ma-2" v-if="editedItem.id">
+                                        <v-chip class="ma-2 white--text" v-if="editedItem.id" color="blue darken-1" >
                                             <v-icon left>mdi-file</v-icon> {{editedItem.file_path.html_code}}
                                         </v-chip>
                                     </v-col>
@@ -37,7 +37,7 @@
                                             prepend-icon="mdi-language-css3" label="CSS File" persistentHint chips
                                             hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB">
                                         </v-file-input>
-                                        <v-chip class="ma-2" v-if="editedItem.id">
+                                        <v-chip class="ma-2 white--text" v-if="editedItem.id" color="blue darken-1">
                                             <v-icon left>mdi-file</v-icon> {{editedItem.file_path.css_code}}
                                         </v-chip>
                                     </v-col>
@@ -50,7 +50,7 @@
                                             multiple
                                             >
                                         </v-file-input>
-                                        <v-chip class="ma-2" v-for="image in editedItem.file_path.images" :key="editedItem.id" v-if="editedItem.id">
+                                        <v-chip class="ma-2 white--text" v-for="image in editedItem.file_path.images" :key="editedItem.id" v-if="editedItem.id" color="blue darken-1">
                                             <v-icon left>mdi-file</v-icon> {{image}}
                                         </v-chip> 
                                     </v-col>
@@ -94,6 +94,7 @@
             </v-card-actions>
 
             <v-snackbar v-model="snackbar" :timeout="timeout">
+                <v-progress-linear indeterminate color="green" :active="loader" ></v-progress-linear>
                 <v-list-item v-for="(feedback, index) in feedbacks" :key="index">
                     <v-list-item-icon v-if="error">
                         <v-icon color="red darken-2">mdi-exclamation-thick</v-icon>
@@ -129,6 +130,7 @@
                 rows: [],
                 editedIndex: -1,
                 snackbar: false,
+                loader: false,
                 timeout: 5000,
                 error: false,
                 departments: [],
@@ -199,7 +201,6 @@
             editItem (item) {
                 this.editedIndex = this.rows.indexOf(item)
                 this.editedItem = Object.assign({}, item)
-                this.dialog = true
             },
 
             deleteItem (item) {
@@ -235,29 +236,51 @@
                 var editedItem = this.editedItem
                 var editedIndex = this.editedIndex
 
+                // method
+                var method = 'upload'
+
                 // form data
                 let formData = new FormData()
                 formData.append('id', this.editedItem.id)
-                formData.append('html_code', this.editedItem.html_code)
-                formData.append('css_code', this.editedItem.css_code)
                 formData.append('name', this.editedItem.name)
                 formData.append('description', this.editedItem.description)
                 formData.append('department_id', this.editedItem.department_id)
-                formData.append('method', 'upload')
-                
+                formData.append('method', method)                
+
+                console.log(this.editedItem.html_code)
+
+                if (typeof this.editedItem.html_code !== 'undefined'){
+                    formData.append('html_code', this.editedItem.html_code)
+                }
+
+                if (typeof this.editedItem.css_code !== 'undefined'){
+                    formData.append('css_code', this.editedItem.css_code)
+                }
+
                 // add multiple images
-                for (let i = 0 ; i < Object.keys(this.editedItem.images).length; i++){
-                    formData.append("images[]", this.editedItem.images[i])
+                if (typeof this.editedItem.images !== 'undefined'){
+                    for (let i = 0 ; i < Object.keys(this.editedItem.images).length; i++){
+                        formData.append("images[]", this.editedItem.images[i])
+                    }
+                }
+                else { 
+                    formData.append("images[]", null)
                 }
                 
+                
                 let formHeader = { headers: { 'Content-Type': 'multipart/form-data' } }
+
+                this.loader = true
+                this.snackbar = true
+                this.feedbacks[0] = 'Generating template, please wait.'
 
                 axios.post('/api/templates/upsert', formData, formHeader)
                 .then(response => {
                     if (response.data.success) {
                         this.feedbacks = []
                         this.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.'
-                        this.snackbar = true
+                        ///////this.snackbar = true
+                        this.loader = true
                         this.error = false
                         /*
                         if ( editedIndex > -1 )
@@ -325,6 +348,7 @@
             this.getDepartments()
             //this.initialize()
             //this.editedItem = this.$route.params
+            console.log(this.$route.params)
             if (this.$route.params.id)
                 this.setEditItems(this.$route.params)
         },

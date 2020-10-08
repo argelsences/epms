@@ -10,7 +10,7 @@
                             <v-col cols="12" sm="12" md="6">
                             </v-col>
                             <v-col cols="12" sm="12" md="6">
-                                <v-switch v-model="switchFile" label="Update files, switching on requires to re-upload all files"></v-switch>
+                                <v-switch v-model="switchFile" label="Switch on to update template files"></v-switch>
                             </v-col>
                     </v-row>
                     <v-form v-model="isValid" ref="form">
@@ -71,7 +71,7 @@
                                             :required="switchFile"
                                             >
                                         </v-file-input>
-                                        <v-chip class="ma-2 white--text" v-for="image in editedItem.file_path.images" :key="editedItem.id" v-if="editedItem.id" color="blue darken-1">
+                                        <v-chip class="ma-2 white--text" v-for="image in editedItem.file_path.images" :key="image" v-if="editedItem.id" color="blue darken-1">
                                             <v-icon left>mdi-file</v-icon> {{image}}
                                         </v-chip>
                                     </v-col>

@@ -176,6 +176,36 @@ class TemplateController extends Controller
      * 1. Force edit to re upload all files
      * 2. Allow to download the template files
      * 3. Put advise on how to edit the template
+     * 
+     * Logic for upload edit
+     * 
+     */
+    /**
+    * 1. When html file is present
+    *    -- read the existing css file
+    *    -- read the existing images
+    *    -- build the html again    
+    *    2. When css file is present
+    *    -- read the existing html file
+    *    -- insert the css file to the existing html file
+    *    -- read the existing images
+    *    -- build the html again
+    *
+    *    3. When image is present
+    *    -- read the existing html file
+    *    -- read the existing css file
+    *    -- insert the existing css file to html
+    *    -- build the html again
+    *
+    *    4. When html and css is present
+    *    -- read the existing image
+    *    -- read the new html code
+    *    -- read the new css code
+    *    -- rebuild the html 
+    *
+    *    5. when html, css and images are present
+    *    -- rebuild all
+    * BUG: when a css is changed and image file input is empty, the screenshot does not include the image
      */
     private function create_by_upload(Request $request){
 
@@ -187,6 +217,7 @@ class TemplateController extends Controller
         $css_file = $request->file('css_code');
 
         // get content of the html file, validate only when there is a file present
+        // HTML
         if ($request->hasFile('html_code') && $html_file->isValid()) {
             $this->validate($request, ['html_code' => new HTMLValidator]);
             $html_code = $html_file->get();
@@ -196,17 +227,28 @@ class TemplateController extends Controller
             if ($request->input('id')){
                 // retrieve the html_code from DB
                 /////html_entity_decode($template->template_code, ENT_QUOTES, 'UTF-8');
-                $html_code = html_entity_decode($this->templates->findOrFail($request->input('id'))->template_code, ENT_QUOTES, 'UTF-8');
+                //$html_code = html_entity_decode($this->templates->findOrFail($request->input('id'))->template_code, ENT_QUOTES, 'UTF-8');
+                //$html_code = File::get();
+                $templateObj = $this->templates->findOrFail($request->input('id'));
+                $html_code = Storage::disk('local')->get('templates' . '/' . $templateObj->id . '/' . $templateObj->file_path['html_code'] );
             }
         }
         
-        
+        // CSS
         // get content of the css file, validate only when there is a file present
         if ($request->hasFile('css_code') && $css_file->isValid()) {
             $this->validate($request, ['css_code' => new CSSValidator]);
             $css_code = $css_file->get();
             $css_code_inline = "<style scoped>$css_code</style>";
             $html_code = substr_replace($html_code , $css_code_inline, strpos($html_code, '</head>'), 0);
+        }
+        else{
+            if ($request->input('id')){
+                $templateObj = $this->templates->findOrFail($request->input('id'));
+                $css_code = Storage::disk('local')->get('templates' . '/' . $templateObj->id . '/' . $templateObj->file_path['css_code'] );
+                $css_code_inline = "<style scoped>$css_code</style>";
+                $html_code = substr_replace($html_code , $css_code_inline, strpos($html_code, '</head>'), 0);
+            }
         }
         
         // process images
@@ -226,8 +268,33 @@ class TemplateController extends Controller
                     $html_code = str_replace($image_filename, $the_image, $html_code);
                 }
             }
-            
         }
+        else {
+            if ($request->input('id')){
+                $templateObj = $this->templates->findOrFail($request->input('id'));
+                $images = $templateObj->file_path['images'];
+                
+                foreach ($images as $image){
+                    // get image filename, this will be used later to match it in the html_code
+                    /////$image_filename  = $image->getClientOriginalName();
+                    // get the image and convert them to base64 equivalent
+                    /////$image_content = $image->get();
+                    $image_path = Storage::disk('local')->path('templates' . '/' . $templateObj->id . '/' . $image);
+                    $image_extension = pathinfo($image_path, PATHINFO_EXTENSION);
+                    $image_content = Storage::disk('local')->get('templates' . '/' . $templateObj->id . '/' . $image );
+                    $image_base64 = base64_encode($image_content);
+                    /////$image_extension = $image->extension();
+                    $the_image = "data:image/$image_extension;base64,$image_base64";
+                    if ( strpos($html_code, $image) ){
+                        //$html_code = substr_replace($html_code , $the_image, strpos($html_code, $image_filename), 0);
+                        $html_code = str_replace($image, $the_image, $html_code);
+                    }
+                    ///////dd($html_code);
+                }
+            }
+        }
+
+        /////dd($html_code);
 
         /**
          * Check for any new files, then use them, if none, then just use what was in the database and skip other updates. 
@@ -235,7 +302,7 @@ class TemplateController extends Controller
          */
         // encode the template
         $html_code = htmlentities($html_code, ENT_QUOTES, 'UTF-8');
-        /////dd($html_code);
+        //dd($html_code);
         
         
         $template_arr = [
@@ -305,6 +372,22 @@ class TemplateController extends Controller
                 $file_path_data['images'][] = $image_filename;
             }
         }
+        else{
+            // check if we are updating
+            if ($request->input('id')){
+                // retrieve the html_code from DB
+                //$file_path_data['css_code'] = $this->templates->findOrFail($request->input('id'))->file_path['css_code'];
+                $templateObj = $this->templates->findOrFail($request->input('id'));
+                $images = $templateObj->file_path['images'];
+                /*$html_code = Storage::disk('local')->get('templates' . '/' . $templateObj->id . '/' . $templateObj->file_path['html_code'] );
+                foreach ($images as $image) {
+                    $image_filename  = $image->getClientOriginalName();
+                    $image_path = $image->storeAs('templates' . '/' . $template->id, $image_filename);
+                    $file_path_data['images'][] = $image_filename;
+                }*/
+                $file_path_data['images'] = $images;
+            }
+        }
 
         // store the path, though virtually this can be assumed as templates/{id}
         $file_path_data['path'] = Storage::disk('local')->path('templates/'.$template->id);
@@ -312,7 +395,7 @@ class TemplateController extends Controller
 
         // serialize the file_path_data
         $serialized_data = serialize($file_path_data);
-
+        /////dd($template);
         // update the file path
         $template->file_path = $serialized_data;
         $template->update();

@@ -10,7 +10,7 @@
                             <v-col cols="12" sm="12" md="6">
                             </v-col>
                             <v-col cols="12" sm="12" md="6">
-                                <v-switch v-model="switchFile" label="Update files"></v-switch>
+                                <v-switch v-model="switchFile" label="Update files, switching on requires to re-upload all files"></v-switch>
                             </v-col>
                     </v-row>
                     <v-form v-model="isValid" ref="form">
@@ -35,10 +35,11 @@
                             <v-col cols="12" sm="12" md="6">
                                 <v-row>
                                     <v-col cols="12" sm="12" md="12">
-                                        <v-file-input v-model="editedItem.html_code" class="mb-8" accept=".html" :rule="[rules.limitFileSize,rules.required]" clearable placeholder="Select by clicking or dropping a file here" 
+                                        <v-file-input v-model="editedItem.html_code" class="mb-8" accept=".html" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
                                             prepend-icon="mdi-language-html5" label="HTML File" persistentHint chips
                                             hint="Uploading a new file will replace the existing template code. Only accept HTML file. File size should not be greater than 2MB"
                                             :disabled="!switchFile"
+                                            :required="switchFile"
                                             >
                                         </v-file-input>
                                         <v-chip class="ma-2 white--text" v-if="editedItem.id" color="blue darken-1" >
@@ -52,6 +53,7 @@
                                             prepend-icon="mdi-language-css3" label="CSS File" persistentHint chips
                                             hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB"
                                             :disabled="!switchFile"
+                                            :required="switchFile"
                                             >
                                         </v-file-input>
                                         <v-chip class="ma-2 white--text" v-if="editedItem.id" color="blue darken-1">
@@ -66,6 +68,7 @@
                                             hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB"
                                             multiple
                                             :disabled="!switchFile"
+                                            :required="switchFile"
                                             >
                                         </v-file-input>
                                         <v-chip class="ma-2 white--text" v-for="image in editedItem.file_path.images" :key="editedItem.id" v-if="editedItem.id" color="blue darken-1">
@@ -148,7 +151,12 @@
                 switchFile: false,
                 rules: {
                     required: (v) => !!v || 'Required.',
-                    /////min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
+                    limitFileSize: (v) => !v || v.size < 1000000 || 'Logo size should be less than 2 MB!',
+                    limitFileSizeMultiple: files => !files || !files.some(file => file.size > 2e6) || 'Avatar size should be less than 2 MB!',
+                    fileRequired: (v) => [
+                        v => !!v || 'File is required',
+                        v => (v && v.length > 0) || 'File is required',
+                    ],
                 },
                 headers: [
                     {text: 'Screenshot', value: 'screenshot'},

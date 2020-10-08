@@ -171,6 +171,11 @@ class TemplateController extends Controller
      * 10. Install browsershot and puppeteer DONE
      * 11. Template and poster preview
      * 12. Poster list and media generation
+     * 
+     * TODAY
+     * 1. Force edit to re upload all files
+     * 2. Allow to download the template files
+     * 3. Put advise on how to edit the template
      */
     private function create_by_upload(Request $request){
 

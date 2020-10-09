@@ -96,7 +96,6 @@
     export default {
         mounted() {
             console.log('Component mounted')
-            console.log(this.editedItem)
         },
         data() {
             return {
@@ -313,7 +312,7 @@
             this.setHedeaderTitle()
             this.getDepartments()
             //this.initialize()
-            console.log(this.$route.params)
+            /////console.log(this.$route.params)
             if (this.$route.params.id)
                 this.setEditItems(this.$route.params)
         },

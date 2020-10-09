@@ -399,6 +399,7 @@ class TemplateController extends Controller
      * 2. The screenshot is cut on top DONE
      * 3. BUG: problem saving when no image on edit DONE
      * 4. List all images linked to the template DONE
+     * 5. BUG: create new caused blank screen
      */
 
     private function create_by_code (Request $request){

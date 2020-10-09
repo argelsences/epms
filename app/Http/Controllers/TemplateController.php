@@ -210,9 +210,19 @@ class TemplateController extends Controller
     * 1. Display department name in template list DONE
     * 2. Edit for template code DONE
     * 3. Generate screenshot based on shortcodes
+    * %title%
+    * %date%
+    * %excerpt%
+    * %synopsis%
+    * %start_date%
+    * %end_date%
+    * %speakers%
+    * %department_name%
+    * %event_date%
     * 4. Create guide on how to create template
     * 5. Frontend for each department
     * 6. System setting page
+    * 7. Create a sample templates (3)
      */
     private function create_by_upload(Request $request){
 

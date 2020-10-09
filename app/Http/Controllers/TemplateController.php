@@ -208,7 +208,7 @@ class TemplateController extends Controller
     *
     * TODAY (09/10/20)
     * 1. Display department name in template list DONE
-    * 2. Edit for template code
+    * 2. Edit for template code DONE
     * 3. Generate screenshot based on shortcodes
     * 4. Create guide on how to create template
     * 5. Frontend for each department
@@ -416,9 +416,10 @@ class TemplateController extends Controller
 
     /**
      * TODO
-     * 1. Upon saving the template, save the html code in file_path[html_code] and css code in file_path[css_code]
-     * 2. The screenshot is cut on top
-     * 3. BUG: problem saving when no image on edit
+     * 1. Upon saving the template, save the html code in file_path[html_code] and css code in file_path[css_code] DONE
+     * 2. The screenshot is cut on top DONE
+     * 3. BUG: problem saving when no image on edit DONE
+     * 4. List all images linked to the template DONE
      */
 
     private function create_by_code (Request $request){
@@ -505,7 +506,6 @@ class TemplateController extends Controller
         $template_arr = [
             'name' => $request->input('name'),
             'description' => $request->input('description'),
-            'file_path' => '',
             'template_code' => $html_code, 
             'department_id' => $request->input('department_id'),
             'method' => $request->input('method'),            
@@ -520,10 +520,13 @@ class TemplateController extends Controller
             $template = tap($template)->update($template_arr);
         }
         else {
+            // we do not have value for the file paths first, just include an empty string
+            $template_arr['file_path'] = '';
             $template = Template::create($template_arr);
             $upsertSuccess = ($template->id) ? true : false;
         }
 
+        /////dd($this->templates->findOrFail($request->input('id')));
         // Upload all images
         /*
         if ($request->hasFile('images')) {

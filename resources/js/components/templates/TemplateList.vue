@@ -11,13 +11,13 @@
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details ></v-text-field>
                         <v-spacer></v-spacer>
                         <v-btn color="#1f4068" v-on:click="redirectToChoice" class="white--text" ><i class="material-icons ">add_box</i> Template</v-btn>
-                        <v-dialog v-model="dialog" hide-overlay transition="dialog-bottom-transition" scrollable fullscreen >
+                        <v-dialog v-model="dialog" hide-overlay transition="dialog-bottom-transition" scrollable  >
                             <v-card tile>
                                 <v-card-text>
                                     <v-container fill-height>
                                         <v-row justify="center" align="center">
                                             <v-col cols="12" sm="4">
-                                                <v-img :src="theImageSrc" @error="imageUrl='alt-image.jpg'" :aspect-ratio="3/4" height="auto" ></v-img>
+                                                <v-img :src="theImageSrc" @error="imageUrl='alt-image.jpg'" height="auto" ></v-img>
                                             </v-col>
                                         </v-row>
                                     </v-container> 

@@ -26,6 +26,9 @@
                                     multiple
                                     >
                                 </v-file-input> 
+                                <v-chip class="ma-2 white--text" v-for="image in editedItem.file_path.images" :key="image" v-if="editedItem.id" color="blue darken-1">
+                                    <v-icon left>mdi-file</v-icon> {{image}}
+                                </v-chip>
                             </v-col>
                         </v-row>
                         <v-row>
@@ -67,6 +70,7 @@
             </v-card-actions>
 
             <v-snackbar v-model="snackbar" :timeout="timeout">
+                <v-progress-linear indeterminate color="green" :active="loader" ></v-progress-linear>
                 <v-list-item v-for="(feedback, index) in feedbacks" :key="index">
                     <v-list-item-icon v-if="error">
                         <v-icon color="red darken-2">mdi-exclamation-thick</v-icon>
@@ -103,6 +107,7 @@
                 rows: [],
                 editedIndex: -1,
                 snackbar: false,
+                loader: false,
                 timeout: 5000,
                 error: false,
                 departments: [],
@@ -238,12 +243,16 @@
                 
                 let formHeader = { headers: { 'Content-Type': 'multipart/form-data' } }
 
+                this.loader = true
+                this.snackbar = true
+                this.feedbacks[0] = 'Generating template, please wait.'
+
                 axios.post('/api/templates/upsert', formData, formHeader)
                 .then(response => {
                     if (response.data.success) {
                         this.feedbacks = []
                         this.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.'
-                        this.snackbar = true
+                        /////this.snackbar = true
                         this.error = false
                         /*
                         if ( editedIndex > -1 )

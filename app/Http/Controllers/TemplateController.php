@@ -219,10 +219,11 @@ class TemplateController extends Controller
     * %speakers%
     * %department_name%
     * %event_date%
-    * 4. Create guide on how to create template
-    * 5. Frontend for each department
-    * 6. System setting page
-    * 7. Create a sample templates (3)
+    * 4. Generate a config file for EPPMS only
+    * 5. Create guide on how to create template
+    * 6. Frontend for each department
+    * 7. System setting page
+    * 8. Create a sample templates (3)
      */
     private function create_by_upload(Request $request){
 

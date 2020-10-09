@@ -172,7 +172,7 @@ class TemplateController extends Controller
      * 11. Template and poster preview
      * 12. Poster list and media generation
      * 
-     * TODAY
+     * TODAY (08/10/20)
      * 1. Force edit to re upload all files
      * 2. Allow to download the template files
      * 3. Put advise on how to edit the template
@@ -205,7 +205,13 @@ class TemplateController extends Controller
     *
     *    5. when html, css and images are present
     *    -- rebuild all
-    * BUG: when a css is changed and image file input is empty, the screenshot does not include the image
+    *
+    * TODAY (09/10/20)
+    * 1. Display department name in template list DONE
+    * 2. Edit for template code
+    * 3. Generate screenshot based on shortcodes
+    * 4. Create guide on how to create template
+    * 5. Frontend for each department
      */
     private function create_by_upload(Request $request){
 
@@ -408,92 +414,175 @@ class TemplateController extends Controller
         return ['success' => $success, 'item' => $template];
     }
 
+    /**
+     * TODO
+     * 1. Upon saving the template, save the html code in file_path[html_code] and css code in file_path[css_code]
+     * 2. The screenshot is cut on top
+     * 3. BUG: problem saving when no image on edit
+     */
+
     private function create_by_code (Request $request){
-         // validate first the files
- 
-         $html_code = $css_code = "";
-         $template_arr  = $file_path_data = [];
- 
-         // assign inputs
-         $html_code = $request->input('html_code');
-         $css_code = $request->input('css_code');
- 
-         // get content of the css file
-         if ($request->input('css_code') !== '' || $request->input('css_code') !== null ) {
-             $css_code_inline = "<style scoped>$css_code</style>";
-             $html_code = substr_replace($html_code , $css_code_inline, strpos($html_code, '</head>'), 0);
-         }
- 
-         // process images
-         if ($request->hasFile('images')) {
-             $images = $request->file('images');
-             
-             foreach ($images as $image){
-                 // get image filename, this will be used later to match it in the html_code
-                 $image_filename  = $image->getClientOriginalName();
-                 // get the image and convert them to base64 equivalent
-                 $image_content = $image->get();
-                 $image_base64 = base64_encode($image_content);
-                 $image_extension = $image->extension();
-                 $the_image = "data:image/$image_extension;base64,$image_base64";
-                 if ( strpos($html_code, $image_filename) ){
-                     //$html_code = substr_replace($html_code , $the_image, strpos($html_code, $image_filename), 0);
-                     $html_code = str_replace($image_filename, $the_image, $html_code);
-                 }
-             }
-             
-         }
-         // encode the template
-         $html_code = htmlentities($html_code, ENT_QUOTES, 'UTF-8');
-         
-         $template_arr = [
-             'name' => $request->input('name'),
-             'description' => $request->input('description'),
-             'file_path' => '',
-             'template_code' => $html_code, 
-             'department_id' => $request->input('department_id'),
-             'method' => $request->input('method'),            
-         ];
- 
-         //echo html_entity_decode($template['template_code'], ENT_QUOTES, 'UTF-8');
- 
-         if ($request->input('id')){
-             // retrieve the user object
-             $template = $this->templates->findOrFail($request->input('id'));
-             // update the user object with updated details
-             $template = tap($template)->update($template_arr);
-         }
-         else {
-             $template = Template::create($template_arr);
-             $upsertSuccess = ($template->id) ? true : false;
-         }
- 
-         // Upload all images
-         if ($request->hasFile('images')) {
-             foreach ($images as $image) {
-                 $image_filename  = $image->getClientOriginalName();
-                 $image_path = $image->storeAs('templates' . '/' . $template->id, $image_filename);
-                 $file_path_data['images'][] = $image_filename;
-             }
-         }
- 
-         // store the path, though virtually this can be assumed as templates/{id}
-         $file_path_data['path'] = Storage::disk('local')->path('templates/'.$template->id);
-         /////$file_path_data['path'] = ('storage/app/templates/'.$template->id);
- 
-         // serialize the file_path_data
-         $serialized_data = serialize($file_path_data);
- 
-         // update the file path
-         $template->file_path = $serialized_data;
-         $template->update();
- 
-         // lets generate a thumbnail
-         $the_thumbnail = $this->thumbnail($template);
- 
-         // return the same data compared to list to ensure using the same 
-         $success = ($template) ? true : false;
-         return ['success' => $success, 'item' => $template];
+        // validate first the files
+        $html_code = $css_code = "";
+        $template_arr  = $file_path_data = [];
+
+        // assign inputs
+        $html_code = $request->input('html_code');
+        $css_code = $request->input('css_code');
+
+        // get content of the css file
+        if ($request->input('css_code') !== '' || $request->input('css_code') !== null ) {
+            $css_code_inline = "<style scoped>$css_code</style>";
+            $html_code = substr_replace($html_code , $css_code_inline, strpos($html_code, '</head>'), 0);
+        }
+
+        // process images
+        /*
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+            
+            foreach ($images as $image){
+                // get image filename, this will be used later to match it in the html_code
+                $image_filename  = $image->getClientOriginalName();
+                // get the image and convert them to base64 equivalent
+                $image_content = $image->get();
+                $image_base64 = base64_encode($image_content);
+                $image_extension = $image->extension();
+                $the_image = "data:image/$image_extension;base64,$image_base64";
+                if ( strpos($html_code, $image_filename) ){
+                    //$html_code = substr_replace($html_code , $the_image, strpos($html_code, $image_filename), 0);
+                    $html_code = str_replace($image_filename, $the_image, $html_code);
+                }
+            }
+            
+        }
+        */
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+            
+            foreach ($images as $image){
+                // get image filename, this will be used later to match it in the html_code
+                $image_filename  = $image->getClientOriginalName();
+                // get the image and convert them to base64 equivalent
+                $image_content = $image->get();
+                $image_base64 = base64_encode($image_content);
+                $image_extension = $image->extension();
+                $the_image = "data:image/$image_extension;base64,$image_base64";
+                if ( strpos($html_code, $image_filename) ){
+                    //$html_code = substr_replace($html_code , $the_image, strpos($html_code, $image_filename), 0);
+                    $html_code = str_replace($image_filename, $the_image, $html_code);
+                }
+            }
+        }
+        else {
+            if ($request->input('id')){
+                $templateObj = $this->templates->findOrFail($request->input('id'));
+                $images = $templateObj->file_path['images'];
+                
+                foreach ($images as $image){
+                    // get image filename, this will be used later to match it in the html_code
+                    /////$image_filename  = $image->getClientOriginalName();
+                    // get the image and convert them to base64 equivalent
+                    /////$image_content = $image->get();
+                    $image_path = Storage::disk('local')->path('templates' . '/' . $templateObj->id . '/' . $image);
+                    $image_extension = pathinfo($image_path, PATHINFO_EXTENSION);
+                    $image_content = Storage::disk('local')->get('templates' . '/' . $templateObj->id . '/' . $image );
+                    $image_base64 = base64_encode($image_content);
+                    /////$image_extension = $image->extension();
+                    $the_image = "data:image/$image_extension;base64,$image_base64";
+                    if ( strpos($html_code, $image) ){
+                        //$html_code = substr_replace($html_code , $the_image, strpos($html_code, $image_filename), 0);
+                        $html_code = str_replace($image, $the_image, $html_code);
+                    }
+                    ///////dd($html_code);
+                }
+            }
+        }
+
+        // encode the template
+        $html_code = htmlentities($html_code, ENT_QUOTES, 'UTF-8');
+        
+        $template_arr = [
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'file_path' => '',
+            'template_code' => $html_code, 
+            'department_id' => $request->input('department_id'),
+            'method' => $request->input('method'),            
+        ];
+
+        //echo html_entity_decode($template['template_code'], ENT_QUOTES, 'UTF-8');
+
+        if ($request->input('id')){
+            // retrieve the user object
+            $template = $this->templates->findOrFail($request->input('id'));
+            // update the user object with updated details
+            $template = tap($template)->update($template_arr);
+        }
+        else {
+            $template = Template::create($template_arr);
+            $upsertSuccess = ($template->id) ? true : false;
+        }
+
+        // Upload all images
+        /*
+        if ($request->hasFile('images')) {
+            foreach ($images as $image) {
+                $image_filename  = $image->getClientOriginalName();
+                $image_path = $image->storeAs('templates' . '/' . $template->id, $image_filename);
+                $file_path_data['images'][] = $image_filename;
+            }
+        }*/
+        if ($request->hasFile('images')) {
+            foreach ($images as $image) {
+                $image_filename  = $image->getClientOriginalName();
+                $image_path = $image->storeAs('templates' . '/' . $template->id, $image_filename);
+                $file_path_data['images'][] = $image_filename;
+            }
+        }
+        else{
+            // check if we are updating
+            if ($request->input('id')){
+                // retrieve the html_code from DB
+                //$file_path_data['css_code'] = $this->templates->findOrFail($request->input('id'))->file_path['css_code'];
+                $templateObj = $this->templates->findOrFail($request->input('id'));
+                $images = $templateObj->file_path['images'];
+                /*$html_code = Storage::disk('local')->get('templates' . '/' . $templateObj->id . '/' . $templateObj->file_path['html_code'] );
+                foreach ($images as $image) {
+                    $image_filename  = $image->getClientOriginalName();
+                    $image_path = $image->storeAs('templates' . '/' . $template->id, $image_filename);
+                    $file_path_data['images'][] = $image_filename;
+                }*/
+                $file_path_data['images'] = $images;
+            }
+        }
+
+        // store the path, though virtually this can be assumed as templates/{id}
+        $file_path_data['path'] = Storage::disk('local')->path('templates/'.$template->id);
+        /////$file_path_data['path'] = ('storage/app/templates/'.$template->id);
+
+        // html code
+        $file_path_data['html_code'] = htmlentities($request->input('html_code'), ENT_QUOTES, 'UTF-8');
+
+        // css code
+        $file_path_data['css_code'] = htmlentities($request->input('css_code'), ENT_QUOTES, 'UTF-8');
+
+        // serialize the file_path_data
+        $serialized_data = serialize($file_path_data);
+
+        // update the file path
+        $template->file_path = $serialized_data;
+        $template->update();
+
+        /////dd(html_entity_decode($template->file_path['html_code'], ENT_QUOTES, 'UTF-8'));
+        
+
+        // lets generate a thumbnail
+        $the_thumbnail = $this->thumbnail($template);
+
+        // return the same data compared to list to ensure using the same 
+        $success = ($template) ? true : false;
+        return ['success' => $success, 'item' => $template];
     }
 
     private function thumbnail(Template $template){

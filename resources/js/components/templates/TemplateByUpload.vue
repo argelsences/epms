@@ -267,8 +267,6 @@
                 formData.append('department_id', this.editedItem.department_id)
                 formData.append('method', method)                
 
-                console.log(this.editedItem.html_code)
-
                 if (typeof this.editedItem.html_code !== 'undefined'){
                     formData.append('html_code', this.editedItem.html_code)
                 }

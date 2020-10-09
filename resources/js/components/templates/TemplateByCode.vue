@@ -92,6 +92,7 @@
     export default {
         mounted() {
             console.log('Component mounted')
+            console.log(this.editedItem)
         },
         data() {
             return {
@@ -119,7 +120,7 @@
                     id: 0,
                     name: '',
                     description: '',
-                    file_path: '',
+                    file_path: null,
                     template_code: '',
                     department_id: '',
                     html_code: null,
@@ -132,7 +133,7 @@
                     id: 0,
                     name: '',
                     description: '',
-                    file_path: '',
+                    file_path: null,
                     template_code: '',
                     department_id: '',
                     html_code: null,
@@ -219,8 +220,20 @@
                 formData.append('method', 'code')
                 
                 // add multiple images
+                /*
                 for (let i = 0 ; i < Object.keys(this.editedItem.images).length; i++){
                     formData.append("images[]", this.editedItem.images[i])
+                }
+                */
+                
+                // add multiple images
+                if (typeof this.editedItem.images !== 'undefined'){
+                    for (let i = 0 ; i < Object.keys(this.editedItem.images).length; i++){
+                        formData.append("images[]", this.editedItem.images[i])
+                    }
+                }
+                else { 
+                    formData.append("images[]", null)
                 }
                 
                 let formHeader = { headers: { 'Content-Type': 'multipart/form-data' } }
@@ -260,6 +273,28 @@
             },
             setEditItems(item){
                 this.editedItem = item
+                this.editedItem.html_code = this.htmlEntityDecode(item.file_path.html_code)
+                this.editedItem.css_code = item.file_path.css_code
+                /*
+                this.editedItem.name = item.name
+                this.editedItem.description = item.description
+                this.editedItem.department_id = item.department_id
+                this.editedItem.images = item.file_path.images
+                */
+            },
+            htmlEntityDecode(str) {
+                var element = document.createElement('div');
+
+                if(str && typeof str === 'string') {
+                    // strip script/html tags
+                    str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+                    str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+                    element.innerHTML = str;
+                    str = element.textContent;
+                    element.textContent = '';
+                }
+
+                return str;
             },
         },
         updated: function(){
@@ -269,6 +304,7 @@
             this.setHedeaderTitle()
             this.getDepartments()
             //this.initialize()
+            console.log(this.$route.params)
             if (this.$route.params.id)
                 this.setEditItems(this.$route.params)
         },

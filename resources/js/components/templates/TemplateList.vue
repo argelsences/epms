@@ -34,6 +34,9 @@
                 <template v-slot:item.screenshot="{ item }">
                    <v-img :src="`/web-admin/templates/screenshot/${item.id}?rnd=${cacheKey}`" @error="imageUrl='alt-image.jpg'" max-height="133px" max-width="100px" @click.stop="imageDialogUrl(item)" ></v-img>
                 </template>
+                <template v-slot:item.department="{ item }">
+                   <span>{{ getDepartment(item.department_id) }}</span>
+                </template>
                 <template v-slot:item.actions="{ item }">
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                     <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
@@ -82,6 +85,7 @@
                 error: false,
                 theImageSrc: '',
                 cacheKey: +new Date(),
+                departments: [],
                 rules: {
                     required: (v) => !!v || 'Required.',
                     /////min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
@@ -89,7 +93,7 @@
                 headers: [
                     {text: 'Screenshot', value: 'screenshot'},
                     {text: 'Name', value: 'name'},
-                    {text: 'Department', value: 'department_id'},
+                    {text: 'Department', value: 'department'},
                     {text: 'Actions', value: 'actions', sortable: false },
                 ],
                 editedItem: {
@@ -120,7 +124,7 @@
         computed: {
             formTitle () {
                 return this.editedIndex === -1 ? 'New Template' : 'Edit Template'
-            }, 
+            },
         },
         watch: {
             dialog (val) {
@@ -136,6 +140,12 @@
                     this.rows = response.data;
                 });
             },
+            getDepartments: function() {
+                axios.get('/api/departments')
+                .then( response => {
+                    this.departments = response.data;
+                });
+            },
             getCountries() {
                 axios.get('/api/countries')
                 .then( response => {
@@ -145,8 +155,14 @@
             editItem (item) {
                 this.editedIndex = this.rows.indexOf(item)
                 this.editedItem = Object.assign({}, item)
-                this.dialog = true
-                this.$router.push({name: 'add-by-upload', params: this.editedItem})
+                /////this.dialog = true
+                console.log(this.editedItem.method)
+                if ( this.editedItem.method == 'upload' )
+                    this.$router.push({name: 'add-by-upload', params: this.editedItem})
+                else if( this.editedItem.method == 'code' )
+                    this.$router.push({name: 'add-by-code', params: this.editedItem})
+                else if( this.editedItem.method == 'canvas' )
+                    this.$router.push({name: 'add-by-canvas', params: this.editedItem})
             },
 
             deleteItem (item) {
@@ -223,6 +239,9 @@
                 this.dialog = true
                 this.theImageSrc = "/web-admin/templates/screenshot/" + item.id
             },
+            getDepartment(id) {
+                return this.departments.find(department => department.id == id).name
+            }
         },
         updated: function(){
             console.log(this.templateMethod)
@@ -231,6 +250,7 @@
             /////this.setCanvasEditor()
             this.setHedeaderTitle()
             this.initialize()
+            this.getDepartments()
             /////window.addEventListener("resize", this.canvasResize);
         },
     }

@@ -305,11 +305,11 @@
                 });*/
                 // use ES6, filter can only access local variables
                 // get department name based on department_id
-                var filterDepartment = this.departments.filter( department => department.id == editedItem.department_id );
-                this.editedItem.department_name = filterDepartment[0].name;
+                var filterDepartment = this.departments.filter( department => department.id == editedItem.department_id )
+                this.editedItem.department_name = filterDepartment[0].name
                 // get role name based on role_id
-                var filterRole = this.roles.filter( role => role.id == editedItem.role_id );
-                this.editedItem.role_name = filterRole[0].name;
+                var filterRole = this.roles.filter( role => role.id == editedItem.role_id )
+                this.editedItem.role_name = filterRole[0].name
 
                 axios.post('/api/users/upsert', {
                     payload: editedItem,

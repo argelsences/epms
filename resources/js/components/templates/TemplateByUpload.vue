@@ -326,34 +326,6 @@
             setHedeaderTitle(){
                 document.title = 'Templates - Event Publication and Poster Management System (EPPMS)';
             },
-            uploadLogo(){
-                if ( this.logo ){
-                    let formData = new FormData()
-                    formData.append('logo', this.logo)
-                    
-                    if ( this.editedItem.id )
-                        formData.append('id', this.editedItem.id)
-
-                    axios.post('/api/departments/uploadLogo', formData, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                        }
-                    })
-                    .then(response => {
-                        if (response.data.success) {
-                            // set the path on the global editedItem
-                            this.editedItem.logo_path = response.data.file_path 
-                        }
-                    })
-                    .catch( error => {
-                        let messages = Object.values(error.response.data.errors); 
-                        this.feedbacks = [].concat.apply([], messages)
-                        this.snackbar = true
-                        this.error = true
-                        this.logo = null
-                    })
-                }
-            },
             setEditItems(item){
                 this.editedItem = item
             },

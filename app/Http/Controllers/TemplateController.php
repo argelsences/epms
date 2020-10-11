@@ -173,7 +173,7 @@ class TemplateController extends Controller
      * 12. Poster list and media generation
      * 
      * TODAY (08/10/20)
-     * 1. Force edit to re upload all files
+     * 1. Force edit to re upload all files DONE
      * 2. Allow to download the template files
      * 3. Put advise on how to edit the template
      * 

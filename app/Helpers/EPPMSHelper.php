@@ -122,7 +122,7 @@ class EPPMSHelper {
         return $shortcodes = [
             'title', 'date', 'excerpt', 'synopsis', 'start_date',
             'end_date', 'speakers', 'speaker_name', 'speaker_profile',
-            'venue_name', 'venue_address', 'department_name'
+            'venue_name', 'venue_address', 'department_name','event_date'
         ];
     }
 }

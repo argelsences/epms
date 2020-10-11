@@ -26,17 +26,17 @@
                                     multiple
                                     >
                                 </v-file-input> 
-                                <v-chip class="ma-2 white--text" v-for="image in editedItem.file_path.images" :key="image" v-if="editedItem.id" color="blue darken-1">
+                                <v-chip class="ma-2 white--text" v-for="image in editedItem.file_path.images" :key="image" v-if="editedItem.file_path.images" color="blue darken-1">
                                     <v-icon left>mdi-file</v-icon> {{image}}
                                 </v-chip>
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="12" sm="12" md="6">
-                                <v-textarea counter label="HTML Codes" v-model="editedItem.html_code" prepend-icon="mdi-language-html5" rows="10" persistent-hint hint="Upload a valid HTML code, no Javascript included"></v-textarea>
+                                <v-textarea counter label="HTML Codes" v-model="editedItem.html_code" prepend-icon="mdi-language-html5" rows="10" persistent-hint hint="Input a valid HTML code, no Javascript included"></v-textarea>
                             </v-col>
                             <v-col cols="12" sm="12" md="6">
-                                <v-textarea counter label="CSS Codes" v-model="editedItem.css_code" prepend-icon="mdi-language-css3" rows="10" persistent-hint hint="Upload a valid CSS code"></v-textarea>
+                                <v-textarea counter label="CSS Codes" v-model="editedItem.css_code" prepend-icon="mdi-language-css3" rows="10" persistent-hint hint="Input a valid CSS code"></v-textarea>
                             </v-col>
                         </v-row>
 
@@ -124,7 +124,7 @@
                     id: 0,
                     name: '',
                     description: '',
-                    file_path: null,
+                    file_path: '',
                     template_code: '',
                     department_id: '',
                     html_code: null,
@@ -137,7 +137,7 @@
                     id: 0,
                     name: '',
                     description: '',
-                    file_path: null,
+                    file_path: '',
                     template_code: '',
                     department_id: '',
                     html_code: null,
@@ -312,7 +312,6 @@
             this.setHedeaderTitle()
             this.getDepartments()
             //this.initialize()
-            /////console.log(this.$route.params)
             if (this.$route.params.id)
                 this.setEditItems(this.$route.params)
         },

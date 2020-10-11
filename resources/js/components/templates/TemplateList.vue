@@ -11,7 +11,7 @@
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details ></v-text-field>
                         <v-spacer></v-spacer>
                         <v-btn color="#1f4068" v-on:click="redirectToChoice" class="white--text" ><i class="material-icons ">add_box</i> Template</v-btn>
-                        <v-dialog v-model="dialog" hide-overlay transition="dialog-bottom-transition" scrollable fullscreen >
+                        <v-dialog v-model="dialog" hide-overlay  scrollable >
                             <v-card tile>
                                 <v-card-text>
                                     <v-container fill-height>
@@ -24,7 +24,9 @@
                                 </v-card-text>
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+                                    <v-btn absolute dark fab top right right color="pink" class="mt-10" @click="close">
+                                        <v-icon x-large>mdi-close</v-icon>
+                                    </v-btn>
                                 </v-card-actions>
                             </v-card>
                         </v-dialog>

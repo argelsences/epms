@@ -42,7 +42,7 @@
                                             :required="switchFile"
                                             >
                                         </v-file-input>
-                                        <v-chip class="ma-2 white--text" v-if="editedItem.id" color="blue darken-1" >
+                                        <v-chip class="ma-2 white--text" v-if="editedItem.file_path.html_code" color="blue darken-1" >
                                             <v-icon left>mdi-file</v-icon> {{editedItem.file_path.html_code}}
                                         </v-chip>
                                     </v-col>
@@ -56,7 +56,7 @@
                                             :required="switchFile"
                                             >
                                         </v-file-input>
-                                        <v-chip class="ma-2 white--text" v-if="editedItem.id" color="blue darken-1">
+                                        <v-chip class="ma-2 white--text" v-if="editedItem.file_path.css_code" color="blue darken-1">
                                             <v-icon left>mdi-file</v-icon> {{editedItem.file_path.css_code}}
                                         </v-chip>
                                     </v-col>
@@ -71,7 +71,7 @@
                                             :required="switchFile"
                                             >
                                         </v-file-input>
-                                        <v-chip class="ma-2 white--text" v-for="image in editedItem.file_path.images" :key="image" v-if="editedItem.id" color="blue darken-1">
+                                        <v-chip class="ma-2 white--text" v-for="image in editedItem.file_path.images" :key="image" v-if="editedItem.file_path.images" color="blue darken-1">
                                             <v-icon left>mdi-file</v-icon> {{image}}
                                         </v-chip>
                                     </v-col>

@@ -15,4 +15,8 @@ class Template extends Model
     public function getFilePathAttribute($value){
         return unserialize($value);
     }
+
+    public function department(){
+        return $this->belongsTo('App\Department');
+    }
 }

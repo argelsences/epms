@@ -219,11 +219,12 @@ class TemplateController extends Controller
     * %speakers%
     * %department_name%
     * %event_date%
-    * 4. Generate a config file for EPPMS only
+    * 4. Generate a config file for EPPMS only DONE
     * 5. Create guide on how to create template
     * 6. Frontend for each department
     * 7. System setting page
-    * 8. Create a sample templates (3)
+    * 8. Create a sample templates (3) partial (1)
+    * 9. BUG: When no css code for existing templates, edit throws error DONE
      */
     private function create_by_upload(Request $request){
 
@@ -340,6 +341,12 @@ class TemplateController extends Controller
          */
 
         // upload the html file
+        $file_path_data = [
+            'html_code' => '',
+            'css_code'  => '',
+            'images'    => [],
+            'path'      => '',
+        ];
         // can make this inline with code on top?
         if ($request->hasFile('html_code') && $html_file->isValid()) {
             $html_filename = $html_file->getClientOriginalName();
@@ -397,7 +404,7 @@ class TemplateController extends Controller
         $template->update();
 
         // lets generate a thumbnail
-        $the_thumbnail = $this->thumbnail($template);
+        $the_thumbnail = $this->thumbnail($template, true);
 
         // return the same data compared to list to ensure using the same 
         $success = ($template) ? true : false;
@@ -522,15 +529,15 @@ class TemplateController extends Controller
         $template->update();        
 
         // lets generate a thumbnail
-        $the_thumbnail = $this->thumbnail($template);
+        $the_thumbnail = $this->thumbnail($template, true);
 
         // return the same data compared to list to ensure using the same 
         $success = ($template) ? true : false;
         return ['success' => $success, 'item' => $template];
     }
 
-    private function thumbnail(Template $template){
-        return EPPMS::thumbnail($template);
+    private function thumbnail(Template $template, $preview = false){
+        return EPPMS::thumbnail($template, $preview);
     }
 
     public function screenshot($id){

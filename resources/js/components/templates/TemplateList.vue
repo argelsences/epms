@@ -11,7 +11,7 @@
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details ></v-text-field>
                         <v-spacer></v-spacer>
                         <v-btn color="#1f4068" v-on:click="redirectToChoice" class="white--text" ><i class="material-icons ">add_box</i> Template</v-btn>
-                        <v-dialog v-model="dialog" hide-overlay  scrollable >
+                        <v-dialog v-model="dialog" hide-overlay  scrollable fullscreen>
                             <v-card tile>
                                 <v-card-text>
                                     <v-container fill-height>

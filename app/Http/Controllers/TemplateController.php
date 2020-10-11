@@ -209,7 +209,7 @@ class TemplateController extends Controller
     * TODAY (09/10/20)
     * 1. Display department name in template list DONE
     * 2. Edit for template code DONE
-    * 3. Generate screenshot based on shortcodes
+    * 3. Generate screenshot based on shortcodes DONE
     * %title%
     * %date%
     * %excerpt%

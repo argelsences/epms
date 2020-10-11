@@ -84,8 +84,7 @@ class EPPMSHelper {
             foreach ( $fields[1] as $field ) {
                 $the_field = explode(' ', $field);
                 if ( in_array( $the_field[0],$this->shortcode_list() )){
-                    // first param is the shortcode
-                    // the proceedings are the attributes
+                    // set content from default config, if applicable
                     $the_field_text = config("eppms.templates.default.$the_field[0]");
                     // check if we have a parameter for the shortcode
                     if (count( $the_field ) > 1 ) {

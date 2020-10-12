@@ -159,23 +159,16 @@ class TemplateController extends Controller
 
     /**
      * TODO
-     * 1. check the HTML for any javascript tags, if found throw an error and do not proceed DONE
-     * 2. Make sure correct files are uploaded DONE
-     * 3. Work on the return value of promise in the template DONE
-     * 4. Add department in interface and store it DONE
-     * 5. Generate screenshot (need to do html_entity_decode) DONE
-     * 6. Store files (HTML, CSS, Images) DONE
-     * 7. Edit function (add method in data for template to know what template is used) DONE
-     * 8. Upload by code DONE
-     * 9. Create ServiceProvider and Facade DONE
-     * 10. Install browsershot and puppeteer DONE
-     * 11. Template and poster preview
+     * 
      * 12. Poster list and media generation
      * 
-     * TODAY (08/10/20)
-     * 1. Force edit to re upload all files DONE
-     * 2. Allow to download the template files
-     * 3. Put advise on how to edit the template
+     * TODAY (12/10/20)
+     * 
+     * 1. Allow to download the template files
+     * 2. Create guide on how to create template
+     * 3. Create a sample templates (3) partial (1)
+     * 4. Frontend for each department
+     * 5. System setting page
      * 
      * Logic for upload edit
      * 
@@ -412,12 +405,8 @@ class TemplateController extends Controller
     }
 
     /**
-     * TODO
-     * 1. Upon saving the template, save the html code in file_path[html_code] and css code in file_path[css_code] DONE
-     * 2. The screenshot is cut on top DONE
-     * 3. BUG: problem saving when no image on edit DONE
-     * 4. List all images linked to the template DONE
-     * 5. BUG: create new caused blank screen
+     * Code responsible for processing templates based on upload code as selection
+     * @TODO: simplify code same with the create_by_upload
      */
 
     private function create_by_code (Request $request){

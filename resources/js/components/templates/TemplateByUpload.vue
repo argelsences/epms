@@ -65,7 +65,7 @@
                                     <v-col cols="12" sm="12" md="12">
                                         <v-file-input v-model="editedItem.images" class="mb-8" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
                                             prepend-icon="mdi-camera-iris" label="Images" persistentHint chips
-                                            hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB"
+                                            hint="Uploading a new file will replace the existing images. Only accepting JPG/PNG/BMP files. File size should not be greater than 2MB"
                                             multiple
                                             :disabled="!switchFile"
                                             :required="switchFile"

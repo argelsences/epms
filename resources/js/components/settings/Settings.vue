@@ -8,35 +8,92 @@
                 <v-container>
                     <v-form v-model="isValid" ref="form">
                         <v-row>
-                            <v-col cols="12" sm="12" md="6">
-                                <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
+                            <v-col cols="12" sm="12" md="12">
+                                <div class="text-h4  text-left">Poster</div>
                             </v-col>
-                            <v-col cols="12" sm="12" md="6">
-                                <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
+                            <v-col cols="12" sm="12" md="12">
+                                <v-text-field v-model="editedItem.name" label="Number of days for archiving" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
                             </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col cols="12" sm="12" md="6">
-                                <v-textarea counter label="Description" v-model="editedItem.description" prepend-icon="mdi-typewriter" rows="10"></v-textarea>
-                            </v-col>
-                            <v-col cols="12" sm="12" md="6" align-self="center">
-                                <v-file-input v-model="editedItem.images" class="mb-8" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
-                                    prepend-icon="mdi-camera-iris" label="Images" persistentHint chips
-                                    hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB"
-                                    multiple
-                                    >
-                                </v-file-input> 
-                                <v-chip class="ma-2 white--text" v-for="image in editedItem.file_path.images" :key="image" v-if="editedItem.file_path.images" color="blue darken-1">
-                                    <v-icon left>mdi-file</v-icon> {{image}}
-                                </v-chip>
+                            <v-col cols="12" sm="12" md="12">
+                                <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Default image output" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
                             </v-col>
                         </v-row>
                         <v-row>
-                            <v-col cols="12" sm="12" md="6">
-                                <v-textarea counter label="HTML Codes" v-model="editedItem.html_code" prepend-icon="mdi-language-html5" rows="10" persistent-hint hint="Input a valid HTML code, no Javascript included"></v-textarea>
+                            <v-col cols="12" sm="12" md="12">
+                                <div class="text-h4  text-left">Frontend</div>
                             </v-col>
-                            <v-col cols="12" sm="12" md="6">
-                                <v-textarea counter label="CSS Codes" v-model="editedItem.css_code" prepend-icon="mdi-language-css3" rows="10" persistent-hint hint="Input a valid CSS code"></v-textarea>
+                            <v-col cols="12" sm="12" md="4">
+                                <v-text-field v-model="editedItem.page_header_bg_color" v-mask="mask" hide-details class="ma-0 pa-0"  label="Page header bg color" outlined readonly :placeholder="color" >
+                                    <template v-slot:append>
+                                        <v-menu v-model="menu_header_bg" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
+                                            <template v-slot:activator="{ on }">
+                                                <div :style="swatchStyleHeaderBGColor" v-on="on" />
+                                            </template>
+                                            <v-card>
+                                                <v-card-text class="pa-0">
+                                                    <v-color-picker v-model="editedItem.page_header_bg_color" mode="hexa" hide-mode-switch flat />
+                                                </v-card-text>
+                                            </v-card>
+                                        </v-menu>
+                                    </template>
+                                </v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="12" md="4">
+                                <v-text-field v-model="editedItem.page_bg_color" v-mask="mask" hide-details class="ma-0 pa-0"  label="Page bg color" outlined readonly :placeholder="color">
+                                    <template v-slot:append>
+                                        <v-menu v-model="menu_bg" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
+                                            <template v-slot:activator="{ on }">
+                                                <div :style="swatchStyleBGColor" v-on="on" />
+                                            </template>
+                                            <v-card>
+                                                <v-card-text class="pa-0">
+                                                    <v-color-picker v-model="editedItem.page_bg_color" mode="hexa" hide-mode-switch flat />
+                                                </v-card-text>
+                                            </v-card>
+                                        </v-menu>
+                                    </template>
+                                </v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="12" md="4">
+                                <v-text-field v-model="editedItem.page_text_color" v-mask="mask" hide-details class="ma-0 pa-0"  label="Page text color" outlined readonly :placeholder="color">
+                                    <template v-slot:append>
+                                        <v-menu v-model="menu_text_color" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
+                                            <template v-slot:activator="{ on }">
+                                                <div :style="swatchStyleTextColor" v-on="on" />
+                                            </template>
+                                            <v-card>
+                                                <v-card-text class="pa-0">
+                                                    <v-color-picker v-model="editedItem.page_text_color" mode="hexa" hide-mode-switch flat />
+                                                </v-card-text>
+                                            </v-card>
+                                        </v-menu>
+                                    </template>
+                                </v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="12" sm="12" md="12">
+                                <div class="text-h4  text-left">Social Media</div>
+                            </v-col>
+                            <v-col cols="12" sm="12" md="4">
+                                <v-switch label="Linkedin" prepend-icon="mdi-facebook"></v-switch>
+                                <v-switch label="Linkedin" prepend-icon="mdi-linkedin"></v-switch>
+                            </v-col>
+                            <v-col cols="12" sm="12" md="4">
+                                <v-switch label="Twitter" prepend-icon="mdi-twitter"></v-switch>
+                                <v-switch label="Whatsapp" prepend-icon="mdi-whatsapp"></v-switch>
+                            </v-col>
+                            <v-col cols="12" sm="12" md="4">
+                                <v-switch label="Email" prepend-icon="mdi-email"></v-switch>
+                            </v-col>
+                            
+                        </v-row>
+                        <v-row>
+                            <v-col cols="12" sm="12" md="12">
+                                <div class="text-h4  text-left">System</div>
+                            </v-col>
+                            <v-col cols="12" sm="12" md="12">
+                                <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Timezone" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
                             </v-col>
                         </v-row>
 
@@ -132,6 +189,9 @@
                     images: [],
                     department_id: '',
                     department_name: '',
+                    page_header_bg_color: '',
+                    page_bg_color: '',
+                    page_text_color: '',
                 },
                 defaultItem: {
                     id: 0,
@@ -145,6 +205,9 @@
                     images: [],
                     department_id: '',
                     department_name: '',
+                    page_header_bg_color: '',
+                    page_bg_color: '',
+                    page_text_color: '',
                 },
                 templateMethod: '',
             }
@@ -277,7 +340,7 @@
               
             },
             setHedeaderTitle(){
-                document.title = 'Templates - Event Publication and Poster Management System (EPPMS)';
+                document.title = 'Settings - Event Publication and Poster Management System (EPPMS)';
             },
             setEditItems(item){
                 this.editedItem = item

@@ -127,9 +127,9 @@
                                                                     <div :style="swatchStyleHeaderBGColor" v-on="on" />
                                                                 </template>
                                                                 <v-card>
-                                                                    <v-card-text class="pa-0">
-                                                                        <v-color-picker v-model="editedItem.page_header_bg_color" mode="hexa" hide-mode-switch flat />
-                                                                    </v-card-text>
+                                                                <v-card-text class="pa-0">
+                                                                    <v-color-picker v-model="editedItem.page_header_bg_color" mode="hexa" hide-mode-switch flat />
+                                                                </v-card-text>
                                                                 </v-card>
                                                             </v-menu>
                                                         </template>

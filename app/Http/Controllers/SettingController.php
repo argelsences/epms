@@ -58,6 +58,7 @@ class SettingController extends Controller
     public function edit(Setting $setting)
     {
         //
+        return view('admin.settings.edit');
     }
 
     /**

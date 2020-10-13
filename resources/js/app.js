@@ -91,6 +91,7 @@ Vue.component('template-choice', require('./components/templates/TemplateChoice.
 Vue.component('by-upload', require('./components/templates/TemplateByUpload.vue').default);
 Vue.component('by-code', require('./components/templates/TemplateByCode.vue').default);
 Vue.component('by-canvas', require('./components/templates/TemplateByCanvas.vue').default);
+Vue.component('settings', require('./components/settings/Settings.vue').default);
 
 
 /**

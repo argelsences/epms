@@ -166,7 +166,7 @@ class TemplateController extends Controller
      * 
      * 1. Allow to download the template files
      * 2. Create guide on how to create template
-     * 3. Create a sample templates (3) partial (1)
+     * 3. Create a sample templates (3) partial (2)
      * 4. Frontend for each department
      * 5. System setting page
      * 
@@ -216,7 +216,7 @@ class TemplateController extends Controller
     * 5. Create guide on how to create template
     * 6. Frontend for each department
     * 7. System setting page
-    * 8. Create a sample templates (3) partial (1)
+    * 8. Create a sample templates (3) partial (2)
     * 9. BUG: When no css code for existing templates, edit throws error DONE
      */
     private function create_by_upload(Request $request){

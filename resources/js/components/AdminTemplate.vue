@@ -93,6 +93,9 @@
       <!--<v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>-->
       <v-toolbar-title>EPPMS</v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-btn :to="{name: `settings`}" icon>
+        <v-icon>mdi-cogs</v-icon>
+      </v-btn>
       <v-btn onclick="event.preventDefault();document.getElementById('logout-form').submit();" icon>
         <v-icon>mdi-exit-run</v-icon>
       </v-btn>

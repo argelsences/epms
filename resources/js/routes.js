@@ -12,6 +12,7 @@ import TemplateUpload from './components/templates/TemplateByUpload.vue'
 import TemplateCode from './components/templates/TemplateByCode.vue'
 import TemplateCanvas from './components/templates/TemplateByCanvas.vue'
 import TemplateChoice from './components/templates/TemplateChoice.vue'
+import Settings from './components/settings/Settings.vue'
 
 Vue.use(VueRouter)
 
@@ -85,6 +86,12 @@ const router =  new VueRouter({
             name: 'templates',
             component: TemplateList,
             meta: {title: 'Templates'}
+        },
+        {
+            path: '/settings',
+            name: 'settings',
+            component: Settings,
+            meta: {title: 'Settings'}
         },
         {
             path: '*',

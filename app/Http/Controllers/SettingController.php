@@ -55,6 +55,13 @@ class SettingController extends Controller
      * @param  \App\Setting  $setting
      * @return \Illuminate\Http\Response
      */
+    /**
+     * TODAY: 14 10 2020
+     * 1. Create a seeder for settings DONE
+     * 2. Load values to edit and to template (use boolval to evaluate values with "is" fields)
+     * 3. Allow to save and update the values
+     * 4. Fonts to resize based on the parent container (templates)
+     */
     public function edit(Setting $setting)
     {
         //
@@ -82,5 +89,19 @@ class SettingController extends Controller
     public function destroy(Setting $setting)
     {
         //
+    }
+    /**
+     * API function
+     * 
+     * List all departments
+     * 
+     */
+    public function list(Setting $model){
+        
+        if ( auth()->user()->can(['edit settings']) ){
+            return response('Unauthorized', 403);
+        }
+        dd($model::orderBy('name', 'ASC')->get());
+        return response()->json(($model::orderBy('name', 'ASC')->get()));
     }
 }

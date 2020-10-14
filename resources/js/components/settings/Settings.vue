@@ -12,10 +12,10 @@
                                 <div class="text-h4  text-left">Poster</div>
                             </v-col>
                             <v-col cols="12" sm="12" md="12">
-                                <v-text-field v-model="editedItem.name" label="Number of days for archiving" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
+                                <v-text-field v-model="editedItem.number_of_days_archive" label="Number of days for archiving" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="12" md="12">
-                                <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Default image output" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
+                                <v-select :items="format" label="Default image output" v-model="editedItem.default_image_output"  prepend-icon="mdi-earth" hint="Type to select"></v-select>
                             </v-col>
                         </v-row>
                         <v-row>
@@ -153,6 +153,7 @@
     export default {
         mounted() {
             console.log('Component mounted')
+            console.log(this.rows)
         },
         data() {
             return {
@@ -166,7 +167,9 @@
                 loader: false,
                 timeout: 5000,
                 error: false,
-                departments: [],
+                format: ['JPG','PNG','BMP'],
+                mask: '?#XXXXXX',
+                color: '#1976D2',
                 rules: {
                     required: (v) => !!v || 'Required.',
                     /////min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
@@ -179,35 +182,29 @@
                 ],
                 editedItem: {
                     id: 0,
-                    name: '',
-                    description: '',
-                    file_path: '',
-                    template_code: '',
-                    department_id: '',
-                    html_code: '',
-                    css_code: '',
-                    images: [],
-                    department_id: '',
-                    department_name: '',
-                    page_header_bg_color: '',
-                    page_bg_color: '',
-                    page_text_color: '',
+                    number_of_days_archive: '',
+                    default_image_output: '',
+                    header_bg_color: '',
+                    bg_color: '',
+                    text_color: '',
+                    is_facebook: 'false',
+                    is_twitter: 'false',
+                    is_linkedin: 'false',
+                    is_email: 'false',
+                    is_whatsapp: 'false',
                 },
                 defaultItem: {
                     id: 0,
-                    name: '',
-                    description: '',
-                    file_path: '',
-                    template_code: '',
-                    department_id: '',
-                    html_code: '',
-                    css_code: '',
-                    images: [],
-                    department_id: '',
-                    department_name: '',
-                    page_header_bg_color: '',
-                    page_bg_color: '',
-                    page_text_color: '',
+                    number_of_days_archive: '',
+                    default_image_output: '',
+                    header_bg_color: '',
+                    bg_color: '',
+                    text_color: '',
+                    is_facebook: 'false',
+                    is_twitter: 'false',
+                    is_linkedin: 'false',
+                    is_email: 'false',
+                    is_whatsapp: 'false',
                 },
                 templateMethod: '',
             }
@@ -215,7 +212,53 @@
         computed: {
             formTitle () {
                 return this.editedIndex === -1 ? 'New Template' : 'Edit Template'
-            }, 
+            },
+            swatchStyleHeaderBGColor() {
+                const { menu } = this
+                //var background = this.editedItem.page_header_bg_color
+                // ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
+                if (this.editedItem.page_header_bg_color == '' || this.editedItem.page_header_bg_color == null )
+                    this.editedItem.page_header_bg_color = '#1976D2'
+                    
+                return {
+                    backgroundColor: this.editedItem.page_header_bg_color,
+                    cursor: 'pointer',
+                    height: '30px',
+                    width: '30px',
+                    borderRadius: menu ? '50%' : '4px',
+                    transition: 'border-radius 200ms ease-in-out'
+                }
+            },
+            swatchStyleBGColor() {
+                const { menu } = this
+                // ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
+                if (this.editedItem.page_bg_color == '' || this.editedItem.page_bg_color == null )
+                    this.editedItem.page_bg_color = '#1976D2'
+                    
+                return {
+                    backgroundColor: this.editedItem.page_bg_color,
+                    cursor: 'pointer',
+                    height: '30px',
+                    width: '30px',
+                    borderRadius: menu ? '50%' : '4px',
+                    transition: 'border-radius 200ms ease-in-out'
+                }
+            },
+            swatchStyleTextColor() {
+                const { menu } = this
+                // ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
+                if (this.editedItem.page_text_color == '' || this.editedItem.page_text_color == null )
+                    this.editedItem.page_text_color = '#1976D2'
+                    
+                return {
+                    backgroundColor: this.editedItem.page_text_color,
+                    cursor: 'pointer',
+                    height: '30px',
+                    width: '30px',
+                    borderRadius: menu ? '50%' : '4px',
+                    transition: 'border-radius 200ms ease-in-out'
+                }
+            },
         },
         watch: {
             dialog (val) {
@@ -225,12 +268,12 @@
             },
         },
         methods: {
-            /*initialize: function() {
-                axios.get('/api/templates')
+            initialize: function() {
+                axios.get('/api/settings')
                 .then( response => {
                     this.rows = response.data;
                 });
-            },*/
+            },
             getDepartments: function() {
                 axios.get('/api/departments')
                 .then( response => {
@@ -372,11 +415,11 @@
             console.log(this.templateMethod)
         }, 
         created: function() {
-            this.setHedeaderTitle()
-            this.getDepartments()
-            //this.initialize()
-            if (this.$route.params.id)
-                this.setEditItems(this.$route.params)
+            //this.setHedeaderTitle()
+            //this.getDepartments()
+            this.initialize()
+            //if (this.$route.params.id)
+                //this.setEditItems(this.$route.params)
         },
     }
 </script>

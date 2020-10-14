@@ -45,7 +45,7 @@ Route::group(['middleware' => ['auth:api']], function(){
     Route::get('/templates', 'TemplateController@list')->name('templates.list');
     Route::post('/templates/upsert', 'TemplateController@upsert')->name('templates.upsert');
     // Settings
-    Route::get('/settings', 'SettingController@edit')->name('settings.edit');
+    Route::get('/settings', 'SettingController@list')->name('settings.list');
     //////Route::get('/templates/screenshot/{id}', 'TemplateController@screenshot')->name('templates.screenshot');
     //Route::delete('/categories/{category}', 'CategoryController@destroy');
     /////Route::middleware('can:delete,category')->delete('/categories/{category}', 'CategoryController@destroy');

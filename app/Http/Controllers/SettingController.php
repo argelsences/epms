@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Setting;
+use App\Country;
 use Illuminate\Http\Request;
 
 class SettingController extends Controller
@@ -101,7 +102,29 @@ class SettingController extends Controller
         if ( auth()->user()->can(['edit settings']) ){
             return response('Unauthorized', 403);
         }
-        dd($model::orderBy('name', 'ASC')->get());
-        return response()->json(($model::orderBy('name', 'ASC')->get()));
+        // assign values here manually
+        $settings = $model::all(['name', 'value']);
+        $objSettings = [];
+
+        foreach ($settings as $setting){
+            $value = $setting->value;
+
+            if (strpos($setting->name , 'is_') !== false)
+                $value = boolval($setting->value);
+
+            $objSettings[$setting->name] = $value;
+        }
+
+        return response()->json($objSettings);
+    }
+    /**
+     * Retrieve list of timezones
+     */
+    public function timezones(Country $country){
+        if ( auth()->user()->can(['edit settings']) ){
+            return response('Unauthorized', 403);
+        }
+
+        return response()->json($country->timezones());
     }
 }

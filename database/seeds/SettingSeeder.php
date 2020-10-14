@@ -26,13 +26,13 @@ class SettingSeeder extends Seeder
         ]);
         $setting = DB::table('settings')->insert([
             'name'       => 'header_bg_color',
-            'value'      => '#0d7377',
+            'value'      => '#0D7377',
             'created_at' => now(),
             'updated_at' => now()
         ]);
         $setting = DB::table('settings')->insert([
             'name'       => 'bg_color',
-            'value'      => '#eeeeee',
+            'value'      => '#EEEEEE',
             'created_at' => now(),
             'updated_at' => now()
         ]);

@@ -23,7 +23,7 @@
                                 <div class="text-h4  text-left">Frontend</div>
                             </v-col>
                             <v-col cols="12" sm="12" md="4">
-                                <v-text-field v-model="editedItem.page_header_bg_color" v-mask="mask" hide-details class="ma-0 pa-0"  label="Page header bg color" outlined readonly :placeholder="color" >
+                                <v-text-field v-model="editedItem.header_bg_color" v-mask="mask" hide-details class="ma-0 pa-0"  label="Page header bg color" outlined readonly :placeholder="color" >
                                     <template v-slot:append>
                                         <v-menu v-model="menu_header_bg" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
                                             <template v-slot:activator="{ on }">
@@ -31,7 +31,7 @@
                                             </template>
                                             <v-card>
                                                 <v-card-text class="pa-0">
-                                                    <v-color-picker v-model="editedItem.page_header_bg_color" mode="hexa" hide-mode-switch flat />
+                                                    <v-color-picker v-model="editedItem.header_bg_color" mode="hexa" hide-mode-switch flat />
                                                 </v-card-text>
                                             </v-card>
                                         </v-menu>
@@ -39,7 +39,7 @@
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12" sm="12" md="4">
-                                <v-text-field v-model="editedItem.page_bg_color" v-mask="mask" hide-details class="ma-0 pa-0"  label="Page bg color" outlined readonly :placeholder="color">
+                                <v-text-field v-model="editedItem.bg_color" v-mask="mask" hide-details class="ma-0 pa-0"  label="Page bg color" outlined readonly :placeholder="color">
                                     <template v-slot:append>
                                         <v-menu v-model="menu_bg" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
                                             <template v-slot:activator="{ on }">
@@ -47,7 +47,7 @@
                                             </template>
                                             <v-card>
                                                 <v-card-text class="pa-0">
-                                                    <v-color-picker v-model="editedItem.page_bg_color" mode="hexa" hide-mode-switch flat />
+                                                    <v-color-picker v-model="editedItem.bg_color" mode="hexa" hide-mode-switch flat />
                                                 </v-card-text>
                                             </v-card>
                                         </v-menu>
@@ -55,7 +55,7 @@
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12" sm="12" md="4">
-                                <v-text-field v-model="editedItem.page_text_color" v-mask="mask" hide-details class="ma-0 pa-0"  label="Page text color" outlined readonly :placeholder="color">
+                                <v-text-field v-model="editedItem.text_color" v-mask="mask" hide-details class="ma-0 pa-0"  label="Page text color" outlined readonly :placeholder="color">
                                     <template v-slot:append>
                                         <v-menu v-model="menu_text_color" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
                                             <template v-slot:activator="{ on }">
@@ -63,7 +63,7 @@
                                             </template>
                                             <v-card>
                                                 <v-card-text class="pa-0">
-                                                    <v-color-picker v-model="editedItem.page_text_color" mode="hexa" hide-mode-switch flat />
+                                                    <v-color-picker v-model="editedItem.text_color" mode="hexa" hide-mode-switch flat />
                                                 </v-card-text>
                                             </v-card>
                                         </v-menu>
@@ -76,15 +76,15 @@
                                 <div class="text-h4  text-left">Social Media</div>
                             </v-col>
                             <v-col cols="12" sm="12" md="4">
-                                <v-switch label="Linkedin" prepend-icon="mdi-facebook"></v-switch>
-                                <v-switch label="Linkedin" prepend-icon="mdi-linkedin"></v-switch>
+                                <v-switch label="Linkedin" prepend-icon="mdi-facebook" v-model="this.editedItem.is_facebook"></v-switch>
+                                <v-switch label="Linkedin" prepend-icon="mdi-linkedin" v-model="this.editedItem.is_linkedin"></v-switch>
                             </v-col>
                             <v-col cols="12" sm="12" md="4">
-                                <v-switch label="Twitter" prepend-icon="mdi-twitter"></v-switch>
-                                <v-switch label="Whatsapp" prepend-icon="mdi-whatsapp"></v-switch>
+                                <v-switch label="Twitter" prepend-icon="mdi-twitter" v-model="this.editedItem.is_twitter"></v-switch>
+                                <v-switch label="Whatsapp" prepend-icon="mdi-whatsapp" v-model="this.editedItem.is_whatsapp"></v-switch>
                             </v-col>
                             <v-col cols="12" sm="12" md="4">
-                                <v-switch label="Email" prepend-icon="mdi-email"></v-switch>
+                                <v-switch label="Email" prepend-icon="mdi-email" v-model="this.editedItem.is_email"></v-switch>
                             </v-col>
                             
                         </v-row>
@@ -93,7 +93,7 @@
                                 <div class="text-h4  text-left">System</div>
                             </v-col>
                             <v-col cols="12" sm="12" md="12">
-                                <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Timezone" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
+                                <v-autocomplete v-model="editedItem.timezone" :items="timezones" label="Timezone" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
                             </v-col>
                         </v-row>
 
@@ -170,6 +170,10 @@
                 format: ['JPG','PNG','BMP'],
                 mask: '?#XXXXXX',
                 color: '#1976D2',
+                timezones: ['Asia/Singapore', 'Asia/Taiwan'],
+                menu_header_bg: false,
+                menu_bg: false,
+                menu_text_color: false,
                 rules: {
                     required: (v) => !!v || 'Required.',
                     /////min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
@@ -192,6 +196,7 @@
                     is_linkedin: 'false',
                     is_email: 'false',
                     is_whatsapp: 'false',
+                    timezone: '',
                 },
                 defaultItem: {
                     id: 0,
@@ -205,6 +210,7 @@
                     is_linkedin: 'false',
                     is_email: 'false',
                     is_whatsapp: 'false',
+                    timezone: '',
                 },
                 templateMethod: '',
             }
@@ -215,13 +221,12 @@
             },
             swatchStyleHeaderBGColor() {
                 const { menu } = this
-                //var background = this.editedItem.page_header_bg_color
-                // ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
-                if (this.editedItem.page_header_bg_color == '' || this.editedItem.page_header_bg_color == null )
-                    this.editedItem.page_header_bg_color = '#1976D2'
+                
+                //if (this.editedItem.header_bg_color == '' || this.editedItem.header_bg_color == null )
+                //    this.editedItem.page_header_bg_color = '#1976D2'
                     
                 return {
-                    backgroundColor: this.editedItem.page_header_bg_color,
+                    backgroundColor: this.editedItem.header_bg_color,
                     cursor: 'pointer',
                     height: '30px',
                     width: '30px',
@@ -231,12 +236,13 @@
             },
             swatchStyleBGColor() {
                 const { menu } = this
+                console.log(this.editedItem.bg_color)
                 // ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
-                if (this.editedItem.page_bg_color == '' || this.editedItem.page_bg_color == null )
-                    this.editedItem.page_bg_color = '#1976D2'
+                //if (this.editedItem.bg_color == '' || this.editedItem.bg_color == null )
+                //    this.editedItem.page_bg_color = '#1976D2'
                     
                 return {
-                    backgroundColor: this.editedItem.page_bg_color,
+                    backgroundColor: this.editedItem.bg_color,
                     cursor: 'pointer',
                     height: '30px',
                     width: '30px',
@@ -247,11 +253,11 @@
             swatchStyleTextColor() {
                 const { menu } = this
                 // ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
-                if (this.editedItem.page_text_color == '' || this.editedItem.page_text_color == null )
-                    this.editedItem.page_text_color = '#1976D2'
+                //if (this.editedItem.text_color == '' || this.editedItem.text_color == null )
+                //    this.editedItem.page_text_color = '#1976D2'
                     
                 return {
-                    backgroundColor: this.editedItem.page_text_color,
+                    backgroundColor: this.editedItem.text_color,
                     cursor: 'pointer',
                     height: '30px',
                     width: '30px',
@@ -271,13 +277,15 @@
             initialize: function() {
                 axios.get('/api/settings')
                 .then( response => {
-                    this.rows = response.data;
+                    this.editedItem = response.data
                 });
             },
-            getDepartments: function() {
-                axios.get('/api/departments')
+            getTimezones: function() {
+                axios.get('/api/timezones')
                 .then( response => {
-                    this.departments = response.data;
+                    ///////this.rows = response.data;
+                    console.log(response.data)
+                    this.timezones = response.data
                 });
             },
             editItem (item) {
@@ -415,11 +423,8 @@
             console.log(this.templateMethod)
         }, 
         created: function() {
-            //this.setHedeaderTitle()
-            //this.getDepartments()
             this.initialize()
-            //if (this.$route.params.id)
-                //this.setEditItems(this.$route.params)
+            this.getTimezones()
         },
     }
 </script>

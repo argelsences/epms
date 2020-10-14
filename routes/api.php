@@ -46,6 +46,7 @@ Route::group(['middleware' => ['auth:api']], function(){
     Route::post('/templates/upsert', 'TemplateController@upsert')->name('templates.upsert');
     // Settings
     Route::get('/settings', 'SettingController@list')->name('settings.list');
+    Route::get('/timezones', 'SettingController@timezones')->name('settings.timezones');
     //////Route::get('/templates/screenshot/{id}', 'TemplateController@screenshot')->name('templates.screenshot');
     //Route::delete('/categories/{category}', 'CategoryController@destroy');
     /////Route::middleware('can:delete,category')->delete('/categories/{category}', 'CategoryController@destroy');

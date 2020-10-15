@@ -12,7 +12,7 @@
                                 <div class="text-h4  text-left">Poster</div>
                             </v-col>
                             <v-col cols="12" sm="12" md="12">
-                                <v-text-field v-model="editedItem.number_of_days_archive" label="Number of days for archiving" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
+                                <v-text-field v-model="editedItem.number_of_days_archive" label="Number of days for archiving" :rules="[rules.required]" prepend-icon="mdi-information" ref="number_of_days" ></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="12" md="12">
                                 <v-select :items="format" label="Default image output" v-model="editedItem.default_image_output"  prepend-icon="mdi-earth" hint="Type to select"></v-select>
@@ -76,15 +76,15 @@
                                 <div class="text-h4  text-left">Social Media</div>
                             </v-col>
                             <v-col cols="12" sm="12" md="4">
-                                <v-switch label="Linkedin" prepend-icon="mdi-facebook" v-model="this.editedItem.is_facebook"></v-switch>
-                                <v-switch label="Linkedin" prepend-icon="mdi-linkedin" v-model="this.editedItem.is_linkedin"></v-switch>
+                                <v-switch label="Linkedin" prepend-icon="mdi-facebook" v-model="editedItem.is_facebook"></v-switch>
+                                <v-switch label="Linkedin" prepend-icon="mdi-linkedin" v-model="editedItem.is_linkedin"></v-switch>
                             </v-col>
                             <v-col cols="12" sm="12" md="4">
-                                <v-switch label="Twitter" prepend-icon="mdi-twitter" v-model="this.editedItem.is_twitter"></v-switch>
-                                <v-switch label="Whatsapp" prepend-icon="mdi-whatsapp" v-model="this.editedItem.is_whatsapp"></v-switch>
+                                <v-switch label="Twitter" prepend-icon="mdi-twitter" v-model="editedItem.is_twitter"></v-switch>
+                                <v-switch label="Whatsapp" prepend-icon="mdi-whatsapp" v-model="editedItem.is_whatsapp"></v-switch>
                             </v-col>
                             <v-col cols="12" sm="12" md="4">
-                                <v-switch label="Email" prepend-icon="mdi-email" v-model="this.editedItem.is_email"></v-switch>
+                                <v-switch label="Email" prepend-icon="mdi-email" v-model="editedItem.is_email"></v-switch>
                             </v-col>
                             
                         </v-row>
@@ -101,29 +101,8 @@
                 </v-container>
             </v-card-text>
             <v-card-actions>
-                <v-btn
-                    :disabled="templateMethod === 'templateChoice'"
-                    text
-                    :to="{name: `template-choice`}"
-                >
-                    Back to choices
-                </v-btn>
                 <v-spacer></v-spacer>
-                <v-btn 
-                    color="blue darken-1" 
-                    text 
-                    :to="{name: `templates`}"
-                >
-                    Go back to Template List
-                </v-btn>
-                <v-btn
-                    :disabled="templateMethod === 'templateChoice'"
-                    color="blue darken-1"
-                    text
-                    v-on:click="save()"
-                >
-                    Save
-                </v-btn>
+                <v-btn color="blue darken-1" text v-on:click="save()">Save</v-btn>
             </v-card-actions>
 
             <v-snackbar v-model="snackbar" :timeout="timeout">
@@ -153,7 +132,6 @@
     export default {
         mounted() {
             console.log('Component mounted')
-            console.log(this.rows)
         },
         data() {
             return {
@@ -191,11 +169,11 @@
                     header_bg_color: '',
                     bg_color: '',
                     text_color: '',
-                    is_facebook: 'false',
-                    is_twitter: 'false',
-                    is_linkedin: 'false',
-                    is_email: 'false',
-                    is_whatsapp: 'false',
+                    is_facebook: false,
+                    is_twitter: false,
+                    is_linkedin: false,
+                    is_email: false,
+                    is_whatsapp: false,
                     timezone: '',
                 },
                 defaultItem: {
@@ -205,14 +183,13 @@
                     header_bg_color: '',
                     bg_color: '',
                     text_color: '',
-                    is_facebook: 'false',
-                    is_twitter: 'false',
-                    is_linkedin: 'false',
-                    is_email: 'false',
-                    is_whatsapp: 'false',
+                    is_facebook: false,
+                    is_twitter: false,
+                    is_linkedin: false,
+                    is_email: false,
+                    is_whatsapp: false,
                     timezone: '',
                 },
-                templateMethod: '',
             }
         },
         computed: {
@@ -236,7 +213,6 @@
             },
             swatchStyleBGColor() {
                 const { menu } = this
-                console.log(this.editedItem.bg_color)
                 // ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
                 //if (this.editedItem.bg_color == '' || this.editedItem.bg_color == null )
                 //    this.editedItem.page_bg_color = '#1976D2'
@@ -284,7 +260,6 @@
                 axios.get('/api/timezones')
                 .then( response => {
                     ///////this.rows = response.data;
-                    console.log(response.data)
                     this.timezones = response.data
                 });
             },
@@ -298,10 +273,7 @@
                 const index = this.rows.indexOf(item)
                 confirm('Are you sure you want to delete this item?') && this.rows.splice(index, 1)
             },
-
             close () {
-                // make sure the dialog box is closed
-                this.dialog = false
                 // next action is to make sure that the value of editedItem is on default, and re-initialize the editedIndex value
                 this.$nextTick(() => {
                     // reset the defaultItem object
@@ -310,11 +282,9 @@
                     this.editedIndex = -1
                     // reset the form
                     this.$refs.form.reset()
-                    // reset window
-                    this.templateMethod = ''
                 })
 
-                 setTimeout(() => { this.$router.push({name: 'templates'}) },1500);
+                /////setTimeout(() => { this.$router.push({name: 'templates'}) },1500);
             },
             save () {
                 /** on change of input, upload the logo, then assign the path to logo path */
@@ -324,48 +294,17 @@
                 // if creating, then push the edited item into the object
                 
                 // assign the edited item to a local var first to be able to be used for filter
-                var editedItem = this.editedItem
-                var editedIndex = this.editedIndex
+                //var editedItem = this.editedItem
+                //var editedIndex = this.editedIndex
 
-                // form data
-                let formData = new FormData()
-                formData.append('id', this.editedItem.id)
-                formData.append('html_code', this.editedItem.html_code)
-                formData.append('css_code', this.editedItem.css_code)
-                formData.append('name', this.editedItem.name)
-                formData.append('description', this.editedItem.description)
-                formData.append('department_id', this.editedItem.department_id)
-                formData.append('method', 'code')
-                
-                // add multiple images
-                /*
-                for (let i = 0 ; i < Object.keys(this.editedItem.images).length; i++){
-                    formData.append("images[]", this.editedItem.images[i])
-                }
-                */
-                
-                // add multiple images
-                if (typeof this.editedItem.images !== 'undefined'){
-                    for (let i = 0 ; i < Object.keys(this.editedItem.images).length; i++){
-                        formData.append("images[]", this.editedItem.images[i])
-                    }
-                }
-                else { 
-                    formData.append("images[]", null)
-                }
-                
-                let formHeader = { headers: { 'Content-Type': 'multipart/form-data' } }
-
-                this.loader = true
-                this.snackbar = true
-                this.feedbacks[0] = 'Generating template, please wait.'
-
-                axios.post('/api/templates/upsert', formData, formHeader)
+                axios.post('/api/settings/upsert', {
+                    payload: this.editedItem,
+                })
                 .then(response => {
                     if (response.data.success) {
                         this.feedbacks = []
-                        this.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.'
-                        /////this.snackbar = true
+                        this.feedbacks[0] = 'Changes for settings are saved.'
+                        this.snackbar = true
                         this.error = false
                         /*
                         if ( editedIndex > -1 )
@@ -373,14 +312,21 @@
                         else
                             this.rows.push(editedItem)
                         */
+                       /*
                         if ( editedIndex > -1 )
                             Object.assign(this.rows[editedIndex], response.data.item)
                         else
                             this.rows.push(response.data.item)
+                        */
 
                         // close the dialog box
-                        this.close()  
+                        /////this.close() 
+                        this.editedItem = response.data.item
                     }
+                    this.$nextTick(() => {
+                        window.scrollTo(0, document.body.scrollHeight)
+                        this.$refs.number_of_days.focus()
+                    });
                 })
                 .catch( error => {
                     let messages = Object.values(error.response.data.errors); 
@@ -393,35 +339,7 @@
             setHedeaderTitle(){
                 document.title = 'Settings - Event Publication and Poster Management System (EPPMS)';
             },
-            setEditItems(item){
-                this.editedItem = item
-                this.editedItem.html_code = this.htmlEntityDecode(item.file_path.html_code)
-                this.editedItem.css_code = item.file_path.css_code
-                /*
-                this.editedItem.name = item.name
-                this.editedItem.description = item.description
-                this.editedItem.department_id = item.department_id
-                this.editedItem.images = item.file_path.images
-                */
-            },
-            htmlEntityDecode(str) {
-                var element = document.createElement('div');
-
-                if(str && typeof str === 'string') {
-                    // strip script/html tags
-                    str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
-                    str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
-                    element.innerHTML = str;
-                    str = element.textContent;
-                    element.textContent = '';
-                }
-
-                return str;
-            },
         },
-        updated: function(){
-            console.log(this.templateMethod)
-        }, 
         created: function() {
             this.initialize()
             this.getTimezones()

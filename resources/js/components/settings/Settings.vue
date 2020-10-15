@@ -93,7 +93,7 @@
                                 <div class="text-h4  text-left">System</div>
                             </v-col>
                             <v-col cols="12" sm="12" md="12">
-                                <v-autocomplete v-model="editedItem.timezone" :items="timezones" item-text="name" item-value="name" label="Timezone" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
+                                <v-autocomplete v-model="editedItem.timezone" :items="timezones"  label="Timezone" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
                             </v-col>
                         </v-row>
 

@@ -58,7 +58,7 @@ const router =  new VueRouter({
             meta: {title: 'Departments'}
         },
         {
-            path: '/',
+            path: '/dashboard',
             name: 'dashboard',
             component: Dashboard,
             meta: {title: 'Dashboard'}
@@ -95,7 +95,7 @@ const router =  new VueRouter({
         },
         {
             path: '*',
-            redirect: '/'
+            redirect: '/dashboard'
         }
     ]
 })

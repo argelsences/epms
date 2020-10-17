@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Department;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -23,5 +25,12 @@ class HomeController extends Controller
     {
         //return view('dashboard');
         return view('welcome');
+    }
+
+    public function department( $URI ){
+        $theURI = filter_var($URI, FILTER_SANITIZE_STRING);
+        $department = Department::where('url', $URI)->firstOrFail();
+        //dd($department);
+        /////return view('');
     }
 }

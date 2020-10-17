@@ -70,7 +70,7 @@ class SettingController extends Controller
      * 5. Configure list of timezones (DONE)
      * TODAY: 15 10 2020 
      * 1. Allow to save and update the values (backlog) DONE
-     * 2. Fonts to resize based on the parent container (templates) (backlog)
+     * 2. Fonts to resize based on the parent container (templates) (backlog) DONE
      * 3. Create homepage
      * 4. Create frontpage for each department
      */

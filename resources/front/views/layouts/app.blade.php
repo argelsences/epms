@@ -30,15 +30,12 @@
     </head>
     <body class="{{ $class ?? '' }}">
       <div id="app">
-          @auth()
-              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                  @csrf
-              </form>
-              <admin-template></admin-template>
-          @endauth
-          @guest()
-              @include('layouts.page_templates.guest')
-          @endguest
+        @auth()
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+        @endauth
+        @include('layouts.page_templates.guest')
       </div>     
       <script src="{{ mix('js/drawerJs.js') }}" ></script>
       @stack('js')

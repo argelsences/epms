@@ -11,11 +11,12 @@ class HomeController extends Controller
      *
      * @return void
      */
+    
     public function __construct()
     {
         /////$this->middleware('auth');
     }
-
+    
     /**
      * Show the application dashboard.
      *
@@ -32,5 +33,7 @@ class HomeController extends Controller
         $department = Department::where('url', $URI)->firstOrFail();
         //dd($department);
         /////return view('');
+        
+        return view('front.department.homepage', compact('department'));
     }
 }

@@ -18,84 +18,83 @@ Vue.use(VueRouter)
 
 const router =  new VueRouter({
     mode: 'history',
-    base: 'web-admin',
     routes: [
         {
-            path: '/templates/by-upload',
+            path: '/web-admin/templates/by-upload',
             name: 'add-by-upload',
             component: TemplateUpload,
             meta: {title: 'Template by upload'}
         },
         {
-            path: '/templates/by-code',
+            path: '/web-admin/templates/by-code',
             name: 'add-by-code',
             component: TemplateCode,
             meta: {title: 'Template by code'}
         },
         {
-            path: '/templates/by-canvas',
+            path: '/web-admin/templates/by-canvas',
             name: 'add-by-canvas',
             component: TemplateCanvas,
             meta: {title: 'Template by canvas'}
         },
         {
-            path: '/template/template-choice',
+            path: '/web-admin/template/template-choice',
             name: 'template-choice',
             component: TemplateChoice,
             meta: {title: 'Create template'}
         },
 
         {
-            path: '/events',
+            path: '/web-admin/events',
             name: 'events',
             component: EventList,
             meta: {title: 'Events'}
         },
         {
-            path: '/departments',
+            path: '/web-admin/departments',
             name: 'departments',
             component: DepartmentList,
             meta: {title: 'Departments'}
         },
         {
-            path: '/dashboard',
+            path: '/web-admin/',
             name: 'dashboard',
             component: Dashboard,
             meta: {title: 'Dashboard'}
         },
         {
-            path: '/users',
+            path: '/web-admin/users',
             name: 'users',
             component: UserList,
             meta: {title: 'Users'}
         },
         {
-            path: '/speakers',
+            path: '/web-admin/speakers',
             name: 'speakers',
             component: SpeakerList,
             meta: {title: 'Speakers'}
         },
         {
-            path: '/venues',
+            path: '/web-admin/venues',
             name: 'venues',
             component: VenueList,
             meta: {title: 'Venues'}
         },
         {
-            path: '/templates',
+            path: '/web-admin/templates',
             name: 'templates',
             component: TemplateList,
             meta: {title: 'Templates'}
         },
         {
-            path: '/settings',
+            path: '/web-admin/settings',
             name: 'settings',
             component: Settings,
             meta: {title: 'Settings'}
         },
         {
             path: '*',
-            redirect: '/dashboard'
+            redirect: '/'
         }
     ]
 })

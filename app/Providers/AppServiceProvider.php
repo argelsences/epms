@@ -28,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
         //
         Schema::defaultStringLength(191);
         
+        /*
         // separate views
         $path_array = $request->segments();
         $admin_route = config('app.admin_route');
@@ -49,5 +50,6 @@ class AppServiceProvider extends ServiceProvider
         }
 
         view()->addLocation($path);
+        */
     }
 }

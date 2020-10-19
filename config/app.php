@@ -56,9 +56,9 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
-    'app_scope' => 'front',
+    ////'app_scope' => 'front',
 
-    'admin_route' => 'web-admin',
+    /////'admin_route' => 'web-admin',
 
     /*
     |--------------------------------------------------------------------------

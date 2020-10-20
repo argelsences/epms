@@ -12,14 +12,14 @@
 
 @section('head')
      <style>
-          body { background-color: {{$department->page_bg_color}} !important; }
+          body { background-color: {{$department->page_bg_color ?? $objSettings['bg_color']}} !important; }
           section#intro {
-               background-color: {{$department->page_header_bg_color}} !important;
+               background-color: {{$department->page_header_bg_color ?? $objSettings['header_bg_color']}} !important;
                color: {{$department->page_text_color}} !important;
           }
           .event-list > li > time {
-               color: {{$department->page_text_color}};
-               background-color: {{$department->page_header_bg_color}};
+               color: {{$department->page_text_color ?? $objSettings['text_color']}};
+               background-color: {{$department->page_header_bg_color ?? $objSettings['header_bg_color']}};
           }
 
      </style>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Department;
+use App\Setting;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -74,11 +75,26 @@ class HomeController extends Controller
         */
         
         /// end script
+        // settings
+        $settings = Setting::all(['name', 'value']);
+        $objSettings = [];
+
+        foreach ($settings as $setting){
+            $value = $setting->value;
+
+            if (strpos($setting->name , 'is_') !== false)
+                $value = boolval($setting->value);
+
+            $objSettings[$setting->name] = $value;
+        }
+
+        //dd($objSettings);
         
         return view('front.department.homepage', compact(
             'department',
             'upcoming_events',
-            'past_events'
+            'past_events',
+            'objSettings',
         ));
     }
     

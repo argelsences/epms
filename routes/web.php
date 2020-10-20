@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'HomeController@index')->name('home');
 
 Route::group(['prefix' => 'd'], function () {
-	Route::get('/{department_slug}', 'HomeController@department')->name('department.homepage');
+	Route::get('/{department_slug}', 'DepartmentController@homepage')->name('department.homepage');
 });
 
 Auth::routes(['verify' => true]);

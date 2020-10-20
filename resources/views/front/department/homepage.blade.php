@@ -1,7 +1,5 @@
 @extends('layouts.app_front', [
   'title' => $department->name,
-  'activePage' => 'user-management', 
-  'titlePage' => __('User Management'),
   'url' => $department->url,
   'logo_path' => ($department->logo_path) ? $department->logo_path : '/' ,
   ])
@@ -15,7 +13,7 @@
           body { background-color: {{$department->page_bg_color ?? $objSettings['bg_color']}} !important; }
           section#intro {
                background-color: {{$department->page_header_bg_color ?? $objSettings['header_bg_color']}} !important;
-               color: {{$department->page_text_color}} !important;
+               color: {{$department->page_text_color ?? $objSettings['text_color']}} !important;
           }
           .event-list > li > time {
                color: {{$department->page_text_color ?? $objSettings['text_color']}};

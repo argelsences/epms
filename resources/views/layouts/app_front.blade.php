@@ -29,19 +29,21 @@
     <script src="{{ asset('material') }}/js/core/jquery.min.js"></script>
     <!-- include default laravel JS and SASS -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/front.css') }}" rel="stylesheet">
     @yield('head')
     </head>
     <body class="{{ $class ?? '' }}">
       <div id="app">
-        @auth()
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
-        @endauth
-         
-        @yield('content') 
-      </div>     
+        <div id="department_page_wrap">
+          @auth()
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                  @csrf
+              </form>
+          @endauth
+          
+          @yield('content') 
+        </div>   
+      </div>  
       @stack('js')
     </body>
 </html>

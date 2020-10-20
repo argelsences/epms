@@ -9,4 +9,5 @@ class Event extends Model
 {
     //
     use SoftDeletes;
+    protected $dates = ['start_date', 'end_date'];
 }

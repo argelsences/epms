@@ -167,8 +167,8 @@ class TemplateController extends Controller
      * 1. Allow to download the template files
      * 2. Create guide on how to create template
      * 3. Create a sample templates (3) partial (2)
-     * 4. Frontend for each department
-     * 5. System setting page
+     * 4. Frontend for each department DONE
+     * 5. System setting page DONE
      * 
      * Logic for upload edit
      * 

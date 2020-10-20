@@ -39,7 +39,8 @@
                 @csrf
             </form>
         @endauth
-        @include('layouts.page_templates.guest')  
+         
+        @yield('content') 
       </div>     
       @stack('js')
     </body>

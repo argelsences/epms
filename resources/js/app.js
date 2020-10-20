@@ -79,20 +79,21 @@ Vue.use(TiptapVuetifyPlugin, {
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 //Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('admin-template', require('./components/AdminTemplate.vue').default);
-Vue.component('dashboard', require('./components/Dashboard.vue').default);
-Vue.component('user-list', require('./components/users/UserList.vue').default);
-Vue.component('department-list', require('./components/departments/DepartmentList.vue').default);
-Vue.component('speaker-list', require('./components/speakers/SpeakerList.vue').default);
-Vue.component('venue-list', require('./components/venues/VenueList.vue').default);
-Vue.component('event-list', require('./components/events/EventList.vue').default);
-Vue.component('template-list', require('./components/templates/TemplateList.vue').default);
-Vue.component('template-choice', require('./components/templates/TemplateChoice.vue').default);
-Vue.component('by-upload', require('./components/templates/TemplateByUpload.vue').default);
-Vue.component('by-code', require('./components/templates/TemplateByCode.vue').default);
-Vue.component('by-canvas', require('./components/templates/TemplateByCanvas.vue').default);
-Vue.component('settings', require('./components/settings/Settings.vue').default);
-
+// Admin components
+Vue.component('admin-template', require('./components/admin/AdminTemplate.vue').default);
+Vue.component('dashboard', require('./components/admin/Dashboard.vue').default);
+Vue.component('user-list', require('./components/admin/users/UserList.vue').default);
+Vue.component('department-list', require('./components/admin/departments/DepartmentList.vue').default);
+Vue.component('speaker-list', require('./components/admin/speakers/SpeakerList.vue').default);
+Vue.component('venue-list', require('./components/admin/venues/VenueList.vue').default);
+Vue.component('event-list', require('./components/admin/events/EventList.vue').default);
+Vue.component('template-list', require('./components/admin/templates/TemplateList.vue').default);
+Vue.component('template-choice', require('./components/admin/templates/TemplateChoice.vue').default);
+Vue.component('by-upload', require('./components/admin/templates/TemplateByUpload.vue').default);
+Vue.component('by-code', require('./components/admin/templates/TemplateByCode.vue').default);
+Vue.component('by-canvas', require('./components/admin/templates/TemplateByCanvas.vue').default);
+Vue.component('settings', require('./components/admin/settings/Settings.vue').default); 
+// Frontend components
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

@@ -1,18 +1,18 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router';
 
-import Dashboard from './components/Dashboard.vue';
-import DepartmentList from './components/departments/DepartmentList.vue';
-import UserList from './components/users/UserList.vue';
-import SpeakerList from './components/speakers/SpeakerList.vue';
-import VenueList from './components/venues/VenueList.vue';
-import EventList from './components/events/EventList.vue';
-import TemplateList from './components/templates/TemplateList.vue';
-import TemplateUpload from './components/templates/TemplateByUpload.vue'
-import TemplateCode from './components/templates/TemplateByCode.vue'
-import TemplateCanvas from './components/templates/TemplateByCanvas.vue'
-import TemplateChoice from './components/templates/TemplateChoice.vue'
-import Settings from './components/settings/Settings.vue'
+import Dashboard from './components/admin/Dashboard.vue';
+import DepartmentList from './components/admin/departments/DepartmentList.vue';
+import UserList from './components/admin/users/UserList.vue';
+import SpeakerList from './components/admin/speakers/SpeakerList.vue';
+import VenueList from './components/admin/venues/VenueList.vue';
+import EventList from './components/admin/events/EventList.vue';
+import TemplateList from './components/admin/templates/TemplateList.vue';
+import TemplateUpload from './components/admin/templates/TemplateByUpload.vue'
+import TemplateCode from './components/admin/templates/TemplateByCode.vue'
+import TemplateCanvas from './components/admin/templates/TemplateByCanvas.vue'
+import TemplateChoice from './components/admin/templates/TemplateChoice.vue'
+import Settings from './components/admin/settings/Settings.vue' 
 
 Vue.use(VueRouter)
 

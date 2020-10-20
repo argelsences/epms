@@ -10995,10 +10995,6 @@ section {
   color: #666;
 }
 
-section .content {
-  /*padding: 40px 0 40px 0;*/
-}
-
 #department_page_wrap #intro {
   position: relative;
   text-align: center;
@@ -11110,11 +11106,6 @@ section .content {
 
 #event_page_wrap #intro .event_buttons .btn-event-link:hover {
   border-color: rgba(255, 255, 255, 0.6);
-}
-
-#event_page_wrap #tickets .tickets_table_wrap {
-  /*padding: 10px;*/
-  /*background-color: #f8f8f8;*/
 }
 
 #event_page_wrap #tickets .input-group-addon {

@@ -16,5 +16,8 @@ return [
             'department_name' => 'Cruickshank, Kunde and Balistreri',
         ],
     ],
+    'default' => [
+        'logo' => '/images/eppms.png'
+    ]
     
 ];

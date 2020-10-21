@@ -96,6 +96,20 @@
                                             </v-row>
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="12">
+                                                    <v-chip class="mb-6">
+                                                        <v-icon left>mdi-face-profile</v-icon>
+                                                        About
+                                                    </v-chip>
+                                                    <tiptap-vuetify
+                                                        v-model="editedItem.about"
+                                                        :extensions="extensions"
+                                                        id="about"
+                                                        min-height="400"
+                                                    ></tiptap-vuetify>
+                                                </v-col>
+                                            </v-row>
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="12">
                                                     <v-text-field v-model="editedItem.url" label="Department URI" prepend-icon="mdi-link" :prefix="base_url" :rules="[rules.required]"></v-text-field>
                                                 </v-col>
                                             </v-row>
@@ -197,7 +211,7 @@
                 <!-- the toolbar -->
                 </template>
                 <template v-slot:item.url="{ item }">
-                    <v-chip class="ma-2" color="cyan darken-2" tile outlined label :href="item.url" target="blank">
+                    <v-chip class="ma-2" color="cyan darken-2" tile outlined label :href="base_url + item.url" target="blank">
                         <v-avatar left>
                             <v-icon>mdi-link</v-icon>
                         </v-avatar>
@@ -235,7 +249,9 @@
 </template>
 
 <script>
+    import { TiptapVuetify, Heading, Bold, Italic, Strike, Underline, Code, Paragraph, BulletList, OrderedList, ListItem, Link, Blockquote, HardBreak, HorizontalRule, History } from 'tiptap-vuetify'
     export default {
+        components: { TiptapVuetify },
         mounted() {
             console.log('Component mounted');
         },
@@ -254,13 +270,35 @@
                 menu_header_bg: false,
                 menu_bg: false,
                 menu_text_color: false,
-                base_url: window.location.origin + '/',
+                base_url: window.location.origin + '/d/',
                 snackbar: false,
                 timeout: 5000,
                 error: false,
                 logo: null,
                 //c_picker: '',
                 //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
+                // declare extensions you want to use
+                extensions: [
+                    History,
+                    Blockquote,
+                    Link,
+                    Underline,
+                    Strike,
+                    Italic,
+                    ListItem,
+                    BulletList,
+                    OrderedList,
+                    [Heading, {
+                        options: {
+                        levels: [1, 2, 3]
+                        }
+                    }],
+                    Bold,
+                    Code,
+                    HorizontalRule,
+                    Paragraph,
+                    HardBreak
+                ],
 
                 rules: {
                     required: (v) => !!v || 'Required.',
@@ -290,6 +328,7 @@
                     google_analytics_code: '',
                     google_tag_manager_code: '',
                     url: '',
+                    about: '',
                 },
                 defaultItem: {
                     id: 0,
@@ -306,6 +345,7 @@
                     google_analytics_code: '',
                     google_tag_manager_code: '',
                     url: '',
+                    about: '',
                 },
             }
         },

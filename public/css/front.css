@@ -11017,6 +11017,11 @@ section {
   border: none;
 }
 
+#department_page_wrap .department_logo .thumbnail img {
+  width: 150px;
+  height: auto;
+}
+
 #goLiveBar {
   background-color: rgba(255, 255, 255, 0.9);
   text-align: center;

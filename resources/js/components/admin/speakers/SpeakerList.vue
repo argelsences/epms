@@ -215,25 +215,25 @@ Script: event sent automatically no need to send it
 
                 // declare extensions you want to use
                 extensions: [
-                History,
-                Blockquote,
-                Link,
-                Underline,
-                Strike,
-                Italic,
-                ListItem,
-                BulletList,
-                OrderedList,
-                [Heading, {
-                    options: {
-                    levels: [1, 2, 3]
-                    }
-                }],
-                Bold,
-                Code,
-                HorizontalRule,
-                Paragraph,
-                HardBreak
+                    History,
+                    Blockquote,
+                    Link,
+                    Underline,
+                    Strike,
+                    Italic,
+                    ListItem,
+                    BulletList,
+                    OrderedList,
+                    [Heading, {
+                        options: {
+                        levels: [1, 2, 3]
+                        }
+                    }],
+                    Bold,
+                    Code,
+                    HorizontalRule,
+                    Paragraph,
+                    HardBreak
                 ],
 
                 rules: {

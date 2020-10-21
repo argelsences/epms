@@ -56,10 +56,6 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
-    ////'app_scope' => 'front',
-
-    /////'admin_route' => 'web-admin',
-
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

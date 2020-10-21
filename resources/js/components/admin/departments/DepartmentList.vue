@@ -211,7 +211,7 @@
                 <!-- the toolbar -->
                 </template>
                 <template v-slot:item.url="{ item }">
-                    <v-chip class="ma-2" color="cyan darken-2" tile outlined label :href="base_url + item.url" target="blank">
+                    <v-chip class="ma-2" color="cyan darken-2" tile outlined label :href="base_url + 'd/' + item.url" target="blank">
                         <v-avatar left>
                             <v-icon>mdi-link</v-icon>
                         </v-avatar>
@@ -270,7 +270,7 @@
                 menu_header_bg: false,
                 menu_bg: false,
                 menu_text_color: false,
-                base_url: window.location.origin + '/d/',
+                base_url: window.location.origin + '/',
                 snackbar: false,
                 timeout: 5000,
                 error: false,

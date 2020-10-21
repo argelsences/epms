@@ -10965,7 +10965,7 @@ label.required::after {
 
 @media (min-width: 1200px) {
   .container {
-    width: 960px;
+    width: 960px !important;
   }
 }
 

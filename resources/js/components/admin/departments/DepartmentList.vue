@@ -361,7 +361,7 @@
                 //var background = this.editedItem.page_header_bg_color
                 // ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
                 if (this.editedItem.page_header_bg_color == '' || this.editedItem.page_header_bg_color == null )
-                    this.editedItem.page_header_bg_color = '#1976D2'
+                    this.editedItem.page_header_bg_color = '#0D7377'
                     
                 return {
                     backgroundColor: this.editedItem.page_header_bg_color,
@@ -376,7 +376,7 @@
                 const { menu } = this
                 // ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
                 if (this.editedItem.page_bg_color == '' || this.editedItem.page_bg_color == null )
-                    this.editedItem.page_bg_color = '#1976D2'
+                    this.editedItem.page_bg_color = '#EEEEEE'
                     
                 return {
                     backgroundColor: this.editedItem.page_bg_color,
@@ -391,7 +391,7 @@
                 const { menu } = this
                 // ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
                 if (this.editedItem.page_text_color == '' || this.editedItem.page_text_color == null )
-                    this.editedItem.page_text_color = '#1976D2'
+                    this.editedItem.page_text_color = '#FFFFFF'
                     
                 return {
                     backgroundColor: this.editedItem.page_text_color,

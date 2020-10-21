@@ -7,13 +7,6 @@
                 </div>
             </div>
             <h1>{{Config::get('app.name')}}</h1>
-            {{--
-            @if($department->about)
-            <div class="description pa10">
-                {!! $department->about !!}
-            </div>
-            @endif
-            --}}
         </div>
     </div>
 </section>

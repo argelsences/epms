@@ -92,10 +92,10 @@ const router =  new VueRouter({
             component: Settings,
             meta: {title: 'Settings'}
         },
-        {
+        /* check later {
             path: '*',
             redirect: '/'
-        }
+        }*/
     ]
 })
 

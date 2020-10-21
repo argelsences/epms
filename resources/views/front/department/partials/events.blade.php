@@ -1,6 +1,6 @@
 <section id="events" class="container">
     <div class="row">
-        <div class="col-xs-12 col-md-8">
+        <div class="col-xs-12 col-md-12">
             @include('front.department.partials.event-list',
                 [
                     'panel_title' => 'Upcoming Events',
@@ -14,7 +14,7 @@
                 ]
             )
         </div>
-        <div class="col-xs-12 col-md-4">
+        <div class="col-xs-12 col-md-12">
             {{--
             @if ($department->facebook)
                 @include('Shared.Partials.FacebookTimelinePanel',

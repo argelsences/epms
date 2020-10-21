@@ -1,5 +1,5 @@
 @extends('layouts.app_front', [
-  'title' => Config::get('app.name'),
+  'title' => '',
   'url' => '/',
   'logo_path' => '/' ,
   ])
@@ -30,8 +30,8 @@
 
 @section('content')
      @include('front.home.partials.header')
-     {{--
      @include('front.home.partials.body')
+     {{--
      @include('front.home.partials.footer')
      --}}
 @endsection

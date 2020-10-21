@@ -38,7 +38,7 @@ class SettingSeeder extends Seeder
         ]);
         $setting = DB::table('settings')->insert([
             'name'       => 'text_color',
-            'value'      => '#212121',
+            'value'      => '#FFFFFF',
             'created_at' => now(),
             'updated_at' => now()
         ]);

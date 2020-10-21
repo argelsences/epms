@@ -242,4 +242,9 @@ class DepartmentController extends Controller
             'objSettings',
         ));
     }
+
+    public function front_list(Department $model){
+        
+        return response()->json(($model::orderBy('name', 'ASC')->get(['name','logo_path','page_header_bg_color','url'])));
+    }
 }

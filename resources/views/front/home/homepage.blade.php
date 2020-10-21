@@ -31,7 +31,5 @@
 @section('content')
      @include('front.home.partials.header')
      @include('front.home.partials.body')
-     {{--
      @include('front.home.partials.footer')
-     --}}
 @endsection

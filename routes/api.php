@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Route;
     return $request->user();
 });*/
 
+Route::get('/departments-front-list', 'DepartmentController@front_list')->name('departments.frontList');
+
 Route::group(['middleware' => ['auth:api']], function(){
     // users
     Route::get('/users', 'UserController@list')->name('users.list');

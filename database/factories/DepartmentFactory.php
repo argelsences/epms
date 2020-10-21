@@ -21,7 +21,7 @@ $factory->define(Department::class, function (Faker $faker) {
         'page_text_color' => $faker->hexColor,
         'google_analytics_code' => '',
         'google_tag_manager_code' => '',
-        'url' => $faker->unique()->url,
+        'url' => $faker->unique()->word,
         'created_at' => now(),
         'updated_at' => now(),
     ];

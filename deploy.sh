@@ -23,6 +23,7 @@ elif [[ $1 == "production" ]]; then
 fi
 
 npm install
+npm audit fix
 
 if [[ $1 == "fresh" ]]; then
     npm run dev

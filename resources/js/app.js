@@ -14,7 +14,8 @@ import * as VueGoogleMaps from 'vue2-google-maps';
 import { TiptapVuetifyPlugin } from 'tiptap-vuetify';
 /////import DrawerJs from '@vadjs/drawerjs/src/Drawer';
 // tiptap CSSs
-import 'tiptap-vuetify/dist/main.css'
+import 'tiptap-vuetify/dist/main.css';
+import moment from 'moment';
 // drawerjs css
 /////import '@vadjs/drawerjs/dist/drawerJs.min.css' 
 /////import '@vadjs/drawerjs/dist/drawerJs.standalone.js'
@@ -66,6 +67,16 @@ Vue.use(TiptapVuetifyPlugin, {
     // optional, default to 'md' (default vuetify icons before v2.0.0)
     iconsGroup: 'md'
   })
+
+/**
+ * Filters
+ */
+/////Vue.config.productionTip = false
+Vue.filter('formatDate', function(value) {
+  if (value) {
+    return moment(String(value)).format('DD MMMM YYYY @ hh:mm A')
+  }
+});
 
 /**
  * The following block of code may be used to automatically register your

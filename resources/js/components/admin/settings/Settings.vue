@@ -76,7 +76,7 @@
                                 <div class="text-h4  text-left">Social Media</div>
                             </v-col>
                             <v-col cols="12" sm="12" md="4">
-                                <v-switch label="Linkedin" prepend-icon="mdi-facebook" v-model="editedItem.is_facebook"></v-switch>
+                                <v-switch label="Facebook" prepend-icon="mdi-facebook" v-model="editedItem.is_facebook"></v-switch>
                                 <v-switch label="Linkedin" prepend-icon="mdi-linkedin" v-model="editedItem.is_linkedin"></v-switch>
                             </v-col>
                             <v-col cols="12" sm="12" md="4">
@@ -86,7 +86,6 @@
                             <v-col cols="12" sm="12" md="4">
                                 <v-switch label="Email" prepend-icon="mdi-email" v-model="editedItem.is_email"></v-switch>
                             </v-col>
-                            
                         </v-row>
                         <v-row>
                             <v-col cols="12" sm="12" md="12">

@@ -29,6 +29,29 @@
 10. Fix the message output after successful create or update
 11. Push changes to API backend
 12. Force form reset
+
+
+title
+synopsis
+excerpt
+start_date
+end_date
+pre_booking_display_message
+post_booking_display_message
+social_show_facebook
+social_show_twitter
+social_show_whatsapp
+social_show_email
+social_show_linkedin
+is_public
+is_approved
+for_approval
+barcode_type
+checkout_timeout
+department_id
+created_by
+edited_by
+venue_id
 -->
 <template>
     <v-app>
@@ -61,16 +84,62 @@
                                     <v-container>
                                         <v-form v-model="isValid" ref="form">
                                             <v-row>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
+                                                <v-col cols="12" sm="12" md="12">
+                                                    <v-text-field v-model="editedItem.title" label="Title" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
                                                 </v-col>
-                                                <v-col cols="12" sm="12" md="6" v-cloak @drop.prevent="addDropFile" @dragover.prevent>
+                                                <!--<v-col cols="12" sm="12" md="6" v-cloak @drop.prevent="addDropFile" @dragover.prevent>
                                                     <v-file-input v-model="photo" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping an image here" 
                                                     prepend-icon="mdi-camera-iris" label="Photo" persistentHint chips
                                                     hint="Selecting an image will replace the existing photo. Valid image formats are JPG, JPEG, PNG & BMP. Image size should not be greater than 2MB"
                                                     @change="uploadLogo">
                                                     </v-file-input>        
                                                     
+                                                </v-col>-->
+                                            </v-row>
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="12">
+                                                    <v-chip class="mb-6">
+                                                        <v-icon left>mdi-face-profile</v-icon>
+                                                        Synopsis
+                                                    </v-chip>
+                                                    <tiptap-vuetify
+                                                        v-model="editedItem.synopsis"
+                                                        :extensions="extensions"
+                                                        id="synopsis"
+                                                        min-height="400"
+                                                    ></tiptap-vuetify>
+                                                </v-col>
+                                            </v-row>
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-text-field v-model="editedItem.start_date" label="Start Date" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-text-field v-model="editedItem.end_date" label="End Date" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
+                                                </v-col>
+                                            </v-row>
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-textarea counter label="Pre booking display message" v-model="editedItem.pre_booking_display_message" prepend-icon="mdi-face-profile"></v-textarea>
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-textarea counter label="Post booking display message" v-model="editedItem.post_booking_display_message" prepend-icon="mdi-face-profile"></v-textarea>
+                                                </v-col>
+                                            </v-row>
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="12">
+                                                    <div class="text-h4  text-left">Social Media</div>
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="4">
+                                                    <v-switch label="Facebook" prepend-icon="mdi-facebook" :v-model="checkSettings('facebook', editedItem.social_show_facebook)"></v-switch>
+                                                    <v-switch label="Linkedin" prepend-icon="mdi-linkedin" v-model="editedItem.social_show_linkedin"></v-switch>
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="4">
+                                                    <v-switch label="Twitter" prepend-icon="mdi-twitter" v-model="editedItem.social_show_twitter"></v-switch>
+                                                    <v-switch label="Whatsapp" prepend-icon="mdi-whatsapp" v-model="editedItem.social_show_whatsapp"></v-switch>
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="4">
+                                                    <v-switch label="Email" prepend-icon="mdi-email" v-model="editedItem.social_show_email"></v-switch>
                                                 </v-col>
                                             </v-row>
                                             <v-row>
@@ -85,21 +154,6 @@
                                                             <p>{{editedItem.photo}}</p>
                                                         </v-card-text>
                                                     </v-card>
-                                                </v-col>
-                                            </v-row>
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="12">
-                                                    <!--<v-textarea counter label="Profile" v-model="editedItem.profile" prepend-icon="mdi-face-profile"></v-textarea>-->
-                                                    <v-chip class="mb-6">
-                                                        <v-icon left>mdi-face-profile</v-icon>
-                                                        Profile
-                                                    </v-chip>
-                                                    <tiptap-vuetify
-                                                        v-model="editedItem.profile"
-                                                        :extensions="extensions"
-                                                        id="profile"
-                                                        min-height="400"
-                                                    ></tiptap-vuetify>
                                                 </v-col>
                                             </v-row>
                                             <v-row>
@@ -122,9 +176,13 @@
                     </v-toolbar>
                 <!-- the toolbar -->
                 </template>
-                <template v-slot:item.actions="{ item }">
-                    <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-                    <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+                <template v-slot:item.title="{ item }">
+                    <p class="text-subtitle-1">
+                        <strong>{{item.title}}</strong>
+                    </p>
+                </template>
+                <template v-slot:item.start_date="{ item }">
+                    <p>{{item.start_date | formatDate}}</p>
                 </template>
                 <template v-slot:item.venue="{ item }">
                     <p>
@@ -133,6 +191,10 @@
                         {{item.venue.address_line_1}}<br />
                         {{item.venue.state}} {{item.venue.country}} {{item.venue.postcode}}
                     </p>
+                </template>
+                <template v-slot:item.actions="{ item }">
+                    <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+                    <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
                 </template>
                 <template v-slot:no-data>
                     <v-btn class="btn btn-sm btn-primary" @click="initialize">Reset</v-btn>
@@ -168,6 +230,7 @@
         components: { TiptapVuetify },
         mounted() {
             console.log('Component mounted');
+            console.log(this.defaultItem)
         },
         data() {
             return {
@@ -194,31 +257,31 @@
 
                 // declare extensions you want to use
                 extensions: [
-                History,
-                Blockquote,
-                Link,
-                Underline,
-                Strike,
-                Italic,
-                ListItem,
-                BulletList,
-                OrderedList,
-                [Heading, {
-                    options: {
-                    levels: [1, 2, 3]
-                    }
-                }],
-                Bold,
-                Code,
-                HorizontalRule,
-                Paragraph,
-                HardBreak
+                    History,
+                    Blockquote,
+                    Link,
+                    Underline,
+                    Strike,
+                    Italic,
+                    ListItem,
+                    BulletList,
+                    OrderedList,
+                    [Heading, {
+                        options: {
+                        levels: [1, 2, 3]
+                        }
+                    }],
+                    Bold,
+                    Code,
+                    HorizontalRule,
+                    Paragraph,
+                    HardBreak
                 ],
                 content: `
                     <h1>Yay Headlines!</h1>
                     <p>All these <strong>cool tags</strong> are working now.</p>
                 `,
-
+                settings: [],
                 rules: {
                     required: (v) => !!v || 'Required.',
                     /////min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
@@ -230,24 +293,58 @@
                 },
                 headers: [
                     {text: 'Title', value: 'title'},
-                    {text: 'Start Date', value: 'start_date'},
+                    {text: 'Date', value: 'start_date'},
                     {text: 'Venue', value: 'venue'},
                     {text: 'Status', value: 'is_public'},
                     {text: 'Actions', value: 'actions', sortable: false },
                 ],
                 editedItem: {
                     id: 0,
-                    name: '',
-                    profile: '',
-                    photo: null,
-                    department_id: '',
+                    title: '',
+                    synopsis: '',
+                    excerpt: '',
+                    start_date: '',
+                    end_date: '',
+                    pre_booking_display_message: '',
+                    post_booking_display_message: '',
+                    social_show_facebook: 0,
+                    social_show_twitter: 0,
+                    social_show_whatsapp: 0,
+                    social_show_email: 0,
+                    social_show_linkedin: 0,
+                    is_public: 0,
+                    is_approved: 0,
+                    for_approval: 0,
+                    barcode_type: '',
+                    checkout_timeout: 0,
+                    department_id: 0,
+                    created_by: 0,
+                    edited_by: 0,
+                    venue_id: 0,
                 },
                 defaultItem: {
                     id: 0,
-                    name: '',
-                    profile: '',
-                    photo: null,
-                    department_id: '',
+                    title: '',
+                    synopsis: '',
+                    excerpt: '',
+                    start_date: '',
+                    end_date: '',
+                    pre_booking_display_message: '',
+                    post_booking_display_message: '',
+                    social_show_facebook: 0,
+                    social_show_twitter: 0,
+                    social_show_whatsapp: 0,
+                    social_show_email: 0,
+                    social_show_linkedin: 0,
+                    is_public: 0,
+                    is_approved: 0,
+                    for_approval: 0,
+                    barcode_type: '',
+                    checkout_timeout: 0,
+                    department_id: 0,
+                    created_by: 0,
+                    edited_by: 0,
+                    venue_id: 0,
                 },
             }
         },
@@ -276,17 +373,26 @@
                     this.departments = response.data;
                 });
             },
+            getSettings: function() {
+                axios.get('/api/settings')
+                .then( response => {
+                    this.settings = response.data
+                    /*this.defaultItem.social_show_facebook = response.data.is_facebook
+                    this.defaultItem.social_show_linkedin = response.data.is_linkedin
+                    this.defaultItem.social_show_twitter = response.data.is_twitter
+                    this.defaultItem.social_show_whatsapp = response.data.is_whatsapp
+                    this.defaultItem.social_show_email = response.data.is_email*/
+                });
+            },
             editItem (item) {
                 this.editedIndex = this.rows.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 this.dialog = true
             },
-
             deleteItem (item) {
                 const index = this.rows.indexOf(item)
                 confirm('Are you sure you want to delete this item?') && this.rows.splice(index, 1)
             },
-
             close () {
                 // make sure the dialog box is closed
                 this.dialog = false
@@ -377,11 +483,18 @@
             addDropFile(e) { 
                 this.file = e.dataTransfer.files[0]
                 console.log(this.file) 
+            },
+            checkSettings(key, value) {
+                
+                if ( !value )
+                    console.log(key, value)
+                return true
             }
         },
         created: function() {
             this.setHedeaderTitle()
             this.initialize()
+            this.getSettings()
             this.getDepartments()
         },
     }

@@ -15,9 +15,9 @@ class Event extends Model
     /**
      * Return dd mm YY @ h:i:s A
      */
-    public function getStartDateAttribute($value){
+    /*public function getStartDateAttribute($value){
         return (new Carbon($value))->format('j F Y @ h:i:s A');
-    }
+    }*/
 
     /**
      * Evaluate value, if 0 then event is not yet published or under review, else Public

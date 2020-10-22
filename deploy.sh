@@ -29,5 +29,4 @@ if [[ $1 == "fresh" ]]; then
     npm run dev
 fi
 
-php artisan view:clear
-php artisan cache:clear
+php artisan optimize

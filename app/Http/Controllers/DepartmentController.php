@@ -245,6 +245,41 @@ class DepartmentController extends Controller
 
     public function front_list(Department $model){
         
-        return response()->json(($model::orderBy('name', 'ASC')->get(['name','logo_path','page_header_bg_color','url'])));
+        //$theURI = filter_var($URI, FILTER_SANITIZE_STRING);
+        //$department = Department::where('url', $URI)->firstOrFail();
+        //$departments = $this->departments::orderBy('name', 'ASC')->get(['name','logo_path','page_header_bg_color','url']);
+
+        //dd($departments);
+        /*
+        $upcoming_events = $department->events()->where([
+            ['end_date', '>=', now()],
+            ['is_public', 1]
+        ])->get();
+        */
+        $department_event = [];
+        $x = 0;
+
+        $departments = $model::orderBy('name', 'ASC')->get(['id','name','logo_path','page_header_bg_color','url']);
+
+        foreach ( $departments as $department ) {
+            $department_event[$x]['department'] = $department;
+            $department_event[$x]['events'] = $department->events()->where([
+                                                ['end_date', '>=', now()],
+                                                ['is_public', 1]
+                                            ])->get(['id','title','start_date']);
+            $department_event[$x]['events']['count'] = count($department_event[$x]['events']);
+            
+            $x++;
+        }
+        
+        /*foreach ( $departments as $department ) {
+            $department_event [] = $department->events;
+        }*/
+
+        //dd($department_event);
+
+
+        return response()->json($department_event);
+
     }
 }

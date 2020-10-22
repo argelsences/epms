@@ -126,6 +126,14 @@
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                     <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
                 </template>
+                <template v-slot:item.venue="{ item }">
+                    <p>
+                        <strong>{{item.venue.name}}</strong><br />
+                        {{item.venue.address_line_1}}<br />
+                        {{item.venue.address_line_1}}<br />
+                        {{item.venue.state}} {{item.venue.country}} {{item.venue.postcode}}
+                    </p>
+                </template>
                 <template v-slot:no-data>
                     <v-btn class="btn btn-sm btn-primary" @click="initialize">Reset</v-btn>
                 </template>
@@ -223,7 +231,8 @@
                 headers: [
                     {text: 'Title', value: 'title'},
                     {text: 'Start Date', value: 'start_date'},
-                    {text: 'Venue', value: 'venue_id'},
+                    {text: 'Venue', value: 'venue'},
+                    {text: 'Status', value: 'is_public'},
                     {text: 'Actions', value: 'actions', sortable: false },
                 ],
                 editedItem: {

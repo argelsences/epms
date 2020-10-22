@@ -95,6 +95,8 @@ class EventController extends Controller
             return response('Unauthorized', 403);
         }
 
-        return response()->json(($model::orderBy('title', 'ASC')->get()));
+        $events = $model::with(['venue'])->orderBy('title', 'ASC')->get();
+
+        return response()->json($events);
     }
 }

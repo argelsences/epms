@@ -52,6 +52,7 @@ department_id
 created_by
 edited_by
 venue_id
+poster_id
 -->
 <template>
     <v-app>
@@ -85,6 +86,10 @@ venue_id
                                         <v-form v-model="isValid" ref="form">
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="12">
+                                                    <div class="text-h4 text-left mt-10">Details</div>
+                                                    <v-divider />
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="12">
                                                     <v-text-field v-model="editedItem.title" label="Title" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
                                                 </v-col>
                                                 <!--<v-col cols="12" sm="12" md="6" v-cloak @drop.prevent="addDropFile" @dragover.prevent>
@@ -111,6 +116,24 @@ venue_id
                                                 </v-col>
                                             </v-row>
                                             <v-row>
+                                                <v-col cols="12" sm="12" md="12">
+                                                    <v-chip class="mb-6">
+                                                        <v-icon left>mdi-face-profile</v-icon>
+                                                        Excerpt
+                                                    </v-chip>
+                                                    <tiptap-vuetify
+                                                        v-model="editedItem.excerpt"
+                                                        :extensions="extensions"
+                                                        id="synopsis"
+                                                        min-height="400"
+                                                    ></tiptap-vuetify>
+                                                </v-col>
+                                            </v-row>
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="12">
+                                                    <div class="text-h4  text-left mt-10">Dates</div>
+                                                    <v-divider />
+                                                </v-col>
                                                 <v-col cols="12" sm="12" md="6">
                                                     <v-text-field v-model="editedItem.start_date" label="Start Date" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
                                                 </v-col>
@@ -119,6 +142,10 @@ venue_id
                                                 </v-col>
                                             </v-row>
                                             <v-row>
+                                                <v-col cols="12" sm="12" md="12">
+                                                    <div class="text-h4  text-left mt-10">Page</div>
+                                                    <v-divider />
+                                                </v-col>
                                                 <v-col cols="12" sm="12" md="6">
                                                     <v-textarea counter label="Pre booking display message" v-model="editedItem.pre_booking_display_message" prepend-icon="mdi-face-profile"></v-textarea>
                                                 </v-col>
@@ -126,9 +153,11 @@ venue_id
                                                     <v-textarea counter label="Post booking display message" v-model="editedItem.post_booking_display_message" prepend-icon="mdi-face-profile"></v-textarea>
                                                 </v-col>
                                             </v-row>
+                                            
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="12">
-                                                    <div class="text-h4  text-left">Social Media</div>
+                                                    <div class="text-h4  text-left mt-10">Social Media</div>
+                                                    <v-divider />
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="4">
                                                     <v-switch label="Facebook" prepend-icon="mdi-facebook" v-model="editedItem.social_show_facebook"></v-switch>
@@ -143,22 +172,37 @@ venue_id
                                                 </v-col>
                                             </v-row>
                                             <v-row>
+                                                <v-col cols="12" sm="12" md="12">
+                                                    <div class="text-h4  text-left mt-10">Venue</div>
+                                                    <v-divider />
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-autocomplete v-model="editedItem.venue_id" :items="venues" item-text="name" item-value="id"  label="Venue" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="6">
+                                                </v-col>
+                                            </v-row>
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="12">
+                                                    <div class="text-h4  text-left mt-10">Poster</div>
+                                                    <v-divider />
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    select template
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    upload poster
+                                                </v-col>
+                                            </v-row>
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="12">
+                                                    <div class="text-h4  text-left mt-10">Department</div>
+                                                    <v-divider />
+                                                </v-col>
                                                 <v-col cols="12" sm="12" md="6">
                                                     <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">
-                                                    <v-card v-if="editedItem.photo != null" class="my-2">
-                                                        <v-card-text>
-                                                            <v-img :lazy-src="base_url + editedItem.photo" max-height="150" max-width="250" :src="base_url + editedItem.photo"></v-img>
-                                                            <v-divider class="my-2"></v-divider>
-                                                            <p>{{editedItem.photo}}</p>
-                                                        </v-card-text>
-                                                    </v-card>
-                                                </v-col>
-                                            </v-row>
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    
                                                 </v-col>
                                             </v-row>
                                         </v-form>
@@ -240,7 +284,7 @@ venue_id
                 feedbacks: [],
                 rows: [],
                 departments: [],
-                roles: [],
+                venues: [],
                 editedIndex: -1,
                 color: '#1976D2',
                 mask: '?#XXXXXX',
@@ -357,6 +401,15 @@ venue_id
             dialog (val) {
                 // if val is true, then statement is true, if not the default value is this.close
                 // eg. the_title = title || "Error"; if title is true, the the value of the_title is the value of title, else the value of the_title is "Error"
+
+                // set default values from settings
+                if (val && this.editedIndex === -1){
+                    this.editedItem.social_show_linkedin = this.settings.is_linkedin
+                    this.editedItem.social_show_twitter = this.settings.is_twitter
+                    this.editedItem.social_show_whatsapp = this.settings.is_whatsapp
+                    this.editedItem.social_show_email = this.settings.is_email
+                    this.editedItem.social_show_facebook = this.settings.is_facebook
+                }
                 val || this.close()
             },
         },
@@ -377,11 +430,12 @@ venue_id
                 axios.get('/api/settings')
                 .then( response => {
                     this.settings = response.data
-                    /*this.defaultItem.social_show_facebook = response.data.is_facebook
-                    this.defaultItem.social_show_linkedin = response.data.is_linkedin
-                    this.defaultItem.social_show_twitter = response.data.is_twitter
-                    this.defaultItem.social_show_whatsapp = response.data.is_whatsapp
-                    this.defaultItem.social_show_email = response.data.is_email*/
+                });
+            },
+            getVenues: function() {
+                axios.get('/api/venues')
+                .then( response => {
+                    this.venues = response.data;
                 });
             },
             editItem (item) {
@@ -496,6 +550,7 @@ venue_id
             this.initialize()
             this.getSettings()
             this.getDepartments()
+            this.getVenues()
         },
     }
 </script>

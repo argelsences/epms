@@ -131,7 +131,7 @@ venue_id
                                                     <div class="text-h4  text-left">Social Media</div>
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="4">
-                                                    <v-switch label="Facebook" prepend-icon="mdi-facebook" :v-model="checkSettings('facebook', editedItem.social_show_facebook)"></v-switch>
+                                                    <v-switch label="Facebook" prepend-icon="mdi-facebook" v-model="editedItem.social_show_facebook"></v-switch>
                                                     <v-switch label="Linkedin" prepend-icon="mdi-linkedin" v-model="editedItem.social_show_linkedin"></v-switch>
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="4">
@@ -185,10 +185,10 @@ venue_id
                     <p>{{item.start_date | formatDate}}</p>
                 </template>
                 <template v-slot:item.venue="{ item }">
-                    <p>
+                    <p class="pt-5">
                         <strong>{{item.venue.name}}</strong><br />
                         {{item.venue.address_line_1}}<br />
-                        {{item.venue.address_line_1}}<br />
+                        {{item.venue.address_line_2}}<br />
                         {{item.venue.state}} {{item.venue.country}} {{item.venue.postcode}}
                     </p>
                 </template>

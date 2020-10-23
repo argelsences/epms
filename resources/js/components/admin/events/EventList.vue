@@ -140,7 +140,7 @@ poster_id
                                                         :text-field-props="textFieldProps"
                                                         :date-picker-props="dateProps"
                                                         :label="formatDate(editedItem.start_date)" 
-                                                        :v-model="formatDate(editedItem.start_date)"  
+                                                        v-model="editedItem.start_date"  
                                                         dateFormat="dd/MM/yyyy" 
                                                         timeFormat="hh:mm a" >
                                                     </v-datetime-picker>                                                    
@@ -151,7 +151,7 @@ poster_id
                                                         :text-field-props="textFieldProps"
                                                         :date-picker-props="dateProps"
                                                         :label="formatDate(editedItem.end_date)" 
-                                                        :v-model="formatDate(editedItem.end_date)"  
+                                                        v-model="editedItem.end_date"  
                                                         dateFormat="dd/MM/yyyy" 
                                                         timeFormat="hh:mm a" >
                                                     </v-datetime-picker>
@@ -364,8 +364,8 @@ poster_id
                     title: '',
                     synopsis: '',
                     excerpt: '',
-                    start_date: '',
-                    end_date: '',
+                    start_date: null,
+                    end_date: 'QRCODE',
                     pre_booking_display_message: '',
                     post_booking_display_message: '',
                     social_show_facebook: 0,
@@ -400,7 +400,7 @@ poster_id
                     is_public: 0,
                     is_approved: 0,
                     for_approval: 0,
-                    barcode_type: '',
+                    barcode_type: 'QRCODE',
                     checkout_timeout: 0,
                     department_id: 0,
                     created_by: 0,
@@ -493,8 +493,9 @@ poster_id
                 // assign the edited item to a local var first to be able to be used for filter
                 var editedItem = this.editedItem
                 var editedIndex = this.editedIndex
+                console.log(this.editedItem)
 
-                axios.post('/api/speakers/upsert', {
+                axios.post('/api/events/upsert', {
                     payload: this.editedItem,
                 })
                 .then(response => {

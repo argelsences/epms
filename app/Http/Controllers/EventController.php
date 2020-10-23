@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
+    protected $events;
+
+    public function __construct(Event $events){
+        $this->events = $events;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -98,5 +103,32 @@ class EventController extends Controller
         $events = $model::with(['venue'])->orderBy('title', 'ASC')->get();
 
         return response()->json($events);
+    }
+    /**
+     * API Update and Insert
+     */
+    public function upsert(Request $request){
+
+        if ( auth()->user()->can(['list event']) ){
+            return response('Unauthorized', 403);
+        }
+        dd($request->all());
+        $upsertSuccess = false;
+        $event = $request->post('payload');
+
+        if ( $event['id'] ){
+            // retrieve the user object
+            $theEvent = $this->events->findOrFail($event['id']);
+            // update the user object with updated details
+            $theEvent = tap($theEvent)->update($event);
+            //$department['updated_at'] = Carbon::now(env("APP_TIMEZONE"));
+        }
+        else{
+            $theEvent = $this->events->create($event);
+            $upsertSuccess = ($theEvent->id) ? true : false;
+        }
+        // return the same data compared to list to ensure using the same 
+        $success = ($theEvent) ? true : false;
+        return ['success' => $success, 'item' => $theEvent];
     }
 }

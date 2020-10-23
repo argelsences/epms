@@ -50,6 +50,8 @@ Route::group(['middleware' => ['auth:api']], function(){
     Route::get('/settings', 'SettingController@list')->name('settings.list');
     Route::post('/settings/upsert', 'SettingController@upsert')->name('settings.upsert');
     Route::get('/timezones', 'SettingController@timezones')->name('settings.timezones');
+    // Events
+    Route::post('/events/upsert', 'EventController@upsert')->name('events.upsert');
     //////Route::get('/templates/screenshot/{id}', 'TemplateController@screenshot')->name('templates.screenshot');
     //Route::delete('/categories/{category}', 'CategoryController@destroy');
     /////Route::middleware('can:delete,category')->delete('/categories/{category}', 'CategoryController@destroy');

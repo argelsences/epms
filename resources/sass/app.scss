@@ -139,3 +139,4 @@ footer.v-footer, .v-sheet.v-app-bar.v-toolbar {
     z-index:$toolbar_z_index;
 }
 .v-navigation-drawer {z-index:$navigation_z_index!important ;}
+.v-overlay{z-index:1008!important;}

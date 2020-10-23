@@ -67,7 +67,7 @@ poster_id
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details ></v-text-field>
                         <v-spacer></v-spacer>
                         <!-- the dialog box -->        
-                        <v-dialog v-model="dialog"  width="80%" scrollable fullscreen>
+                        <v-dialog v-model="dialog"  width="80%" scrollable fullscreen hide-overlay>
                             <template v-slot:activator="{ on, attrs }">
                                 <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Event</v-btn>
                             </template>
@@ -135,10 +135,26 @@ poster_id
                                                     <v-divider />
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">
-                                                    <v-text-field v-model="editedItem.start_date" label="Start Date" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
+                                                    <div class="text-caption">Start Date and Time</div>
+                                                    <v-datetime-picker 
+                                                        :text-field-props="textFieldProps"
+                                                        :date-picker-props="dateProps"
+                                                        :label="formatDate(editedItem.start_date)" 
+                                                        :v-model="formatDate(editedItem.start_date)"  
+                                                        dateFormat="dd/MM/yyyy" 
+                                                        timeFormat="hh:mm a" >
+                                                    </v-datetime-picker>                                                    
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">
-                                                    <v-text-field v-model="editedItem.end_date" label="End Date" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
+                                                    <div class="text-caption">End Date and Time</div>
+                                                    <v-datetime-picker 
+                                                        :text-field-props="textFieldProps"
+                                                        :date-picker-props="dateProps"
+                                                        :label="formatDate(editedItem.end_date)" 
+                                                        :v-model="formatDate(editedItem.end_date)"  
+                                                        dateFormat="dd/MM/yyyy" 
+                                                        timeFormat="hh:mm a" >
+                                                    </v-datetime-picker>
                                                 </v-col>
                                             </v-row>
                                             <v-row>
@@ -269,6 +285,7 @@ poster_id
 <script>
     // import the component and the necessary extensions
     import { TiptapVuetify, Heading, Bold, Italic, Strike, Underline, Code, Paragraph, BulletList, OrderedList, ListItem, Link, Blockquote, HardBreak, HorizontalRule, History } from 'tiptap-vuetify'
+    import moment from 'moment'
     export default {
         // specify TiptapVuetify component in "components"
         components: { TiptapVuetify },
@@ -371,8 +388,8 @@ poster_id
                     title: '',
                     synopsis: '',
                     excerpt: '',
-                    start_date: '',
-                    end_date: '',
+                    start_date: null,
+                    end_date: null,
                     pre_booking_display_message: '',
                     post_booking_display_message: '',
                     social_show_facebook: 0,
@@ -389,6 +406,12 @@ poster_id
                     created_by: 0,
                     edited_by: 0,
                     venue_id: 0,
+                },
+                textFieldProps: {
+                    appendIcon: 'event',
+                },
+                dateProps: {
+                    headerColor: 'cyan darken-2'
                 },
             }
         },
@@ -538,11 +561,11 @@ poster_id
                 this.file = e.dataTransfer.files[0]
                 console.log(this.file) 
             },
-            checkSettings(key, value) {
-                
-                if ( !value )
-                    console.log(key, value)
-                return true
+            formatDate(value){
+                if (!value) 
+                    value = moment()
+
+                return moment(String(value)).format('DD/MM/YYYY hh:mm A')
             }
         },
         created: function() {

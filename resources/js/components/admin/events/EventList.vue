@@ -117,6 +117,7 @@ poster_id
                                             </v-row>
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="12">
+                                                    <!--
                                                     <v-chip class="mb-6">
                                                         <v-icon left>mdi-face-profile</v-icon>
                                                         Excerpt
@@ -127,6 +128,8 @@ poster_id
                                                         id="synopsis"
                                                         min-height="400"
                                                     ></tiptap-vuetify>
+                                                    -->
+                                                    <v-textarea counter label="Excerpt" v-model="editedItem.excerpt" :rules=[rules.limitCharacters] prepend-icon="mdi-face-profile" hint="Limit to 150 characters only" persisten-hint></v-textarea>
                                                 </v-col>
                                             </v-row>
                                             <v-row>
@@ -140,10 +143,12 @@ poster_id
                                                         :text-field-props="textFieldProps"
                                                         :date-picker-props="dateProps"
                                                         :label="formatDate(editedItem.start_date)" 
-                                                        v-model="editedItem.start_date"  
+                                                        v-model="computeStartDate"
                                                         dateFormat="dd/MM/yyyy" 
                                                         timeFormat="hh:mm a" >
-                                                    </v-datetime-picker>                                                    
+                                                    </v-datetime-picker>
+                                                    <!--<v-datetime-picker :v-model="formattedDatetime" date-format="MM/dd/yyyy"></v-datetime-picker>                                                   
+                                                    <div>Datetime value: <span v-text="formattedDatetime"></span></div>-->
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">
                                                     <div class="text-caption">End Date and Time</div>
@@ -151,7 +156,7 @@ poster_id
                                                         :text-field-props="textFieldProps"
                                                         :date-picker-props="dateProps"
                                                         :label="formatDate(editedItem.end_date)" 
-                                                        v-model="editedItem.end_date"  
+                                                        v-model="computeEndDate"  
                                                         dateFormat="dd/MM/yyyy" 
                                                         timeFormat="hh:mm a" >
                                                     </v-datetime-picker>
@@ -204,7 +209,75 @@ poster_id
                                                     <v-divider />
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">
-                                                    select template
+                                                    <v-dialog
+                                                    v-model="dialog2"
+                                                    fullscreen
+                                                    hide-overlay
+                                                    transition="dialog-bottom-transition"
+                                                    >
+                                                    <template v-slot:activator="{ on, attrs }">
+                                                        <v-btn
+                                                        color="#1f4068"
+                                                        dark
+                                                        v-bind="attrs"
+                                                        v-on="on"
+                                                        >
+                                                        Select Template
+                                                        </v-btn>
+                                                    </template>
+                                                    <v-card>
+                                                        <v-toolbar
+                                                        dark
+                                                        color="primary"
+                                                        >
+                                                        <v-btn
+                                                            icon
+                                                            dark
+                                                            @click="dialog2 = false"
+                                                        >
+                                                            <v-icon>mdi-close</v-icon>
+                                                        </v-btn>
+                                                        <v-toolbar-title>Templates</v-toolbar-title>
+                                                        <v-spacer></v-spacer>
+                                                        <v-toolbar-items>
+                                                            <v-btn
+                                                            dark
+                                                            text
+                                                            @click="setTemplateChoice"
+                                                            >
+                                                            Save your choice
+                                                            </v-btn>
+                                                        </v-toolbar-items>
+                                                        </v-toolbar>
+                                                        <v-list
+                                                        three-line
+                                                        subheader
+                                                        >
+                                                            <v-list-item-group
+                                                                v-model="selectedItem"
+                                                                color="primary"
+                                                            >
+                                                                <v-row>
+                                                                <v-col cols="4" sm="12" md="4" v-for="(item, i) in templates"
+                                                                :key="i">
+                                                                <v-list-item>
+                                                                
+                                                                <v-list-item-icon>
+                                                                    <v-icon v-text="item.icon"></v-icon>
+                                                                </v-list-item-icon>
+                                                                <v-list-item-content>
+                                                                    <v-list-item-title v-text="item.name"></v-list-item-title>
+                                                                </v-list-item-content>
+                                                                
+                                                                </v-list-item>
+                                                                </v-col>
+                                                                </v-row>
+                                                            </v-list-item-group>
+                                                        </v-list>
+                                                    </v-card>
+                                                    </v-dialog>
+
+
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">
                                                     upload poster
@@ -252,6 +325,11 @@ poster_id
                         {{item.venue.state}} {{item.venue.country}} {{item.venue.postcode}}
                     </p>
                 </template>
+                <template v-slot:item.is_public="{ item }">
+                    <p class="pt-5">
+                        {{isPublic(item.is_public)}}
+                    </p>
+                </template>
                 <template v-slot:item.actions="{ item }">
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                     <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
@@ -291,17 +369,19 @@ poster_id
         components: { TiptapVuetify },
         mounted() {
             console.log('Component mounted');
-            console.log(this.defaultItem)
+            console.log(this.templates)
         },
         data() {
             return {
                 dialog: false,
+                dialog2: false,
                 isValid: true,
                 search : '',
                 feedbacks: [],
                 rows: [],
                 departments: [],
                 venues: [],
+                templates: [],
                 editedIndex: -1,
                 color: '#1976D2',
                 mask: '?#XXXXXX',
@@ -313,6 +393,7 @@ poster_id
                 timeout: 5000,
                 error: false,
                 photo: null,
+                formattedDatetime: '09/01/2019 12:00',
                 //c_picker: '',
                 //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
 
@@ -350,7 +431,8 @@ poster_id
                     phoneValid: (v) => !v || /^(?=.*[0-9])[- +()x0-9]+$/.test(v) || 'Tel. # must be valid',
                     urlValid: (v) => !v || /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(v) || 'URL must be valid',
                     limitFileSize: (v) => !v || v.size < 2000000 || 'Logo size should be less than 2 MB!',
-                    limitFileSizeMultiple: files => !files || !files.some(file => file.size > 2e6) || 'Avatar size should be less than 2 MB!'
+                    limitFileSizeMultiple: files => !files || !files.some(file => file.size > 2e6) || 'Avatar size should be less than 2 MB!',
+                    limitCharacters: (v) => (v || '' ).length <= 150 || 'Excerpt must be 150 characters or less',
                 },
                 headers: [
                     {text: 'Title', value: 'title'},
@@ -365,7 +447,7 @@ poster_id
                     synopsis: '',
                     excerpt: '',
                     start_date: null,
-                    end_date: 'QRCODE',
+                    end_date: null,
                     pre_booking_display_message: '',
                     post_booking_display_message: '',
                     social_show_facebook: 0,
@@ -376,7 +458,7 @@ poster_id
                     is_public: 0,
                     is_approved: 0,
                     for_approval: 0,
-                    barcode_type: '',
+                    barcode_type: 'QRCODE',
                     checkout_timeout: 0,
                     department_id: 0,
                     created_by: 0,
@@ -413,12 +495,23 @@ poster_id
                 dateProps: {
                     headerColor: 'cyan darken-2'
                 },
+
+
+                selectedItem: 0,
+
+
             }
         },
         computed: {
             formTitle () {
                 return this.editedIndex === -1 ? 'New Event' : 'Edit Event'
             },
+            computeStartDate() {
+                return this.formatStartDate()
+            },
+            computeEndDate() {
+                return this.formatEndDate()
+            }
         },
         watch: {
             dialog (val) {
@@ -461,6 +554,12 @@ poster_id
                     this.venues = response.data;
                 });
             },
+            getTemplates: function() {
+                axios.get('/api/templates')
+                .then( response => {
+                    this.templates = response.data;
+                });
+            },
             editItem (item) {
                 this.editedIndex = this.rows.indexOf(item)
                 this.editedItem = Object.assign({}, item)
@@ -493,7 +592,7 @@ poster_id
                 // assign the edited item to a local var first to be able to be used for filter
                 var editedItem = this.editedItem
                 var editedIndex = this.editedIndex
-                console.log(this.editedItem)
+                /////console.log(this.editedItem)
 
                 axios.post('/api/events/upsert', {
                     payload: this.editedItem,
@@ -560,13 +659,33 @@ poster_id
             },
             addDropFile(e) { 
                 this.file = e.dataTransfer.files[0]
-                console.log(this.file) 
+                //console.log(this.file) 
             },
             formatDate(value){
                 if (!value) 
-                    value = moment()
-
-                return moment(String(value)).format('DD/MM/YYYY hh:mm A')
+                    return moment()
+                
+                return moment(value).format('DD/MM/yyyy hh:mm a')
+            },
+            formatStartDate(){
+                if (!this.editedItem.start_date) 
+                    return moment()
+                
+                return moment(this.editedItem.start_date).format('DD/MM/yyyy hh:mm a')
+            },
+            formatEndDate(){
+                if (!this.editedItem.end_date) 
+                    return moment()
+                
+                return moment(this.editedItem.end_date).format('DD/MM/yyyy hh:mm a')
+            },
+            isPublic(value){
+                /////console.log(value)
+                return (value) ? 'Public' : 'Private'
+            },
+            setTemplateChoice(){
+                console.log(this.selectedItem)
+                this.dialog2 = false
             }
         },
         created: function() {
@@ -575,6 +694,7 @@ poster_id
             this.getSettings()
             this.getDepartments()
             this.getVenues()
+            this.getTemplates()
         },
     }
 </script>

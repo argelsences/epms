@@ -7,10 +7,10 @@
                 @foreach($events as $event)
                     <li>
                         <time datetime="{{ $event->start_date }}">
-                            <span class="day">{{ $event->start_date->format('d') }}</span>
-                            <span class="month">{{ $event->start_date->format('n') }}</span>
-                            <span class="year">{{ $event->start_date->format('Y') }}</span>
-                            <span class="time">{{ $event->start_date->format('h:i') }}</span>
+                            <span class="day">{{\Carbon\Carbon::parse($event->start_date)->format('d')}}</span>
+                            <span class="month">{{ \Carbon\Carbon::parse($event->start_date)->format('n') }}</span>
+                            <span class="year">{{ \Carbon\Carbon::parse($event->start_date)->format('Y') }}</span>
+                            <span class="time">{{ \Carbon\Carbon::parse($event->start_date)->format('h:i') }}</span>
                         </time>
                         {{-- 
                         @if(count($event->images))

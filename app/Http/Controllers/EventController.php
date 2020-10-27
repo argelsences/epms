@@ -112,9 +112,11 @@ class EventController extends Controller
         if ( auth()->user()->can(['list event']) ){
             return response('Unauthorized', 403);
         }
-        dd($request->all());
+        //dd($request->all());
         $upsertSuccess = false;
         $event = $request->post('payload');
+        $event['barcode_type'] = (!$event['barcode_type']) ? 'QRCODE' : '';
+        
 
         if ( $event['id'] ){
             // retrieve the user object

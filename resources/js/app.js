@@ -15,10 +15,11 @@ import { TiptapVuetifyPlugin } from 'tiptap-vuetify';
 /////import DrawerJs from '@vadjs/drawerjs/src/Drawer';
 // tiptap CSSs
 import 'tiptap-vuetify/dist/main.css';
-import moment from 'moment';
+//import moment from 'moment';
+import moment from 'moment-timezone';
 import DatetimePicker from 'vuetify-datetime-picker'
 // drawerjs css
-/////import '@vadjs/drawerjs/dist/drawerJs.min.css' 
+/////import '@vadjs/drawerjs/dist/drawerJs.min.css'
 /////import '@vadjs/drawerjs/dist/drawerJs.standalone.js'
 
 import Route from './routes.js'
@@ -32,6 +33,7 @@ window.Vue.use(VueMask);
 
 /// drawerJS
 /////window.Vue.use(DrawerJs);
+moment.tz.setDefault('Asia/Singapore')
 
 
 // initialize vue2-google-maps
@@ -76,7 +78,7 @@ Vue.use(moment)
 /////Vue.config.productionTip = false
 Vue.filter('formatDate', function(value) {
   if (value) {
-    return moment( new Date(value)).format('DD MMMM YYYY @ hh:mm A')
+    return moment( new Date(value)).add(8, 'hours').format('DD MMMM YYYY @ hh:mm A')
   }
 });
 /**

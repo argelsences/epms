@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Event;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class EventController extends Controller
 {
@@ -101,6 +102,7 @@ class EventController extends Controller
         }
 
         $events = $model::with(['venue'])->orderBy('title', 'ASC')->get();
+        //dd($events);
 
         return response()->json($events);
     }
@@ -121,6 +123,10 @@ class EventController extends Controller
         if ( $event['id'] ){
             // retrieve the user object
             $theEvent = $this->events->findOrFail($event['id']);
+            //$theEvent->start_date = new Carbon($event['start_date'], 'Asia/Singapore');
+            //dd(Carbon::parse($event['start_date']));
+            //$event['start_date'] = Carbon::parse($event['start_date']);
+            //$event['start_date'] = Carbon::createFromFormat('Y-m-d H:i:s', $event['start_date'], 'Asia/Singapore' );
             // update the user object with updated details
             $theEvent = tap($theEvent)->update($event);
             //$department['updated_at'] = Carbon::now(env("APP_TIMEZONE"));

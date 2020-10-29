@@ -220,7 +220,47 @@ poster_id
                                                     <v-divider />
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">
-                                                    <v-autocomplete v-model="editedItem.speaker_id" :items="speakers" item-text="name" item-value="id"  label="Speakers" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
+                                                    <v-autocomplete
+                                                        v-model="editedItem.speaker_id"
+                                                        :items="speakers"
+                                                        prepend-icon="mdi-office-building"
+                                                        filled
+                                                        chips
+                                                        color="blue-grey lighten-2"
+                                                        label="Select"
+                                                        item-text="name"
+                                                        item-value="id"
+                                                        multiple
+                                                        >
+                                                        <template v-slot:selection="data">
+                                                            <v-chip
+                                                            v-bind="data.attrs"
+                                                            :input-value="data.selected"
+                                                            >
+                                                            <v-avatar left>
+                                                                <v-img :src="base_url + data.item.photo"></v-img>
+                                                            </v-avatar>
+                                                            {{ data.item.name }}
+                                                            </v-chip>
+                                                        </template>
+                                                        <template v-slot:item="data">
+                                                            <template v-if="typeof data.item !== 'object'">
+                                                            <v-list-item-content v-text="data.item"></v-list-item-content>
+                                                            </template>
+                                                            <template v-else>
+                                                            <v-list-item-avatar>
+                                                                <img :src="base_url + data.item.photo">
+                                                            </v-list-item-avatar>
+                                                            <v-list-item-content>
+                                                                <v-list-item-title v-html="data.item.name"></v-list-item-title>
+                                                                <!--<v-list-item-subtitle v-html="data.item.group"></v-list-item-subtitle>-->
+                                                            </v-list-item-content>
+                                                            </template>
+                                                        </template>
+                                                        </v-autocomplete>
+                                                
+                                                
+                                                
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">
                                                 </v-col>
@@ -382,7 +422,6 @@ poster_id
         components: { TiptapVuetify },
         mounted() {
             console.log('Component mounted');
-            console.log(this.templates)
         },
         data() {
             return {
@@ -407,9 +446,7 @@ poster_id
                 error: false,
                 photo: null,
                 formattedDatetime: '09/01/2019 12:00',
-                //c_picker: '',
-                //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
-
+                base_url: window.location.origin + '/',
                 // declare extensions you want to use
                 extensions: [
                     History,
@@ -549,6 +586,7 @@ poster_id
                 axios.get('/api/events')
                 .then( response => {
                     this.rows = response.data;
+                    console.log(this.rows)
                 });
             },
             getDepartments: function() {
@@ -608,6 +646,9 @@ poster_id
                 var editedItem = this.editedItem
                 var editedIndex = this.editedIndex
                 /////console.log(this.editedItem)
+                // dirty fix for bug that causes to minus 8 hours of time
+                this.editedItem.start_date = moment(this.editedItem.start_date).add(8, 'hours').format('yyyy-MM-DD hh:mm:ss')
+                this.editedItem.end_date = moment(this.editedItem.end_date).add(8, 'hours').format('yyyy-MM-DD hh:mm:ss')
 
                 axios.post('/api/events/upsert', {
                     payload: this.editedItem,
@@ -686,13 +727,13 @@ poster_id
                 if (!this.editedItem.start_date) 
                     return moment()
                 
-                return moment(this.editedItem.start_date).format('DD/MM/yyyy hh:mm a')
+                return moment(this.editedItem.start_date).add(8, 'hours').format('DD/MM/yyyy hh:mm a')
             },
             formatEndDate(){
                 if (!this.editedItem.end_date) 
                     return moment()
                 
-                return moment(this.editedItem.end_date).format('DD/MM/yyyy hh:mm a')
+                return moment(this.editedItem.end_date).add(8, 'hours').format('DD/MM/yyyy hh:mm a')
             },
             isPublic(value){
                 /////console.log(value)
@@ -701,7 +742,7 @@ poster_id
             setTemplateChoice(){
                 console.log(this.selectedItem)
                 this.dialog2 = false
-            }
+            },
         },
         created: function() {
             this.setHedeaderTitle()

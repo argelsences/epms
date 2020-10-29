@@ -34,15 +34,6 @@ class Event extends Model
     }
 
     /**
-     * Evaluate value, if 0 then event is not yet published or under review, else Public
-     */
-    /*
-    public function getIsPublicAttribute($value){
-        return ($value) ? "Published" : "Private";
-    }
-    */
-
-    /**
      * Return venue name instead
      */
     /*
@@ -55,4 +46,9 @@ class Event extends Model
     public function venue(){
         return $this->belongsTo('App\Venue');
     }
+
+    public function speakers(){
+        return $this->belongsToMany('App\Speaker');
+    }
+
 }

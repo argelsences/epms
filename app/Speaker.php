@@ -18,4 +18,8 @@ class Speaker extends Model
     protected $fillable = [
         'name', 'profile', 'photo', 'department_id', 
     ];
+
+    public function events(){
+        return $this->belongsToMany('App\Event');
+    }
 }

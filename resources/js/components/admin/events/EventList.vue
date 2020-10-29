@@ -86,6 +86,17 @@ poster_id
                                         <v-form v-model="isValid" ref="form">
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="12">
+                                                    <div class="text-h4  text-left mt-10">Department</div>
+                                                    <v-divider />
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="6">
+                                                </v-col>
+                                            </v-row>
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="12">
                                                     <div class="text-h4 text-left mt-10">Details</div>
                                                     <v-divider />
                                                 </v-col>
@@ -205,6 +216,18 @@ poster_id
                                             </v-row>
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="12">
+                                                    <div class="text-h4  text-left mt-10">Speaker</div>
+                                                    <v-divider />
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-autocomplete v-model="editedItem.speaker_id" :items="speakers" item-text="name" item-value="id"  label="Speakers" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="6">
+                                                </v-col>
+                                            </v-row>
+                                            <!-- This should be on another tab
+                                            <v-row>
+                                                <v-col cols="12" sm="12" md="12">
                                                     <div class="text-h4  text-left mt-10">Poster</div>
                                                     <v-divider />
                                                 </v-col>
@@ -283,17 +306,7 @@ poster_id
                                                     upload poster
                                                 </v-col>
                                             </v-row>
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="12">
-                                                    <div class="text-h4  text-left mt-10">Department</div>
-                                                    <v-divider />
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                </v-col>
-                                            </v-row>
+                                            -->
                                         </v-form>
                                     </v-container>
                                 </v-card-text>
@@ -381,7 +394,7 @@ poster_id
                 rows: [],
                 departments: [],
                 venues: [],
-                templates: [],
+                speakers: [],
                 editedIndex: -1,
                 color: '#1976D2',
                 mask: '?#XXXXXX',
@@ -464,6 +477,7 @@ poster_id
                     created_by: 0,
                     edited_by: 0,
                     venue_id: 0,
+                    speaker_id: 0,
                 },
                 defaultItem: {
                     id: 0,
@@ -488,6 +502,7 @@ poster_id
                     created_by: 0,
                     edited_by: 0,
                     venue_id: 0,
+                    speaker_id: 0,
                 },
                 textFieldProps: {
                     appendIcon: 'event',
@@ -554,10 +569,10 @@ poster_id
                     this.venues = response.data;
                 });
             },
-            getTemplates: function() {
-                axios.get('/api/templates')
+            getSpeakers: function() {
+                axios.get('/api/speakers')
                 .then( response => {
-                    this.templates = response.data;
+                    this.speakers = response.data;
                 });
             },
             editItem (item) {
@@ -694,7 +709,7 @@ poster_id
             this.getSettings()
             this.getDepartments()
             this.getVenues()
-            this.getTemplates()
+            this.getSpeakers()
         },
     }
 </script>

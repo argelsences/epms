@@ -33,7 +33,6 @@
         "v-mask": "^2.2.3",
         "vue-router": "^3.4.3",
         "vue2-google-maps": "^0.10.7",
-        "vuetify": "^2.3.4",
-        "vuetify-datetime-picker": "^2.1.1"
+        "vuetify": "^2.3.4"
     }
 }

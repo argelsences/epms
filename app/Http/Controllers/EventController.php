@@ -118,7 +118,15 @@ class EventController extends Controller
         $upsertSuccess = false;
         $event = $request->post('payload');
         $event['barcode_type'] = (!$event['barcode_type']) ? 'QRCODE' : '';
-        
+        /////dd($event);
+        /////dd(Carbon::createFromFormat('Y-d-m H:i:s', $event['start_date'] )->format('Y-M-D'));
+        $event['start_date'] = Carbon::parse($event['start_date']);
+        $event['end_date'] = Carbon::parse($event['end_date']);
+        //dd($event);
+        //$event['start_date'] = Carbon::createFromFormat('Y-m-d H:i:s', $event['start_date'] )->format('Y-m-d H:i:s');
+        //$event['end_date'] = Carbon::createFromFormat('Y-m-d H:i:s', $event['end_date'] )->format('Y-m-d H:i:s');
+
+        //dd($event);
 
         if ( $event['id'] ){
             // retrieve the user object

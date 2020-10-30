@@ -1,59 +1,3 @@
-<!--<template>              
-    <table class="table table-striped">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col" v-for="(column, index) in columns" :key="index">{{column.label}}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="(row, index) in rows" :key="row.id">
-                <td>{{row.id}}</td>
-                <td>{{row.name}}</td>
-                <td>{{row.designation}}</td>
-                <td>{{row.email}}</td>
-                <td><a :href="`/web-admin/users/${row.id}/edit`">Edit</a></td>
-            </tr>
-        </tbody>
-    </table>      
-</template>
-** search what is map function {{desserts.map(function(x) {return x.id; }).indexOf(item.id)}}
-1. API for department list, and selected department DONE
-2. Work on pushing the list of departments DONE
-3. Fix issue with department when editing entry DONE
-4. Disable editing email on update DONE
-5. For designation, work on pushing the list of unique designations and allow user to add new input (use combobox) DONE
-6. Add Role
-7. Fix the password when user is editing DONE, confirm password is not shown
-8. Changed password field with input to show the password DONE
-9. BUG: when edit then add new, the password is prefilled and you can save without setting the password. Designation is affected. DONE
-10. Fix the message output after successful create or update
-11. Push changes to API backend
-12. Force form reset
-
-
-title
-synopsis
-excerpt
-start_date
-end_date
-pre_booking_display_message
-post_booking_display_message
-social_show_facebook
-social_show_twitter
-social_show_whatsapp
-social_show_email
-social_show_linkedin
-is_public
-is_approved
-for_approval
-barcode_type
-checkout_timeout
-department_id
-created_by
-edited_by
-venue_id
-poster_id
--->
 <template>
     <v-app>
         <div class="text-h4 text-left">Events</div>
@@ -103,14 +47,6 @@ poster_id
                                                 <v-col cols="12" sm="12" md="12">
                                                     <v-text-field v-model="editedItem.title" label="Title" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
                                                 </v-col>
-                                                <!--<v-col cols="12" sm="12" md="6" v-cloak @drop.prevent="addDropFile" @dragover.prevent>
-                                                    <v-file-input v-model="photo" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping an image here" 
-                                                    prepend-icon="mdi-camera-iris" label="Photo" persistentHint chips
-                                                    hint="Selecting an image will replace the existing photo. Valid image formats are JPG, JPEG, PNG & BMP. Image size should not be greater than 2MB"
-                                                    @change="uploadLogo">
-                                                    </v-file-input>        
-                                                    
-                                                </v-col>-->
                                             </v-row>
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="12">
@@ -128,18 +64,6 @@ poster_id
                                             </v-row>
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="12">
-                                                    <!--
-                                                    <v-chip class="mb-6">
-                                                        <v-icon left>mdi-face-profile</v-icon>
-                                                        Excerpt
-                                                    </v-chip>
-                                                    <tiptap-vuetify
-                                                        v-model="editedItem.excerpt"
-                                                        :extensions="extensions"
-                                                        id="synopsis"
-                                                        min-height="400"
-                                                    ></tiptap-vuetify>
-                                                    -->
                                                     <v-textarea counter label="Excerpt" v-model="editedItem.excerpt" :rules=[rules.limitCharacters] prepend-icon="mdi-face-profile" hint="Limit to 150 characters only" persisten-hint></v-textarea>
                                                 </v-col>
                                             </v-row>
@@ -149,28 +73,52 @@ poster_id
                                                     <v-divider />
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">
-                                                    <div class="text-caption">Start Date and Time</div>
-                                                    <v-datetime-picker 
-                                                        :text-field-props="textFieldProps"
-                                                        :date-picker-props="dateProps"
-                                                        :label="formatDate(editedItem.start_date)" 
-                                                        v-model="computeStartDate"
-                                                        dateFormat="dd/MM/yyyy" 
-                                                        timeFormat="hh:mm a" >
-                                                    </v-datetime-picker>
-                                                    <!--<v-datetime-picker :v-model="formattedDatetime" date-format="MM/dd/yyyy"></v-datetime-picker>                                                   
-                                                    <div>Datetime value: <span v-text="formattedDatetime"></span></div>-->
+                                                    <v-menu ref="st_menu" v-model="st_menu" :close-on-content-click="false" :return-value.sync="start_date" transition="scale-transition" offset-y min-width="290px">
+                                                        <template v-slot:activator="{ on, attrs }">
+                                                            <v-text-field v-model="start_date" label="Start Date" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
+                                                        </template>
+                                                        <v-date-picker v-model="start_date" no-title scrollable>
+                                                            <v-spacer></v-spacer>
+                                                            <v-btn text color="primary" @click="st_menu = false">
+                                                                Cancel
+                                                            </v-btn>
+                                                            <v-btn text color="primary" @click="$refs.st_menu.save(start_date)" >
+                                                                OK
+                                                            </v-btn>
+                                                        </v-date-picker>
+                                                    </v-menu>
                                                 </v-col>
+                                                <v-col cols="12" sm="6" md="6">
+                                                    <v-menu ref="stt_menu" v-model="stt_menu" :close-on-content-click="false" :nudge-right="40" :return-value.sync="start_time" transition="scale-transition" offset-y max-width="290px" min-width="290px">
+                                                        <template v-slot:activator="{ on, attrs }">
+                                                            <v-text-field v-model="start_time" label="Start Time" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on"></v-text-field>
+                                                        </template>
+                                                        <v-time-picker v-if="stt_menu" v-model="start_time" full-width @click:minute="$refs.stt_menu.save(start_time)"></v-time-picker>
+                                                    </v-menu>
+                                                </v-col>
+                                            </v-row>
+                                            <v-row>
                                                 <v-col cols="12" sm="12" md="6">
-                                                    <div class="text-caption">End Date and Time</div>
-                                                    <v-datetime-picker 
-                                                        :text-field-props="textFieldProps"
-                                                        :date-picker-props="dateProps"
-                                                        :label="formatDate(editedItem.end_date)" 
-                                                        v-model="computeEndDate"  
-                                                        dateFormat="dd/MM/yyyy" 
-                                                        timeFormat="hh:mm a" >
-                                                    </v-datetime-picker>
+                                                    <v-menu ref="se_menu" v-model="se_menu" :close-on-content-click="false" :return-value.sync="end_date" transition="scale-transition" offset-y min-width="290px">
+                                                        <template v-slot:activator="{ on, attrs }">
+                                                            <v-text-field v-model="end_date" label="End Date" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
+                                                        </template>
+                                                        <v-date-picker v-model="end_date" no-title scrollable >
+                                                        <v-spacer></v-spacer>
+                                                            <v-btn text color="primary" @click="se_menu = false" > Cancel</v-btn>
+                                                            <v-btn text color="primary" @click="$refs.se_menu.save(end_date)" >
+                                                                OK
+                                                            </v-btn>
+                                                        </v-date-picker>
+                                                    </v-menu>
+                                                </v-col>
+                                                <v-col cols="12" sm="6" md="6">
+                                                    <v-menu ref="ste_menu" v-model="ste_menu" :close-on-content-click="false" :nudge-right="40" :return-value.sync="end_time" transition="scale-transition" offset-y max-width="290px" min-width="290px">
+                                                        <template v-slot:activator="{ on, attrs }">
+                                                            <v-text-field v-model="end_time" label="End Time" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on"></v-text-field>
+                                                        </template>
+                                                        <v-time-picker v-if="ste_menu" v-model="end_time" full-width @click:minute="$refs.ste_menu.save(end_time)"></v-time-picker>
+                                                    </v-menu>
                                                 </v-col>
                                             </v-row>
                                             <v-row>
@@ -426,7 +374,10 @@ poster_id
         data() {
             return {
                 dialog: false,
-                dialog2: false,
+                st_menu: false,
+                se_menu: false,
+                stt_menu: false,
+                ste_menu: false,
                 isValid: true,
                 search : '',
                 feedbacks: [],
@@ -435,18 +386,15 @@ poster_id
                 venues: [],
                 speakers: [],
                 editedIndex: -1,
-                color: '#1976D2',
-                mask: '?#XXXXXX',
-                menu_header_bg: false,
-                menu_bg: false,
-                menu_text_color: false,
-                base_url: window.location.origin + '/',
                 snackbar: false,
                 timeout: 5000,
                 error: false,
                 photo: null,
-                formattedDatetime: '09/01/2019 12:00',
                 base_url: window.location.origin + '/',
+                start_date: new Date().toISOString().substr(0, 10),
+                end_date: new Date().toISOString().substr(0, 10),
+                start_time: '',
+                end_time: '',
                 // declare extensions you want to use
                 extensions: [
                     History,
@@ -469,10 +417,6 @@ poster_id
                     Paragraph,
                     HardBreak
                 ],
-                content: `
-                    <h1>Yay Headlines!</h1>
-                    <p>All these <strong>cool tags</strong> are working now.</p>
-                `,
                 settings: [],
                 rules: {
                     required: (v) => !!v || 'Required.',
@@ -496,8 +440,8 @@ poster_id
                     title: '',
                     synopsis: '',
                     excerpt: '',
-                    start_date: null,
-                    end_date: null,
+                    start_date: '',
+                    end_date: '',
                     pre_booking_display_message: '',
                     post_booking_display_message: '',
                     social_show_facebook: 0,
@@ -521,8 +465,8 @@ poster_id
                     title: '',
                     synopsis: '',
                     excerpt: '',
-                    start_date: null,
-                    end_date: null,
+                    start_date: '',
+                    end_date: '',
                     pre_booking_display_message: '',
                     post_booking_display_message: '',
                     social_show_facebook: 0,
@@ -543,15 +487,11 @@ poster_id
                 },
                 textFieldProps: {
                     appendIcon: 'event',
+                    label: 'sdfsdfsdfsdf'
                 },
                 dateProps: {
                     headerColor: 'cyan darken-2'
                 },
-
-
-                selectedItem: 0,
-
-
             }
         },
         computed: {
@@ -616,6 +556,12 @@ poster_id
             editItem (item) {
                 this.editedIndex = this.rows.indexOf(item)
                 this.editedItem = Object.assign({}, item)
+                let eventStartDate = new Date(this.editedItem.start_date)
+                let eventEndDate = new Date(this.editedItem.end_date)
+                this.start_date = eventStartDate.toISOString().substr(0, 10)
+                this.start_time = String(eventStartDate.getHours()).padStart(2, '0') + ":" + String(eventStartDate.getMinutes()).padStart(2, '0')
+                this.end_date = eventEndDate.toISOString().substr(0, 10)
+                this.end_time = String(eventEndDate.getHours()).padStart(2, '0') + ":" + String(eventEndDate.getMinutes()).padStart(2, '0')
                 this.dialog = true
             },
             deleteItem (item) {
@@ -645,10 +591,10 @@ poster_id
                 // assign the edited item to a local var first to be able to be used for filter
                 var editedItem = this.editedItem
                 var editedIndex = this.editedIndex
-                /////console.log(this.editedItem)
-                // dirty fix for bug that causes to minus 8 hours of time
-                this.editedItem.start_date = moment(this.editedItem.start_date).add(8, 'hours').format('yyyy-MM-DD hh:mm:ss')
-                this.editedItem.end_date = moment(this.editedItem.end_date).add(8, 'hours').format('yyyy-MM-DD hh:mm:ss')
+                this.editedItem.start_date = this.start_date + ' ' + this.start_time
+                this.editedItem.end_date = this.end_date + ' ' + this.end_time
+
+                console.log(this.editedItem )
 
                 axios.post('/api/events/upsert', {
                     payload: this.editedItem,
@@ -721,27 +667,10 @@ poster_id
                 if (!value) 
                     return moment()
                 
-                return moment(value).format('DD/MM/yyyy hh:mm a')
-            },
-            formatStartDate(){
-                if (!this.editedItem.start_date) 
-                    return moment()
-                
-                return moment(this.editedItem.start_date).add(8, 'hours').format('DD/MM/yyyy hh:mm a')
-            },
-            formatEndDate(){
-                if (!this.editedItem.end_date) 
-                    return moment()
-                
-                return moment(this.editedItem.end_date).add(8, 'hours').format('DD/MM/yyyy hh:mm a')
+                return moment(String(value)).format('DD/MM/yyyy hh:mm a')
             },
             isPublic(value){
-                /////console.log(value)
                 return (value) ? 'Public' : 'Private'
-            },
-            setTemplateChoice(){
-                console.log(this.selectedItem)
-                this.dialog2 = false
             },
         },
         created: function() {

@@ -17,7 +17,6 @@ import { TiptapVuetifyPlugin } from 'tiptap-vuetify';
 import 'tiptap-vuetify/dist/main.css';
 //import moment from 'moment';
 import moment from 'moment-timezone';
-import DatetimePicker from 'vuetify-datetime-picker'
 // drawerjs css
 /////import '@vadjs/drawerjs/dist/drawerJs.min.css'
 /////import '@vadjs/drawerjs/dist/drawerJs.standalone.js'
@@ -78,13 +77,10 @@ Vue.use(moment)
 /////Vue.config.productionTip = false
 Vue.filter('formatDate', function(value) {
   if (value) {
-    return moment( new Date(value)).add(8, 'hours').format('DD MMMM YYYY @ hh:mm A')
+    //return moment( new Date(value)).add(8, 'hours').format('DD MMMM YYYY @ hh:mm A')
+    return moment( new Date(value)).format('DD MMMM YYYY @ hh:mm A')
   }
 });
-/**
- * Custom datetime picker
- */
-Vue.use(DatetimePicker)
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

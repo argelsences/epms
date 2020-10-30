@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes; 
 use Carbon\Carbon;
+use DateTimeInterface;
 
 class Event extends Model
 {
@@ -25,12 +26,18 @@ class Event extends Model
         return (new Carbon($value))->format('j F Y @ h:i:s A');
     }*/
 
+    /*
     public function getStartDateAttribute($value){
         return Carbon::parse($value)->toDateTimeString();
     }
 
     public function getEndDateAttribute($value){
         return Carbon::parse($value)->toDateTimeString();
+    }
+    */
+
+    protected function serializeDate(DateTimeInterface $date){
+        return $date->format('Y-m-d H:i:s');
     }
 
     /**

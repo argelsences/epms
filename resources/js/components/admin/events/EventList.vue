@@ -103,7 +103,7 @@
                                                         <template v-slot:activator="{ on, attrs }">
                                                             <v-text-field v-model="end_date" label="End Date" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
                                                         </template>
-                                                        <v-date-picker v-model="end_date" no-title scrollable >
+                                                        <v-date-picker v-model="end_date" no-title scrollable :min="start_date">
                                                         <v-spacer></v-spacer>
                                                             <v-btn text color="primary" @click="se_menu = false" > Cancel</v-btn>
                                                             <v-btn text color="primary" @click="$refs.se_menu.save(end_date)" >
@@ -117,7 +117,7 @@
                                                         <template v-slot:activator="{ on, attrs }">
                                                             <v-text-field v-model="end_time" label="End Time" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on"></v-text-field>
                                                         </template>
-                                                        <v-time-picker v-if="ste_menu" v-model="end_time" full-width @click:minute="$refs.ste_menu.save(end_time)"></v-time-picker>
+                                                        <v-time-picker v-if="ste_menu" v-model="end_time" full-width @click:minute="$refs.ste_menu.save(end_time)" :min="start_time"></v-time-picker>
                                                     </v-menu>
                                                 </v-col>
                                             </v-row>
@@ -393,8 +393,8 @@
                 base_url: window.location.origin + '/',
                 start_date: new Date().toISOString().substr(0, 10),
                 end_date: new Date().toISOString().substr(0, 10),
-                start_time: '',
-                end_time: '',
+                start_time: '00:00',
+                end_time: '00:00',
                 // declare extensions you want to use
                 extensions: [
                     History,

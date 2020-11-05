@@ -114,40 +114,40 @@ class EventController extends Controller
         if ( auth()->user()->can(['list event']) ){
             return response('Unauthorized', 403);
         }
-        //dd($request->all());
+        /////dd($request->all());
         $upsertSuccess = false;
         $event = $request->post('payload');
         $event['barcode_type'] = (!$event['barcode_type']) ? 'QRCODE' : '';
-        /////dd($event);
-        /////dd(Carbon::createFromFormat('Y-d-m H:i:s', $event['start_date'] )->format('Y-M-D'));
         $event['start_date'] = Carbon::parse($event['start_date']);
         $event['end_date'] = Carbon::parse($event['end_date']);
-        //dd($event);
-        //$event['start_date'] = Carbon::createFromFormat('Y-m-d H:i:s', $event['start_date'] )->format('Y-m-d H:i:s');
-        //$event['end_date'] = Carbon::createFromFormat('Y-m-d H:i:s', $event['end_date'] )->format('Y-m-d H:i:s');
-
-        //dd($event['speaker_id']);
         // Set event edited by and created by
         $event = EPPMS::setEventAuthorship($event);
 
         if ( $event['id'] ){
             // retrieve the user object
             $theEvent = $this->events->findOrFail($event['id']);
-
-            ////$theEvent->speakers()->belongsToMany($event['speakers']);
-            //$theEvent->start_date = new Carbon($event['start_date'], 'Asia/Singapore');
-            //dd(Carbon::parse($event['start_date']));
-            //$event['start_date'] = Carbon::parse($event['start_date']);
-            //$event['start_date'] = Carbon::createFromFormat('Y-m-d H:i:s', $event['start_date'], 'Asia/Singapore' );
             // update the user object with updated details
             $theEvent = tap($theEvent)->update($event);
+            // make sure that the speakers variable is an array.
+            // in the list function, we pass speakers as object to simplify the query
+            // however, when update is performed and no speaker is selected, the request is passing speaker untouched
+            // and the values are in object
+            //$the_speakers = $event['speakers'];
+            if (strpos(json_encode($event['speakers']), 'id') > 0 ) {
+                $event['speakers'] = array_column($event['speakers'], 'id');
+            }
+            
             $theEvent->speakers()->sync( $event['speakers'] );
-            //$department['updated_at'] = Carbon::now(env("APP_TIMEZONE"));
         }
         else{
             $theEvent = $this->events->create($event);
             // attach speakers to event
             $theSpeakers = $theEvent->speakers()->attach($event['speakers']);
+            $theEvent = $theEvent->fresh();
+
+            $theEvent = Event::with(['venue','speakers'])->find($theEvent->id);
+            /////dd($theEvents);
+
             $upsertSuccess = ($theEvent->id) ? true : false;
         }
         // return the same data compared to list to ensure using the same 

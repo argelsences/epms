@@ -17,11 +17,11 @@ class CreateEventsTable extends Migration
             $table->id();
             $table->string('title');
             $table->text('synopsis');
-            $table->string('excerpt');
+            $table->string('excerpt')->nullable();
             $table->dateTime('start_date');
             $table->dateTime('end_date');
-            $table->text('pre_booking_display_message');
-            $table->text('post_booking_display_message');
+            $table->text('pre_booking_display_message')->nullable();
+            $table->text('post_booking_display_message')->nullable();
             $table->boolean('social_show_facebook');
             $table->boolean('social_show_linkedin');
             $table->boolean('social_show_twitter');

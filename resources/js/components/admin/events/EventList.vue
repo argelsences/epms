@@ -137,6 +137,7 @@
                                                     </v-dialog>
                                                 </v-col>
                                             </v-row>
+                                            <!--
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="12">
                                                     <div class="text-h4  text-left mt-10">Page</div>
@@ -149,6 +150,8 @@
                                                     <v-textarea counter label="Post booking display message" v-model="editedItem.post_booking_display_message" prepend-icon="mdi-face-profile"></v-textarea>
                                                 </v-col>
                                             </v-row>
+                                            -->
+                                            <!--
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="12">
                                                     <div class="text-h4  text-left mt-10">Social Media</div>
@@ -166,6 +169,7 @@
                                                     <v-switch label="Email" prepend-icon="mdi-email" v-model="editedItem.social_show_email"></v-switch>
                                                 </v-col>
                                             </v-row>
+                                            -->
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="12">
                                                     <div class="text-h4  text-left mt-10">Venue</div>
@@ -454,8 +458,8 @@
                     excerpt: '',
                     start_date: '',
                     end_date: '',
-                    pre_booking_display_message: '',
-                    post_booking_display_message: '',
+                    //pre_booking_display_message: '',
+                    //post_booking_display_message: '',
                     social_show_facebook: 0,
                     social_show_twitter: 0,
                     social_show_whatsapp: 0,
@@ -469,7 +473,7 @@
                     department_id: 0,
                     created_by: 0,
                     edited_by: 0,
-                    venue_id: 0,
+                    venue: [],
                     speakers: [],
                 },
                 defaultItem: {
@@ -479,8 +483,8 @@
                     excerpt: '',
                     start_date: '',
                     end_date: '',
-                    pre_booking_display_message: '',
-                    post_booking_display_message: '',
+                    //pre_booking_display_message: '',
+                    //post_booking_display_message: '',
                     social_show_facebook: 0,
                     social_show_twitter: 0,
                     social_show_whatsapp: 0,
@@ -494,7 +498,7 @@
                     department_id: 0,
                     created_by: 0,
                     edited_by: 0,
-                    venue_id: 0,
+                    venue: [],
                     speakers: [],
                 },
                 textFieldProps: {
@@ -510,12 +514,6 @@
             formTitle () {
                 return this.editedIndex === -1 ? 'New Event' : 'Edit Event'
             },
-            computeStartDate() {
-                return this.formatStartDate()
-            },
-            computeEndDate() {
-                return this.formatEndDate()
-            }
         },
         watch: {
             dialog (val) {
@@ -606,7 +604,7 @@
                 this.editedItem.start_date = this.start_date + ' ' + this.start_time
                 this.editedItem.end_date = this.end_date + ' ' + this.end_time
 
-                console.log(this.editedItem )
+                //console.log(this.editedItem )
 
                 axios.post('/api/events/upsert', {
                     payload: this.editedItem,
@@ -676,12 +674,6 @@
             addDropFile(e) { 
                 this.file = e.dataTransfer.files[0]
                 //console.log(this.file) 
-            },
-            formatDate(value){
-                if (!value) 
-                    return moment()
-                
-                return moment(String(value)).format('DD/MM/yyyy hh:mm a')
             },
             isPublic(value){
                 return (value) ? 'Public' : 'Private'

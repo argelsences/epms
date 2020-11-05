@@ -102,13 +102,12 @@ class EventController extends Controller
             return response('Unauthorized', 403);
         }
 
-        $events = $model::with(['venue'])->orderBy('title', 'ASC')->get();
-        //dd($events);
+        $events = $model::with(['venue','speakers'])->orderBy('title', 'ASC')->get();
 
         return response()->json($events);
     }
     /**
-     * API Update and Insert
+     * API Update and Insertdd($events->speakers());
      */
     public function upsert(Request $request){
 
@@ -134,18 +133,21 @@ class EventController extends Controller
         if ( $event['id'] ){
             // retrieve the user object
             $theEvent = $this->events->findOrFail($event['id']);
+
+            ////$theEvent->speakers()->belongsToMany($event['speakers']);
             //$theEvent->start_date = new Carbon($event['start_date'], 'Asia/Singapore');
             //dd(Carbon::parse($event['start_date']));
             //$event['start_date'] = Carbon::parse($event['start_date']);
             //$event['start_date'] = Carbon::createFromFormat('Y-m-d H:i:s', $event['start_date'], 'Asia/Singapore' );
             // update the user object with updated details
             $theEvent = tap($theEvent)->update($event);
+            $theEvent->speakers()->sync( $event['speakers'] );
             //$department['updated_at'] = Carbon::now(env("APP_TIMEZONE"));
         }
         else{
             $theEvent = $this->events->create($event);
             // attach speakers to event
-            $theSpeakers = $theEvent->speakers()->attach($event['speaker_id']);
+            $theSpeakers = $theEvent->speakers()->attach($event['speakers']);
             $upsertSuccess = ($theEvent->id) ? true : false;
         }
         // return the same data compared to list to ensure using the same 

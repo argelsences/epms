@@ -89,12 +89,20 @@
                                                     </v-menu>
                                                 </v-col>
                                                 <v-col cols="12" sm="6" md="6">
-                                                    <v-menu ref="stt_menu" v-model="stt_menu" :close-on-content-click="false" :nudge-right="40" :return-value.sync="start_time" transition="scale-transition" offset-y max-width="290px" min-width="290px">
+                                                    <v-dialog ref="stt_dialog" v-model="stt_dialog" :return-value.sync="start_time" persistent width="290px">
                                                         <template v-slot:activator="{ on, attrs }">
                                                             <v-text-field v-model="start_time" label="Start Time" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on"></v-text-field>
                                                         </template>
-                                                        <v-time-picker v-if="stt_menu" v-model="start_time" full-width @click:minute="$refs.stt_menu.save(start_time)"></v-time-picker>
-                                                    </v-menu>
+                                                        <v-time-picker v-if="stt_dialog" v-model="start_time" full-width>
+                                                            <v-spacer></v-spacer>
+                                                            <v-btn text color="primary" @click="stt_dialog = false">
+                                                                Cancel
+                                                            </v-btn>
+                                                            <v-btn text color="primary" @click="$refs.stt_dialog.save(start_time)">
+                                                                OK
+                                                            </v-btn>
+                                                        </v-time-picker>
+                                                    </v-dialog>
                                                 </v-col>
                                             </v-row>
                                             <v-row>
@@ -113,12 +121,20 @@
                                                     </v-menu>
                                                 </v-col>
                                                 <v-col cols="12" sm="6" md="6">
-                                                    <v-menu ref="ste_menu" v-model="ste_menu" :close-on-content-click="false" :nudge-right="40" :return-value.sync="end_time" transition="scale-transition" offset-y max-width="290px" min-width="290px">
+                                                    <v-dialog ref="ste_dialog" v-model="ste_dialog" :return-value.sync="end_time" persistent width="290px">
                                                         <template v-slot:activator="{ on, attrs }">
                                                             <v-text-field v-model="end_time" label="End Time" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on"></v-text-field>
                                                         </template>
-                                                        <v-time-picker v-if="ste_menu" v-model="end_time" full-width @click:minute="$refs.ste_menu.save(end_time)" ></v-time-picker>
-                                                    </v-menu>
+                                                        <v-time-picker v-if="ste_dialog" v-model="end_time" full-width>
+                                                            <v-spacer></v-spacer>
+                                                            <v-btn text color="primary" @click="ste_dialog = false">
+                                                                Cancel
+                                                            </v-btn>
+                                                            <v-btn text color="primary" @click="$refs.ste_dialog.save(end_time)">
+                                                                OK
+                                                            </v-btn>
+                                                        </v-time-picker>
+                                                    </v-dialog>
                                                 </v-col>
                                             </v-row>
                                             <v-row>
@@ -133,7 +149,6 @@
                                                     <v-textarea counter label="Post booking display message" v-model="editedItem.post_booking_display_message" prepend-icon="mdi-face-profile"></v-textarea>
                                                 </v-col>
                                             </v-row>
-                                            
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="12">
                                                     <div class="text-h4  text-left mt-10">Social Media</div>
@@ -169,7 +184,7 @@
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">
                                                     <v-autocomplete
-                                                        v-model="editedItem.speaker_id"
+                                                        v-model="editedItem.speakers"
                                                         :items="speakers"
                                                         prepend-icon="mdi-office-building"
                                                         filled
@@ -206,9 +221,6 @@
                                                             </template>
                                                         </template>
                                                         </v-autocomplete>
-                                                
-                                                
-                                                
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">
                                                 </v-col>
@@ -376,8 +388,8 @@
                 dialog: false,
                 st_menu: false,
                 se_menu: false,
-                stt_menu: false,
-                ste_menu: false,
+                stt_dialog:false,
+                ste_dialog: false,
                 isValid: true,
                 search : '',
                 feedbacks: [],
@@ -458,7 +470,7 @@
                     created_by: 0,
                     edited_by: 0,
                     venue_id: 0,
-                    speaker_id: 0,
+                    speakers: [],
                 },
                 defaultItem: {
                     id: 0,
@@ -483,7 +495,7 @@
                     created_by: 0,
                     edited_by: 0,
                     venue_id: 0,
-                    speaker_id: 0,
+                    speakers: [],
                 },
                 textFieldProps: {
                     appendIcon: 'event',

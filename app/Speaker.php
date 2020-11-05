@@ -20,6 +20,6 @@ class Speaker extends Model
     ];
 
     public function events(){
-        return $this->belongsToMany('App\Event', 'event_speakers');
+        return $this->belongsToMany('App\Event')->withTimestamps();
     }
 }

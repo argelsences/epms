@@ -13,7 +13,7 @@ class CreateEventSpeakersTable extends Migration
      */
     public function up()
     {
-        Schema::create('event_speakers', function (Blueprint $table) {
+        Schema::create('event_speaker', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('event_id')->unsigned();
             $table->bigInteger('speaker_id')->unsigned();

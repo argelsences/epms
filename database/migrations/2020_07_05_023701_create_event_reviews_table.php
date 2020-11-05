@@ -13,7 +13,7 @@ class CreateEventReviewsTable extends Migration
      */
     public function up()
     {
-        Schema::create('event_reviews', function (Blueprint $table) {
+        Schema::create('event_review', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');

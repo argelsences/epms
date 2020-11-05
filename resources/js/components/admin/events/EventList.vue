@@ -171,62 +171,153 @@
                                             </v-row>
                                             -->
                                             <v-row>
-                                                <v-col cols="12" sm="12" md="12">
-                                                    <div class="text-h4  text-left mt-10">Venue</div>
-                                                    <v-divider />
+                                                <v-col cols="12" sm="12" md="6">
+                                                    <v-row>
+                                                        <v-col cols="12" sm="12" md="12">
+                                                            <div class="text-h4 text-left mt-10">Venue</div>
+                                                            <v-divider />
+                                                        </v-col>
+                                                  
+                                                        <v-col cols="12" sm="12" md="12">
+                                                            <v-row>
+                                                                <v-col cols="8" sm="8" md="8">
+                                                                    <v-autocomplete v-model="editedItem.venue_id" :items="venues" item-text="name" item-value="id"  label="Venue" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
+                                                                </v-col>
+                                                                <v-col cols="4" sm="4" md="4">
+                                                                    <v-dialog v-model="dialog2" persistent max-width="600px">
+                                                                        <template v-slot:activator="{ on, attrs }">
+                                                                            <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Venue</v-btn>
+                                                                        </template>
+                                                                        <v-card>
+                                                                            <v-card-title>
+                                                                            <span class="headline">New Venue</span>
+                                                                            </v-card-title>
+                                                                            <v-card-text>
+                                                                            <v-container>
+                                                                                <v-row>
+                                                                                <v-col
+                                                                                    cols="12"
+                                                                                    sm="6"
+                                                                                    md="4"
+                                                                                >
+                                                                                    <v-text-field
+                                                                                    label="Legal first name*"
+                                                                                    required
+                                                                                    ></v-text-field>
+                                                                                </v-col>
+                                                                                <v-col
+                                                                                    cols="12"
+                                                                                    sm="6"
+                                                                                    md="4"
+                                                                                >
+                                                                                    <v-text-field
+                                                                                    label="Legal middle name"
+                                                                                    hint="example of helper text only on focus"
+                                                                                    ></v-text-field>
+                                                                                </v-col>
+                                                                                <v-col
+                                                                                    cols="12"
+                                                                                    sm="6"
+                                                                                    md="4"
+                                                                                >
+                                                                                    <v-text-field
+                                                                                    label="Legal last name*"
+                                                                                    hint="example of persistent helper text"
+                                                                                    persistent-hint
+                                                                                    required
+                                                                                    ></v-text-field>
+                                                                                </v-col>
+                                                                                <v-col cols="12">
+                                                                                    <v-text-field
+                                                                                    label="Email*"
+                                                                                    required
+                                                                                    ></v-text-field>
+                                                                                </v-col>
+                                                                                <v-col cols="12">
+                                                                                    <v-text-field
+                                                                                    label="Password*"
+                                                                                    type="password"
+                                                                                    required
+                                                                                    ></v-text-field>
+                                                                                </v-col>
+                                                                                <v-col
+                                                                                    cols="12"
+                                                                                    sm="6"
+                                                                                >
+                                                                                    <v-select
+                                                                                    :items="['0-17', '18-29', '30-54', '54+']"
+                                                                                    label="Age*"
+                                                                                    required
+                                                                                    ></v-select>
+                                                                                </v-col>
+                                                                                <v-col
+                                                                                    cols="12"
+                                                                                    sm="6"
+                                                                                >
+                                                                                    <v-autocomplete
+                                                                                    :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
+                                                                                    label="Interests"
+                                                                                    multiple
+                                                                                    ></v-autocomplete>
+                                                                                </v-col>
+                                                                                </v-row>
+                                                                            </v-container>
+                                                                            <small>*indicates required field</small>
+                                                                            </v-card-text>
+                                                                            <v-card-actions>
+                                                                            <v-spacer></v-spacer>
+                                                                            <v-btn
+                                                                                color="blue darken-1"
+                                                                                text
+                                                                                @click="dialog2 = false"
+                                                                            >
+                                                                                Close
+                                                                            </v-btn>
+                                                                            <v-btn
+                                                                                color="blue darken-1"
+                                                                                text
+                                                                                @click="dialog2 = false"
+                                                                            >
+                                                                                Save
+                                                                            </v-btn>
+                                                                            </v-card-actions>
+                                                                        </v-card>
+                                                                    </v-dialog>
+                                                                </v-col>
+                                                            </v-row>
+                                                        </v-col>
+                                                    </v-row>
+                                                    
+                                                    
+                                                    
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">
-                                                    <v-autocomplete v-model="editedItem.venue_id" :items="venues" item-text="name" item-value="id"  label="Venue" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                </v-col>
-                                            </v-row>
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="12">
                                                     <div class="text-h4  text-left mt-10">Speaker</div>
                                                     <v-divider />
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-autocomplete
-                                                        v-model="editedItem.speakers"
-                                                        :items="speakers"
-                                                        prepend-icon="mdi-office-building"
-                                                        filled
-                                                        chips
-                                                        color="blue-grey lighten-2"
-                                                        label="Select"
-                                                        item-text="name"
-                                                        item-value="id"
-                                                        multiple
-                                                        >
+                                                    <v-autocomplete v-model="editedItem.speakers" :items="speakers" prepend-icon="mdi-office-building" filled chips color="blue-grey lighten-2" label="Select" item-text="name" item-value="id" multiple>
                                                         <template v-slot:selection="data">
-                                                            <v-chip
-                                                            v-bind="data.attrs"
-                                                            :input-value="data.selected"
-                                                            >
-                                                            <v-avatar left>
-                                                                <v-img :src="base_url + data.item.photo"></v-img>
-                                                            </v-avatar>
-                                                            {{ data.item.name }}
+                                                            <v-chip v-bind="data.attrs" :input-value="data.selected">
+                                                                <v-avatar left>
+                                                                    <v-img :src="base_url + data.item.photo"></v-img>
+                                                                </v-avatar>
+                                                                {{ data.item.name }}
                                                             </v-chip>
                                                         </template>
                                                         <template v-slot:item="data">
                                                             <template v-if="typeof data.item !== 'object'">
-                                                            <v-list-item-content v-text="data.item"></v-list-item-content>
+                                                                <v-list-item-content v-text="data.item"></v-list-item-content>
                                                             </template>
                                                             <template v-else>
-                                                            <v-list-item-avatar>
-                                                                <img :src="base_url + data.item.photo">
-                                                            </v-list-item-avatar>
-                                                            <v-list-item-content>
-                                                                <v-list-item-title v-html="data.item.name"></v-list-item-title>
-                                                                <!--<v-list-item-subtitle v-html="data.item.group"></v-list-item-subtitle>-->
-                                                            </v-list-item-content>
+                                                                <v-list-item-avatar>
+                                                                    <img :src="base_url + data.item.photo">
+                                                                </v-list-item-avatar>
+                                                                <v-list-item-content>
+                                                                    <v-list-item-title v-html="data.item.name"></v-list-item-title>
+                                                                    <!--<v-list-item-subtitle v-html="data.item.group"></v-list-item-subtitle>-->
+                                                                </v-list-item-content>
                                                             </template>
                                                         </template>
                                                         </v-autocomplete>
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6">
                                                 </v-col>
                                             </v-row>
                                             <!-- This should be on another tab
@@ -390,6 +481,7 @@
         data() {
             return {
                 dialog: false,
+                dialog2: false,
                 st_menu: false,
                 se_menu: false,
                 stt_dialog:false,

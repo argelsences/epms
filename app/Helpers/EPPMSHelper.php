@@ -6,6 +6,7 @@ use App\Template;
 use Spatie\Browsershot\Browsershot;
 use Storage;
 use Image;
+use Illuminate\Support\Facades\Auth;
 
 class EPPMSHelper {
 
@@ -124,5 +125,26 @@ class EPPMSHelper {
             'end_date', 'speakers', 'speaker_name', 'speaker_profile',
             'venue_name', 'venue_address', 'department_name','event_date'
         ];
+    }
+
+    /**
+     * Set authorship for an event
+     */
+    public function setEventAuthorship( $event ){
+        
+        $user_id = Auth::id();
+        // if there is an event id, then we will set the edited by to the logged in user
+        
+        // if no event id, then we set the created by and edited by
+        if ($event['id']){
+            $event['edited_by'] = Auth::id();
+        }
+        else {
+            $event['created_by'] = $user_id;
+            $event['edited_by'] = Auth::id();
+        }
+        
+        //dd($event);
+        return $event;
     }
 }

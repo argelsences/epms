@@ -117,7 +117,7 @@
                                                         <template v-slot:activator="{ on, attrs }">
                                                             <v-text-field v-model="end_time" label="End Time" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on"></v-text-field>
                                                         </template>
-                                                        <v-time-picker v-if="ste_menu" v-model="end_time" full-width @click:minute="$refs.ste_menu.save(end_time)" :min="start_time"></v-time-picker>
+                                                        <v-time-picker v-if="ste_menu" v-model="end_time" full-width @click:minute="$refs.ste_menu.save(end_time)" ></v-time-picker>
                                                     </v-menu>
                                                 </v-col>
                                             </v-row>
@@ -602,7 +602,7 @@
                 .then(response => {
                     if (response.data.success) {
                         this.feedbacks = []
-                        this.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.'
+                        this.feedbacks[0] = 'Changes for ' + editedItem.title + ' is saved.'
                         this.snackbar = true
                         this.error = false
                         /*
@@ -615,6 +615,8 @@
                             Object.assign(this.rows[editedIndex], response.data.item)
                         else
                             this.rows.push(response.data.item)
+
+                        console.log(this.rows)
 
                         // close the dialog box
                         this.close()  

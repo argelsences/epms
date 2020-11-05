@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Event;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use EPPMS;
 
 class EventController extends Controller
 {
@@ -126,7 +127,9 @@ class EventController extends Controller
         //$event['start_date'] = Carbon::createFromFormat('Y-m-d H:i:s', $event['start_date'] )->format('Y-m-d H:i:s');
         //$event['end_date'] = Carbon::createFromFormat('Y-m-d H:i:s', $event['end_date'] )->format('Y-m-d H:i:s');
 
-        //dd($event);
+        //dd($event['speaker_id']);
+        // Set event edited by and created by
+        $event = EPPMS::setEventAuthorship($event);
 
         if ( $event['id'] ){
             // retrieve the user object
@@ -141,6 +144,8 @@ class EventController extends Controller
         }
         else{
             $theEvent = $this->events->create($event);
+            // attach speakers to event
+            $theSpeakers = $theEvent->speakers()->attach($event['speaker_id']);
             $upsertSuccess = ($theEvent->id) ? true : false;
         }
         // return the same data compared to list to ensure using the same 

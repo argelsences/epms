@@ -55,7 +55,7 @@ class Event extends Model
     }
 
     public function speakers(){
-        return $this->belongsToMany('App\Speaker');
+        return $this->belongsToMany('App\Speaker', 'event_speakers');
     }
 
 }

@@ -193,94 +193,37 @@
                                                                             <span class="headline">New Venue</span>
                                                                             </v-card-title>
                                                                             <v-card-text>
-                                                                            <v-container>
-                                                                                <v-row>
-                                                                                <v-col
-                                                                                    cols="12"
-                                                                                    sm="12"
-                                                                                    md="12"
-                                                                                >
-                                                                                    <v-text-field
-                                                                                    label="Name"
-                                                                                    required
-                                                                                    v-model="venue.name"
-                                                                                    ></v-text-field>
-                                                                                </v-col>
-                                                                                <v-col
-                                                                                    cols="12"
-                                                                                    sm="12"
-                                                                                    md="12"
-                                                                                >
-                                                                                    <v-text-field
-                                                                                    label="Address line 1"
-                                                                                    hint="example of helper text only on focus"
-                                                                                    v-model="venue.address_line_1"
-                                                                                    ></v-text-field>
-                                                                                </v-col>
-                                                                                <v-col
-                                                                                    cols="12"
-                                                                                    sm="12"
-                                                                                    md="12"
-                                                                                >
-                                                                                    <v-text-field
-                                                                                    label="Address line 2"
-                                                                                    hint="example of persistent helper text"
-                                                                                    persistent-hint
-                                                                                    required
-                                                                                    v-model="venue.address_line_2"
-                                                                                    ></v-text-field>
-                                                                                </v-col>
-                                                                                <v-col cols="12" sm="4" md="4">
-                                                                                    <v-text-field
-                                                                                    label="Postcode"
-                                                                                    required
-                                                                                    v-model="venue.postcode"
-                                                                                    ></v-text-field>
-                                                                                </v-col>
-                                                                                <v-col cols="12" sm="4" md="4">
-                                                                                    <v-text-field
-                                                                                    label="State"
-                                                                                    type="password"
-                                                                                    required
-                                                                                    v-model="venue.state"
-                                                                                    ></v-text-field>
-                                                                                </v-col>
-                                                                                <v-col
-                                                                                    cols="12"
-                                                                                    sm="4" md="4"
-                                                                                >
-                                                                                    <v-select
-                                                                                    :items="['0-17', '18-29', '30-54', '54+']"
-                                                                                    label="Country"
-                                                                                    required
-                                                                                    v-model="venue.country"
-                                                                                    ></v-select>
-                                                                                </v-col>
-                                                                                <v-col
-                                                                                    cols="12"
-                                                                                    sm="6"
-                                                                                >
-                                                                                </v-col>
-                                                                                </v-row>
-                                                                            </v-container>
-                                                                            <small>*indicates required field</small>
+                                                                                <v-container>
+                                                                                    <v-row>
+                                                                                        <v-col cols="12" sm="12" md="12">
+                                                                                            <v-text-field label="Name" required v-model="venue.name" hint="*Required" persistent-hint></v-text-field>
+                                                                                        </v-col>
+                                                                                        <v-col cols="12" sm="12" md="12">
+                                                                                            <v-text-field label="Address line 1" hint="*Required" required persistent-hint v-model="venue.address_line_1"></v-text-field>
+                                                                                        </v-col>
+                                                                                        <v-col cols="12" sm="12" md="12">
+                                                                                            <v-text-field label="Address line 2" v-model="venue.address_line_2"></v-text-field>
+                                                                                        </v-col>
+                                                                                        <v-col cols="12" sm="4" md="4">
+                                                                                            <v-text-field label="Postcode" required v-model="venue.postcode"></v-text-field>
+                                                                                        </v-col>
+                                                                                        <v-col cols="12" sm="4" md="4">
+                                                                                            <v-text-field label="State" v-model="venue.state"></v-text-field>
+                                                                                        </v-col>
+                                                                                        <v-col cols="12" sm="4" md="4">
+                                                                                            <v-select :items="countries" label="Country" item-text="name" item-value="name" v-model="venue.country"  prepend-icon="mdi-earth"></v-select>
+                                                                                        </v-col>
+                                                                                    </v-row>
+                                                                                </v-container>
                                                                             </v-card-text>
                                                                             <v-card-actions>
-                                                                            <v-spacer></v-spacer>
-                                                                            <v-btn
-                                                                                color="blue darken-1"
-                                                                                text
-                                                                                @click="dialog2 = false"
-                                                                            >
-                                                                                Close
-                                                                            </v-btn>
-                                                                            <v-btn
-                                                                                color="blue darken-1"
-                                                                                text
-                                                                                @click="dialog2 = false"
-                                                                            >
-                                                                                Save
-                                                                            </v-btn>
+                                                                                <v-spacer></v-spacer>
+                                                                                <v-btn color="blue darken-1" text @click="dialog2 = false">
+                                                                                    Close
+                                                                                </v-btn>
+                                                                                <v-btn color="blue darken-1" text @click="dialog2 = false">
+                                                                                    Save
+                                                                                </v-btn>
                                                                             </v-card-actions>
                                                                         </v-card>
                                                                     </v-dialog>
@@ -324,7 +267,7 @@
                                                                     </v-autocomplete>
                                                                 </v-col>
                                                                 <v-col cols="4" sm="4" md="4">
-                                                                    <v-dialog v-model="dialog2" persistent max-width="600px">
+                                                                    <v-dialog v-model="dialog3" persistent max-width="600px">
                                                                         <template v-slot:activator="{ on, attrs }">
                                                                             <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Speaker</v-btn>
                                                                         </template>
@@ -333,94 +276,31 @@
                                                                             <span class="headline">New Speaker</span>
                                                                             </v-card-title>
                                                                             <v-card-text>
-                                                                            <v-container>
-                                                                                <v-row>
-                                                                                <v-col
-                                                                                    cols="12"
-                                                                                    sm="12"
-                                                                                    md="12"
-                                                                                >
-                                                                                    <v-text-field
-                                                                                    label="Name"
-                                                                                    required
-                                                                                    v-model="venue.name"
-                                                                                    ></v-text-field>
-                                                                                </v-col>
-                                                                                <v-col
-                                                                                    cols="12"
-                                                                                    sm="12"
-                                                                                    md="12"
-                                                                                >
-                                                                                    <v-text-field
-                                                                                    label="Address line 1"
-                                                                                    hint="example of helper text only on focus"
-                                                                                    v-model="venue.address_line_1"
-                                                                                    ></v-text-field>
-                                                                                </v-col>
-                                                                                <v-col
-                                                                                    cols="12"
-                                                                                    sm="12"
-                                                                                    md="12"
-                                                                                >
-                                                                                    <v-text-field
-                                                                                    label="Address line 2"
-                                                                                    hint="example of persistent helper text"
-                                                                                    persistent-hint
-                                                                                    required
-                                                                                    v-model="venue.address_line_2"
-                                                                                    ></v-text-field>
-                                                                                </v-col>
-                                                                                <v-col cols="12" sm="4" md="4">
-                                                                                    <v-text-field
-                                                                                    label="Postcode"
-                                                                                    required
-                                                                                    v-model="venue.postcode"
-                                                                                    ></v-text-field>
-                                                                                </v-col>
-                                                                                <v-col cols="12" sm="4" md="4">
-                                                                                    <v-text-field
-                                                                                    label="State"
-                                                                                    type="password"
-                                                                                    required
-                                                                                    v-model="venue.state"
-                                                                                    ></v-text-field>
-                                                                                </v-col>
-                                                                                <v-col
-                                                                                    cols="12"
-                                                                                    sm="4" md="4"
-                                                                                >
-                                                                                    <v-select
-                                                                                    :items="['0-17', '18-29', '30-54', '54+']"
-                                                                                    label="Country"
-                                                                                    required
-                                                                                    v-model="venue.country"
-                                                                                    ></v-select>
-                                                                                </v-col>
-                                                                                <v-col
-                                                                                    cols="12"
-                                                                                    sm="6"
-                                                                                >
-                                                                                </v-col>
-                                                                                </v-row>
-                                                                            </v-container>
-                                                                            <small>*indicates required field</small>
+                                                                                <v-container>
+                                                                                    <v-row>
+                                                                                        <v-col cols="12" sm="12" md="12">
+                                                                                            <v-text-field label="Name" hint="*Required" persistent-hint required v-model="speaker.name"></v-text-field>
+                                                                                        </v-col>
+                                                                                        <v-col cols="12" sm="12" md="12">
+                                                                                            <v-textarea counter label="Profile" required v-model="speaker.profile"></v-textarea>
+                                                                                        </v-col>
+                                                                                        <v-col cols="12" sm="12" md="12">
+                                                                                            <v-text-field label="Photo" hint="example of helper text only on focus" v-model="speaker.photo"></v-text-field>
+                                                                                        </v-col>
+                                                                                        <v-col cols="12" sm="12" md="12">
+                                                                                            <v-autocomplete v-model="speaker.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
+                                                                                        </v-col>
+                                                                                    </v-row>
+                                                                                </v-container>
                                                                             </v-card-text>
                                                                             <v-card-actions>
-                                                                            <v-spacer></v-spacer>
-                                                                            <v-btn
-                                                                                color="blue darken-1"
-                                                                                text
-                                                                                @click="dialog2 = false"
-                                                                            >
-                                                                                Close
-                                                                            </v-btn>
-                                                                            <v-btn
-                                                                                color="blue darken-1"
-                                                                                text
-                                                                                @click="dialog2 = false"
-                                                                            >
-                                                                                Save
-                                                                            </v-btn>
+                                                                                <v-spacer></v-spacer>
+                                                                                <v-btn color="blue darken-1" text @click="dialog3 = false">
+                                                                                    Close
+                                                                                </v-btn>
+                                                                                <v-btn color="blue darken-1" text @click="dialog2 = false">
+                                                                                    Save
+                                                                                </v-btn>
                                                                             </v-card-actions>
                                                                         </v-card>
                                                                     </v-dialog>
@@ -592,6 +472,7 @@
             return {
                 dialog: false,
                 dialog2: false,
+                dialog3: false,
                 st_menu: false,
                 se_menu: false,
                 stt_dialog:false,
@@ -717,7 +598,13 @@
                     postcode: '',
                     country: '',
                     state: '',
-                }
+                },
+                speaker: {
+                    name: '',
+                    profile: '',
+                    photo: null,
+                    department_id: 0,
+                },
             }
         },
         computed: {
@@ -771,6 +658,12 @@
                 axios.get('/api/speakers')
                 .then( response => {
                     this.speakers = response.data;
+                });
+            },
+            getCountries() {
+                axios.get('/api/countries')
+                .then( response => {
+                    this.countries = response.data;
                 });
             },
             editItem (item) {
@@ -896,6 +789,7 @@
             this.getDepartments()
             this.getVenues()
             this.getSpeakers()
+            this.getCountries()
         },
     }
 </script>

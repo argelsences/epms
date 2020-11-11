@@ -190,30 +190,32 @@
                                                                         </template>
                                                                         <v-card>
                                                                             <v-card-title>
-                                                                            <span class="headline">New Venue</span>
+                                                                                <span class="headline">New Venue</span>
                                                                             </v-card-title>
                                                                             <v-card-text>
                                                                                 <v-container>
-                                                                                    <v-row>
-                                                                                        <v-col cols="12" sm="12" md="12">
-                                                                                            <v-text-field label="Name" required v-model="venue.name" hint="*Required" persistent-hint></v-text-field>
-                                                                                        </v-col>
-                                                                                        <v-col cols="12" sm="12" md="12">
-                                                                                            <v-text-field label="Address line 1" hint="*Required" required persistent-hint v-model="venue.address_line_1"></v-text-field>
-                                                                                        </v-col>
-                                                                                        <v-col cols="12" sm="12" md="12">
-                                                                                            <v-text-field label="Address line 2" v-model="venue.address_line_2"></v-text-field>
-                                                                                        </v-col>
-                                                                                        <v-col cols="12" sm="4" md="4">
-                                                                                            <v-text-field label="Postcode" required v-model="venue.postcode"></v-text-field>
-                                                                                        </v-col>
-                                                                                        <v-col cols="12" sm="4" md="4">
-                                                                                            <v-text-field label="State" v-model="venue.state"></v-text-field>
-                                                                                        </v-col>
-                                                                                        <v-col cols="12" sm="4" md="4">
-                                                                                            <v-select :items="countries" label="Country" item-text="name" item-value="name" v-model="venue.country"  prepend-icon="mdi-earth"></v-select>
-                                                                                        </v-col>
-                                                                                    </v-row>
+                                                                                    <v-form v-model="isValid" ref="formVenue">
+                                                                                        <v-row>
+                                                                                            <v-col cols="12" sm="12" md="12">
+                                                                                                <v-text-field label="Name" required v-model="venue.name" hint="*Required" persistent-hint></v-text-field>
+                                                                                            </v-col>
+                                                                                            <v-col cols="12" sm="12" md="12">
+                                                                                                <v-text-field label="Address line 1" hint="*Required" required persistent-hint v-model="venue.address_line_1"></v-text-field>
+                                                                                            </v-col>
+                                                                                            <v-col cols="12" sm="12" md="12">
+                                                                                                <v-text-field label="Address line 2" v-model="venue.address_line_2"></v-text-field>
+                                                                                            </v-col>
+                                                                                            <v-col cols="12" sm="4" md="4">
+                                                                                                <v-text-field label="Postcode" required v-model="venue.postcode"></v-text-field>
+                                                                                            </v-col>
+                                                                                            <v-col cols="12" sm="4" md="4">
+                                                                                                <v-text-field label="State" v-model="venue.state"></v-text-field>
+                                                                                            </v-col>
+                                                                                            <v-col cols="12" sm="4" md="4">
+                                                                                                <v-select :items="countries" label="Country" item-text="name" item-value="name" v-model="venue.country"  prepend-icon="mdi-earth"></v-select>
+                                                                                            </v-col>
+                                                                                        </v-row>
+                                                                                    </v-form>
                                                                                 </v-container>
                                                                             </v-card-text>
                                                                             <v-card-actions>
@@ -221,7 +223,7 @@
                                                                                 <v-btn color="blue darken-1" text @click="dialog2 = false">
                                                                                     Close
                                                                                 </v-btn>
-                                                                                <v-btn color="blue darken-1" text @click="dialog2 = false">
+                                                                                <v-btn color="blue darken-1" text @click="saveVenue">
                                                                                     Save
                                                                                 </v-btn>
                                                                             </v-card-actions>
@@ -241,7 +243,7 @@
                                                         <v-col cols="12" sm="12" md="12">
                                                             <v-row>
                                                                 <v-col cols="8" sm="8" md="8">
-                                                                    <v-autocomplete v-model="editedItem.speakers" :items="speakers" prepend-icon="mdi-office-building" filled chips color="blue-grey lighten-2" label="Select" item-text="name" item-value="id" multiple>
+                                                                    <v-autocomplete v-model="editedItem.speakers" :items="speakers" prepend-icon="mdi-office-building"  chips color="blue-grey lighten-2" label="Select" item-text="name" item-value="id" multiple>
                                                                         <template v-slot:selection="data">
                                                                             <v-chip v-bind="data.attrs" :input-value="data.selected">
                                                                                 <v-avatar left>
@@ -310,88 +312,6 @@
                                                     </v-row>
                                                 </v-col>
                                             </v-row>
-                                            <!-- This should be on another tab
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="12">
-                                                    <div class="text-h4  text-left mt-10">Poster</div>
-                                                    <v-divider />
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-dialog
-                                                    v-model="dialog2"
-                                                    fullscreen
-                                                    hide-overlay
-                                                    transition="dialog-bottom-transition"
-                                                    >
-                                                    <template v-slot:activator="{ on, attrs }">
-                                                        <v-btn
-                                                        color="#1f4068"
-                                                        dark
-                                                        v-bind="attrs"
-                                                        v-on="on"
-                                                        >
-                                                        Select Template
-                                                        </v-btn>
-                                                    </template>
-                                                    <v-card>
-                                                        <v-toolbar
-                                                        dark
-                                                        color="primary"
-                                                        >
-                                                        <v-btn
-                                                            icon
-                                                            dark
-                                                            @click="dialog2 = false"
-                                                        >
-                                                            <v-icon>mdi-close</v-icon>
-                                                        </v-btn>
-                                                        <v-toolbar-title>Templates</v-toolbar-title>
-                                                        <v-spacer></v-spacer>
-                                                        <v-toolbar-items>
-                                                            <v-btn
-                                                            dark
-                                                            text
-                                                            @click="setTemplateChoice"
-                                                            >
-                                                            Save your choice
-                                                            </v-btn>
-                                                        </v-toolbar-items>
-                                                        </v-toolbar>
-                                                        <v-list
-                                                        three-line
-                                                        subheader
-                                                        >
-                                                            <v-list-item-group
-                                                                v-model="selectedItem"
-                                                                color="primary"
-                                                            >
-                                                                <v-row>
-                                                                <v-col cols="4" sm="12" md="4" v-for="(item, i) in templates"
-                                                                :key="i">
-                                                                <v-list-item>
-                                                                
-                                                                <v-list-item-icon>
-                                                                    <v-icon v-text="item.icon"></v-icon>
-                                                                </v-list-item-icon>
-                                                                <v-list-item-content>
-                                                                    <v-list-item-title v-text="item.name"></v-list-item-title>
-                                                                </v-list-item-content>
-                                                                
-                                                                </v-list-item>
-                                                                </v-col>
-                                                                </v-row>
-                                                            </v-list-item-group>
-                                                        </v-list>
-                                                    </v-card>
-                                                    </v-dialog>
-
-
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    upload poster
-                                                </v-col>
-                                            </v-row>
-                                            -->
                                         </v-form>
                                     </v-container>
                                 </v-card-text>
@@ -592,6 +512,7 @@
                     headerColor: 'cyan darken-2'
                 },
                 venue: {
+                    id: 0,
                     name: '',
                     address_line_1: '',
                     address_line_2: '',
@@ -605,6 +526,7 @@
                     photo: null,
                     department_id: 0,
                 },
+                countries: [],
             }
         },
         computed: {
@@ -694,6 +616,20 @@
                     this.$refs.form.reset();
                 })
             },
+            closeVenue () {
+                // make sure the dialog box is closed
+                this.dialog2 = false
+                // next action is to make sure that the value of editedItem is on default, and re-initialize the editedIndex value
+                this.$nextTick(() => {
+                    // reset the defaultItem object
+                    //this.editedItem = Object.assign({}, this.defaultItem)
+                    // reset the edit flag
+                    //this.editedIndex = -1
+                    // reset the form
+                    this.$refs.formVenue.reset();
+                    this.getVenues();
+                })
+            },
             save () {
                 /** on change of input, upload the logo, then assign the path to logo path */
                 this.$refs.form.validate()
@@ -742,6 +678,48 @@
                     this.error = true
                 })
               
+            },
+            saveVenue(){
+                /** on change of input, upload the logo, then assign the path to logo path */
+                this.$refs.formVenue.validate()
+                console.log(this.venue)
+                // check if process is updating or creating
+                // if update, then replace the value of the current item with the value in the editedItem
+                // if creating, then push the edited item into the object
+                
+                // assign the edited item to a local var first to be able to be used for filter
+                
+                //var editedItem = this.editedItem
+                //var editedIndex = this.editedIndex
+
+                axios.post('/api/venues/upsert', {
+                    payload: this.venue,
+                })
+                .then(response => {
+                    if (response.data.success) {
+                        console.log(response.data.item.name)
+                        this.feedbacks = []
+                        this.feedbacks[0] = 'Changes for ' + response.data.item.name + ' is saved.'
+                        this.snackbar = true
+                        this.error = false
+                        /*
+                        if ( editedIndex > -1 )
+                            Object.assign(this.rows[editedIndex], response.data.item)
+                        else
+                            this.rows.push(response.data.item)
+                        */
+                        // close the dialog box
+                        //this.close()  
+                        this.editedItem.venue_id = response.data.item.id
+                        this.closeVenue()
+                    }
+                })
+                .catch( error => {
+                    let messages = Object.values(error.response.data.errors); 
+                    this.feedbacks = [].concat.apply([], messages)
+                    this.snackbar = true
+                    this.error = true
+                })
             },
             uploadLogo(){
                 if ( this.photo ){

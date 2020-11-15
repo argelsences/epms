@@ -241,73 +241,76 @@
                                                             <v-divider />
                                                         </v-col>
                                                         <v-col cols="12" sm="12" md="12">
-                                                            <v-row>
-                                                                <v-col cols="8" sm="8" md="8">
-                                                                    <v-autocomplete v-model="editedItem.speakers" :items="speakers" prepend-icon="mdi-office-building"  chips color="blue-grey lighten-2" label="Select" item-text="name" item-value="id" multiple>
-                                                                        <template v-slot:selection="data">
-                                                                            <v-chip v-bind="data.attrs" :input-value="data.selected">
-                                                                                <v-avatar left>
-                                                                                    <v-img :src="base_url + data.item.photo"></v-img>
-                                                                                </v-avatar>
-                                                                                {{ data.item.name }}
-                                                                            </v-chip>
-                                                                        </template>
-                                                                        <template v-slot:item="data">
-                                                                            <template v-if="typeof data.item !== 'object'">
-                                                                                <v-list-item-content v-text="data.item"></v-list-item-content>
+                                                            
+                                                                <v-row>
+                                                                    <v-col cols="8" sm="8" md="8">
+                                                                        <v-autocomplete v-model="editedItem.speakers" :items="speakers" prepend-icon="mdi-office-building"  chips color="blue-grey lighten-2" label="Select" item-text="name" item-value="id" multiple>
+                                                                            <template v-slot:selection="data">
+                                                                                <v-chip v-bind="data.attrs" :input-value="data.selected">
+                                                                                    <v-avatar left>
+                                                                                        <v-img :src="base_url + data.item.photo"></v-img>
+                                                                                    </v-avatar>
+                                                                                    {{ data.item.name }}
+                                                                                </v-chip>
                                                                             </template>
-                                                                            <template v-else>
-                                                                                <v-list-item-avatar>
-                                                                                    <img :src="base_url + data.item.photo">
-                                                                                </v-list-item-avatar>
-                                                                                <v-list-item-content>
-                                                                                    <v-list-item-title v-html="data.item.name"></v-list-item-title>
-                                                                                    <!--<v-list-item-subtitle v-html="data.item.group"></v-list-item-subtitle>-->
-                                                                                </v-list-item-content>
+                                                                            <template v-slot:item="data">
+                                                                                <template v-if="typeof data.item !== 'object'">
+                                                                                    <v-list-item-content v-text="data.item"></v-list-item-content>
+                                                                                </template>
+                                                                                <template v-else>
+                                                                                    <v-list-item-avatar>
+                                                                                        <img :src="base_url + data.item.photo">
+                                                                                    </v-list-item-avatar>
+                                                                                    <v-list-item-content>
+                                                                                        <v-list-item-title v-html="data.item.name"></v-list-item-title>
+                                                                                        <!--<v-list-item-subtitle v-html="data.item.group"></v-list-item-subtitle>-->
+                                                                                    </v-list-item-content>
+                                                                                </template>
                                                                             </template>
-                                                                        </template>
-                                                                    </v-autocomplete>
-                                                                </v-col>
-                                                                <v-col cols="4" sm="4" md="4">
-                                                                    <v-dialog v-model="dialog3" persistent max-width="600px">
-                                                                        <template v-slot:activator="{ on, attrs }">
-                                                                            <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Speaker</v-btn>
-                                                                        </template>
-                                                                        <v-card>
-                                                                            <v-card-title>
-                                                                            <span class="headline">New Speaker</span>
-                                                                            </v-card-title>
-                                                                            <v-card-text>
-                                                                                <v-container>
-                                                                                    <v-row>
-                                                                                        <v-col cols="12" sm="12" md="12">
-                                                                                            <v-text-field label="Name" hint="*Required" persistent-hint required v-model="speaker.name"></v-text-field>
-                                                                                        </v-col>
-                                                                                        <v-col cols="12" sm="12" md="12">
-                                                                                            <v-textarea counter label="Profile" required v-model="speaker.profile"></v-textarea>
-                                                                                        </v-col>
-                                                                                        <v-col cols="12" sm="12" md="12">
-                                                                                            <v-text-field label="Photo" hint="example of helper text only on focus" v-model="speaker.photo"></v-text-field>
-                                                                                        </v-col>
-                                                                                        <v-col cols="12" sm="12" md="12">
-                                                                                            <v-autocomplete v-model="speaker.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
-                                                                                        </v-col>
-                                                                                    </v-row>
-                                                                                </v-container>
-                                                                            </v-card-text>
-                                                                            <v-card-actions>
-                                                                                <v-spacer></v-spacer>
-                                                                                <v-btn color="blue darken-1" text @click="dialog3 = false">
-                                                                                    Close
-                                                                                </v-btn>
-                                                                                <v-btn color="blue darken-1" text @click="dialog2 = false">
-                                                                                    Save
-                                                                                </v-btn>
-                                                                            </v-card-actions>
-                                                                        </v-card>
-                                                                    </v-dialog>
-                                                                </v-col>
-                                                            </v-row>
+                                                                        </v-autocomplete>
+                                                                    </v-col>
+                                                                    <v-col cols="4" sm="4" md="4">
+                                                                        <v-dialog v-model="dialog3" persistent max-width="600px">
+                                                                            <template v-slot:activator="{ on, attrs }">
+                                                                                <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Speaker</v-btn>
+                                                                            </template>
+                                                                            <v-card>
+                                                                                <v-card-title>
+                                                                                <span class="headline">New Speaker</span>
+                                                                                </v-card-title>
+                                                                                <v-card-text>
+                                                                                    <v-container>
+                                                                                        <v-form v-model="isValid" ref="formSpeaker">
+                                                                                        <v-row>
+                                                                                            <v-col cols="12" sm="12" md="12">
+                                                                                                <v-text-field label="Name" hint="*Required" persistent-hint required v-model="speaker.name"></v-text-field>
+                                                                                            </v-col>
+                                                                                            <v-col cols="12" sm="12" md="12">
+                                                                                                <v-textarea counter label="Profile" required v-model="speaker.profile"></v-textarea>
+                                                                                            </v-col>
+                                                                                            <v-col cols="12" sm="12" md="12">
+                                                                                                <v-text-field label="Photo" hint="example of helper text only on focus" v-model="speaker.photo"></v-text-field>
+                                                                                            </v-col>
+                                                                                            <v-col cols="12" sm="12" md="12">
+                                                                                                <v-autocomplete v-model="speaker.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
+                                                                                            </v-col>
+                                                                                        </v-row>
+                                                                                        </v-form>
+                                                                                    </v-container>
+                                                                                </v-card-text>
+                                                                                <v-card-actions>
+                                                                                    <v-spacer></v-spacer>
+                                                                                    <v-btn color="blue darken-1" text @click="dialog3 = false">
+                                                                                        Close
+                                                                                    </v-btn>
+                                                                                    <v-btn color="blue darken-1" text @click="saveSpeaker()">
+                                                                                        Save
+                                                                                    </v-btn>
+                                                                                </v-card-actions>
+                                                                            </v-card>
+                                                                        </v-dialog>
+                                                                    </v-col>
+                                                                </v-row>
                                                         </v-col>
                                                     </v-row>
                                                 </v-col>
@@ -386,7 +389,7 @@
         // specify TiptapVuetify component in "components"
         components: { TiptapVuetify },
         mounted() {
-            console.log('Component mounted');
+            console.log('Component mounted')
         },
         data() {
             return {
@@ -521,6 +524,7 @@
                     state: '',
                 },
                 speaker: {
+                    id: 0,
                     name: '',
                     profile: '',
                     photo: null,
@@ -598,6 +602,7 @@
                 this.end_date = eventEndDate.toISOString().substr(0, 10)
                 this.end_time = String(eventEndDate.getHours()).padStart(2, '0') + ":" + String(eventEndDate.getMinutes()).padStart(2, '0')
                 this.dialog = true
+
             },
             deleteItem (item) {
                 const index = this.rows.indexOf(item)
@@ -621,13 +626,19 @@
                 this.dialog2 = false
                 // next action is to make sure that the value of editedItem is on default, and re-initialize the editedIndex value
                 this.$nextTick(() => {
-                    // reset the defaultItem object
-                    //this.editedItem = Object.assign({}, this.defaultItem)
-                    // reset the edit flag
-                    //this.editedIndex = -1
                     // reset the form
                     this.$refs.formVenue.reset();
                     this.getVenues();
+                })
+            },
+            closeSpeaker () {
+                // make sure the dialog box is closed
+                this.dialog3 = false
+                // next action is to make sure that the value of editedItem is on default, and re-initialize the editedIndex value
+                this.$nextTick(() => {
+                    // reset the form
+                    this.$refs.formSpeaker.reset();
+                    /////this.getSpeakers();
                 })
             },
             save () {
@@ -642,8 +653,6 @@
                 var editedIndex = this.editedIndex
                 this.editedItem.start_date = this.start_date + ' ' + this.start_time
                 this.editedItem.end_date = this.end_date + ' ' + this.end_time
-
-                //console.log(this.editedItem )
 
                 axios.post('/api/events/upsert', {
                     payload: this.editedItem,
@@ -682,15 +691,6 @@
             saveVenue(){
                 /** on change of input, upload the logo, then assign the path to logo path */
                 this.$refs.formVenue.validate()
-                console.log(this.venue)
-                // check if process is updating or creating
-                // if update, then replace the value of the current item with the value in the editedItem
-                // if creating, then push the edited item into the object
-                
-                // assign the edited item to a local var first to be able to be used for filter
-                
-                //var editedItem = this.editedItem
-                //var editedIndex = this.editedIndex
 
                 axios.post('/api/venues/upsert', {
                     payload: this.venue,
@@ -712,6 +712,32 @@
                         //this.close()  
                         this.editedItem.venue_id = response.data.item.id
                         this.closeVenue()
+                    }
+                })
+                .catch( error => {
+                    let messages = Object.values(error.response.data.errors); 
+                    this.feedbacks = [].concat.apply([], messages)
+                    this.snackbar = true
+                    this.error = true
+                })
+            },
+            saveSpeaker() {
+                /** on change of input, upload the logo, then assign the path to logo path */
+                this.$refs.formSpeaker.validate()
+
+                axios.post('/api/speakers/upsert', {
+                    payload: this.speaker,
+                })
+                .then(response => {
+                    if (response.data.success) {
+                        this.feedbacks = []
+                        this.feedbacks[0] = 'Changes for ' + response.data.item.name + ' is saved.'
+                        this.snackbar = true
+                        this.error = false
+                        
+                        this.getSpeakers();
+                        this.editedItem.speakers.push(response.data.item)
+                        this.closeSpeaker() 
                     }
                 })
                 .catch( error => {

@@ -11,7 +11,7 @@
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details ></v-text-field>
                         <v-spacer></v-spacer>
                         <!-- the dialog box -->        
-                        <v-dialog v-model="dialog"  width="80%" scrollable fullscreen hide-overlay>
+                        <v-dialog v-model="dialog"  scrollable fullscreen hide-overlay>
                             <template v-slot:activator="{ on, attrs }">
                                 <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Event</v-btn>
                             </template>
@@ -184,51 +184,7 @@
                                                                     <v-autocomplete v-model="editedItem.venue_id" :items="venues" item-text="name" item-value="id"  label="Venue" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
                                                                 </v-col>
                                                                 <v-col cols="4" sm="4" md="4">
-                                                                    <v-dialog v-model="dialog2" persistent max-width="600px">
-                                                                        <template v-slot:activator="{ on, attrs }">
-                                                                            <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Venue</v-btn>
-                                                                        </template>
-                                                                        <v-card>
-                                                                            <v-card-title>
-                                                                                <span class="headline">New Venue</span>
-                                                                            </v-card-title>
-                                                                            <v-card-text>
-                                                                                <v-container>
-                                                                                    <v-form v-model="isValid2" ref="formVenue">
-                                                                                        <v-row>
-                                                                                            <v-col cols="12" sm="12" md="12">
-                                                                                                <v-text-field label="Name" required v-model="venue.name" hint="*Required" persistent-hint></v-text-field>
-                                                                                            </v-col>
-                                                                                            <v-col cols="12" sm="12" md="12">
-                                                                                                <v-text-field label="Address line 1" hint="*Required" required persistent-hint v-model="venue.address_line_1"></v-text-field>
-                                                                                            </v-col>
-                                                                                            <v-col cols="12" sm="12" md="12">
-                                                                                                <v-text-field label="Address line 2" v-model="venue.address_line_2"></v-text-field>
-                                                                                            </v-col>
-                                                                                            <v-col cols="12" sm="4" md="4">
-                                                                                                <v-text-field label="Postcode" required v-model="venue.postcode"></v-text-field>
-                                                                                            </v-col>
-                                                                                            <v-col cols="12" sm="4" md="4">
-                                                                                                <v-text-field label="State" v-model="venue.state"></v-text-field>
-                                                                                            </v-col>
-                                                                                            <v-col cols="12" sm="4" md="4">
-                                                                                                <v-select :items="countries" label="Country" item-text="name" item-value="name" v-model="venue.country"  prepend-icon="mdi-earth"></v-select>
-                                                                                            </v-col>
-                                                                                        </v-row>
-                                                                                    </v-form>
-                                                                                </v-container>
-                                                                            </v-card-text>
-                                                                            <v-card-actions>
-                                                                                <v-spacer></v-spacer>
-                                                                                <v-btn color="blue darken-1" text @click="dialog2 = false">
-                                                                                    Close
-                                                                                </v-btn>
-                                                                                <v-btn color="blue darken-1" text @click="saveVenue">
-                                                                                    Save
-                                                                                </v-btn>
-                                                                            </v-card-actions>
-                                                                        </v-card>
-                                                                    </v-dialog>
+                                                                    <v-btn color="#1f4068" class="white--text" @click="dialog2 = true"><i class="material-icons ">add_box</i> Venue</v-btn>
                                                                 </v-col>
                                                             </v-row>
                                                         </v-col>
@@ -269,45 +225,7 @@
                                                                     </v-autocomplete>
                                                                 </v-col>
                                                                 <v-col cols="4" sm="4" md="4">
-                                                                    <v-dialog v-model="dialog3" persistent max-width="600px">
-                                                                        <template v-slot:activator="{ on, attrs }">
-                                                                            <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Speaker</v-btn>
-                                                                        </template>
-                                                                        <v-card>
-                                                                            <v-card-title>
-                                                                            <span class="headline">New Speaker</span>
-                                                                            </v-card-title>
-                                                                            <v-card-text>
-                                                                                <v-container>
-                                                                                    <v-form v-model="isValid3" ref="formSpeaker">
-                                                                                    <v-row>
-                                                                                        <v-col cols="12" sm="12" md="12">
-                                                                                            <v-text-field label="Name" hint="*Required" persistent-hint required v-model="speaker.name"></v-text-field>
-                                                                                        </v-col>
-                                                                                        <v-col cols="12" sm="12" md="12">
-                                                                                            <v-textarea counter label="Profile" required v-model="speaker.profile"></v-textarea>
-                                                                                        </v-col>
-                                                                                        <v-col cols="12" sm="12" md="12">
-                                                                                            <v-text-field label="Photo" hint="example of helper text only on focus" v-model="speaker.photo"></v-text-field>
-                                                                                        </v-col>
-                                                                                        <v-col cols="12" sm="12" md="12">
-                                                                                            <v-autocomplete v-model="speaker.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
-                                                                                        </v-col>
-                                                                                    </v-row>
-                                                                                    </v-form>
-                                                                                </v-container>
-                                                                            </v-card-text>
-                                                                            <v-card-actions>
-                                                                                <v-spacer></v-spacer>
-                                                                                <v-btn color="blue darken-1" text @click="dialog3 = false">
-                                                                                    Close
-                                                                                </v-btn>
-                                                                                <v-btn color="blue darken-1" text @click="saveSpeaker()">
-                                                                                    Save
-                                                                                </v-btn>
-                                                                            </v-card-actions>
-                                                                        </v-card>
-                                                                    </v-dialog>
+                                                                    <v-btn color="#1f4068" class="white--text" @click="dialog3 = !dialog3"><i class="material-icons ">add_box</i> Speaker</v-btn>
                                                                 </v-col>
                                                             </v-row>
                                                         </v-col>
@@ -358,6 +276,7 @@
                     <v-btn class="btn btn-sm btn-primary" @click="initialize">Reset</v-btn>
                 </template>
             </v-data-table>
+            
             <v-snackbar v-model="snackbar" :timeout="timeout">
                 <v-list-item v-for="(feedback, index) in feedbacks" :key="index">
                     <v-list-item-icon v-if="error">
@@ -377,6 +296,90 @@
                 </template>
             </v-snackbar>
         </v-card>
+        <v-dialog v-model="dialog3" persistent max-width="600px">
+                <!--<template v-slot:activator="{ on, attrs }">
+                    <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Speaker</v-btn>
+                </template>-->
+                <v-card>
+                    <v-card-title>
+                    <span class="headline">New Speaker</span>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-container>
+                            <v-form v-model="isValid3" ref="formSpeaker">
+                            <v-row>
+                                <v-col cols="12" sm="12" md="12">
+                                    <v-text-field label="Name" hint="*Required" persistent-hint required v-model="speaker.name"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="12">
+                                    <v-textarea counter label="Profile" required v-model="speaker.profile"></v-textarea>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="12">
+                                    <v-text-field label="Photo" hint="example of helper text only on focus" v-model="speaker.photo"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="12">
+                                    <v-autocomplete v-model="speaker.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
+                                </v-col>
+                            </v-row>
+                            </v-form>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue darken-1" text @click="closeSpeaker">
+                            Close
+                        </v-btn>
+                        <v-btn color="blue darken-1" text @click="saveSpeaker()">
+                            Save
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+            <v-dialog v-model="dialog2" persistent max-width="600px">
+                <!--<template v-slot:activator="{ on, attrs }">
+                    <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Venue</v-btn>
+                </template>-->
+                <v-card>
+                    <v-card-title>
+                        <span class="headline">New Venue</span>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-container>
+                            <v-form v-model="isValid2" ref="formVenue">
+                                <v-row>
+                                    <v-col cols="12" sm="12" md="12">
+                                        <v-text-field label="Name" required v-model="venue.name" hint="*Required" persistent-hint></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="12" md="12">
+                                        <v-text-field label="Address line 1" hint="*Required" required persistent-hint v-model="venue.address_line_1"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="12" md="12">
+                                        <v-text-field label="Address line 2" v-model="venue.address_line_2"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="4" md="4">
+                                        <v-text-field label="Postcode" required v-model="venue.postcode"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="4" md="4">
+                                        <v-text-field label="State" v-model="venue.state"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="4" md="4">
+                                        <v-select :items="countries" label="Country" item-text="name" item-value="name" v-model="venue.country"  prepend-icon="mdi-earth"></v-select>
+                                    </v-col>
+                                </v-row>
+                            </v-form>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue darken-1" text @click="dialog2 = false">
+                            Close
+                        </v-btn>
+                        <v-btn color="blue darken-1" text @click="saveVenue">
+                            Save
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
     </v-app>
 </template>
 
@@ -639,7 +642,7 @@
                 this.$nextTick(() => {
                     // reset the form
                     this.$refs.formSpeaker.reset();
-                    /////this.getSpeakers();
+                    this.getSpeakers();
                 })
             },
             save () {
@@ -734,8 +737,8 @@
                         this.error = false
                         */
                         
-                        this.getSpeakers();
-                        this.editedItem.speakers.push(response.data.item)
+                        /////this.getSpeakers();
+                        this.editedItem.speakers.push(response.data.item.id)
                         this.closeSpeaker() 
                     }
                 })

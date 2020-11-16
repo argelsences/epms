@@ -20,6 +20,8 @@
                                     <!-- formTitle is  a computed property based on action edit or new -->
                                     <span class="headline">{{ formTitle }}</span>
                                     <v-spacer></v-spacer>
+                                    <v-switch :label="isPublic(editedItem.is_public)" prepend-icon="mdi-publish" v-model="editedItem.is_public" class="mr-16"></v-switch>
+                                    <v-switch :label="isApproved(editedItem.is_approved)" prepend-icon="mdi-publish" v-model="editedItem.is_approved" class="mr-16"></v-switch>
                                     <v-btn absolute dark fab middle right color="pink" @click="close">
                                         <v-icon x-large>mdi-close</v-icon>
                                     </v-btn>
@@ -75,7 +77,7 @@
                                                 <v-col cols="12" sm="12" md="6">
                                                     <v-menu ref="st_menu" v-model="st_menu" :close-on-content-click="false" :return-value.sync="start_date" transition="scale-transition" offset-y min-width="290px">
                                                         <template v-slot:activator="{ on, attrs }">
-                                                            <v-text-field v-model="start_date" label="Start Date" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
+                                                            <v-text-field  :label="computedStartDateFormatted" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" hint="Start Date" persistent-hint></v-text-field>
                                                         </template>
                                                         <v-date-picker v-model="start_date" no-title scrollable>
                                                             <v-spacer></v-spacer>
@@ -91,7 +93,7 @@
                                                 <v-col cols="12" sm="6" md="6">
                                                     <v-dialog ref="stt_dialog" v-model="stt_dialog" :return-value.sync="start_time" persistent width="290px">
                                                         <template v-slot:activator="{ on, attrs }">
-                                                            <v-text-field v-model="start_time" label="Start Time" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on"></v-text-field>
+                                                            <v-text-field :label="computedStartTimeFormatted" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on" hint="Start Time" persistent-hint></v-text-field>
                                                         </template>
                                                         <v-time-picker v-if="stt_dialog" v-model="start_time" full-width>
                                                             <v-spacer></v-spacer>
@@ -109,7 +111,7 @@
                                                 <v-col cols="12" sm="12" md="6">
                                                     <v-menu ref="se_menu" v-model="se_menu" :close-on-content-click="false" :return-value.sync="end_date" transition="scale-transition" offset-y min-width="290px">
                                                         <template v-slot:activator="{ on, attrs }">
-                                                            <v-text-field v-model="end_date" label="End Date" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
+                                                            <v-text-field :label="computedEndDateFormatted"  prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" hint="End Date" persistent-hint></v-text-field>
                                                         </template>
                                                         <v-date-picker v-model="end_date" no-title scrollable :min="start_date">
                                                         <v-spacer></v-spacer>
@@ -123,7 +125,7 @@
                                                 <v-col cols="12" sm="6" md="6">
                                                     <v-dialog ref="ste_dialog" v-model="ste_dialog" :return-value.sync="end_time" persistent width="290px">
                                                         <template v-slot:activator="{ on, attrs }">
-                                                            <v-text-field v-model="end_time" label="End Time" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on"></v-text-field>
+                                                            <v-text-field :label="computedEndTimeFormatted" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on" hint="End Time" persistent-hint></v-text-field>
                                                         </template>
                                                         <v-time-picker v-if="ste_dialog" v-model="end_time" full-width>
                                                             <v-spacer></v-spacer>
@@ -297,89 +299,89 @@
             </v-snackbar>
         </v-card>
         <v-dialog v-model="dialog3" persistent max-width="600px">
-                <!--<template v-slot:activator="{ on, attrs }">
-                    <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Speaker</v-btn>
-                </template>-->
-                <v-card>
-                    <v-card-title>
+            <!--<template v-slot:activator="{ on, attrs }">
+                <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Speaker</v-btn>
+            </template>-->
+            <v-card>
+                <v-card-title>
                     <span class="headline">New Speaker</span>
-                    </v-card-title>
-                    <v-card-text>
-                        <v-container>
-                            <v-form v-model="isValid3" ref="formSpeaker">
+                </v-card-title>
+                <v-card-text>
+                    <v-container>
+                        <v-form v-model="isValid3" ref="formSpeaker">
+                        <v-row>
+                            <v-col cols="12" sm="12" md="12">
+                                <v-text-field label="Name" hint="*Required" persistent-hint required v-model="speaker.name"></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="12" md="12">
+                                <v-textarea counter label="Profile" required v-model="speaker.profile"></v-textarea>
+                            </v-col>
+                            <v-col cols="12" sm="12" md="12">
+                                <v-text-field label="Photo" hint="example of helper text only on focus" v-model="speaker.photo"></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="12" md="12">
+                                <v-autocomplete v-model="speaker.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
+                            </v-col>
+                        </v-row>
+                        </v-form>
+                    </v-container>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="closeSpeaker">
+                        Close
+                    </v-btn>
+                    <v-btn color="blue darken-1" text @click="saveSpeaker()">
+                        Save
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+        <v-dialog v-model="dialog2" persistent max-width="600px">
+            <!--<template v-slot:activator="{ on, attrs }">
+                <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Venue</v-btn>
+            </template>-->
+            <v-card>
+                <v-card-title>
+                    <span class="headline">New Venue</span>
+                </v-card-title>
+                <v-card-text>
+                    <v-container>
+                        <v-form v-model="isValid2" ref="formVenue">
                             <v-row>
                                 <v-col cols="12" sm="12" md="12">
-                                    <v-text-field label="Name" hint="*Required" persistent-hint required v-model="speaker.name"></v-text-field>
+                                    <v-text-field label="Name" required v-model="venue.name" hint="*Required" persistent-hint></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="12" md="12">
-                                    <v-textarea counter label="Profile" required v-model="speaker.profile"></v-textarea>
+                                    <v-text-field label="Address line 1" hint="*Required" required persistent-hint v-model="venue.address_line_1"></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="12" md="12">
-                                    <v-text-field label="Photo" hint="example of helper text only on focus" v-model="speaker.photo"></v-text-field>
+                                    <v-text-field label="Address line 2" v-model="venue.address_line_2"></v-text-field>
                                 </v-col>
-                                <v-col cols="12" sm="12" md="12">
-                                    <v-autocomplete v-model="speaker.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
+                                <v-col cols="12" sm="4" md="4">
+                                    <v-text-field label="Postcode" required v-model="venue.postcode"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="4" md="4">
+                                    <v-text-field label="State" v-model="venue.state"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="4" md="4">
+                                    <v-select :items="countries" label="Country" item-text="name" item-value="name" v-model="venue.country"  prepend-icon="mdi-earth"></v-select>
                                 </v-col>
                             </v-row>
-                            </v-form>
-                        </v-container>
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="blue darken-1" text @click="closeSpeaker">
-                            Close
-                        </v-btn>
-                        <v-btn color="blue darken-1" text @click="saveSpeaker()">
-                            Save
-                        </v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-dialog>
-            <v-dialog v-model="dialog2" persistent max-width="600px">
-                <!--<template v-slot:activator="{ on, attrs }">
-                    <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Venue</v-btn>
-                </template>-->
-                <v-card>
-                    <v-card-title>
-                        <span class="headline">New Venue</span>
-                    </v-card-title>
-                    <v-card-text>
-                        <v-container>
-                            <v-form v-model="isValid2" ref="formVenue">
-                                <v-row>
-                                    <v-col cols="12" sm="12" md="12">
-                                        <v-text-field label="Name" required v-model="venue.name" hint="*Required" persistent-hint></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="12" md="12">
-                                        <v-text-field label="Address line 1" hint="*Required" required persistent-hint v-model="venue.address_line_1"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="12" md="12">
-                                        <v-text-field label="Address line 2" v-model="venue.address_line_2"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="4" md="4">
-                                        <v-text-field label="Postcode" required v-model="venue.postcode"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="4" md="4">
-                                        <v-text-field label="State" v-model="venue.state"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="4" md="4">
-                                        <v-select :items="countries" label="Country" item-text="name" item-value="name" v-model="venue.country"  prepend-icon="mdi-earth"></v-select>
-                                    </v-col>
-                                </v-row>
-                            </v-form>
-                        </v-container>
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="blue darken-1" text @click="dialog2 = false">
-                            Close
-                        </v-btn>
-                        <v-btn color="blue darken-1" text @click="saveVenue">
-                            Save
-                        </v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-dialog>
+                        </v-form>
+                    </v-container>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="dialog2 = false">
+                        Close
+                    </v-btn>
+                    <v-btn color="blue darken-1" text @click="saveVenue">
+                        Save
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-app>
 </template>
 
@@ -501,7 +503,7 @@
                     social_show_email: 0,
                     social_show_linkedin: 0,
                     is_public: 0,
-                    is_approved: 0,
+                    is_approved: 1,
                     for_approval: 0,
                     barcode_type: 'QRCODE',
                     checkout_timeout: 0,
@@ -535,11 +537,27 @@
                     department_id: 0,
                 },
                 countries: [],
+                selectedDate: null,
             }
         },
         computed: {
             formTitle () {
                 return this.editedIndex === -1 ? 'New Event' : 'Edit Event'
+            },
+            computedStartDateFormatted () {
+                //let eventStartDate = new Date(this.editedItem.start_date)
+                //this.start_date = eventStartDate.toISOString().substr(0, 10)
+                return this.formatDate(this.start_date)
+                //return this.formatDate(new Date(this.editedItem.start_date).toISOString().substr(0, 10))
+            },
+            computedEndDateFormatted () {
+                return this.formatDate(this.end_date)
+            },
+            computedStartTimeFormatted () {
+                return this.formatTime(this.start_time)
+            },
+            computedEndTimeFormatted () {
+                return this.formatTime(this.end_time)
             },
         },
         watch: {
@@ -557,6 +575,27 @@
                 }
                 val || this.close()
             },
+            /*
+            'editedItem.start_date': function (val){
+                console.log(val)
+                let eventStartDate = new Date(val)
+                this.start_date = eventStartDate.toISOString().substr(0, 10) 
+            },
+            */
+           /*
+           editedItem: {
+                // This will let Vue know to look inside the array
+                deep: true,
+
+                // We have to move our method to a handler field
+                handler(val){
+                    //console.log('The list of colours has changed!');
+                    console.log(val)
+                    let eventStartDate = new Date(val)
+                    this.start_date = eventStartDate.toISOString().substr(0, 10) 
+                }
+            },
+            */
         },
         methods: {
             initialize: function() {
@@ -602,6 +641,7 @@
                 let eventStartDate = new Date(this.editedItem.start_date)
                 let eventEndDate = new Date(this.editedItem.end_date)
                 this.start_date = eventStartDate.toISOString().substr(0, 10)
+                console.log(this.start_date)
                 this.start_time = String(eventStartDate.getHours()).padStart(2, '0') + ":" + String(eventStartDate.getMinutes()).padStart(2, '0')
                 this.end_date = eventEndDate.toISOString().substr(0, 10)
                 this.end_time = String(eventEndDate.getHours()).padStart(2, '0') + ":" + String(eventEndDate.getMinutes()).padStart(2, '0')
@@ -655,6 +695,7 @@
                 // assign the edited item to a local var first to be able to be used for filter
                 var editedItem = this.editedItem
                 var editedIndex = this.editedIndex
+                
                 this.editedItem.start_date = this.start_date + ' ' + this.start_time
                 this.editedItem.end_date = this.end_date + ' ' + this.end_time
 
@@ -788,6 +829,32 @@
             },
             isPublic(value){
                 return (value) ? 'Public' : 'Private'
+            },
+            isApproved(value){
+                return (value) ? 'Approved' : 'For Approval'
+            },
+            formatDate (date) {
+
+                console.log(date)
+                if (!date) return null
+
+                const [year, month, day] = date.split('-')
+                return `${month}/${day}/${year}`
+            },
+            formatTime (time) {
+                if (!time) return null
+
+                //const [hour, minute, year] = date.split('/')
+                //return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+                // Check correct time format and split into components
+                time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+
+                if (time.length > 1) { // If time format correct
+                    time = time.slice (1);  // Remove full string match value
+                    time[5] = +time[0] < 12 ? 'AM' : 'PM'; // Set AM/PM
+                    time[0] = +time[0] % 12 || 12; // Adjust hours
+                }
+                return time.join (''); // return adjusted time or original string
             },
         },
         created: function() {

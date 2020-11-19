@@ -102,7 +102,15 @@ class EventController extends Controller
             return response('Unauthorized', 403);
         }
 
-        $events = $model::with(['venue','speakers'])->orderBy('title', 'ASC')->get();
+        $events = $model::with(['venue','speakers','tickets'])->orderBy('title', 'ASC')->get();
+        /*
+        $tickets = [];
+        foreach($events as $event){
+            $tickets[] = $event->tickets();
+        }
+        dd($tickets);
+        */
+        //dd($events);
 
         return response()->json($events);
     }

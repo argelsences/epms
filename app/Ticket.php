@@ -9,4 +9,7 @@ class Ticket extends Model
 {
     //
     use SoftDeletes;
+    public function event(){
+        return $this->belongsTo('App\Event')->withTimestamps();
+    }
 }

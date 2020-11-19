@@ -29,27 +29,25 @@
                                 <v-divider></v-divider>
                                 <v-card-text class="pt-0">
                                     <v-container>
-
-
                                         <v-tabs vertical>
                                             <v-tab class="pa-8">
-                                                <v-icon left>mdi-account</v-icon>
+                                                <v-icon left>mdi-cog</v-icon>
                                                 Details
                                             </v-tab>
                                             <v-tab class="pa-8">
-                                                <v-icon left>mdi-lock</v-icon>
+                                                <v-icon left>mdi-image</v-icon>
                                                 Poster
                                             </v-tab>
                                             <v-tab class="pa-8">
-                                                <v-icon left>mdi-access-point</v-icon>
+                                                <v-icon left>mdi-ticket-confirmation-outline</v-icon>
                                                 Ticket
                                             </v-tab>
                                             <v-tab class="pa-8">
-                                                <v-icon left>mdi-access-point</v-icon>
+                                                <v-icon left>mdi-ticket-confirmation</v-icon>
                                                 Booking
                                             </v-tab>
                                             <v-tab class="pa-8">
-                                                <v-icon left>mdi-access-point</v-icon>
+                                                <v-icon left>mdi-ticket-account</v-icon>
                                                 Attendee
                                             </v-tab>
 
@@ -299,45 +297,40 @@
                                                     <v-card-text class="pt-0">
                                                         <v-row>
                                                             <v-col cols="12" sm="12" md="12">
-                                                                <v-btn color="#1f4068" class="white--text" @click="dialog2 = true"><i class="material-icons ">add_box</i> Ticket</v-btn>
-                                                                <v-spacer></v-spacer>
+                                                                <v-btn color="#1f4068" class="white--text float-right" @click="dialog1 = true"><i class="material-icons ">add_box</i> Ticket</v-btn>
                                                             </v-col>
                                                         </v-row>
+                                                        <v-divider />
                                                         <v-row dense>
                                                             <v-col cols="12" sm="6" md="4">
-                                                                <v-card>
-                                                                   
-                                                                        
-                                                                        <div class="ticket-header green text-white">
-                                                                            <v-card-subtitle class="pb-0 text-white" >FREE</v-card-subtitle>
-                                                                            <v-spacer />
-                                                                            <v-card-title class="headline pt-0">The Ticket Name</v-card-title>
-                                                                        </div>
-                                                                        <v-card-text>
-                                                                            <div class="d-flex flex-no-wrap justify-space-between pa-10">
-                                                                                <div class="text-center">
-                                                                                    <p class="text-lg-h4">00</p>
-                                                                                    <p class="text-caption text--secondary">SOLD</p>
-                                                                                </div>
-                                                                                <v-divider vertical />
-                                                                                <div class="text-center">
-                                                                                    <p class="text-lg-h4">00</p>
-                                                                                    <p class="text-caption text--secondary">REMAINING</p>
-                                                                                </div>
+                                                                <v-card>    
+                                                                    <div class="ticket-header cyan darken-4 text-white">
+                                                                        <v-card-subtitle class="pb-0 text-white" >FREE</v-card-subtitle>
+                                                                        <v-spacer />
+                                                                        <v-card-title class="headline pt-0">The Ticket Name</v-card-title>
+                                                                    </div>
+                                                                    <v-card-text>
+                                                                        <div class="d-flex flex-no-wrap justify-space-between pa-5 pb-0">
+                                                                            <div class="text-center">
+                                                                                <p class="text-lg-h4">00</p>
+                                                                                <p class="text-caption text--secondary">SOLD</p>
                                                                             </div>
-                                                                        </v-card-text>
-                                                                        <v-card-actions>
-                                                                            <v-spacer></v-spacer>
-                                                                            <v-btn class="ml-2 mt-3" fab icon height="40px" right width="40px">
-                                                                                <v-icon>mdi-play</v-icon>
-                                                                            </v-btn>
-                                                                            <v-btn class="ml-2 mt-5" outlined rounded small>
-                                                                                On sale
-                                                                            </v-btn>
-                                                                        </v-card-actions>
-                                                                        
-                                                                        
-                                                                    
+                                                                            <v-divider vertical />
+                                                                            <div class="text-center">
+                                                                                <p class="text-lg-h4">00</p>
+                                                                                <p class="text-caption text--secondary">REMAINING</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </v-card-text>
+                                                                    <v-card-actions>
+                                                                        <v-spacer></v-spacer>
+                                                                        <v-btn class="ml-2 mt-3" fab icon height="40px" right width="40px">
+                                                                            <v-icon>mdi-play</v-icon>
+                                                                        </v-btn>
+                                                                        <v-btn class="ml-2 mt-5" outlined rounded small>
+                                                                            On sale
+                                                                        </v-btn>
+                                                                    </v-card-actions>
                                                                 </v-card>
                                                             </v-col>
                                                         </v-row>
@@ -358,15 +351,7 @@
                                                     </v-card-text>
                                                 </v-card>
                                             </v-tab-item>
-                                        </v-tabs>
-
-
-
-
-
-
-
-                                        
+                                        </v-tabs>  
                                     </v-container>
                                 </v-card-text>
                                 <v-divider></v-divider>
@@ -375,17 +360,6 @@
                                     <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
                                     <v-btn color="blue darken-1" :disabled="!isValid" text @click="save">Save</v-btn>
                                 </v-card-actions>
-
-
-
-
-                            
-                                
-                            
-
-
-
-
                             </v-card>
                         </v-dialog>
                         <!-- the dialog box -->
@@ -525,6 +499,105 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+        <!-- for tickets -->
+        <v-dialog v-model="dialog1" persistent max-width="600px">
+            <!--<template v-slot:activator="{ on, attrs }">
+                <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Venue</v-btn>
+            </template>-->
+            <v-card>
+                <v-card-title>
+                    <span class="headline">New | Edit Ticket</span>
+                </v-card-title>
+                <v-card-text>
+                    <v-container>
+                        <v-form v-model="isValid1" ref="formTicket">
+                            <v-row>
+                                <v-col cols="12" sm="12" md="12">
+                                    <v-text-field label="Ticket Title" required v-model="ticket.title" hint="*Required" persistent-hint></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="12">
+                                    <v-text-field label="Ticket Description" hint="*Required" required persistent-hint v-model="ticket.description"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="12">
+                                    <v-text-field label="Quantity Available" v-model="ticket.quantity_available"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="12">
+                                    <v-expansion-panels flat >
+                                        <v-expansion-panel>
+                                            <v-expansion-panel-header color="#1f4068" class="white--text">
+                                                More options
+                                                <template v-slot:actions>
+                                                    <v-icon color="white">
+                                                    mdi-more
+                                                    </v-icon>
+                                                </template>
+                                            </v-expansion-panel-header>
+                                            <v-expansion-panel-content>
+                                                <v-row>
+                                                    <v-col cols="12" sm="6" md="6">
+                                                        <v-menu ref="st_menu" v-model="start_book_menu" :close-on-content-click="false" :return-value.sync="ticket.start_book_date" transition="scale-transition" offset-y min-width="290px">
+                                                            <template v-slot:activator="{ on, attrs }">
+                                                                <v-text-field  :label="computedStartDateFormatted" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" hint="Start sale on" persistent-hint></v-text-field>
+                                                            </template>
+                                                            <v-date-picker v-model="ticket.start_book_date" no-title scrollable>
+                                                                <v-spacer></v-spacer>
+                                                                <v-btn text color="primary" @click="start_book_menu = false">
+                                                                    Cancel
+                                                                </v-btn>
+                                                                <v-btn text color="primary" @click="$refs.start_book_menu.save(ticket.start_book_date)" >
+                                                                    OK
+                                                                </v-btn>
+                                                            </v-date-picker>
+                                                        </v-menu>
+                                                    </v-col>
+                                                    <v-col cols="12" sm="6" md="6">
+                                                        <v-menu ref="st_menu" v-model="end_book_menu" :close-on-content-click="false" :return-value.sync="ticket.end_book_date" transition="scale-transition" offset-y min-width="290px">
+                                                            <template v-slot:activator="{ on, attrs }">
+                                                                <v-text-field  :label="computedStartDateFormatted" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" hint="End sale on" persistent-hint></v-text-field>
+                                                            </template>
+                                                            <v-date-picker v-model="ticket.end_book_date" no-title scrollable>
+                                                                <v-spacer></v-spacer>
+                                                                <v-btn text color="primary" @click="end_book_menu = false">
+                                                                    Cancel
+                                                                </v-btn>
+                                                                <v-btn text color="primary" @click="$refs.end_book_menu.save(ticket.start_book_date)" >
+                                                                    OK
+                                                                </v-btn>
+                                                            </v-date-picker>
+                                                        </v-menu>
+                                                    </v-col>
+                                                </v-row>
+                                                <v-row>
+                                                    <v-col cols="12" sm="4" md="4">
+                                                        <v-text-field label="Postcode" required v-model="venue.postcode"></v-text-field>
+                                                    </v-col>
+                                                    <v-col cols="12" sm="4" md="4">
+                                                        <v-text-field label="State" v-model="venue.state"></v-text-field>
+                                                    </v-col>
+                                                    <v-col cols="12" sm="4" md="4">
+                                                        <v-select :items="countries" label="Country" item-text="name" item-value="name" v-model="venue.country"  prepend-icon="mdi-earth"></v-select>
+                                                    </v-col>
+                                                </v-row>
+                                            </v-expansion-panel-content>
+                                        </v-expansion-panel>
+                                    </v-expansion-panels>
+                                </v-col>
+                            </v-row>
+                        </v-form>
+                    </v-container>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="dialog1 = false">
+                        Close
+                    </v-btn>
+                    <v-btn color="blue darken-1" text @click="saveTicket">
+                        Save
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+        <!-- for tickets -->
     </v-app>
 </template>
 
@@ -541,13 +614,17 @@
         data() {
             return {
                 dialog: false,
+                dialog1: false,
                 dialog2: false,
                 dialog3: false,
                 st_menu: false,
                 se_menu: false,
+                start_book_menu: false,
+                end_book_menu: false,
                 stt_dialog:false,
                 ste_dialog: false,
                 isValid: true,
+                isValid1: true,
                 isValid2: true,
                 isValid3: true,
                 isValid5: true,
@@ -631,6 +708,7 @@
                     edited_by: 0,
                     venue: [],
                     speakers: [],
+                    tickets: [],
                 },
                 defaultItem: {
                     id: 0,
@@ -656,6 +734,7 @@
                     edited_by: 0,
                     venue: [],
                     speakers: [],
+                    tickets: [],
                 },
                 textFieldProps: {
                     appendIcon: 'event',
@@ -679,6 +758,22 @@
                     profile: '',
                     photo: null,
                     department_id: 0,
+                },
+                ticket: {
+                    id: 0,
+                    title: '',
+                    description: '',
+                    max_per_person: 1,
+                    min_per_person: 1,
+                    quantity_available: 10,
+                    quantity_booked: 0,
+                    start_book_date: '',
+                    end_book_date: '',
+                    is_paused: 0,
+                    is_hidden: 0,
+                    event_id: 0,
+                    department_id: 0,
+                    created_by: 0,
                 },
                 countries: [],
                 selectedDate: null,

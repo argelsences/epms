@@ -58,4 +58,8 @@ class Event extends Model
         return $this->belongsToMany('App\Speaker')->withTimestamps();
     }
 
+    public function tickets(){
+        return $this->hasMany('App\Ticket');
+    }
+
 }

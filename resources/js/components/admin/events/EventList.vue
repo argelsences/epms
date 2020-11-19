@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <div class="text-h4 text-left">Events</div>
+        <div class="text-h5 text-left">Events</div>
         <div class="text-subtitle-1 text-left">You can manage your events here</div>
         <v-divider></v-divider>
         <v-card>
@@ -27,214 +27,346 @@
                                     </v-btn>
                                 </v-card-title>
                                 <v-divider></v-divider>
-                                <v-card-text>
+                                <v-card-text class="pt-0">
                                     <v-container>
-                                        <v-form v-model="isValid" ref="form">
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="12">
-                                                    <div class="text-h4  text-left mt-10">Department</div>
-                                                    <v-divider />
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                </v-col>
-                                            </v-row>
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="12">
-                                                    <div class="text-h4 text-left mt-10">Details</div>
-                                                    <v-divider />
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="12">
-                                                    <v-text-field v-model="editedItem.title" label="Title" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
-                                                </v-col>
-                                            </v-row>
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="12">
-                                                    <v-chip class="mb-6">
-                                                        <v-icon left>mdi-face-profile</v-icon>
-                                                        Synopsis
-                                                    </v-chip>
-                                                    <tiptap-vuetify
-                                                        v-model="editedItem.synopsis"
-                                                        :extensions="extensions"
-                                                        id="synopsis"
-                                                        min-height="400"
-                                                    ></tiptap-vuetify>
-                                                </v-col>
-                                            </v-row>
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="12">
-                                                    <v-textarea counter label="Excerpt" v-model="editedItem.excerpt" :rules=[rules.limitCharacters] prepend-icon="mdi-face-profile" hint="Limit to 150 characters only" persisten-hint></v-textarea>
-                                                </v-col>
-                                            </v-row>
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="12">
-                                                    <div class="text-h4  text-left mt-10">Dates</div>
-                                                    <v-divider />
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-menu ref="st_menu" v-model="st_menu" :close-on-content-click="false" :return-value.sync="start_date" transition="scale-transition" offset-y min-width="290px">
-                                                        <template v-slot:activator="{ on, attrs }">
-                                                            <v-text-field  :label="computedStartDateFormatted" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" hint="Start Date" persistent-hint></v-text-field>
-                                                        </template>
-                                                        <v-date-picker v-model="start_date" no-title scrollable>
-                                                            <v-spacer></v-spacer>
-                                                            <v-btn text color="primary" @click="st_menu = false">
-                                                                Cancel
-                                                            </v-btn>
-                                                            <v-btn text color="primary" @click="$refs.st_menu.save(start_date)" >
-                                                                OK
-                                                            </v-btn>
-                                                        </v-date-picker>
-                                                    </v-menu>
-                                                </v-col>
-                                                <v-col cols="12" sm="6" md="6">
-                                                    <v-dialog ref="stt_dialog" v-model="stt_dialog" :return-value.sync="start_time" persistent width="290px">
-                                                        <template v-slot:activator="{ on, attrs }">
-                                                            <v-text-field :label="computedStartTimeFormatted" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on" hint="Start Time" persistent-hint></v-text-field>
-                                                        </template>
-                                                        <v-time-picker v-if="stt_dialog" v-model="start_time" full-width>
-                                                            <v-spacer></v-spacer>
-                                                            <v-btn text color="primary" @click="stt_dialog = false">
-                                                                Cancel
-                                                            </v-btn>
-                                                            <v-btn text color="primary" @click="$refs.stt_dialog.save(start_time)">
-                                                                OK
-                                                            </v-btn>
-                                                        </v-time-picker>
-                                                    </v-dialog>
-                                                </v-col>
-                                            </v-row>
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-menu ref="se_menu" v-model="se_menu" :close-on-content-click="false" :return-value.sync="end_date" transition="scale-transition" offset-y min-width="290px">
-                                                        <template v-slot:activator="{ on, attrs }">
-                                                            <v-text-field :label="computedEndDateFormatted"  prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" hint="End Date" persistent-hint></v-text-field>
-                                                        </template>
-                                                        <v-date-picker v-model="end_date" no-title scrollable :min="start_date">
-                                                        <v-spacer></v-spacer>
-                                                            <v-btn text color="primary" @click="se_menu = false" > Cancel</v-btn>
-                                                            <v-btn text color="primary" @click="$refs.se_menu.save(end_date)" >
-                                                                OK
-                                                            </v-btn>
-                                                        </v-date-picker>
-                                                    </v-menu>
-                                                </v-col>
-                                                <v-col cols="12" sm="6" md="6">
-                                                    <v-dialog ref="ste_dialog" v-model="ste_dialog" :return-value.sync="end_time" persistent width="290px">
-                                                        <template v-slot:activator="{ on, attrs }">
-                                                            <v-text-field :label="computedEndTimeFormatted" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on" hint="End Time" persistent-hint></v-text-field>
-                                                        </template>
-                                                        <v-time-picker v-if="ste_dialog" v-model="end_time" full-width>
-                                                            <v-spacer></v-spacer>
-                                                            <v-btn text color="primary" @click="ste_dialog = false">
-                                                                Cancel
-                                                            </v-btn>
-                                                            <v-btn text color="primary" @click="$refs.ste_dialog.save(end_time)">
-                                                                OK
-                                                            </v-btn>
-                                                        </v-time-picker>
-                                                    </v-dialog>
-                                                </v-col>
-                                            </v-row>
-                                            <!--
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="12">
-                                                    <div class="text-h4  text-left mt-10">Page</div>
-                                                    <v-divider />
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-textarea counter label="Pre booking display message" v-model="editedItem.pre_booking_display_message" prepend-icon="mdi-face-profile"></v-textarea>
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-textarea counter label="Post booking display message" v-model="editedItem.post_booking_display_message" prepend-icon="mdi-face-profile"></v-textarea>
-                                                </v-col>
-                                            </v-row>
-                                            -->
-                                            <!--
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="12">
-                                                    <div class="text-h4  text-left mt-10">Social Media</div>
-                                                    <v-divider />
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="4">
-                                                    <v-switch label="Facebook" prepend-icon="mdi-facebook" v-model="editedItem.social_show_facebook"></v-switch>
-                                                    <v-switch label="Linkedin" prepend-icon="mdi-linkedin" v-model="editedItem.social_show_linkedin"></v-switch>
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="4">
-                                                    <v-switch label="Twitter" prepend-icon="mdi-twitter" v-model="editedItem.social_show_twitter"></v-switch>
-                                                    <v-switch label="Whatsapp" prepend-icon="mdi-whatsapp" v-model="editedItem.social_show_whatsapp"></v-switch>
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="4">
-                                                    <v-switch label="Email" prepend-icon="mdi-email" v-model="editedItem.social_show_email"></v-switch>
-                                                </v-col>
-                                            </v-row>
-                                            -->
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-row>
-                                                        <v-col cols="12" sm="12" md="12">
-                                                            <div class="text-h4 text-left mt-10">Venue</div>
-                                                            <v-divider />
-                                                        </v-col>
-                                                  
-                                                        <v-col cols="12" sm="12" md="12">
+
+
+                                        <v-tabs vertical>
+                                            <v-tab class="pa-8">
+                                                <v-icon left>mdi-account</v-icon>
+                                                Details
+                                            </v-tab>
+                                            <v-tab class="pa-8">
+                                                <v-icon left>mdi-lock</v-icon>
+                                                Poster
+                                            </v-tab>
+                                            <v-tab class="pa-8">
+                                                <v-icon left>mdi-access-point</v-icon>
+                                                Ticket
+                                            </v-tab>
+                                            <v-tab class="pa-8">
+                                                <v-icon left>mdi-access-point</v-icon>
+                                                Booking
+                                            </v-tab>
+                                            <v-tab class="pa-8">
+                                                <v-icon left>mdi-access-point</v-icon>
+                                                Attendee
+                                            </v-tab>
+
+                                            <v-tab-item>
+                                                <v-card flat>
+                                                    <v-card-text class="pt-0">
+                                                        <v-form v-model="isValid" ref="form">
                                                             <v-row>
-                                                                <v-col cols="8" sm="8" md="8">
-                                                                    <v-autocomplete v-model="editedItem.venue_id" :items="venues" item-text="name" item-value="id"  label="Venue" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
+                                                                <v-col cols="12" sm="12" md="12">
+                                                                    <div class="text-h5  text-left">Department</div>
+                                                                    <v-divider />
                                                                 </v-col>
-                                                                <v-col cols="4" sm="4" md="4">
-                                                                    <v-btn color="#1f4068" class="white--text" @click="dialog2 = true"><i class="material-icons ">add_box</i> Venue</v-btn>
+                                                                <v-col cols="12" sm="12" md="6">
+                                                                    <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
+                                                                </v-col>
+                                                                <v-col cols="12" sm="12" md="6">
                                                                 </v-col>
                                                             </v-row>
-                                                        </v-col>
-                                                    </v-row>
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-row>
-                                                        <v-col cols="12" sm="12" md="12">
-                                                            <div class="text-h4  text-left mt-10">Speaker</div>
-                                                            <v-divider />
-                                                        </v-col>
-                                                        <v-col cols="12" sm="12" md="12">
                                                             <v-row>
-                                                                <v-col cols="8" sm="8" md="8">
-                                                                    <v-autocomplete v-model="editedItem.speakers" :items="speakers" prepend-icon="mdi-office-building"  chips color="blue-grey lighten-2" label="Select" item-text="name" item-value="id" multiple>
-                                                                        <template v-slot:selection="data">
-                                                                            <v-chip v-bind="data.attrs" :input-value="data.selected">
-                                                                                <v-avatar left>
-                                                                                    <v-img :src="base_url + data.item.photo"></v-img>
-                                                                                </v-avatar>
-                                                                                {{ data.item.name }}
-                                                                            </v-chip>
-                                                                        </template>
-                                                                        <template v-slot:item="data">
-                                                                            <template v-if="typeof data.item !== 'object'">
-                                                                                <v-list-item-content v-text="data.item"></v-list-item-content>
-                                                                            </template>
-                                                                            <template v-else>
-                                                                                <v-list-item-avatar>
-                                                                                    <img :src="base_url + data.item.photo">
-                                                                                </v-list-item-avatar>
-                                                                                <v-list-item-content>
-                                                                                    <v-list-item-title v-html="data.item.name"></v-list-item-title>
-                                                                                    <!--<v-list-item-subtitle v-html="data.item.group"></v-list-item-subtitle>-->
-                                                                                </v-list-item-content>
-                                                                            </template>
-                                                                        </template>
-                                                                    </v-autocomplete>
+                                                                <v-col cols="12" sm="12" md="12">
+                                                                    <div class="text-h5 text-left mt-10">Details</div>
+                                                                    <v-divider />
                                                                 </v-col>
-                                                                <v-col cols="4" sm="4" md="4">
-                                                                    <v-btn color="#1f4068" class="white--text" @click="dialog3 = !dialog3"><i class="material-icons ">add_box</i> Speaker</v-btn>
+                                                                <v-col cols="12" sm="12" md="12">
+                                                                    <v-text-field v-model="editedItem.title" label="Title" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
                                                                 </v-col>
                                                             </v-row>
-                                                        </v-col>
-                                                    </v-row>
-                                                </v-col>
-                                            </v-row>
-                                        </v-form>
+                                                            <v-row>
+                                                                <v-col cols="12" sm="12" md="12">
+                                                                    <v-chip class="mb-6">
+                                                                        <v-icon left>mdi-face-profile</v-icon>
+                                                                        Synopsis
+                                                                    </v-chip>
+                                                                    <tiptap-vuetify
+                                                                        v-model="editedItem.synopsis"
+                                                                        :extensions="extensions"
+                                                                        id="synopsis"
+                                                                        min-height="400"
+                                                                    ></tiptap-vuetify>
+                                                                </v-col>
+                                                            </v-row>
+                                                            <v-row>
+                                                                <v-col cols="12" sm="12" md="12">
+                                                                    <v-textarea counter label="Excerpt" v-model="editedItem.excerpt" :rules=[rules.limitCharacters] prepend-icon="mdi-face-profile" hint="Limit to 150 characters only" persisten-hint></v-textarea>
+                                                                </v-col>
+                                                            </v-row>
+                                                            <v-row>
+                                                                <v-col cols="12" sm="12" md="12">
+                                                                    <div class="text-h5  text-left mt-10">Dates</div>
+                                                                    <v-divider />
+                                                                </v-col>
+                                                                <v-col cols="12" sm="12" md="6">
+                                                                    <v-menu ref="st_menu" v-model="st_menu" :close-on-content-click="false" :return-value.sync="start_date" transition="scale-transition" offset-y min-width="290px">
+                                                                        <template v-slot:activator="{ on, attrs }">
+                                                                            <v-text-field  :label="computedStartDateFormatted" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" hint="Start Date" persistent-hint></v-text-field>
+                                                                        </template>
+                                                                        <v-date-picker v-model="start_date" no-title scrollable>
+                                                                            <v-spacer></v-spacer>
+                                                                            <v-btn text color="primary" @click="st_menu = false">
+                                                                                Cancel
+                                                                            </v-btn>
+                                                                            <v-btn text color="primary" @click="$refs.st_menu.save(start_date)" >
+                                                                                OK
+                                                                            </v-btn>
+                                                                        </v-date-picker>
+                                                                    </v-menu>
+                                                                </v-col>
+                                                                <v-col cols="12" sm="6" md="6">
+                                                                    <v-dialog ref="stt_dialog" v-model="stt_dialog" :return-value.sync="start_time" persistent width="290px">
+                                                                        <template v-slot:activator="{ on, attrs }">
+                                                                            <v-text-field :label="computedStartTimeFormatted" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on" hint="Start Time" persistent-hint></v-text-field>
+                                                                        </template>
+                                                                        <v-time-picker v-if="stt_dialog" v-model="start_time" full-width>
+                                                                            <v-spacer></v-spacer>
+                                                                            <v-btn text color="primary" @click="stt_dialog = false">
+                                                                                Cancel
+                                                                            </v-btn>
+                                                                            <v-btn text color="primary" @click="$refs.stt_dialog.save(start_time)">
+                                                                                OK
+                                                                            </v-btn>
+                                                                        </v-time-picker>
+                                                                    </v-dialog>
+                                                                </v-col>
+                                                            </v-row>
+                                                            <v-row>
+                                                                <v-col cols="12" sm="12" md="6">
+                                                                    <v-menu ref="se_menu" v-model="se_menu" :close-on-content-click="false" :return-value.sync="end_date" transition="scale-transition" offset-y min-width="290px">
+                                                                        <template v-slot:activator="{ on, attrs }">
+                                                                            <v-text-field :label="computedEndDateFormatted"  prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" hint="End Date" persistent-hint></v-text-field>
+                                                                        </template>
+                                                                        <v-date-picker v-model="end_date" no-title scrollable :min="start_date">
+                                                                        <v-spacer></v-spacer>
+                                                                            <v-btn text color="primary" @click="se_menu = false" > Cancel</v-btn>
+                                                                            <v-btn text color="primary" @click="$refs.se_menu.save(end_date)" >
+                                                                                OK
+                                                                            </v-btn>
+                                                                        </v-date-picker>
+                                                                    </v-menu>
+                                                                </v-col>
+                                                                <v-col cols="12" sm="6" md="6">
+                                                                    <v-dialog ref="ste_dialog" v-model="ste_dialog" :return-value.sync="end_time" persistent width="290px">
+                                                                        <template v-slot:activator="{ on, attrs }">
+                                                                            <v-text-field :label="computedEndTimeFormatted" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on" hint="End Time" persistent-hint></v-text-field>
+                                                                        </template>
+                                                                        <v-time-picker v-if="ste_dialog" v-model="end_time" full-width>
+                                                                            <v-spacer></v-spacer>
+                                                                            <v-btn text color="primary" @click="ste_dialog = false">
+                                                                                Cancel
+                                                                            </v-btn>
+                                                                            <v-btn text color="primary" @click="$refs.ste_dialog.save(end_time)">
+                                                                                OK
+                                                                            </v-btn>
+                                                                        </v-time-picker>
+                                                                    </v-dialog>
+                                                                </v-col>
+                                                            </v-row>
+                                                            <!--
+                                                            <v-row>
+                                                                <v-col cols="12" sm="12" md="12">
+                                                                    <div class="text-h4  text-left mt-10">Page</div>
+                                                                    <v-divider />
+                                                                </v-col>
+                                                                <v-col cols="12" sm="12" md="6">
+                                                                    <v-textarea counter label="Pre booking display message" v-model="editedItem.pre_booking_display_message" prepend-icon="mdi-face-profile"></v-textarea>
+                                                                </v-col>
+                                                                <v-col cols="12" sm="12" md="6">
+                                                                    <v-textarea counter label="Post booking display message" v-model="editedItem.post_booking_display_message" prepend-icon="mdi-face-profile"></v-textarea>
+                                                                </v-col>
+                                                            </v-row>
+                                                            -->
+                                                            <!--
+                                                            <v-row>
+                                                                <v-col cols="12" sm="12" md="12">
+                                                                    <div class="text-h4  text-left mt-10">Social Media</div>
+                                                                    <v-divider />
+                                                                </v-col>
+                                                                <v-col cols="12" sm="12" md="4">
+                                                                    <v-switch label="Facebook" prepend-icon="mdi-facebook" v-model="editedItem.social_show_facebook"></v-switch>
+                                                                    <v-switch label="Linkedin" prepend-icon="mdi-linkedin" v-model="editedItem.social_show_linkedin"></v-switch>
+                                                                </v-col>
+                                                                <v-col cols="12" sm="12" md="4">
+                                                                    <v-switch label="Twitter" prepend-icon="mdi-twitter" v-model="editedItem.social_show_twitter"></v-switch>
+                                                                    <v-switch label="Whatsapp" prepend-icon="mdi-whatsapp" v-model="editedItem.social_show_whatsapp"></v-switch>
+                                                                </v-col>
+                                                                <v-col cols="12" sm="12" md="4">
+                                                                    <v-switch label="Email" prepend-icon="mdi-email" v-model="editedItem.social_show_email"></v-switch>
+                                                                </v-col>
+                                                            </v-row>
+                                                            -->
+                                                            <v-row>
+                                                                <v-col cols="12" sm="12" md="6">
+                                                                    <v-row>
+                                                                        <v-col cols="12" sm="12" md="12">
+                                                                            <div class="text-h5 text-left mt-10">Venue</div>
+                                                                            <v-divider />
+                                                                        </v-col>
+                                                                
+                                                                        <v-col cols="12" sm="12" md="12">
+                                                                            <v-row>
+                                                                                <v-col cols="8" sm="8" md="8">
+                                                                                    <v-autocomplete v-model="editedItem.venue_id" :items="venues" item-text="name" item-value="id"  label="Venue" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
+                                                                                </v-col>
+                                                                                <v-col cols="4" sm="4" md="4">
+                                                                                    <v-btn color="#1f4068" class="white--text" @click="dialog2 = true"><i class="material-icons ">add_box</i> Venue</v-btn>
+                                                                                </v-col>
+                                                                            </v-row>
+                                                                        </v-col>
+                                                                    </v-row>
+                                                                </v-col>
+                                                                <v-col cols="12" sm="12" md="6">
+                                                                    <v-row>
+                                                                        <v-col cols="12" sm="12" md="12">
+                                                                            <div class="text-h5  text-left mt-10">Speaker</div>
+                                                                            <v-divider />
+                                                                        </v-col>
+                                                                        <v-col cols="12" sm="12" md="12">
+                                                                            <v-row>
+                                                                                <v-col cols="8" sm="8" md="8">
+                                                                                    <v-autocomplete v-model="editedItem.speakers" :items="speakers" prepend-icon="mdi-office-building"  chips color="blue-grey lighten-2" label="Select" item-text="name" item-value="id" multiple>
+                                                                                        <template v-slot:selection="data">
+                                                                                            <v-chip v-bind="data.attrs" :input-value="data.selected">
+                                                                                                <v-avatar left>
+                                                                                                    <v-img :src="base_url + data.item.photo"></v-img>
+                                                                                                </v-avatar>
+                                                                                                {{ data.item.name }}
+                                                                                            </v-chip>
+                                                                                        </template>
+                                                                                        <template v-slot:item="data">
+                                                                                            <template v-if="typeof data.item !== 'object'">
+                                                                                                <v-list-item-content v-text="data.item"></v-list-item-content>
+                                                                                            </template>
+                                                                                            <template v-else>
+                                                                                                <v-list-item-avatar>
+                                                                                                    <img :src="base_url + data.item.photo">
+                                                                                                </v-list-item-avatar>
+                                                                                                <v-list-item-content>
+                                                                                                    <v-list-item-title v-html="data.item.name"></v-list-item-title>
+                                                                                                    <!--<v-list-item-subtitle v-html="data.item.group"></v-list-item-subtitle>-->
+                                                                                                </v-list-item-content>
+                                                                                            </template>
+                                                                                        </template>
+                                                                                    </v-autocomplete>
+                                                                                </v-col>
+                                                                                <v-col cols="4" sm="4" md="4">
+                                                                                    <v-btn color="#1f4068" class="white--text" @click="dialog3 = !dialog3"><i class="material-icons ">add_box</i> Speaker</v-btn>
+                                                                                </v-col>
+                                                                            </v-row>
+                                                                        </v-col>
+                                                                    </v-row>
+                                                                </v-col>
+                                                            </v-row>
+                                                        </v-form>
+                                                    </v-card-text>
+                                                </v-card>
+                                            </v-tab-item>
+                                            <v-tab-item>
+                                                <v-card flat>
+                                                    <v-card-text class="pt-0">
+                                                        <v-row>
+                                                            <v-col cols="12" sm="12" md="12">
+                                                                <div class="text-h5  text-left">How do you want to create your poster?</div>
+                                                                <v-divider />
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row>
+                                                            <v-col cols="12" sm="12" md="12">
+                                                                <div class="text-h6  text-left mb-10">Upload a poster file</div>
+                                                                <v-form v-model="isValid5" ref="posterForm">
+                                                                    <v-file-input v-model="poster" class="mb-8" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
+                                                                        prepend-icon="mdi-camera-iris" label="Poster File" persistentHint chips
+                                                                        hint="Uploading a new file will replace the existing poster. Only accepting JPG/PNG/BMP files. File size should not be greater than 2MB"
+                                                                    >
+                                                                    </v-file-input>
+                                                                </v-form>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row>
+                                                            <v-col cols="12" sm="12" md="12">
+                                                                <div class="text-h6  text-left mb-10">Or, select a template from the list</div>
+                                                            </v-col>
+                                                        </v-row>
+                                                    </v-card-text>
+                                                </v-card>
+                                            </v-tab-item>
+                                            <v-tab-item>
+                                                <v-card flat>
+                                                    <v-card-text class="pt-0">
+                                                        <v-row>
+                                                            <v-col cols="12" sm="12" md="12">
+                                                                <v-btn color="#1f4068" class="white--text" @click="dialog2 = true"><i class="material-icons ">add_box</i> Ticket</v-btn>
+                                                                <v-spacer></v-spacer>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row dense>
+                                                            <v-col cols="12" sm="6" md="4">
+                                                                <v-card>
+                                                                   
+                                                                        
+                                                                        <div class="ticket-header green text-white">
+                                                                            <v-card-subtitle class="pb-0 text-white" >FREE</v-card-subtitle>
+                                                                            <v-spacer />
+                                                                            <v-card-title class="headline pt-0">The Ticket Name</v-card-title>
+                                                                        </div>
+                                                                        <v-card-text>
+                                                                            <div class="d-flex flex-no-wrap justify-space-between pa-10">
+                                                                                <div class="text-center">
+                                                                                    <p class="text-lg-h4">00</p>
+                                                                                    <p class="text-caption text--secondary">SOLD</p>
+                                                                                </div>
+                                                                                <v-divider vertical />
+                                                                                <div class="text-center">
+                                                                                    <p class="text-lg-h4">00</p>
+                                                                                    <p class="text-caption text--secondary">REMAINING</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </v-card-text>
+                                                                        <v-card-actions>
+                                                                            <v-spacer></v-spacer>
+                                                                            <v-btn class="ml-2 mt-3" fab icon height="40px" right width="40px">
+                                                                                <v-icon>mdi-play</v-icon>
+                                                                            </v-btn>
+                                                                            <v-btn class="ml-2 mt-5" outlined rounded small>
+                                                                                On sale
+                                                                            </v-btn>
+                                                                        </v-card-actions>
+                                                                        
+                                                                        
+                                                                    
+                                                                </v-card>
+                                                            </v-col>
+                                                        </v-row>
+                                                    </v-card-text>
+                                                </v-card>
+                                            </v-tab-item>
+                                            <v-tab-item>
+                                                <v-card flat>
+                                                    <v-card-text class="pt-0">
+                                                        booking
+                                                    </v-card-text>
+                                                </v-card>
+                                            </v-tab-item>
+                                            <v-tab-item>
+                                                <v-card flat>
+                                                    <v-card-text class="pt-0">
+                                                        attendee
+                                                    </v-card-text>
+                                                </v-card>
+                                            </v-tab-item>
+                                        </v-tabs>
+
+
+
+
+
+
+
+                                        
                                     </v-container>
                                 </v-card-text>
                                 <v-divider></v-divider>
@@ -243,6 +375,17 @@
                                     <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
                                     <v-btn color="blue darken-1" :disabled="!isValid" text @click="save">Save</v-btn>
                                 </v-card-actions>
+
+
+
+
+                            
+                                
+                            
+
+
+
+
                             </v-card>
                         </v-dialog>
                         <!-- the dialog box -->
@@ -407,6 +550,7 @@
                 isValid: true,
                 isValid2: true,
                 isValid3: true,
+                isValid5: true,
                 search : '',
                 feedbacks: [],
                 rows: [],
@@ -417,7 +561,7 @@
                 snackbar: false,
                 timeout: 5000,
                 error: false,
-                photo: null,
+                poster: null,
                 base_url: window.location.origin + '/',
                 start_date: new Date().toISOString().substr(0, 10),
                 end_date: new Date().toISOString().substr(0, 10),
@@ -792,15 +936,15 @@
                     */
                 })
             },
-            uploadLogo(){
-                if ( this.photo ){
+            uploadPoster(){
+                if ( this.poster ){
                     let formData = new FormData()
-                    formData.append('photo', this.photo)
+                    formData.append('poster', this.poster)
                     
                     if ( this.editedItem.id )
                         formData.append('id', this.editedItem.id)
 
-                    axios.post('/api/speakers/uploadPhoto', formData, {
+                    axios.post('/api/events/upload-poster', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
@@ -808,7 +952,7 @@
                     .then(response => {
                         if (response.data.success) {
                             // set the path on the global editedItem
-                            this.editedItem.photo = response.data.file_path 
+                            this.poster_thumb = response.data.poster_thumb 
                         }
                     })
                     .catch( error => {

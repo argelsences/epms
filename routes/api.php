@@ -43,6 +43,7 @@ Route::group(['middleware' => ['auth:api']], function(){
     Route::get('/countries', 'VenueController@countries')->name('countries.list');
     // Events
     Route::get('/events', 'EventController@list')->name('events.list');
+    Route::get('/events/upload-poster', 'EventController@uploadPoster')->name('events.list');
     // Templates
     Route::get('/templates', 'TemplateController@list')->name('templates.list');
     Route::post('/templates/upsert', 'TemplateController@upsert')->name('templates.upsert');

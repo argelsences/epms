@@ -40,7 +40,7 @@
                                             hint="Uploading a new file will replace the existing template code. Only accept HTML file. File size should not be greater than 2MB"
                                             :disabled="!switchFile"
                                             :required="switchFile"
-                                            >
+                                        >
                                         </v-file-input>
                                         <v-chip class="ma-2 white--text" v-if="editedItem.file_path.html_code" color="blue darken-1" >
                                             <v-icon left>mdi-file</v-icon> {{editedItem.file_path.html_code}}

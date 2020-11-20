@@ -11,7 +11,7 @@
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details ></v-text-field>
                         <v-spacer></v-spacer>
                         <!-- the dialog box -->        
-                        <v-dialog v-model="dialog"  scrollable fullscreen hide-overlay>
+                        <v-dialog v-model="dialog" persistent scrollable fullscreen hide-overlay>
                             <template v-slot:activator="{ on, attrs }">
                                 <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Event</v-btn>
                             </template>
@@ -29,7 +29,7 @@
                                 <v-divider></v-divider>
                                 <v-card-text class="pt-0">
                                     <v-container>
-                                        <v-tabs vertical>
+                                        <v-tabs vertical v-model="active_tab">
                                             <v-tab class="pa-8">
                                                 <v-icon left>mdi-cog</v-icon>
                                                 Details
@@ -204,7 +204,6 @@
                                                                             <div class="text-h5 text-left mt-10">Venue</div>
                                                                             <v-divider />
                                                                         </v-col>
-                                                                
                                                                         <v-col cols="12" sm="12" md="12">
                                                                             <v-row>
                                                                                 <v-col cols="8" sm="8" md="8">
@@ -276,11 +275,13 @@
                                                             <v-col cols="12" sm="12" md="12">
                                                                 <div class="text-h6  text-left mb-10">Upload a poster file</div>
                                                                 <v-form v-model="isValid5" ref="posterForm">
-                                                                    <v-file-input v-model="poster" class="mb-8" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
+                                                                    <v-file-input v-model="poster" class="mb-8" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Click to upload" 
                                                                         prepend-icon="mdi-camera-iris" label="Poster File" persistentHint chips
                                                                         hint="Uploading a new file will replace the existing poster. Only accepting JPG/PNG/BMP files. File size should not be greater than 2MB"
                                                                     >
                                                                     </v-file-input>
+                                                                    <v-btn color="success" @click="$refs.inputUpload.click()">Success</v-btn>
+                                                                    <input v-show="false" ref="inputUpload" type="file" @change="yourFunction" accept="image/png, image/jpeg, image/bmp, image/jpg" >
                                                                 </v-form>
                                                             </v-col>
                                                         </v-row>
@@ -297,38 +298,41 @@
                                                     <v-card-text class="pt-0">
                                                         <v-row>
                                                             <v-col cols="12" sm="12" md="12">
-                                                                <v-btn color="#1f4068" class="white--text float-right" @click="dialog1 = true"><i class="material-icons ">add_box</i> Ticket</v-btn>
+                                                                <v-btn color="#1f4068" class="white--text float-right" @click="openTicketDialog"><i class="material-icons ">add_box</i> Ticket</v-btn>
                                                             </v-col>
                                                         </v-row>
                                                         <v-divider />
                                                         <v-row dense>
-                                                            <v-col cols="12" sm="6" md="4">
-                                                                <v-card>    
+                                                            <v-col cols="12" sm="6" md="4" v-for="ticket in tickets" :key="ticket.id">
+                                                                <v-card class="mb-5">    
                                                                     <div class="ticket-header cyan darken-4 text-white">
                                                                         <v-card-subtitle class="pb-0 text-white" >FREE</v-card-subtitle>
                                                                         <v-spacer />
-                                                                        <v-card-title class="headline pt-0">The Ticket Name</v-card-title>
+                                                                        <v-card-title class="headline pt-0">{{ticket.title}}</v-card-title>
                                                                     </div>
                                                                     <v-card-text>
                                                                         <div class="d-flex flex-no-wrap justify-space-between pa-5 pb-0">
                                                                             <div class="text-center">
-                                                                                <p class="text-lg-h4">00</p>
-                                                                                <p class="text-caption text--secondary">SOLD</p>
+                                                                                <p class="text-lg-h4">{{ticket.quantity_booked}}</p>
+                                                                                <p class="text-caption text--secondary">BOOKED</p>
                                                                             </div>
                                                                             <v-divider vertical />
                                                                             <div class="text-center">
-                                                                                <p class="text-lg-h4">00</p>
+                                                                                <p class="text-lg-h4">{{ticket.quantity_available - ticket.quantity_booked}}</p>
                                                                                 <p class="text-caption text--secondary">REMAINING</p>
                                                                             </div>
                                                                         </div>
                                                                     </v-card-text>
                                                                     <v-card-actions>
                                                                         <v-spacer></v-spacer>
-                                                                        <v-btn class="ml-2 mt-3" fab icon height="40px" right width="40px">
-                                                                            <v-icon>mdi-play</v-icon>
+                                                                        <v-btn class="ml-2 mt-3" fab icon height="40px" right width="40px" @click="ticketPause(ticket.id)">
+                                                                            <!--<v-icon>{{`mdi-${ticket_icon}`}}</v-icon>-->
+                                                                            <v-icon v-if="ticket.is_paused">mdi-pause</v-icon>
+                                                                            <v-icon v-else>mdi-play</v-icon>
                                                                         </v-btn>
                                                                         <v-btn class="ml-2 mt-5" outlined rounded small>
-                                                                            On sale
+                                                                            <div v-if="ticket.is_paused" class="pink--text">Paused</div>
+                                                                            <div v-else class="cyan--text darken-4">Online</div>
                                                                         </v-btn>
                                                                     </v-card-actions>
                                                                 </v-card>
@@ -500,10 +504,7 @@
             </v-card>
         </v-dialog>
         <!-- for tickets -->
-        <v-dialog v-model="dialog1" persistent max-width="600px">
-            <!--<template v-slot:activator="{ on, attrs }">
-                <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Venue</v-btn>
-            </template>-->
+        <v-dialog v-model="dialog1" persistent max-width="600px" >
             <v-card>
                 <v-card-title>
                     <span class="headline">New | Edit Ticket</span>
@@ -522,10 +523,10 @@
                                     <v-text-field label="Quantity Available" v-model="ticket.quantity_available"></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="12" md="12">
-                                    <v-expansion-panels flat >
+                                    <v-expansion-panels flat v-model="ticketExpansionPanel">
                                         <v-expansion-panel>
                                             <v-expansion-panel-header color="#1f4068" class="white--text">
-                                                More options
+                                                More Options
                                                 <template v-slot:actions>
                                                     <v-icon color="white">
                                                     mdi-more
@@ -535,9 +536,9 @@
                                             <v-expansion-panel-content>
                                                 <v-row>
                                                     <v-col cols="12" sm="6" md="6">
-                                                        <v-menu ref="st_menu" v-model="start_book_menu" :close-on-content-click="false" :return-value.sync="ticket.start_book_date" transition="scale-transition" offset-y min-width="290px">
+                                                        <v-menu ref="start_book_menu" v-model="start_book_menu" :close-on-content-click="false" :return-value.sync="ticket.start_book_date" transition="scale-transition" offset-y min-width="290px">
                                                             <template v-slot:activator="{ on, attrs }">
-                                                                <v-text-field  :label="computedStartDateFormatted" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" hint="Start sale on" persistent-hint></v-text-field>
+                                                                <v-text-field  :label="computedStartTicketBook" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" hint="Start booking on" persistent-hint></v-text-field>
                                                             </template>
                                                             <v-date-picker v-model="ticket.start_book_date" no-title scrollable>
                                                                 <v-spacer></v-spacer>
@@ -551,31 +552,63 @@
                                                         </v-menu>
                                                     </v-col>
                                                     <v-col cols="12" sm="6" md="6">
-                                                        <v-menu ref="st_menu" v-model="end_book_menu" :close-on-content-click="false" :return-value.sync="ticket.end_book_date" transition="scale-transition" offset-y min-width="290px">
+                                                        <v-dialog ref="start_time_dialog" v-model="start_time_dialog" :return-value.sync="ticket.start_book_time" persistent width="290px">
                                                             <template v-slot:activator="{ on, attrs }">
-                                                                <v-text-field  :label="computedStartDateFormatted" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" hint="End sale on" persistent-hint></v-text-field>
+                                                                <v-text-field :label="computedStartTicketBookTime" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on" hint="Start booking time" persistent-hint></v-text-field>
+                                                            </template>
+                                                            <v-time-picker v-if="start_time_dialog" v-model="ticket.start_book_time" full-width>
+                                                                <v-spacer></v-spacer>
+                                                                <v-btn text color="primary" @click="start_time_dialog = false">
+                                                                    Cancel
+                                                                </v-btn>
+                                                                <v-btn text color="primary" @click="$refs.start_time_dialog.save(ticket.start_book_time)">
+                                                                    OK
+                                                                </v-btn>
+                                                            </v-time-picker>
+                                                        </v-dialog>
+                                                    </v-col>
+                                                </v-row>
+                                                <v-row>
+                                                    <v-col cols="12" sm="6" md="6">
+                                                        <v-menu ref="end_book_menu" v-model="end_book_menu" :close-on-content-click="false" :return-value.sync="ticket.end_book_date" transition="scale-transition" offset-y min-width="290px">
+                                                            <template v-slot:activator="{ on, attrs }">
+                                                                <v-text-field  :label="computedEndTicketBook" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" hint="End booking on" persistent-hint></v-text-field>
                                                             </template>
                                                             <v-date-picker v-model="ticket.end_book_date" no-title scrollable>
                                                                 <v-spacer></v-spacer>
                                                                 <v-btn text color="primary" @click="end_book_menu = false">
                                                                     Cancel
                                                                 </v-btn>
-                                                                <v-btn text color="primary" @click="$refs.end_book_menu.save(ticket.start_book_date)" >
+                                                                <v-btn text color="primary" @click="$refs.end_book_menu.save(ticket.end_book_date)" >
                                                                     OK
                                                                 </v-btn>
                                                             </v-date-picker>
                                                         </v-menu>
                                                     </v-col>
+                                                    <v-col cols="12" sm="6" md="6">
+                                                        <v-dialog ref="end_time_dialog" v-model="end_time_dialog" :return-value.sync="ticket.end_book_time" persistent width="290px">
+                                                            <template v-slot:activator="{ on, attrs }">
+                                                                <v-text-field :label="computedEndTicketBookTime" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on" hint="End booking time" persistent-hint></v-text-field>
+                                                            </template>
+                                                            <v-time-picker v-if="end_time_dialog" v-model="ticket.end_book_time" full-width>
+                                                                <v-spacer></v-spacer>
+                                                                <v-btn text color="primary" @click="end_time_dialog = false">
+                                                                    Cancel
+                                                                </v-btn>
+                                                                <v-btn text color="primary" @click="$refs.end_time_dialog.save(ticket.end_book_time)">
+                                                                    OK
+                                                                </v-btn>
+                                                            </v-time-picker>
+                                                        </v-dialog>
+                                                    </v-col>
                                                 </v-row>
                                                 <v-row>
-                                                    <v-col cols="12" sm="4" md="4">
-                                                        <v-text-field label="Postcode" required v-model="venue.postcode"></v-text-field>
+                                                    <v-col cols="12" sm="6" md="6">
+                                                        <!--<v-select :items="countries" label="Minimum ticket per booking" item-text="name" item-value="name" v-model="ticket.min_per_person"  prepend-icon="mdi-earth"></v-select>-->
+                                                        <v-select :items="[1,2,3,4,5,6,7,8,9,10]" label="Minimum ticket per booking"  v-model="ticket.min_per_person"  prepend-icon="mdi-earth"></v-select>
                                                     </v-col>
-                                                    <v-col cols="12" sm="4" md="4">
-                                                        <v-text-field label="State" v-model="venue.state"></v-text-field>
-                                                    </v-col>
-                                                    <v-col cols="12" sm="4" md="4">
-                                                        <v-select :items="countries" label="Country" item-text="name" item-value="name" v-model="venue.country"  prepend-icon="mdi-earth"></v-select>
+                                                    <v-col cols="12" sm="6" md="6">
+                                                        <v-select :items="[1,2,3,4,5,6,7,8,9,10]" label="Maximum ticket per booking" v-model="ticket.max_per_person"  prepend-icon="mdi-earth"></v-select>
                                                     </v-col>
                                                 </v-row>
                                             </v-expansion-panel-content>
@@ -588,7 +621,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="dialog1 = false">
+                    <v-btn color="blue darken-1" text @click="closeTicket">
                         Close
                     </v-btn>
                     <v-btn color="blue darken-1" text @click="saveTicket">
@@ -623,6 +656,8 @@
                 end_book_menu: false,
                 stt_dialog:false,
                 ste_dialog: false,
+                start_time_dialog: false,
+                end_time_dialog: false,
                 isValid: true,
                 isValid1: true,
                 isValid2: true,
@@ -763,20 +798,37 @@
                     id: 0,
                     title: '',
                     description: '',
-                    max_per_person: 1,
-                    min_per_person: 1,
-                    quantity_available: 10,
+                    min_per_person: 0,
+                    max_per_person: 0,
+                    quantity_available: 0,
                     quantity_booked: 0,
                     start_book_date: '',
                     end_book_date: '',
-                    is_paused: 0,
-                    is_hidden: 0,
-                    event_id: 0,
-                    department_id: 0,
-                    created_by: 0,
+                    start_book_time: '',
+                    end_book_time: '',
+                    start_book_datetime: '',
+                    end_book_datetime: '',
+                },
+                ticketDefault: {
+                    id: 0,
+                    title: '',
+                    description: '',
+                    min_per_person: 1,
+                    max_per_person: 1,
+                    quantity_available: 10,
+                    quantity_booked: 0,
+                    start_book_date: new Date().toISOString().substr(0, 10),
+                    end_book_date: new Date().toISOString().substr(0, 10),
+                    start_book_time: moment().format('HH:mm'),
+                    end_book_time: moment().format('HH:mm'),
+                    start_book_datetime: '',
+                    end_book_datetime: '',
                 },
                 countries: [],
                 selectedDate: null,
+                tickets: [],
+                active_tab: 0,
+                ticketExpansionPanel: null,
             }
         },
         computed: {
@@ -784,10 +836,7 @@
                 return this.editedIndex === -1 ? 'New Event' : 'Edit Event'
             },
             computedStartDateFormatted () {
-                //let eventStartDate = new Date(this.editedItem.start_date)
-                //this.start_date = eventStartDate.toISOString().substr(0, 10)
                 return this.formatDate(this.start_date)
-                //return this.formatDate(new Date(this.editedItem.start_date).toISOString().substr(0, 10))
             },
             computedEndDateFormatted () {
                 return this.formatDate(this.end_date)
@@ -797,6 +846,18 @@
             },
             computedEndTimeFormatted () {
                 return this.formatTime(this.end_time)
+            },
+            computedStartTicketBook () {
+                return this.formatDate(this.ticket.start_book_date)
+            },
+            computedEndTicketBook () {
+                return this.formatDate(this.ticket.end_book_date)
+            },
+            computedStartTicketBookTime () {
+                return this.formatTime(this.ticket.start_book_time)
+            },
+            computedEndTicketBookTime () {
+                return this.formatTime(this.ticket.end_book_time)
             },
         },
         watch: {
@@ -812,6 +873,7 @@
                     this.editedItem.social_show_email = this.settings.is_email
                     this.editedItem.social_show_facebook = this.settings.is_facebook
                 }
+
                 val || this.close()
             },
             /*
@@ -868,6 +930,12 @@
                     this.speakers = response.data;
                 });
             },
+            getTickets(eventId) {
+                axios.get(`/api/tickets/event/${eventId}`)
+                .then( response => {
+                    this.tickets = response.data;
+                });
+            },
             getCountries() {
                 axios.get('/api/countries')
                 .then( response => {
@@ -880,11 +948,13 @@
                 let eventStartDate = new Date(this.editedItem.start_date)
                 let eventEndDate = new Date(this.editedItem.end_date)
                 this.start_date = eventStartDate.toISOString().substr(0, 10)
-                console.log(this.start_date)
                 this.start_time = String(eventStartDate.getHours()).padStart(2, '0') + ":" + String(eventStartDate.getMinutes()).padStart(2, '0')
                 this.end_date = eventEndDate.toISOString().substr(0, 10)
                 this.end_time = String(eventEndDate.getHours()).padStart(2, '0') + ":" + String(eventEndDate.getMinutes()).padStart(2, '0')
                 this.dialog = true
+                // get all tickets for this event
+                this.getTickets(this.editedItem.id)
+                console.log(this.tickets)
 
             },
             deleteItem (item) {
@@ -894,6 +964,9 @@
             close () {
                 // make sure the dialog box is closed
                 this.dialog = false
+                this.dialog1 =false
+                this.dialog2 =false
+                this.dialog2 =false
                 // next action is to make sure that the value of editedItem is on default, and re-initialize the editedIndex value
                 this.$nextTick(() => {
                     // reset the defaultItem object
@@ -902,6 +975,9 @@
                     this.editedIndex = -1
                     // reset the form
                     this.$refs.form.reset();
+                    // reset all objects
+                    this.tickets = []
+                    this.active_tab = 0
                 })
             },
             closeVenue () {
@@ -922,6 +998,18 @@
                     // reset the form
                     this.$refs.formSpeaker.reset();
                     this.getSpeakers();
+                })
+            },
+            closeTicket () {
+                // make sure the dialog box is closed
+                this.dialog1 = false
+                // next action is to make sure that the value of editedItem is on default, and re-initialize the editedIndex value
+                this.$nextTick(() => {
+                    // reset the form
+                    this.ticket = Object.assign({}, this.ticketDefault)
+                    this.$refs.formTicket.reset();
+                    // make sure expansion tab in dialog is closed
+                    this.ticketExpansionPanel = null
                 })
             },
             save () {
@@ -1031,6 +1119,29 @@
                     */
                 })
             },
+            saveTicket() {
+                this.ticket.department_id = this.editedItem.department_id
+                this.ticket.event_id = this.editedItem.id
+
+                /** on change of input, upload the logo, then assign the path to logo path */
+                this.$refs.formTicket.validate()
+
+                this.ticket.start_book_datetime = this.ticket.start_book_date + ' ' + this.ticket.start_book_time
+                this.ticket.end_book_datetime = this.ticket.end_book_date + ' ' + this.ticket.end_book_time
+
+                axios.post('/api/tickets/upsert', {
+                    payload: this.ticket,
+                })
+                .then(response => {
+                    if (response.data.success) {
+                        this.getTickets(this.editedItem.id)
+                        this.closeTicket()
+                    }
+                })
+                .catch( error => {
+                    
+                })
+            },
             uploadPoster(){
                 if ( this.poster ){
                     let formData = new FormData()
@@ -1064,7 +1175,6 @@
             },
             addDropFile(e) { 
                 this.file = e.dataTransfer.files[0]
-                //console.log(this.file) 
             },
             isPublic(value){
                 return (value) ? 'Public' : 'Private'
@@ -1083,8 +1193,6 @@
             formatTime (time) {
                 if (!time) return null
 
-                //const [hour, minute, year] = date.split('/')
-                //return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
                 // Check correct time format and split into components
                 time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
 
@@ -1094,6 +1202,23 @@
                     time[0] = +time[0] % 12 || 12; // Adjust hours
                 }
                 return time.join (''); // return adjusted time or original string
+            },
+            ticketPause(ticketID){
+                axios.post('/api/tickets/pause', {
+                    payload: ticketID,
+                })
+                .then(response => {
+                    if (response.data.success) {
+                        this.getTickets(this.editedItem.id)
+                    }
+                })
+                .catch( error => {
+                    
+                })
+            },
+            openTicketDialog(){
+                this.dialog1 = true
+                this.ticket = Object.assign({}, this.ticketDefault)
             },
         },
         created: function() {

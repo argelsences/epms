@@ -144,7 +144,26 @@ class EPPMSHelper {
             $event['edited_by'] = Auth::id();
         }
         
-        //dd($event);
         return $event;
+    }
+
+    /**
+     * Set authorship for an event
+     */
+    public function setAuthorship( $object ){
+        
+        $user_id = Auth::id();
+        // if there is an event id, then we will set the edited by to the logged in user
+        
+        // if no event id, then we set the created by and edited by
+        if ($object['id']){
+            $object['edited_by'] = Auth::id();
+        }
+        else {
+            $object['created_by'] = $user_id;
+            $object['edited_by'] = Auth::id();
+        }
+        
+        return $object;
     }
 }

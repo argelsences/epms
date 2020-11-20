@@ -20,7 +20,7 @@ $nav-color: #283149;
 $secondary_font_color: #eeeeee;
 $toolbar_z_index: 1002;
 $navigation_z_index: $toolbar_z_index + 2;
-$dialog_z_index: $toolbar_z_index + 6;
+$dialog_z_index: $toolbar_z_index + 8;
 
 // mixins
 @mixin no-box-shadow-border-radius {
@@ -131,12 +131,17 @@ $dialog_z_index: $toolbar_z_index + 6;
 
 // vuetify override
 .v-navigation-drawer a:hover, .v-toolbar a:hover {text-decoration:none;}
-.v-dialog__content {z-index:$dialog_z_index!important;}
+/*.v-dialog__content {z-index:$dialog_z_index!important;}*/
 /*.toolbar-placeholder:not(.toolbar-placeholder-inside){
     z-index: 0!important;
 }*/
+
+
+/*
 footer.v-footer, .v-sheet.v-app-bar.v-toolbar {
     z-index:$toolbar_z_index;
 }
 .v-navigation-drawer {z-index:$navigation_z_index!important ;}
-.v-overlay{z-index:1008!important;}
+*/
+
+/*.v-overlay{z-index:1008!important;}*/

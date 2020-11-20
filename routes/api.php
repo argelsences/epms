@@ -43,7 +43,7 @@ Route::group(['middleware' => ['auth:api']], function(){
     Route::get('/countries', 'VenueController@countries')->name('countries.list');
     // Events
     Route::get('/events', 'EventController@list')->name('events.list');
-    Route::get('/events/upload-poster', 'EventController@uploadPoster')->name('events.list');
+    Route::get('/events/upload-poster', 'EventController@uploadPoster')->name('upload-poster.list');
     // Templates
     Route::get('/templates', 'TemplateController@list')->name('templates.list');
     Route::post('/templates/upsert', 'TemplateController@upsert')->name('templates.upsert');
@@ -57,4 +57,8 @@ Route::group(['middleware' => ['auth:api']], function(){
     //Route::delete('/categories/{category}', 'CategoryController@destroy');
     /////Route::middleware('can:delete,category')->delete('/categories/{category}', 'CategoryController@destroy');
     //Route::post('/menu-items/add', 'MenuItemController@store');
+    //Route::get('/tickets', 'TicketController@list')->name('tickets.list');
+    Route::get('/tickets/event/{event}', 'TicketController@list')->name('tickets.list');
+    Route::post('/tickets/upsert', 'TicketController@upsert')->name('tickets.upsert');
+    Route::post('/tickets/pause', 'TicketController@pause')->name('tickets.pause');
 });

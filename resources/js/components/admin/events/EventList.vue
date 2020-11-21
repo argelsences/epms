@@ -1135,12 +1135,14 @@
             uploadPoster(){
                 if ( this.posterFile ){
                     let formData = new FormData()
-                    formData.append('poster', this.poster)
+                    formData.append('poster', this.posterFile)
+
+                    console.log(formData)
                     
                     if ( this.editedItem.id )
                         formData.append('id', this.editedItem.id)
 
-                    axios.post('/api/events/upload-poster', formData, {
+                    axios.post('/api/posters/upload', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }

@@ -282,13 +282,19 @@
                                                                         
                                                                     >
                                                                     </v-file-input>-->
-                                                                   
-                                                                    <v-btn color="primary" class="text-none" rounded  depressed :loading="isSelecting" @click="onButtonClick">
+                                                                    <div>
+                                                                        <v-btn color="primary" class="text-none" rounded  depressed :loading="isSelecting" @click="onButtonClick">
                                                                         <v-icon left>cloud_upload</v-icon>
-                                                                        {{ buttonText }}
-                                                                    </v-btn>
-                                                                    <input ref="uploader" class="d-none" type="file" accept="image/png, image/jpeg, image/bmp, image/jpg" @change="onFileChanged">
-                                                                    <div class="text-caption pl-2">Uploading a new file will replace the existing poster. Only accepting JPG/PNG/BMP files. File size should not be greater than 2MB</div>
+                                                                            {{ buttonText }}
+                                                                        </v-btn>
+                                                                        <input ref="uploader" class="d-none" type="file" accept="image/png, image/jpeg, image/bmp, image/jpg" @change="onFileChanged">
+                                                                        <div class="text-caption pl-2">Uploading a new file will replace the existing poster. Only accepting JPG/PNG/BMP files. File size should not be greater than 2MB</div>
+                                                                    </div>
+                                                                    
+                                                                    <v-spacer></v-spacer>
+                                                                    <div>
+                                                                        <v-btn text depressed :loading="isSelecting" class="float-right" :disabled="uploadReady" @click="uploadPoster">Upload Poster</v-btn>
+                                                                    </div>
                                                                 </v-form>
                                                             </v-col>
                                                         </v-row>
@@ -366,7 +372,7 @@
                                     </v-container>
                                 </v-card-text>
                                 <v-divider></v-divider>
-                                <v-card-actions>
+                                <v-card-actions v-if="!active_tab">
                                     <v-spacer></v-spacer>
                                     <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
                                     <v-btn color="blue darken-1" :disabled="!isValid" text @click="save">Save</v-btn>
@@ -426,6 +432,7 @@
                 </template>
             </v-snackbar>
         </v-card>
+        <!-- for speaker -->
         <v-dialog v-model="dialog3" persistent max-width="600px">
             <!--<template v-slot:activator="{ on, attrs }">
                 <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Speaker</v-btn>
@@ -465,6 +472,7 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+        <!-- for venue -->
         <v-dialog v-model="dialog2" persistent max-width="600px">
             <!--<template v-slot:activator="{ on, attrs }">
                 <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Venue</v-btn>
@@ -838,8 +846,9 @@
                 ticketExpansionPanel: null,
 
                 defaultButtonText: 'Choose a file',
-                selectedFile: null,
+                posterFile: null,
                 isSelecting: false,
+                uploadReady: true,
 
                 
             }
@@ -873,7 +882,7 @@
                 return this.formatTime(this.ticket.end_book_time)
             },
             buttonText() {
-                return this.selectedFile ? this.selectedFile.name : this.defaultButtonText
+                return this.posterFile ? this.posterFile.name : this.defaultButtonText
             },
             tabDisable() {
                 return (this.editedItem.id) ? false : true
@@ -1124,7 +1133,7 @@
                 })
             },
             uploadPoster(){
-                if ( this.poster ){
+                if ( this.posterFile ){
                     let formData = new FormData()
                     formData.append('poster', this.poster)
                     
@@ -1220,9 +1229,15 @@
                 this.$refs.uploader.click()
             },
             onFileChanged(e) {
-                this.selectedFile = e.target.files[0]
-            
+                this.posterFile = e.target.files[0]
+
+                if (this.posterFile)
+                    this.uploadReady = false
+                else
+                    this.uploadReady = true
                 // do something
+
+                console.log(this.posterFile)
             },
         },
         created: function() {

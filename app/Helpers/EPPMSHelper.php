@@ -7,6 +7,8 @@ use Spatie\Browsershot\Browsershot;
 use Storage;
 use Image;
 use Illuminate\Support\Facades\Auth;
+use App\Event;
+use App\Poster;
 
 class EPPMSHelper {
 
@@ -165,5 +167,45 @@ class EPPMSHelper {
         }
         
         return $object;
+    }
+
+    /**
+     * Generate poster
+     * @TODO:
+     * 1. Edit a poster object when an object exists for an event parent
+     */
+    public function generatePoster($params){
+        //dd($params);
+        $posterParams = $poster = $thePoster = [];
+        $photo = $params['photo'];
+        $id = $params['id'];
+
+        $photo_filename  = $photo->getClientOriginalName();
+        $file_path = $photo->storeAs("files/events/$id/poster", $photo_filename);
+
+        // retrieve the event object
+        $event = Event::findOrFail($id);
+        // retrieve the poster object, if any
+        $poster = Poster::where('event_id', $id)->first();
+        
+        // check if we have an existing poster linked to event, if none, create one, else update it
+        if ( $poster ){
+
+        }
+        else {
+            $posterParams = [
+                'id' => 0,
+                'file_path' => $file_path,
+                'poster_code' => '',
+                'event_id' => $id
+            ];
+            
+            $posterParams = $this->setAuthorship($posterParams);
+            // since this is new, we do not need the id key
+            unset($posterParams['id']);
+            $thePoster = Poster::create($posterParams);
+        }
+
+        return $thePoster;
     }
 }

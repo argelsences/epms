@@ -16,7 +16,7 @@ class Event extends Model
         'pre_booking_display_message', 'post_booking_display_message', 'social_show_facebook',
         'social_show_twitter', 'social_show_whatsapp', 'social_show_email', 'social_show_linkedin',
         'is_public', 'is_approved', 'for_approval', 'barcode_type', 'checkout_timeout',
-        'department_id', 'created_by', 'edited_by', 'venue_id', 'poster_id',
+        'department_id', 'created_by', 'edited_by', 'venue_id',
     ];
 
     /**

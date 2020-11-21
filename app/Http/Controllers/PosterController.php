@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Poster;
 use Illuminate\Http\Request;
+use EPPMS;
 
 class PosterController extends Controller
 {
@@ -106,24 +107,44 @@ class PosterController extends Controller
         // get the max id of the object
         /////$id = Speaker::max('id');
         // if id is present in the payload, then use it, it means that we are updating an entity
+
+        $params = [];
+
         if ( $request->input('id') )
             $id = $request->input('id');
+
+        if (null != $request->file('poster') )
+            $photo = $request->file('poster');
+
+
+        if ( $id && $photo ){
+            $params = [
+                'id' => $id,
+                'photo' => $photo,
+            ];
+
+            $thePoster = EPPMS::generatePoster($params);
+        }
 
         $success = $file_path = false;
 
         // Upload all files
-        if ( null != $request->file('poster') ){
+        //if ( null != $request->file('poster') ){
+
+
+            /*
             $photo = $request->file('poster');
             $photo_filename  = $photo->getClientOriginalName();
-            //$filename = $logo->storeAs('templates' . '/' . $template->id, $photo_filename);
-            $file_path = $photo->store("files/events/poster/$id");
+            $file_path = $photo->storeAs("files/events/poster/$id", $photo_filename);
+            */
+            //$file_path = $photo->store("files/events/poster/$id");
 
             // create a poster object and used the file_path
             // for upload, the file_path will be used
             // if file path is used, clear the poster code value
             // if template is used for the template, then clear the file_path content
             // for each generation of new poster, the old poster files should be cleared
-        }
+        //}
         // to access public files in url http://localhost:8000/files/eclOueMC57PBMVylqzhIiumaoGh72UHZFbEyjiz5.jpeg
         
         $success = $file_path ? true : false;

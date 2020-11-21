@@ -29,24 +29,24 @@
                                 <v-divider></v-divider>
                                 <v-card-text class="pt-0">
                                     <v-container>
-                                        <v-tabs vertical v-model="active_tab">
-                                            <v-tab class="pa-8">
+                                        <v-tabs vertical v-model="active_tab" color="cyan darken-4">
+                                            <v-tab class="pa-8" >
                                                 <v-icon left>mdi-cog</v-icon>
                                                 Details
                                             </v-tab>
-                                            <v-tab class="pa-8">
+                                            <v-tab class="pa-8" :disabled="tabDisable">
                                                 <v-icon left>mdi-image</v-icon>
                                                 Poster
                                             </v-tab>
-                                            <v-tab class="pa-8">
+                                            <v-tab class="pa-8" :disabled="tabDisable">
                                                 <v-icon left>mdi-ticket-confirmation-outline</v-icon>
                                                 Ticket
                                             </v-tab>
-                                            <v-tab class="pa-8">
+                                            <v-tab class="pa-8" :disabled="tabDisable">
                                                 <v-icon left>mdi-ticket-confirmation</v-icon>
                                                 Booking
                                             </v-tab>
-                                            <v-tab class="pa-8">
+                                            <v-tab class="pa-8" :disabled="tabDisable">
                                                 <v-icon left>mdi-ticket-account</v-icon>
                                                 Attendee
                                             </v-tab>
@@ -650,7 +650,6 @@
         components: { TiptapVuetify },
         mounted() {
             console.log('Component mounted')
-            this.filename = this.value
         },
         data() {
             return {
@@ -840,7 +839,9 @@
 
                 defaultButtonText: 'Choose a file',
                 selectedFile: null,
-                isSelecting: false
+                isSelecting: false,
+
+                
             }
         },
         computed: {
@@ -874,6 +875,9 @@
             buttonText() {
                 return this.selectedFile ? this.selectedFile.name : this.defaultButtonText
             },
+            tabDisable() {
+                return (this.editedItem.id) ? false : true
+            }
         },
         watch: {
             dialog (val) {
@@ -891,6 +895,7 @@
 
                 val || this.close()
             },
+
             /*
             'editedItem.start_date': function (val){
                 console.log(val)
@@ -918,7 +923,6 @@
                 axios.get('/api/events')
                 .then( response => {
                     this.rows = response.data;
-                    console.log(this.rows)
                 });
             },
             getDepartments: function() {
@@ -969,8 +973,6 @@
                 this.dialog = true
                 // get all tickets for this event
                 this.getTickets(this.editedItem.id)
-                console.log(this.tickets)
-
             },
             deleteItem (item) {
                 const index = this.rows.indexOf(item)
@@ -1050,18 +1052,11 @@
                         this.feedbacks[0] = 'Changes for ' + editedItem.title + ' is saved.'
                         this.snackbar = true
                         this.error = false
-                        /*
-                        if ( editedIndex > -1 )
-                            Object.assign(this.rows[editedIndex], editedItem)
-                        else
-                            this.rows.push(editedItem)
-                        */
+                
                         if ( editedIndex > -1 )
                             Object.assign(this.rows[editedIndex], response.data.item)
                         else
                             this.rows.push(response.data.item)
-
-                        console.log(this.rows)
 
                         // close the dialog box
                         this.close()  
@@ -1084,26 +1079,11 @@
                 })
                 .then(response => {
                     if (response.data.success) {
-                        console.log(response.data.item.name)
-                        /*
-                        this.feedbacks = []
-                        this.feedbacks[0] = 'Changes for ' + response.data.item.name + ' is saved.'
-                        this.snackbar = true
-                        this.error = false
-                        */
-
                         this.editedItem.venue_id = response.data.item.id
                         this.closeVenue()
                     }
                 })
-                .catch( error => {
-                    /*
-                    let messages = Object.values(error.response.data.errors); 
-                    this.feedbacks = [].concat.apply([], messages)
-                    this.snackbar = true
-                    this.error = true
-                    */
-                })
+                .catch( error => {})
             },
             saveSpeaker() {
                 /** on change of input, upload the logo, then assign the path to logo path */
@@ -1114,25 +1094,11 @@
                 })
                 .then(response => {
                     if (response.data.success) {
-                        /*this.feedbacks = []
-                        this.feedbacks[0] = 'Changes for ' + response.data.item.name + ' is saved.'
-                        this.snackbar = true
-                        this.error = false
-                        */
-                        
-                        /////this.getSpeakers();
                         this.editedItem.speakers.push(response.data.item.id)
                         this.closeSpeaker() 
                     }
                 })
-                .catch( error => {
-                    /*
-                    let messages = Object.values(error.response.data.errors); 
-                    this.feedbacks = [].concat.apply([], messages)
-                    this.snackbar = true
-                    this.error = true
-                    */
-                })
+                .catch( error => {})
             },
             saveTicket() {
                 this.ticket.department_id = this.editedItem.department_id
@@ -1198,14 +1164,13 @@
                 return (value) ? 'Approved' : 'For Approval'
             },
             formatDate (date) {
-
-                console.log(date)
                 if (!date) return null
 
                 const [year, month, day] = date.split('-')
                 return `${month}/${day}/${year}`
             },
             formatTime (time) {
+                console.log(time)
                 if (!time) return null
 
                 // Check correct time format and split into components
@@ -1236,12 +1201,14 @@
                 this.ticket = Object.assign({}, this.ticketDefault)
             },
             editTicket(ticket) {
-                console.log(ticket)
-                this.ticket = ticket
-                this.ticket.start_book_date = moment(this.ticket.start_book_date).format('YYYY-MM-DD')
-                this.ticket.start_book_time = moment(this.ticket.start_book_date).format('HH:mm')
-                this.ticket.end_book_date = moment(this.ticket.end_book_date).format('YYYY-MM-DD')
-                this.ticket.end_book_time = moment(this.ticket.end_book_time).format('HH:mm')
+                let bookStartDate =ticket.start_book_date
+                let bookEndDate = ticket.end_book_date
+                ticket.start_book_date = moment(bookStartDate).format('YYYY-MM-DD')
+                ticket.start_book_time = moment(bookStartDate).format('HH:mm')
+                ticket.end_book_date = moment(bookEndDate).format('YYYY-MM-DD')
+                ticket.end_book_time = moment(bookEndDate).format('HH:mm')
+
+                this.ticket = Object.assign({}, ticket)
                 this.dialog1 = true
             },
             onButtonClick() {
@@ -1269,9 +1236,3 @@
         },
     }
 </script>
-<style scoped>
-  input[type=file] {
-    position: absolute;
-    left: -99999px;
-  }
-</style>

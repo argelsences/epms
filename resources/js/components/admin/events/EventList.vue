@@ -312,7 +312,7 @@
                                                         <v-row dense>
                                                             <v-col cols="12" sm="6" md="4" v-for="ticket in tickets" :key="ticket.id">
                                                                 <v-card class="mb-5">    
-                                                                    <div class="ticket-header cyan darken-4 text-white">
+                                                                    <div class="ticket-header cyan darken-4 text-white" @click="editTicket(ticket)">
                                                                         <v-card-subtitle class="pb-0 text-white" >FREE</v-card-subtitle>
                                                                         <v-spacer />
                                                                         <v-card-title class="headline pt-0">{{ticket.title}}</v-card-title>
@@ -1234,6 +1234,15 @@
             openTicketDialog(){
                 this.dialog1 = true
                 this.ticket = Object.assign({}, this.ticketDefault)
+            },
+            editTicket(ticket) {
+                console.log(ticket)
+                this.ticket = ticket
+                this.ticket.start_book_date = moment(this.ticket.start_book_date).format('YYYY-MM-DD')
+                this.ticket.start_book_time = moment(this.ticket.start_book_date).format('HH:mm')
+                this.ticket.end_book_date = moment(this.ticket.end_book_date).format('YYYY-MM-DD')
+                this.ticket.end_book_time = moment(this.ticket.end_book_time).format('HH:mm')
+                this.dialog1 = true
             },
             onButtonClick() {
                 this.isSelecting = true

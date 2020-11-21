@@ -273,15 +273,22 @@
                                                         </v-row>
                                                         <v-row>
                                                             <v-col cols="12" sm="12" md="12">
-                                                                <div class="text-h6  text-left mb-10">Upload a poster file</div>
+                                                                <div class="text-h6  text-left mb-2">Upload a poster file</div>
                                                                 <v-form v-model="isValid5" ref="posterForm">
-                                                                    <v-file-input v-model="poster" class="mb-8" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Click to upload" 
+                                                                    <!--<v-file-input v-model="poster" class="mb-8" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Click to upload" 
                                                                         prepend-icon="mdi-camera-iris" label="Poster File" persistentHint chips
                                                                         hint="Uploading a new file will replace the existing poster. Only accepting JPG/PNG/BMP files. File size should not be greater than 2MB"
+                                                                        ref="posterUpload"
+                                                                        
                                                                     >
-                                                                    </v-file-input>
-                                                                    <v-btn color="success" @click="$refs.inputUpload.click()">Success</v-btn>
-                                                                    <input v-show="false" ref="inputUpload" type="file" @change="yourFunction" accept="image/png, image/jpeg, image/bmp, image/jpg" >
+                                                                    </v-file-input>-->
+                                                                   
+                                                                    <v-btn color="primary" class="text-none" rounded  depressed :loading="isSelecting" @click="onButtonClick">
+                                                                        <v-icon left>cloud_upload</v-icon>
+                                                                        {{ buttonText }}
+                                                                    </v-btn>
+                                                                    <input ref="uploader" class="d-none" type="file" accept="image/png, image/jpeg, image/bmp, image/jpg" @change="onFileChanged">
+                                                                    <div class="text-caption pl-2">Uploading a new file will replace the existing poster. Only accepting JPG/PNG/BMP files. File size should not be greater than 2MB</div>
                                                                 </v-form>
                                                             </v-col>
                                                         </v-row>
@@ -643,6 +650,7 @@
         components: { TiptapVuetify },
         mounted() {
             console.log('Component mounted')
+            this.filename = this.value
         },
         data() {
             return {
@@ -829,6 +837,10 @@
                 tickets: [],
                 active_tab: 0,
                 ticketExpansionPanel: null,
+
+                defaultButtonText: 'Choose a file',
+                selectedFile: null,
+                isSelecting: false
             }
         },
         computed: {
@@ -858,6 +870,9 @@
             },
             computedEndTicketBookTime () {
                 return this.formatTime(this.ticket.end_book_time)
+            },
+            buttonText() {
+                return this.selectedFile ? this.selectedFile.name : this.defaultButtonText
             },
         },
         watch: {
@@ -1220,6 +1235,19 @@
                 this.dialog1 = true
                 this.ticket = Object.assign({}, this.ticketDefault)
             },
+            onButtonClick() {
+                this.isSelecting = true
+                window.addEventListener('focus', () => {
+                    this.isSelecting = false
+                }, { once: true })
+
+                this.$refs.uploader.click()
+            },
+            onFileChanged(e) {
+                this.selectedFile = e.target.files[0]
+            
+                // do something
+            },
         },
         created: function() {
             this.setHedeaderTitle()
@@ -1232,3 +1260,9 @@
         },
     }
 </script>
+<style scoped>
+  input[type=file] {
+    position: absolute;
+    left: -99999px;
+  }
+</style>

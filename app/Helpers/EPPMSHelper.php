@@ -188,24 +188,25 @@ class EPPMSHelper {
         // retrieve the poster object, if any
         $poster = Poster::where('event_id', $id)->first();
         
+        $posterParams = [
+            'file_path' => $file_path,
+            'poster_code' => '',
+            'event_id' => $id
+        ];
         // check if we have an existing poster linked to event, if none, create one, else update it
         if ( $poster ){
-
+            $posterParams['id'] = $poster->id;
+            $posterParams = $this->setAuthorship($posterParams);
+            $poster->update($posterParams);
         }
         else {
-            $posterParams = [
-                'id' => 0,
-                'file_path' => $file_path,
-                'poster_code' => '',
-                'event_id' => $id
-            ];
-            
+            $posterParams['id'] = 0;
             $posterParams = $this->setAuthorship($posterParams);
             // since this is new, we do not need the id key
             unset($posterParams['id']);
-            $thePoster = Poster::create($posterParams);
+            $poster = Poster::create($posterParams);
         }
-
-        return $thePoster;
+        
+        return $poster;
     }
 }

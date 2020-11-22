@@ -18,10 +18,25 @@
                             <v-card>
                                 <v-card-title>
                                     <!-- formTitle is  a computed property based on action edit or new -->
-                                    <span class="headline">{{ formTitle }}</span>
-                                    <v-spacer></v-spacer>
-                                    <v-switch :label="isPublic(editedItem.is_public)" prepend-icon="mdi-publish" v-model="editedItem.is_public" class="mr-16"></v-switch>
-                                    <v-switch :label="isApproved(editedItem.is_approved)" prepend-icon="mdi-publish" v-model="editedItem.is_approved" class="mr-16"></v-switch>
+                                    <v-list-item two-line>
+                                        <v-list-item-content>
+                                            <v-list-item-title class="headline">
+                                                {{ formTitle }}
+                                                <v-tooltip right>
+                                                    <template v-slot:activator="{ on, attrs }">
+                                                        <v-icon color="pink" dark v-bind="attrs" v-on="on" icon class="ml-2">
+                                                            mdi-eye
+                                                        </v-icon>
+                                                    </template>
+                                                    <span>Event Page</span>
+                                                </v-tooltip>
+                                            </v-list-item-title>
+                                            <v-list-item-subtitle>
+                                                {{ eventTitle }}
+                                            </v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+                                    <v-spacer />
                                     <v-btn absolute dark fab middle right color="pink" @click="close">
                                         <v-icon x-large>mdi-close</v-icon>
                                     </v-btn>
@@ -55,6 +70,17 @@
                                                 <v-card flat>
                                                     <v-card-text class="pt-0">
                                                         <v-form v-model="isValid" ref="form">
+                                                            <v-row>
+                                                                <v-col cols="12" sm="12" md="12" class="d-flex justify-end">
+                                                                    <div class="d-inline-block">
+                                                                        <v-switch dense :label="isPublic(editedItem.is_public)" :prepend-icon="eventPublic" v-model="editedItem.is_public" class="mr-5"></v-switch>
+                                                                    </div>
+                                                                    <div class="d-inline-block">
+                                                                        <v-switch dense :label="isApproved(editedItem.is_approved)" :prepend-icon="eventApprove" v-model="editedItem.is_approved" ></v-switch>
+                                                                    </div>
+                                                                    
+                                                                </v-col>
+                                                            </v-row>
                                                             <v-row>
                                                                 <v-col cols="12" sm="12" md="12">
                                                                     <div class="text-h5  text-left">Department</div>
@@ -315,8 +341,7 @@
                                                                     </v-card-text>
                                                                     <v-card-actions v-if="poster.file_path">
                                                                         <v-spacer></v-spacer>
-                                                                        <v-select dense :items="posterFormats" label="Output Format"
-                                                                        ></v-select>
+                                                                        <v-select dense :items="posterFormats" label="Output Format"></v-select>
                                                                         <v-btn color="primary" class="text-none" text  depressed @click="downloadPoster">
                                                                             <v-icon left>mdi-download</v-icon>
                                                                             DOWNLOAD
@@ -342,7 +367,6 @@
                                                                 <v-card class="mb-5">    
                                                                     <div class="ticket-header cyan darken-4 text-white" @click="editTicket(ticket)">
                                                                         <v-card-subtitle class="pb-0 text-white" >FREE</v-card-subtitle>
-                                                                        <v-spacer />
                                                                         <v-card-title class="headline pt-0">{{ticket.title}}</v-card-title>
                                                                     </div>
                                                                     <v-card-text>
@@ -429,6 +453,7 @@
                 <template v-slot:item.actions="{ item }">
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                     <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+                    <v-icon small @click="openEventPage(item)">mdi-eye</v-icon>
                 </template>
                 <template v-slot:no-data>
                     <v-btn class="btn btn-sm btn-primary" @click="initialize">Reset</v-btn>
@@ -544,7 +569,7 @@
         <v-dialog v-model="dialog1" persistent max-width="600px" >
             <v-card>
                 <v-card-title>
-                    <span class="headline">New | Edit Ticket</span>
+                    <span class="headline">{{ticketFormTitle}}</span>
                 </v-card-title>
                 <v-card-text>
                     <v-container>
@@ -750,11 +775,11 @@
                     limitCharacters: (v) => (v || '' ).length <= 150 || 'Excerpt must be 150 characters or less',
                 },
                 headers: [
-                    {text: 'Title', value: 'title'},
+                    {text: 'Title', value: 'title', class: 'data-title',},
                     {text: 'Date', value: 'start_date'},
                     {text: 'Venue', value: 'venue'},
                     {text: 'Status', value: 'is_public'},
-                    {text: 'Actions', value: 'actions', sortable: false },
+                    {text: 'Actions', value: 'actions', sortable: false, class: 'data-actions', },
                 ],
                 editedItem: {
                     id: 0,
@@ -886,6 +911,9 @@
             formTitle () {
                 return this.editedIndex === -1 ? 'New Event' : 'Edit Event'
             },
+            eventTitle () {
+                return this.editedItem.title ? this.editedItem.title : ''
+            },
             computedStartDateFormatted () {
                 return this.formatDate(this.start_date)
             },
@@ -915,6 +943,15 @@
             },
             tabDisable() {
                 return (this.editedItem.id) ? false : true
+            },
+            eventPublic() {
+                return (this.editedItem.is_public) ? 'mdi-table-eye' : 'mdi-table-eye-off'
+            },
+            eventApprove() {
+                return (this.editedItem.is_approved) ? 'mdi-thumb-up' : 'mdi-thumbs-up-down'
+            },
+            ticketFormTitle () {
+                return (!this.ticket.id) ? 'New Ticket' : 'Edit Ticket'
             }
         },
         watch: {
@@ -1277,6 +1314,9 @@
 
                 console.log(this.posterFile)
             },
+            openEventPage(item) {
+                console.log(item)
+            }
         },
         created: function() {
             this.setHedeaderTitle()
@@ -1291,4 +1331,5 @@
 </script>
 <style scoped>
     .v-icon.no-poster-icon {margin-top:35%;}
+    .ticket-header:hover {cursor: pointer;}
 </style>

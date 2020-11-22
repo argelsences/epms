@@ -199,4 +199,10 @@ class EventController extends Controller
         $success = $file_path ? true : false;
         return ['success' => $success, 'file_path' => $file_path ];
     }
+    /**
+     * Frontend display event page
+     */
+    public function display_event() {
+        dd(__METHOD__);
+    }
 }

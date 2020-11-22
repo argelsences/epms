@@ -95,7 +95,7 @@ class PosterController extends Controller
         }
 
         $thePoster = Poster::where('event_id', $event)->first();
-        ///dd($theTickets);
+        
         return response()->json(($thePoster));
     }
     /**

@@ -287,7 +287,7 @@
                                                                             <div>
                                                                                 <v-btn color="primary" class="text-none" rounded  depressed :loading="isSelecting" @click="onButtonClick">
                                                                                     <v-icon left>cloud_upload</v-icon>
-                                                                                    {{ buttonText }}
+                                                                                    {{ uploadButtonText }}
                                                                                 </v-btn>
                                                                                 <input ref="uploader" class="d-none" type="file" accept="image/png, image/jpeg, image/bmp, image/jpg" @change="onFileChanged">
                                                                                 <div class="text-caption pl-2">Uploading a new file will replace the existing poster. Only accepting JPG/PNG/BMP files. File size should not be greater than 2MB</div>
@@ -315,6 +315,8 @@
                                                                     </v-card-text>
                                                                     <v-card-actions v-if="poster.file_path">
                                                                         <v-spacer></v-spacer>
+                                                                        <v-select dense :items="posterFormats" label="Output Format"
+                                                                        ></v-select>
                                                                         <v-btn color="primary" class="text-none" text  depressed @click="downloadPoster">
                                                                             <v-icon left>mdi-download</v-icon>
                                                                             DOWNLOAD
@@ -865,7 +867,7 @@
                 active_tab: 0,
                 ticketExpansionPanel: null,
 
-                defaultButtonText: 'Choose a file',
+                defaultUploadButtonText: 'Choose a file',
                 posterFile: null,
                 isSelecting: false,
                 uploadReady: true,
@@ -876,9 +878,8 @@
                     edited_by: 0,
                     event_id: 0,
                     template_id: 0,
-                }
-
-                
+                },
+                posterFormats: ['JPG', 'PNG', 'BMP', 'PDF'],
             }
         },
         computed: {
@@ -909,8 +910,8 @@
             computedEndTicketBookTime () {
                 return this.formatTime(this.ticket.end_book_time)
             },
-            buttonText() {
-                return this.posterFile ? this.posterFile.name : this.defaultButtonText
+            uploadButtonText() {
+                return this.posterFile ? this.posterFile.name : this.defaultUploadButtonText
             },
             tabDisable() {
                 return (this.editedItem.id) ? false : true

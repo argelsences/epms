@@ -84,6 +84,21 @@ class PosterController extends Controller
         //
     }
     /**
+     * API function
+     * 
+     * List all speakers
+     * 
+     */
+    public function list($event){
+        if ( auth()->user()->can(['view poster']) ){
+            return response('Unauthorized', 403);
+        }
+
+        $thePoster = Poster::where('event_id', $event)->first();
+        ///dd($theTickets);
+        return response()->json(($thePoster));
+    }
+    /**
      * API Function
      * Upload a poster for an event
      */
@@ -103,12 +118,8 @@ class PosterController extends Controller
         $validatedData = $request->validate([
             "photo" => "nullable|sometimes|image|mimes:jpeg,bmp,png,jpg|max:2000"
         ]);
-        
-        // get the max id of the object
-        /////$id = Speaker::max('id');
-        // if id is present in the payload, then use it, it means that we are updating an entity
 
-        $params = [];
+        $params = $thePoster = [];
 
         if ( $request->input('id') )
             $id = $request->input('id');
@@ -124,30 +135,11 @@ class PosterController extends Controller
             ];
 
             $thePoster = EPPMS::generatePoster($params);
+            $generateSuccess = ($thePoster->id) ? true : false;
         }
-
-        $success = $file_path = false;
-
-        // Upload all files
-        //if ( null != $request->file('poster') ){
-
-
-            /*
-            $photo = $request->file('poster');
-            $photo_filename  = $photo->getClientOriginalName();
-            $file_path = $photo->storeAs("files/events/poster/$id", $photo_filename);
-            */
-            //$file_path = $photo->store("files/events/poster/$id");
-
-            // create a poster object and used the file_path
-            // for upload, the file_path will be used
-            // if file path is used, clear the poster code value
-            // if template is used for the template, then clear the file_path content
-            // for each generation of new poster, the old poster files should be cleared
-        //}
         // to access public files in url http://localhost:8000/files/eclOueMC57PBMVylqzhIiumaoGh72UHZFbEyjiz5.jpeg
         
-        $success = $file_path ? true : false;
-        return ['success' => $success, 'file_path' => $file_path ];
+        $success = ($thePoster) ? true : false;
+        return ['success' => $success, 'item' => $thePoster];
     }
 }

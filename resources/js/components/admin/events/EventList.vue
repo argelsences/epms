@@ -272,35 +272,55 @@
                                                             </v-col>
                                                         </v-row>
                                                         <v-row>
-                                                            <v-col cols="12" sm="12" md="12">
-                                                                <div class="text-h6  text-left mb-2">Upload a poster file</div>
-                                                                <v-form v-model="isValid5" ref="posterForm">
-                                                                    <!--<v-file-input v-model="poster" class="mb-8" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Click to upload" 
-                                                                        prepend-icon="mdi-camera-iris" label="Poster File" persistentHint chips
-                                                                        hint="Uploading a new file will replace the existing poster. Only accepting JPG/PNG/BMP files. File size should not be greater than 2MB"
-                                                                        ref="posterUpload"
-                                                                        
-                                                                    >
-                                                                    </v-file-input>-->
-                                                                    <div>
-                                                                        <v-btn color="primary" class="text-none" rounded  depressed :loading="isSelecting" @click="onButtonClick">
-                                                                        <v-icon left>cloud_upload</v-icon>
-                                                                            {{ buttonText }}
-                                                                        </v-btn>
-                                                                        <input ref="uploader" class="d-none" type="file" accept="image/png, image/jpeg, image/bmp, image/jpg" @change="onFileChanged">
-                                                                        <div class="text-caption pl-2">Uploading a new file will replace the existing poster. Only accepting JPG/PNG/BMP files. File size should not be greater than 2MB</div>
-                                                                    </div>
-                                                                    
-                                                                    <v-spacer></v-spacer>
-                                                                    <div>
-                                                                        <v-btn text depressed :loading="isSelecting" class="float-right" :disabled="uploadReady" @click="uploadPoster">Upload Poster</v-btn>
-                                                                    </div>
-                                                                </v-form>
+                                                            <v-col cols="12" sm="8" md="8">
+                                                                <v-row>
+                                                                    <v-col cols="12" sm=12 md="12">
+                                                                        <div class="text-h6  text-left mb-2">Upload a poster file</div>
+                                                                        <v-form v-model="isValid5" ref="posterForm">
+                                                                            <!--<v-file-input v-model="poster" class="mb-8" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Click to upload" 
+                                                                                prepend-icon="mdi-camera-iris" label="Poster File" persistentHint chips
+                                                                                hint="Uploading a new file will replace the existing poster. Only accepting JPG/PNG/BMP files. File size should not be greater than 2MB"
+                                                                                ref="posterUpload"
+                                                                                
+                                                                            >
+                                                                            </v-file-input>-->
+                                                                            <div>
+                                                                                <v-btn color="primary" class="text-none" rounded  depressed :loading="isSelecting" @click="onButtonClick">
+                                                                                    <v-icon left>cloud_upload</v-icon>
+                                                                                    {{ buttonText }}
+                                                                                </v-btn>
+                                                                                <input ref="uploader" class="d-none" type="file" accept="image/png, image/jpeg, image/bmp, image/jpg" @change="onFileChanged">
+                                                                                <div class="text-caption pl-2">Uploading a new file will replace the existing poster. Only accepting JPG/PNG/BMP files. File size should not be greater than 2MB</div>
+                                                                            </div>
+                                                                            
+                                                                            <v-spacer></v-spacer>
+                                                                            <div>
+                                                                                <v-btn text depressed :loading="isSelecting" class="float-right" :disabled="uploadReady" @click="uploadPoster">Upload Poster</v-btn>
+                                                                            </div>
+                                                                        </v-form>
+                                                                    </v-col>
+                                                                    <v-col cols="12" sm="12" md="12">
+                                                                        <div class="text-h6  text-left mb-10">Or, select from the list of templates to generate a poster</div>
+                                                                    </v-col>
+                                                                </v-row>
                                                             </v-col>
-                                                        </v-row>
-                                                        <v-row>
-                                                            <v-col cols="12" sm="12" md="12">
-                                                                <div class="text-h6  text-left mb-10">Or, select a template from the list</div>
+                                                            <v-col cols="12" sm="4" md="4" class="align-self-center">
+                                                                <v-card outlined min-height="500px">
+                                                                    <v-card-title>
+                                                                        Preview
+                                                                    </v-card-title>
+                                                                    <v-card-text class="align-self-center">
+                                                                        <v-img v-if="poster.file_path" :src="base_url + poster.file_path" alt="" aspect-ratio=".7" ></v-img>
+                                                                        <v-icon size=200 v-else class="d-flex justify-center no-poster-icon">mdi-image</v-icon>
+                                                                    </v-card-text>
+                                                                    <v-card-actions v-if="poster.file_path">
+                                                                        <v-spacer></v-spacer>
+                                                                        <v-btn color="primary" class="text-none" text  depressed @click="downloadPoster">
+                                                                            <v-icon left>mdi-download</v-icon>
+                                                                            DOWNLOAD
+                                                                        </v-btn>
+                                                                    </v-card-actions>
+                                                                </v-card>
                                                             </v-col>
                                                         </v-row>
                                                     </v-card-text>
@@ -665,6 +685,7 @@
                 dialog1: false,
                 dialog2: false,
                 dialog3: false,
+                dialog5: false,
                 st_menu: false,
                 se_menu: false,
                 start_book_menu: false,
@@ -688,7 +709,6 @@
                 snackbar: false,
                 timeout: 5000,
                 error: false,
-                poster: null,
                 base_url: window.location.origin + '/',
                 start_date: new Date().toISOString().substr(0, 10),
                 end_date: new Date().toISOString().substr(0, 10),
@@ -849,6 +869,14 @@
                 posterFile: null,
                 isSelecting: false,
                 uploadReady: true,
+                poster: {
+                    file_path: '',
+                    poster_code: '',
+                    created_by: 0,
+                    edited_by: 0,
+                    event_id: 0,
+                    template_id: 0,
+                }
 
                 
             }
@@ -964,6 +992,12 @@
                     this.tickets = response.data;
                 });
             },
+            getPoster(eventId) {
+                axios.get(`/api/posters/event/${eventId}`)
+                .then( response => {
+                    this.poster = response.data;
+                });
+            },
             getCountries() {
                 axios.get('/api/countries')
                 .then( response => {
@@ -982,6 +1016,7 @@
                 this.dialog = true
                 // get all tickets for this event
                 this.getTickets(this.editedItem.id)
+                this.getPoster(this.editedItem.id)
             },
             deleteItem (item) {
                 const index = this.rows.indexOf(item)
@@ -1136,8 +1171,6 @@
                 if ( this.posterFile ){
                     let formData = new FormData()
                     formData.append('poster', this.posterFile)
-
-                    console.log(formData)
                     
                     if ( this.editedItem.id )
                         formData.append('id', this.editedItem.id)
@@ -1148,9 +1181,11 @@
                         }
                     })
                     .then(response => {
+                        console.log(response.data.success)
                         if (response.data.success) {
                             // set the path on the global editedItem
-                            this.poster_thumb = response.data.poster_thumb 
+                            //this.poster_thumb = response.data.poster_thumb 
+                            this.poster = response.data.item
                         }
                     })
                     .catch( error => {
@@ -1253,3 +1288,6 @@
         },
     }
 </script>
+<style scoped>
+    .v-icon.no-poster-icon {margin-top:35%;}
+</style>

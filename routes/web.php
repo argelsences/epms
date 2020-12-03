@@ -20,7 +20,7 @@ Route::get('/', 'HomeController@index')->name('home');
 
 Route::group(['prefix' => 'd'], function () {
 	Route::get('/{department_slug}', 'DepartmentController@homepage')->name('department.homepage');
-	Route::get('/{department_slug}/events/{event_id}/{event_slug}', 'EventController@display_event')->name('event.display');
+	Route::get('/{department_slug}/events/{event_id}', 'EventController@display_event')->name('event.display');
 });
 
 Auth::routes(['verify' => true]);

@@ -21,7 +21,7 @@
                         --}}
                         <div class="info">
                             <h2 class="title ellipsis">
-                               <a href="{{$event->event_url }}">{{ $event->title }}</a>
+                               <a href="{{route('event.display', ['department_slug' => $department->url, 'event_id' => $event->id])}}">{{ $event->title }}</a>
                             </h2>
                             <p class="desc ellipsis">{{ $event->venue_name }}</p>
                             <ul>

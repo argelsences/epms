@@ -4,13 +4,15 @@
             @include('front.department.partials.event-list',
                 [
                     'panel_title' => 'Upcoming Events',
-                    'events'      => $upcoming_events
+                    'events'      => $upcoming_events,
+                    'department'  => $department,
                 ]
             )
             @include('front.department.partials.event-list',
                 [
                     'panel_title' => 'Past Events',
-                    'events'      => $past_events
+                    'events'      => $past_events,
+                    'department'  => $department,
                 ]
             )
         </div>

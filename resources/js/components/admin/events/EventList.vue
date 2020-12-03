@@ -24,9 +24,11 @@
                                                 {{ formTitle }}
                                                 <v-tooltip right>
                                                     <template v-slot:activator="{ on, attrs }">
-                                                        <v-icon color="pink" dark v-bind="attrs" v-on="on" icon class="ml-2">
-                                                            mdi-eye
-                                                        </v-icon>
+                                                        <v-btn icon color="pink" @click="eventURL">
+                                                            <v-icon dark v-bind="attrs" v-on="on" icon class="ml-2">
+                                                                mdi-eye
+                                                            </v-icon>
+                                                        </v-btn>
                                                     </template>
                                                     <span>Event Page</span>
                                                 </v-tooltip>
@@ -1316,6 +1318,14 @@
             },
             openEventPage(item) {
                 console.log(item)
+            },
+            eventURL() {
+                console.log(this.editedItem)
+                console.log(this.departments)
+                //return "/#"
+                let theDepartment = this.departments.find(department => department.id == this.editedItem.department_id)
+                
+                window.open('/d/'+theDepartment.url+'/events/'+ this.editedItem.id, '_blank');
             }
         },
         created: function() {

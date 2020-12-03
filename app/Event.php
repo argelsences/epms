@@ -11,7 +11,9 @@ class Event extends Model
 {
     //
     use SoftDeletes;
+    
     protected $dates = ['start_date', 'end_date'];
+
     protected $fillable = ['title', 'synopsis', 'excerpt', 'start_date', 'end_date',
         'pre_booking_display_message', 'post_booking_display_message', 'social_show_facebook',
         'social_show_twitter', 'social_show_whatsapp', 'social_show_email', 'social_show_linkedin',
@@ -60,6 +62,10 @@ class Event extends Model
 
     public function tickets(){
         return $this->hasMany('App\Ticket');
+    }
+
+    public function department() {
+        return $this->belongsTo('App\Department');
     }
 
 }

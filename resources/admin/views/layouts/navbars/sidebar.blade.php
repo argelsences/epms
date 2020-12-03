@@ -1,2 +1,0 @@
-<admin-menu></admin-menu>
- 

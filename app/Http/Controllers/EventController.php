@@ -6,6 +6,8 @@ use App\Event;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use EPPMS;
+use App\Department;
+use App\Setting;
 
 class EventController extends Controller
 {
@@ -203,9 +205,12 @@ class EventController extends Controller
      * Frontend display event page
      */
     public function display_event( $URI, $event_id ) {
-        dd($URI);
+        
         $theURI = filter_var($URI, FILTER_SANITIZE_STRING);
+        $theEventID = filter_var($event_id, FILTER_SANITIZE_NUMBER_INT);
         $department = Department::where('url', $URI)->firstOrFail();
+        $event = $this->events->findOrFail($theEventID);
+        
     
         /// script
         /** @var Organiser $organiser */
@@ -227,16 +232,6 @@ class EventController extends Controller
             $organiser->page_header_bg_color = $preview_styles['page_header_bg_color'];
             $organiser->page_text_color = $preview_styles['page_text_color'];
         }*/
-
-        $upcoming_events = $department->events()->where([
-            ['end_date', '>=', now()],
-            ['is_public', 1]
-        ])->get();
-
-        $past_events = $department->events()->where([
-            ['end_date', '<', now()],
-            ['is_public', 1]
-        ])->limit(10)->get();
         
         /*
         $data = [
@@ -264,10 +259,9 @@ class EventController extends Controller
 
         //dd($objSettings);
         
-        return view('front.department.homepage', compact(
+        return view('front.event.homepage', compact(
             'department',
-            'upcoming_events',
-            'past_events',
+            'event',
             'objSettings',
         ));
     }

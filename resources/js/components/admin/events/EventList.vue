@@ -24,7 +24,7 @@
                                                 {{ formTitle }}
                                                 <v-tooltip right>
                                                     <template v-slot:activator="{ on, attrs }">
-                                                        <v-btn icon color="pink" @click="eventURL">
+                                                        <v-btn icon color="pink" @click="eventURL(false)">
                                                             <v-icon dark v-bind="attrs" v-on="on" icon class="ml-2">
                                                                 mdi-eye
                                                             </v-icon>
@@ -455,7 +455,7 @@
                 <template v-slot:item.actions="{ item }">
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                     <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
-                    <v-icon small @click="openEventPage(item)">mdi-eye</v-icon>
+                    <v-icon small @click="eventURL(item)">mdi-eye</v-icon>
                 </template>
                 <template v-slot:no-data>
                     <v-btn class="btn btn-sm btn-primary" @click="initialize">Reset</v-btn>
@@ -1316,16 +1316,12 @@
 
                 console.log(this.posterFile)
             },
-            openEventPage(item) {
-                console.log(item)
-            },
-            eventURL() {
-                console.log(this.editedItem)
-                console.log(this.departments)
-                //return "/#"
-                let theDepartment = this.departments.find(department => department.id == this.editedItem.department_id)
+            eventURL(item) {
+                let dID= (item) ? item.department_id : this.editedItem.department_id
+                let vID = (item) ? item.id : this.editedItem.id
+                let theDepartment = this.departments.find(department => department.id == dID)
                 
-                window.open('/d/'+theDepartment.url+'/events/'+ this.editedItem.id, '_blank');
+                window.open('/d/'+theDepartment.url+'/events/'+ vID, '_blank');
             }
         },
         created: function() {

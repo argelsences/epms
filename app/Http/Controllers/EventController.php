@@ -121,7 +121,7 @@ class EventController extends Controller
      */
     public function upsert(Request $request){
 
-        if ( auth()->user()->can(['list event']) ){
+        if ( auth()->user()->can(['edit event', 'create event']) ){
             return response('Unauthorized', 403);
         }
         /////dd($request->all());

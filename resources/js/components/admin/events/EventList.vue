@@ -25,7 +25,7 @@
                                                 <v-tooltip right>
                                                     <template v-slot:activator="{ on, attrs }">
                                                         <v-btn icon color="pink" @click="eventURL(false)">
-                                                            <v-icon dark v-bind="attrs" v-on="on" icon class="ml-2">
+                                                            <v-icon class="ml-2">
                                                                 mdi-eye
                                                             </v-icon>
                                                         </v-btn>

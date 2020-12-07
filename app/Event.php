@@ -24,9 +24,9 @@ class Event extends Model
     /**
      * Return dd mm YY @ h:i:s A
      */
-    /*public function getStartDateAttribute($value){
-        return (new Carbon($value))->format('j F Y @ h:i:s A');
-    }*/
+    public function startDateFormatted(){
+        return (new Carbon($this->start_date))->format('j F Y h:i A');
+    }
 
     /*
     public function getStartDateAttribute($value){

@@ -52,7 +52,7 @@ html, body {
     text-align: center;
     margin: 0;
     margin-bottom: 30px;
-    letter-spacing: 2em;
+    letter-spacing: .2em;
     font-weight: 200;
   }
   
@@ -584,6 +584,7 @@ html, body {
   #goLiveBar .container {
     padding: 0px;
   }
-  
+
+  .section_head {width:100%;}
 
 /** END FRONTEND **/

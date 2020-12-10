@@ -21,6 +21,7 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::group(['prefix' => 'd'], function () {
 	Route::get('/{department_slug}', 'DepartmentController@homepage')->name('department.homepage');
 	Route::get('/{department_slug}/events/{event_id}', 'EventController@display_event')->name('event.display');
+	Route::post('/{department_slug}/events/{event_id}/checkout', 'TicketController@checkout')->name('tickets.checkout');
 });
 
 Auth::routes(['verify' => true]);

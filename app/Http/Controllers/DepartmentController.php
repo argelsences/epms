@@ -95,7 +95,11 @@ class DepartmentController extends Controller
      */
     public function list(Department $model){
         
-        if ( auth()->user()->can(['list department']) ){
+        /*if ( auth()->user()->can(['list department']) ){
+            return response('Unauthorized', 403);
+        }*/
+        
+        if (auth()->user()->hasPermissionTo('list department', 'api') ){
             return response('Unauthorized', 403);
         }
 

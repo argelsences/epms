@@ -1,19 +1,18 @@
 <section id="tickets" class="container">
     <div class="row">
-        <h1 class='section_head'>
-            @lang("Public_ViewEvent.tickets")
+        <h1 class='section_head text-center'>
+            Ticket(s)
         </h1>
     </div>
 
     @if($event->end_date->isPast())
-        <div class="alert alert-boring">
-            @lang("Public_ViewEvent.event_already", ['started' => trans('Public_ViewEvent.event_already_ended')])
+        <div class="alert alert-boring text-center">
+            The event already ended
         </div>
     @else
 
         @if($tickets->count() > 0)
-
-            {!! Form::open(['url' => route('postValidateTickets', ['event_id' => $event->id]), 'class' => 'ajax']) !!}
+            <form method="POST" action="{{ route('tickets.checkout') }}">
             <div class="row">
                 <div class="col-md-12">
                     <div class="content">
@@ -140,7 +139,7 @@
                 </div>
             </div>
             {!! Form::hidden('is_embedded', $is_embedded) !!}
-            {!! Form::close() !!}
+            </form>
 
         @else
 

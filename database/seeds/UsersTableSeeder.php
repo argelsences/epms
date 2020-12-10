@@ -24,7 +24,13 @@ class UsersTableSeeder extends Seeder
         ]);
 
         DB::table('model_has_roles')->insert([
-            'role_id' => 6,
+            'role_id' => 11,
+            'model_type' => 'App\User',
+            'model_id' => 1
+        ]);
+
+        DB::table('model_has_roles')->insert([
+            'role_id' => 12,
             'model_type' => 'App\User',
             'model_id' => 1
         ]);

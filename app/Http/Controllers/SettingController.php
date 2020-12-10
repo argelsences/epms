@@ -110,7 +110,11 @@ class SettingController extends Controller
      */
     public function list(Setting $model){
         
-        if ( auth()->user()->can(['edit settings']) ){
+        /*if ( auth()->user()->can(['edit settings']) ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if (auth()->user()->hasPermissionTo('edit settings', 'api') ){
             return response('Unauthorized', 403);
         }
         // assign values here manually
@@ -132,7 +136,11 @@ class SettingController extends Controller
      * Retrieve list of timezones
      */
     public function timezones(Country $country){
-        if ( auth()->user()->can(['edit settings']) ){
+        /*if ( auth()->user()->can(['edit settings']) ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if (auth()->user()->hasPermissionTo('edit settings', 'api') ){
             return response('Unauthorized', 403);
         }
 

@@ -32,8 +32,8 @@
 
           {{-- Push for sticky footer--}}-->
           @include('front.event.partials.header-section')
-          {{--
           @include('front.event.partials.ticket-section')
+          {{--
           @include('front.event.partials.details-section')
           @include('front.event.partials.share-section')
           @include('front.event.partials.location-section')

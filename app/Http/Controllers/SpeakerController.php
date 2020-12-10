@@ -91,7 +91,11 @@ class SpeakerController extends Controller
      * 
      */
     public function list(Speaker $model){
-        if ( auth()->user()->can(['list speaker']) ){
+        /*if ( auth()->user()->can(['list speaker']) ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if (auth()->user()->hasPermissionTo('list speaker', 'api') ){
             return response('Unauthorized', 403);
         }
 

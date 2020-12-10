@@ -100,7 +100,11 @@ class EventController extends Controller
      */
     public function list(Event $model){
         
-        if ( auth()->user()->can(['list event']) ){
+        /*if ( auth()->user()->can(['list event']) ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if (auth()->user()->hasPermissionTo('list event', 'api') ){
             return response('Unauthorized', 403);
         }
 

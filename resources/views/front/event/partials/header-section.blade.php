@@ -1,17 +1,19 @@
 <!-- TODO check if live, if not, create a bar to offer the super admin, administrator or the author to make it live -->
 
-@if( auth()->user()->can(["edit event","create event"]) )
-    @if(!$event->is_public)
-        <section id="goLiveBar">
-            <div class="container">
-                @if(!$event->is_public)
-                    This event is not visible to the public.
-                    <a href="#"
-                    style="background-color: green; border-color: green;"
-                    class="btn btn-success btn-xs">Go Live</a>
-                @endif
-            </div>
-        </section>
+@if (auth()->check())
+    @if( auth()->user()->can(["edit event","create event"]) )
+        @if(!$event->is_public)
+            <section id="goLiveBar">
+                <div class="container">
+                    @if(!$event->is_public)
+                        This event is not visible to the public.
+                        <a href="#"
+                        style="background-color: green; border-color: green;"
+                        class="btn btn-success btn-xs">Go Live</a>
+                    @endif
+                </div>
+            </section>
+        @endif
     @endif
 @endif
 <section id="organiserHead" class="container-fluid">

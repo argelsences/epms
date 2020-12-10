@@ -222,6 +222,7 @@ class EventController extends Controller
         $theEventID = filter_var($event_id, FILTER_SANITIZE_NUMBER_INT);
         $department = Department::where('url', $URI)->firstOrFail();
         $event = $this->events->findOrFail($theEventID);
+        //dd($event->tickets);
         
     
         /// script

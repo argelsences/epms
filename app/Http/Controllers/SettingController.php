@@ -151,9 +151,14 @@ class SettingController extends Controller
      */
     public function upsert(Request $request)
     {
-        if ( auth()->user()->can(['edit settings']) ){
+        /*if ( auth()->user()->can(['edit settings']) ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if (auth()->user()->hasPermissionTo('edit settings', 'api') ){
             return response('Unauthorized', 403);
         }
+
         $objSettings = $request->post('payload');
 
         foreach ($objSettings as $key => $value){

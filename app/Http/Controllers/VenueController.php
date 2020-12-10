@@ -114,7 +114,11 @@ class VenueController extends Controller
      */
     public function upsert(Request $request)
     {
-        if ( auth()->user()->can(['edit venue', 'add venue']) ){
+        /*if ( auth()->user()->can(['edit venue', 'add venue']) ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if (auth()->user()->hasPermissionTo('edit venue', 'api') && auth()->user()->hasPermissionTo('add venue', 'api') ){
             return response('Unauthorized', 403);
         }
 

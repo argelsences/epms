@@ -112,7 +112,11 @@ class SpeakerController extends Controller
      */
     public function upsert(Request $request)
     {
-        if ( auth()->user()->can(['edit speaker', 'add speaker']) ){
+        /*if ( auth()->user()->can(['edit speaker', 'add speaker']) ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if (auth()->user()->hasPermissionTo('edit speaker', 'api') && auth()->user()->hasPermissionTo('add speaker', 'api') ){
             return response('Unauthorized', 403);
         }
 
@@ -143,7 +147,11 @@ class SpeakerController extends Controller
      */
     public function uploadPhoto(Request $request){
 
-        if ( auth()->user()->can(['edit speaker', 'add speaker']) ){
+        /*if ( auth()->user()->can(['edit speaker', 'add speaker']) ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if (auth()->user()->hasPermissionTo('edit speaker', 'api') && auth()->user()->hasPermissionTo('add speaker', 'api') ){
             return response('Unauthorized', 403);
         }
 

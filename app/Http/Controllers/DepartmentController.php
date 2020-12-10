@@ -117,7 +117,11 @@ class DepartmentController extends Controller
      */
     public function upsert(DepartmentRequest $request)
     {
-        if ( auth()->user()->can(['edit department', 'add department']) ){
+        /*if ( auth()->user()->can(['edit department', 'add department']) ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if (auth()->user()->hasPermissionTo('edit department', 'api') && auth()->user()->hasPermissionTo('add department', 'api') ){
             return response('Unauthorized', 403);
         }
 
@@ -148,7 +152,11 @@ class DepartmentController extends Controller
      */
     public function uploadLogo(Request $request){
 
-        if ( auth()->user()->can(['edit department', 'add department']) ){
+        /*if ( auth()->user()->can(['edit department', 'add department']) ){
+            return response('Unauthorized', 403);
+        }*/
+        
+        if (auth()->user()->hasPermissionTo('edit department', 'api') && auth()->user()->hasPermissionTo('add department', 'api') ){
             return response('Unauthorized', 403);
         }
 

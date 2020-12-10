@@ -75,9 +75,14 @@ class UserController extends Controller
      */
     public function upsert(UserRequest $request)
     {
-        if ( auth()->user()->can(['edit user', 'add user']) ){
+        /*if ( auth()->user()->can(['edit user', 'add user']) ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if (auth()->user()->hasPermissionTo('edit user', 'api') && auth()->user()->hasPermissionTo('add user', 'api') ){
             return response('Unauthorized', 403);
         }
+
         $user = $request->post('payload');
         
         if ( $user['id'] ){

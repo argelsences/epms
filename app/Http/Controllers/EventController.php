@@ -125,7 +125,11 @@ class EventController extends Controller
      */
     public function upsert(Request $request){
 
-        if ( auth()->user()->can(['edit event', 'create event']) ){
+        /*if ( auth()->user()->can(['edit event', 'create event']) ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if (auth()->user()->hasPermissionTo('edit event', 'api') && auth()->user()->hasPermissionTo('create event', 'api') ){
             return response('Unauthorized', 403);
         }
         /////dd($request->all());
@@ -178,7 +182,11 @@ class EventController extends Controller
      */
     public function uploadPoster(Request $request){
 
-        if ( auth()->user()->can(['edit poster', 'add poster']) ){
+        /*if ( auth()->user()->can(['edit poster', 'add poster']) ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if (auth()->user()->hasPermissionTo('edit poster', 'api') && auth()->user()->hasPermissionTo('add poster', 'api') ){
             return response('Unauthorized', 403);
         }
 

@@ -97,7 +97,11 @@ class TicketController extends Controller
      * 
      */
     public function list($event){
-        if ( auth()->user()->can(['list ticket']) ){
+        /*if ( auth()->user()->can(['list ticket']) ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if (auth()->user()->hasPermissionTo('list ticket', 'api') ){
             return response('Unauthorized', 403);
         }
 
@@ -116,7 +120,11 @@ class TicketController extends Controller
      */
     public function upsert(Request $request)
     {
-        if ( auth()->user()->can(['edit ticket', 'add ticket']) ){
+        /*if ( auth()->user()->can(['edit ticket', 'add ticket']) ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if (auth()->user()->hasPermissionTo('edit ticket', 'api') && auth()->user()->hasPermissionTo('add ticket', 'api') ){
             return response('Unauthorized', 403);
         }
 
@@ -157,7 +165,11 @@ class TicketController extends Controller
      */
     public function pause(Request $request) {
 
-        if ( auth()->user()->can(['edit ticket']) ){
+        /*if ( auth()->user()->can(['edit ticket']) ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if (auth()->user()->hasPermissionTo('edit ticket', 'api') ){
             return response('Unauthorized', 403);
         }
         

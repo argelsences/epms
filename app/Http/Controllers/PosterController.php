@@ -90,7 +90,11 @@ class PosterController extends Controller
      * 
      */
     public function list($event){
-        if ( auth()->user()->can(['view poster']) ){
+        /*if ( auth()->user()->can(['view poster']) ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if (auth()->user()->hasPermissionTo('view poster', 'api') ){
             return response('Unauthorized', 403);
         }
 
@@ -111,7 +115,11 @@ class PosterController extends Controller
      */
     public function upload(Request $request){
 
-        if ( auth()->user()->can(['edit speaker', 'add speaker']) ){
+        /*if ( auth()->user()->can(['edit speaker', 'add speaker']) ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if (auth()->user()->hasPermissionTo('edit poster', 'api') && auth()->user()->hasPermissionTo('add poster', 'api') ){
             return response('Unauthorized', 403);
         }
 

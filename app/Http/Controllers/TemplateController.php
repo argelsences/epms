@@ -146,7 +146,11 @@ class TemplateController extends Controller
      */
     public function upsert(Request $request) {
 
-        if ( auth()->user()->can(['edit template', 'add template']) ){
+        /*if ( auth()->user()->can(['edit template', 'add template']) ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if (auth()->user()->hasPermissionTo('edit template', 'api') && auth()->user()->hasPermissionTo('add template', 'api') ){
             return response('Unauthorized', 403);
         }
 

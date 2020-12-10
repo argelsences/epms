@@ -106,6 +106,11 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'edit role']);
         Permission::create(['name' => 'delete role']);
         Permission::create(['name' => 'add role']);
+
+        Permission::create(['name' => 'list role','guard_name' => 'api']);
+        Permission::create(['name' => 'edit role','guard_name' => 'api']);
+        Permission::create(['name' => 'delete role','guard_name' => 'api']);
+        Permission::create(['name' => 'add role','guard_name' => 'api']);
         // settings
         Permission::create(['name' => 'list settings']);
         Permission::create(['name' => 'edit settings']);

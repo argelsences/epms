@@ -131,7 +131,11 @@ class TemplateController extends Controller
      */
     public function list(Template $model){
         
-        if ( auth()->user()->can(['list template']) ){
+        /*if ( auth()->user()->can(['list template']) ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if (auth()->user()->hasPermissionTo('list template', 'api') ){
             return response('Unauthorized', 403);
         }
 

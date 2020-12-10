@@ -140,7 +140,11 @@ class UserController extends Controller
      */
     public function list(User $model) {
 
-        if (auth()->user()->can(['list user'])){
+        /*if (auth()->user()->can(['list user'])){
+            return response('Unauthorized', 403);
+        }*/
+
+        if (auth()->user()->hasPermissionTo('list user', 'api') ){
             return response('Unauthorized', 403);
         }
 
@@ -176,7 +180,10 @@ class UserController extends Controller
      */
     public function getAllRoles (Role $model){
 
-        if (auth()->user()->can(['list role'])){
+        /*if (auth()->user()->can(['list role'])){
+            return response('Unauthorized', 403);
+        }*/
+        if (auth()->user()->hasPermissionTo('list role', 'api') ){
             return response('Unauthorized', 403);
         }
 

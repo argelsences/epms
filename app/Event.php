@@ -68,4 +68,8 @@ class Event extends Model
         return $this->belongsTo('App\Department');
     }
 
+    public function poster(){
+        return $this->hasOne('App\Poster');
+    }
+
 }

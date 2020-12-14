@@ -271,6 +271,7 @@ class EventController extends Controller
         }
 
         //dd($objSettings);
+        //dd($event->poster);
         
         return view('front.event.homepage', compact(
             'department',

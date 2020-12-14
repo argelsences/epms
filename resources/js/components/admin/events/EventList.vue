@@ -25,7 +25,7 @@
                                                 <v-tooltip right>
                                                     <template v-slot:activator="{ on, attrs }">
                                                         <v-btn icon color="pink" @click="eventURL(false)">
-                                                            <v-icon class="ml-2">
+                                                            <v-icon>
                                                                 mdi-eye
                                                             </v-icon>
                                                         </v-btn>
@@ -206,7 +206,6 @@
                                                                 </v-col>
                                                             </v-row>
                                                             -->
-                                                            <!--
                                                             <v-row>
                                                                 <v-col cols="12" sm="12" md="12">
                                                                     <div class="text-h4  text-left mt-10">Social Media</div>
@@ -224,7 +223,6 @@
                                                                     <v-switch label="Email" prepend-icon="mdi-email" v-model="editedItem.social_show_email"></v-switch>
                                                                 </v-col>
                                                             </v-row>
-                                                            -->
                                                             <v-row>
                                                                 <v-col cols="12" sm="12" md="6">
                                                                     <v-row>

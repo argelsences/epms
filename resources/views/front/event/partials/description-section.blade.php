@@ -12,7 +12,7 @@
         @if ($event->poster->count())
             <div class="col-md-5">
                 <div class="content event_poster">
-                    <img alt="{{$event->title}}" src="/{{$event->poster->file_path}}" property="image">
+                    <v-img src="/{{$event->poster->file_path}}" property="image" alt="{{$event->title}}"></v-img>
                 </div>
             </div>
         @endif

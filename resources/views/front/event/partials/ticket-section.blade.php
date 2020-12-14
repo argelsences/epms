@@ -75,7 +75,7 @@
                                 @endforeach
                                 <tr>
                                     <td colspan="3" style="text-align: center">
-                                        Choose the number of tickets and click "register". On the next screen you will be asked for your information.
+                                        Choose the number of tickets and click "REGISTER". On the next screen you will be asked for your information.
                                     </td>
                                 </tr>
                                 <tr class="checkout">

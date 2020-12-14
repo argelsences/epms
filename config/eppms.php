@@ -18,6 +18,13 @@ return [
     ],
     'default' => [
         'logo' => '/images/eppms.png'
-    ]
+    ],
+    'security' => [
+        'captcha' => [
+            'captcha_site_key' => 'XXXXX',
+            'captcha_secret' => 'XXXXX',
+            'captcha_type' => 'recaptcha',
+        ],
+    ],
     
 ];

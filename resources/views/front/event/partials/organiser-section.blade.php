@@ -2,70 +2,76 @@
     <div class="row">
         <div class="col-md-12">
             <div class="event_organiser_details" property="organizer" typeof="Organization">
-                <div class="logo">
-                    <img alt="{{$event->organiser->name}}" src="{{asset($event->organiser->full_logo_path)}}" property="logo">
-                </div>
-                    @if($event->organiser->enable_organiser_page)
-                    <a href="{{route('showOrganiserHome', [$event->organiser->id, Str::slug($event->organiser->name)])}}" title="Organiser Page">
-                        {{$event->organiser->name}}
+                <div class="text-center">
+                    <div class="logo">
+                        <img alt="{{$event->department->name}}" src="{{asset($event->department->logo_path)}}" property="logo">
+                    </div>
+                        
+                    <a href="{{route('department.homepage', [$event->department->url])}}" title="Organiser Page">
+                        {{$event->department->name}}
                     </a>
-                    @else
-                        {{$event->organiser->name}}
-                    @endif
-                </h3>
 
-                <p property="description">
-                    {!! nl2br($event->organiser->about)!!}
-                </p>
-                <p>
-                    @if($event->organiser->facebook)
-                        <a property="sameAs" href="https://fb.com/{{$event->organiser->facebook}}" class="btn btn-facebook">
-                            <i class="ico-facebook"></i>&nbsp; @lang("Public_ViewEvent.Facebook")
-                        </a>
-                    @endif
-                        @if($event->organiser->twitter)
-                            <a property="sameAs" href="https://twitter.com/{{$event->organiser->twitter}}" class="btn btn-twitter">
-                                <i class="ico-twitter"></i>&nbsp; @lang("Public_ViewEvent.Twitter")
-                            </a>
+                    <p property="description">
+                        {!! nl2br($event->department->about)!!}
+                    </p>
+
+                    <p>
+                        Find us at
+                        @if($event->department->facebook)
+                            <v-btn property="sameAs" icon href="https://fb.com/{{$event->department->facebook}}"  class="ma-5 white--text" fab>
+                                <v-icon x-large dark >
+                                    mdi-facebook
+                                </v-icon>
+                            </v-btn>
                         @endif
-                    <button onclick="$(function(){ $('.contact_form').slideToggle(); });" type="button" class="btn btn-primary">
-                        <i class="ico-envelop"></i>&nbsp; @lang("Public_ViewEvent.Contact")
-                    </button>
-                </p>
-                <div class="contact_form well well-sm">
-                    {!! Form::open(['url' => route('postContactOrganiser', ['event_id' => $event->id]), 'class' => 'reset ajax', 'id' => 'contact-form']) !!}
-                    <h3>@lang("Public_ViewEvent.Contact") <i>{{$event->organiser->name}}</i></h3>
-                    <div class="form-group">
-                        {!! Form::label(trans("Public_ViewEvent.your_name")) !!}
-                        {!! Form::text('name', null,
-                            array('required',
-                                  'class'=>'form-control',
-                                  'placeholder'=>trans("Public_ViewEvent.your_name"))) !!}
-                    </div>
-
-                    <div class="form-group">
-                        {!! Form::label(trans("Public_ViewEvent.your_email_address")) !!}
-                        {!! Form::text('email', null,
-                            array('required',
-                                  'class'=>'form-control',
-                                  'placeholder'=>trans("Public_ViewEvent.your_email_address"))) !!}
-                    </div>
-
-                    <div class="form-group">
-                        {!! Form::label(trans("Public_ViewEvent.your_message")) !!}
-                        {!! Form::textarea('message', null,
-                            array('required',
-                                  'class'=>'form-control',
-                                  'placeholder'=>trans("Public_ViewEvent.your_message"))) !!}
-                    </div>
-
-                    @include('Public.LoginAndRegister.Partials.CaptchaSection')
-
-                    <div class="form-group">
-                        <p><input class="btn btn-primary" type="submit" value="@lang('Public_ViewEvent.send_message_submit')"></p>
-                    </div>
+                            @if($event->department->instagram)
+                                <!--<a property="sameAs" href="https://twitter.com/{{$event->department->twitter}}" class="btn btn-twitter">
+                                    <i class="ico-twitter"></i>&nbsp; Twitter
+                                </a>-->
+                                <v-btn property="sameAs" icon href="https://twitter.com/{{$event->department->twitter}}"  class="ma-5 white--text" fab>
+                                    <v-icon x-large dark >
+                                        mdi-instagram
+                                    </v-icon>
+                                </v-btn>
+                            @endif
+                        <!--<button onclick="$(function(){ $('.contact_form').slideToggle(); });" type="button" class="btn btn-primary">
+                            <i class="ico-envelop"></i>&nbsp; Contact
+                        </button>-->
+                        <v-btn icon  class="ma-5 white--text" fab>
+                            <v-icon x-large dark >
+                                mdi-email
+                            </v-icon>
+                        </v-btn>
+                    </p>
                 </div>
-                {!! Form::close() !!}
+                <div class="contact_form well well-sm">
+                    <form method="POST" action="http://127.0.0.1:8000/e/3/contact_organiser" accept-charset="UTF-8" class="reset ajax" id="contact-form">
+                        @csrf
+                        <h3>Contact <i>{{$event->department->name}}</i></h3>
+                        <div class="form-group">
+                            <label for="Your name">Your Name</label>
+                            <input required="" class="form-control" placeholder="Your name" name="name" type="text">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Your e-mail address">Your E-mail Address</label>
+                            <input required="" class="form-control" placeholder="Your e-mail address" name="email" type="text">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Your message">Your Message</label>
+                            <textarea required="" class="form-control" placeholder="Your message" name="message" cols="50" rows="10"></textarea>
+                        </div>
+
+                    {{--@include('Public.LoginAndRegister.Partials.CaptchaSection')--}}
+
+                    <div class="form-group">
+                        <p><input class="btn btn-primary" type="submit" value="SEND MESSAGE"></p>
+                    </div>
+                    </form>
+                </div>
+                
+                
             </div>
         </div>
     </div>

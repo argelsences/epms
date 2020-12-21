@@ -109,7 +109,8 @@ Vue.component('by-canvas', require('./components/admin/templates/TemplateByCanva
 Vue.component('settings', require('./components/admin/settings/Settings.vue').default); 
 // Frontend components
 Vue.component('department', require('./components/front/departments/Department.vue').default);
-Vue.component('event', require('./components/front/events/Event.vue').default); 
+Vue.component('event', require('./components/front/events/Event.vue').default);
+Vue.component('contact-form', require('./components/front/events/ContactForm.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

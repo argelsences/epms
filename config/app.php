@@ -179,7 +179,8 @@ return [
 
         // custom provider
         App\Providers\EPPMSServiceProvider::class,
-        Mews\Purifier\PurifierServiceProvider::class, 
+        Mews\Purifier\PurifierServiceProvider::class,
+        App\Providers\RecaptchaValidatorServiceProvider::class,
 
     ],
 

@@ -45,7 +45,7 @@
                     </p>
                 </div>
                 <div class="contact_form well well-sm">
-                    <form method="POST" action="http://127.0.0.1:8000/e/3/contact_organiser" accept-charset="UTF-8" class="reset ajax" id="contact-form">
+                    <!--<form method="POST" action="http://127.0.0.1:8000/e/3/contact_organiser" accept-charset="UTF-8" class="reset ajax" id="contact-form">
                         @csrf
                         <h3>Contact <i>{{$event->department->name}}</i></h3>
                         <div class="form-group">
@@ -68,10 +68,9 @@
                     <div class="form-group">
                         <p><input class="btn btn-primary" type="submit" value="SEND MESSAGE"></p>
                     </div>
-                    </form>
+                    </form>-->
+                    <contact-form :event="{{$event}}"></contact-form>
                 </div>
-                
-                
             </div>
         </div>
     </div>

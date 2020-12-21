@@ -279,4 +279,20 @@ class EventController extends Controller
             'objSettings',
         ));
     }
+
+    /**
+     * for frontend contact form
+     */
+    public function contact_us(Request $request){
+        //dd($request->all());
+
+        /*$validate = Validator::make($request->all(), [
+            'g_recaptcha_response' => 'required|captcha'
+        ]);*/
+        //$request->post('payload')
+
+        $validatedData = $request->validate([
+            "g_recaptcha_response" => "required|captcha"
+        ]);
+    }
 }

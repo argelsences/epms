@@ -6,10 +6,10 @@
     </div>
     <div class="row">
         @php
-            $descriptionColSize =  $event->poster->count() ? '7' : '12';
+            $descriptionColSize =  ($event->poster) ? '7' : '12';
         @endphp
 
-        @if ($event->poster->count())
+        @if ($event->poster)
             <div class="col-md-5">
                 <div class="content event_poster">
                     <v-img src="/{{$event->poster->file_path}}" property="image" alt="{{$event->title}}"></v-img>

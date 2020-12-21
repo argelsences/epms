@@ -20,6 +20,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/departments-front-list', 'DepartmentController@front_list')->name('departments.frontList');
 
+Route::post('/contact-us', 'EventController@contact_us')->name('events.contact_us');
+
+
 Route::group(['middleware' => ['auth:api']], function(){
     // users
     Route::get('/users', 'UserController@list')->name('users.list');

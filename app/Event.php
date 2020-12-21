@@ -72,4 +72,20 @@ class Event extends Model
         return $this->hasOne('App\Poster');
     }
 
+    /**
+     * Get a usable address for embedding Google Maps
+     *
+     */
+    public function getMapAddressAttribute()
+    {
+        $string = 
+            $this->venue->address_line_1 . ','
+            . $this->venue->address_line_2 . ','
+            . $this->venue->state . ','
+            . $this->venue->post_code . ','
+            . $this->venue->country;
+
+        return urlencode($string);
+    }
+
 }

@@ -8,6 +8,8 @@ use Carbon\Carbon;
 use EPPMS;
 use App\Department;
 use App\Setting;
+use App\Http\Requests\ContactFormRequest;
+use App\Jobs\SendEmailFrontendJob;
 
 class EventController extends Controller
 {
@@ -283,16 +285,12 @@ class EventController extends Controller
     /**
      * for frontend contact form
      */
-    public function contact_us(Request $request){
-        //dd($request->all());
+    public function contact_us(ContactFormRequest $request){
+        
+        SendEmailFrontendJob::dispatch($request->except(['g_recaptcha_response']))
+                ->delay(now()->addSeconds(5)); 
 
-        /*$validate = Validator::make($request->all(), [
-            'g_recaptcha_response' => 'required|captcha'
-        ]);*/
-        //$request->post('payload')
-
-        $validatedData = $request->validate([
-            "g_recaptcha_response" => "required|captcha"
-        ]);
+        return ['success' => true, 'message' => config('eppms.messages.frontend_success') ];
+       
     }
 }

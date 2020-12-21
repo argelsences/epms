@@ -26,5 +26,8 @@ return [
             'captcha_type' => 'recaptcha',
         ],
     ],
+    'messages' => [
+        'frontend_success' => 'Thank you for your message, we will get back to you shortly.' 
+    ],
     
 ];

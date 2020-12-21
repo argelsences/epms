@@ -1,5 +1,4 @@
 <template>
-    <!--<form action="{{ route('events.contact_us') }}" @submit.prevent="FormSubmit($event)">-->
     <v-app>
         <v-card elevation="2">
             <v-card-title>
@@ -9,13 +8,13 @@
                 <v-container>
                     <v-row>
                         <v-col cols="12" sm="10" md="10">
-                            <v-alert dense outlined type="info">All fields are required</v-alert>
+                            <v-alert v-if="submitted" dense outlined type="info">{{message}}</v-alert>
                         </v-col>
                     </v-row>
                     <v-form v-model="isValid" ref="form">
                         <v-row>
                             <v-col cols="12" sm="10" md="10">
-                                <v-text-field v-model="contact.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-account" ></v-text-field>
+                                <v-text-field v-model="contact.name" label="Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" ></v-text-field>
                             </v-col>
                         </v-row>
                         <v-row>
@@ -25,7 +24,7 @@
                         </v-row>
                         <v-row>
                             <v-col cols="12" sm="10" md="10">
-                                <v-textarea counter label="Message" required v-model="contact.message" prepend-icon="mdi-message"></v-textarea>
+                                <v-textarea counter label="Message" :rules="[rules.required,rules.maxMessage]" required v-model="contact.message" prepend-icon="mdi-message"></v-textarea>
                             </v-col>
                             <vue-recaptcha
                                 ref="recaptcha"
@@ -37,10 +36,6 @@
                                 >
                             </vue-recaptcha>
                         </v-row>
-
-                        <!--<button type="submit" class="button" :disabled="isSubmitting">Sign Up</button>-->
-                        
-                    <!--</form>-->
                     </v-form>
                 </v-container>
             </v-card-text>
@@ -65,6 +60,7 @@ export default {
             theEvent: _.cloneDeep(this.event),
             errors: [],
             isSubmitting: false,
+            submitted: false,
             myForm: null,
             captcha_site_key: process.env.MIX_INVISIBLE_RECAPTCHA_SITEKEY,
             isValid: false,
@@ -73,22 +69,19 @@ export default {
                 email: '',
                 message: '',
                 g_recaptcha_response: '',
+                department_id: 0,
             },
+            message: '',
             rules: {
                     required: (v) => !!v || 'Required.',
-                    /////min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
+                    maxMessage: (v) => (v || '').length <= 255 || 'Text must be 255 characters or less',
+                    maxName: (v) => (v || '').length <= 80 || 'Text must be 80 characters or less',
                     emailValid: (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
-                    phoneValid: (v) => !v || /^(?=.*[0-9])[- +()x0-9]+$/.test(v) || 'Tel. # must be valid',
-                    urlValid: (v) => !v || /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(v) || 'URL must be valid',
-                    limitFileSize: (v) => !v || v.size < 2000000 || 'Logo size should be less than 2 MB!',
-                    limitFileSizeMultiple: files => !files || !files.some(file => file.size > 2e6) || 'Avatar size should be less than 2 MB!'
                 },
         }
     },
     methods: {
         FormSubmit() {
-            //this.myForm = event
-            /////console.log(this.contact)
             this.isSubmitting = true
             this.$refs.recaptcha.execute()
         },
@@ -98,14 +91,21 @@ export default {
 
             // append recaptcha token
             this.contact.g_recaptcha_response = token
+            this.contact.department_id = this.theEvent.department.id
 
             axios.post('/api/contact-us', this.contact,)
             .then(response => {
-                this.errors = []
-                this.isSubmitting = false
-
-                // all good
-                /////window.location.replace('/')
+                if (response.data.success) {
+                    this.errors = []
+                    this.isSubmitting = false
+                    this.message = response.data.message
+                    this.submitted = true
+                }
+                
+                this.$nextTick(() => {
+                    // reset the form
+                    this.$refs.form.reset();
+                })
 
             })
             .catch(err => {

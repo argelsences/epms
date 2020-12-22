@@ -24,19 +24,17 @@
                                 </v-icon>
                             </v-btn>
                         @endif
-                            @if($event->department->instagram)
-                                <!--<a property="sameAs" href="https://twitter.com/{{$event->department->twitter}}" class="btn btn-twitter">
-                                    <i class="ico-twitter"></i>&nbsp; Twitter
-                                </a>-->
-                                <v-btn property="sameAs" icon href="https://twitter.com/{{$event->department->twitter}}"  class="ma-5 white--text" fab>
-                                    <v-icon x-large dark >
-                                        mdi-instagram
-                                    </v-icon>
-                                </v-btn>
-                            @endif
-                        <!--<button onclick="$(function(){ $('.contact_form').slideToggle(); });" type="button" class="btn btn-primary">
-                            <i class="ico-envelop"></i>&nbsp; Contact
-                        </button>-->
+                        @if($event->department->instagram)
+                            <!--<a property="sameAs" href="https://twitter.com/{{$event->department->twitter}}" class="btn btn-twitter">
+                                <i class="ico-twitter"></i>&nbsp; Twitter
+                            </a>-->
+                            <v-btn property="sameAs" icon href="https://twitter.com/{{$event->department->twitter}}"  class="ma-5 white--text" fab>
+                                <v-icon x-large dark >
+                                    mdi-instagram
+                                </v-icon>
+                            </v-btn>
+                        @endif
+                        <!-- set toggle here -->
                         <v-btn icon  class="ma-5 white--text" fab>
                             <v-icon x-large dark >
                                 mdi-email
@@ -45,30 +43,6 @@
                     </p>
                 </div>
                 <div class="contact_form well well-sm">
-                    <!--<form method="POST" action="http://127.0.0.1:8000/e/3/contact_organiser" accept-charset="UTF-8" class="reset ajax" id="contact-form">
-                        @csrf
-                        <h3>Contact <i>{{$event->department->name}}</i></h3>
-                        <div class="form-group">
-                            <label for="Your name">Your Name</label>
-                            <input required="" class="form-control" placeholder="Your name" name="name" type="text">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="Your e-mail address">Your E-mail Address</label>
-                            <input required="" class="form-control" placeholder="Your e-mail address" name="email" type="text">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="Your message">Your Message</label>
-                            <textarea required="" class="form-control" placeholder="Your message" name="message" cols="50" rows="10"></textarea>
-                        </div>
-
-                    {{--@include('Public.LoginAndRegister.Partials.CaptchaSection')--}}
-
-                    <div class="form-group">
-                        <p><input class="btn btn-primary" type="submit" value="SEND MESSAGE"></p>
-                    </div>
-                    </form>-->
                     <contact-form :event="{{$event}}"></contact-form>
                 </div>
             </div>

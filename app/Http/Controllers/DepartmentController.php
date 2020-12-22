@@ -211,15 +211,26 @@ class DepartmentController extends Controller
             $organiser->page_text_color = $preview_styles['page_text_color'];
         }*/
 
-        $upcoming_events = $department->events()->where([
+        /*$upcoming_events = $department->events()->where([
             ['end_date', '>=', now()],
-            ['is_public', 1]
-        ])->get();
+            ['is_public', 1],
+            ['is_approved', 1]
+        ])->get();*/
+        $upcoming_events = $department->events()->where('end_date', '>=', now())
+            ->live()
+            ->orderBy('start_date', 'DESC')
+            ->get();
 
-        $past_events = $department->events()->where([
+        /*$past_events = $department->events()->where([
             ['end_date', '<', now()],
-            ['is_public', 1]
-        ])->limit(10)->get();
+            ['is_public', 1],
+            ['is_approved', 1]
+        ])->limit(10)->get();*/
+        $past_events = $department->events()->where( 'end_date', '<', now() )
+            ->live()
+            ->orderBy('start_date', 'DESC')
+            ->limit(10)
+            ->get();
         
         /*
         $data = [

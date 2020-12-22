@@ -223,8 +223,42 @@ class EventController extends Controller
         $theURI = filter_var($URI, FILTER_SANITIZE_STRING);
         $theEventID = filter_var($event_id, FILTER_SANITIZE_NUMBER_INT);
         $department = Department::where('url', $URI)->firstOrFail();
-        $event = $this->events->findOrFail($theEventID);
-        //dd($event->tickets);
+
+        /*
+            1. get the event
+            2. check if it is live
+            3. if yes, then display
+            4. if not, check if the user is the author of the event, the administrator of the department or superadministrator
+            5. if yes, display the event
+            6. if not throw 404 
+        */
+        $theEvent = $this->events->findOrFail($theEventID);
+
+        if( $theEvent->is_public && $theEvent->is_approved ){
+            $event = $theEvent;
+        }
+        else {
+            if (auth()->check()){
+                $auth_user = auth()->user();
+                //dd($auth_user->is_super_admin() );
+                // check if author of event || administrator of department || super administrator
+                if ( ($auth_user->is_event_author($theEvent->created_by)) || 
+                    ( $auth_user->is_department_admin($theEvent->department_id) ) ||
+                    ( $auth_user->is_super_admin() )
+            
+                ){
+                    $event = $theEvent;
+                }
+                else {
+                    // return not found error
+                    abort(404);
+                }
+            }
+            else {
+                // return not found error
+                abort(404);
+            }
+        }
         
     
         /// script
@@ -271,9 +305,6 @@ class EventController extends Controller
 
             $objSettings[$setting->name] = $value;
         }
-
-        //dd($objSettings);
-        //dd($event->poster);
         
         return view('front.event.homepage', compact(
             'department',

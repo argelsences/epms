@@ -579,7 +579,7 @@
                                     <v-text-field label="Ticket Title" required v-model="ticket.title" hint="*Required" persistent-hint></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="12" md="12">
-                                    <v-text-field label="Ticket Description" hint="*Required" required persistent-hint v-model="ticket.description"></v-text-field>
+                                    <v-text-field label="Ticket Description"  v-model="ticket.description"></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="12" md="12">
                                     <v-text-field label="Quantity Available" v-model="ticket.quantity_available"></v-text-field>

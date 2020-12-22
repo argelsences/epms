@@ -47,4 +47,41 @@ class User extends Authenticatable
     public function role() {
         return $this->roles()->first()->get();
     }
+
+    /**
+     * Check if user is author of an event
+     */
+    public function is_event_author($created_by){
+
+        if (auth()->user()->id == $created_by )
+            return true;
+            
+        return false;
+    }
+
+    /**
+     * Check if user is administrator of a department
+     */
+    public function is_department_admin($department_id, $guard = 'web'){
+
+        //dd(auth()->user()->hasRole('Administrator',$guard));
+        //auth()->user()->department_id == $department_id && auth()->user()->hasRole('Administrator',$guard)
+
+        if (auth()->user()->department_id == $department_id && auth()->user()->hasRole('Administrator',$guard) )
+            return true;
+            
+        return false;
+    }
+
+    /**
+     * Check if user is super admin
+     */
+    public function is_super_admin($guard = 'web') {
+
+        dd(auth()->user()->hasRole('Super Administrator', $guard));
+        if (auth()->user()->hasRole('Super Administrator', $guard))
+            return true;
+
+        return false;
+    }
 }

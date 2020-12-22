@@ -88,4 +88,8 @@ class Event extends Model
         return urlencode($string);
     }
 
+    public function scopeLive($query){
+        return $query->where('is_public', 1)->where('is_approved', 1);
+    }
+
 }

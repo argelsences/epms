@@ -1,25 +1,25 @@
 <section id="tickets" class="container">
-    <div class="row">
+    <!--<div class="row">
         <h1 class='section_head text-center'>
             Ticket(s)
         </h1>
-    </div>
+    </div>-->
 
     @if($event->end_date->isPast())
         <div class="alert alert-boring text-center">
             The event already ended
         </div>
     @else
-
+        <!-- set as vue component -->
         @if($event->tickets->count() > 0)
-            <form method="POST" action="{{ route('tickets.checkout', ['department_slug'=>$department->url, 'event_id' => $department->id]) }}">
+            <!--<form method="POST" action="{{ route('tickets.checkout', ['department_slug'=>$department->url, 'event_id' => $department->id]) }}">
             <div class="row">
                 <div class="col-md-12">
                     <div class="content">
                         <div class="tickets_table_wrap">
                             <table class="table">
                                 <?php
-                                $is_free_event = true;
+                                    //$is_free_event = true;
                                 ?>
                                 @foreach($event->tickets->where('is_hidden', false) as $ticket)
                                     <tr class="ticket" property="offers" typeof="Offer">
@@ -42,7 +42,6 @@
                                                     Ticket currently not on sale
                                                 </span>
                                             @else
-                                                {{--@if($ticket->sale_status === config('attendize.ticket_status_sold_out'))--}}
                                                 @if($ticket->quantity_available - $ticket->quantity_booked == 0)
                                                     <span class="text-danger" property="availability"
                                                           content="http://schema.org/SoldOut">
@@ -75,12 +74,12 @@
                                 @endforeach
                                 <tr>
                                     <td colspan="3" style="text-align: center">
-                                        Choose the number of tickets and click "REGISTER". On the next screen you will be asked for your information.
+                                        Choose the number of tickets and click "REGISTER". On the next step you will be asked for your information.
                                     </td>
                                 </tr>
                                 <tr class="checkout">
                                     <td colspan="3">
-                                        <input type="submit" class="btn btn-lg btn-primary pull-right" value="REGISTER" />
+                                        <input type="submit" class="btn btn-lg btn-primary pull-right white--text" value="REGISTER" />
                                     </td>
                                 </tr>
                             </table>
@@ -89,7 +88,10 @@
                 </div>
             </div>
             <input name="is_embedded" type="hidden" value="0">
-            </form>
+            </form>-->
+            
+            <ticket-form :event="{{$event}}"></ticket-form>
+
         @else
             <div class="alert alert-boring text-center">
                 No ticket/s available

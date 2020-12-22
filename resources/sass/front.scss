@@ -34,9 +34,14 @@ html, body {
     font-size: 9px;
   }
   
-  @media (min-width: 1200px) {
+  /*@media (min-width: 1200px) {
     .container {
       width: 960px !important;
+    }
+  }*/
+  @media (min-width: 1264px) {
+    .container {
+      max-width: 960px !important;
     }
   }
   
@@ -586,5 +591,7 @@ html, body {
   }
 
   .section_head {width:100%;}
+  h1.section_head {font-family: sans-serif!important;color:#666!important;}
+  #tickets .v-application--wrap {min-height: initial;}
 
 /** END FRONTEND **/

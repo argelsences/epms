@@ -143,7 +143,7 @@
                                         <div v-else>
                                             <input name="tickets[]" type="hidden" :value="ticket.id">
                                             <meta property="availability" content="http://schema.org/InStock">
-                                            <select :name="`ticket_${ticket.id}`" class="form-control float-right" style="text-align: center">
+                                            <select :name="`ticket_${ticket.id}`" class="form-control float-right" style="text-align: center" @change="onTicketChange($event, ticket.id)" v-model="numberTickets[ticket.id]">
                                                 <option v-if="ticketCount > 1" value="0">0</option>
                                                 <option v-for="i in (ticket.min_per_person, ticket.max_per_person)" :value="i" :key=i>{{i}}</option>
                                             </select>
@@ -184,9 +184,9 @@
                         <v-row>
                             <v-col cols="12" sm="8" md="8">
                                 <h3>Your Information</h3>
-                                <v-text-field v-model="order.first_name" label="First Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" ></v-text-field>
-                                <v-text-field v-model="order.last_name" label="Last Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" ></v-text-field>
-                                <v-text-field v-model="order.email" label="Email" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-mail" ></v-text-field>
+                                <v-text-field v-model="orders.bookee.first_name" label="First Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" ></v-text-field>
+                                <v-text-field v-model="orders.bookee.last_name" label="Last Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" ></v-text-field>
+                                <v-text-field v-model="orders.bookee.email" label="Email" :rules="[rules.required,rules.emailValid]" prepend-icon="mdi-mail" ></v-text-field>
                                 <v-btn x-small depressed color="primary">Copy these details to all ticket holders</v-btn>
                             </v-col>
                             <v-col cols="12" sm="4" md="4">
@@ -209,14 +209,17 @@
                             </v-col>
                         </v-row>
 
-                        <v-row v-for="ticket in theEvent.tickets" :key="ticket.id" class="ticket">
+                        <v-row v-for="(ticket,index) in theEvent.tickets" :key="ticket.id" class="ticket">
                             <v-col cols="12" sm="8" md="8">
-                                <v-row v-for="n in 2" :key=n>
-                                    <v-card elevation="2">
-                                        <v-card-title>
+                                <v-row v-for="n in numberTickets[ticket.id]" :key=n>
+                                    <v-card raised class="mb-5 ticket-card" tile>
+                                        <v-card-title class="white--text primary">
                                             {{ticket.title}} Ticket Holder {{n}} Details
                                         </v-card-title>
                                         <v-card-text>
+                                            <v-text-field v-model="orders.first_name" label="First Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" ></v-text-field>
+                                            <v-text-field v-model="orders.last_name" label="Last Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" ></v-text-field>
+                                            <v-text-field v-model="orders.email" label="Email" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-mail" ></v-text-field> 
                                         </v-card-text>
                                     </v-card>
                                 </v-row>
@@ -282,6 +285,7 @@ export default {
             myForm: null,
             captcha_site_key: process.env.MIX_INVISIBLE_RECAPTCHA_SITEKEY,
             isValid: false,
+            /*
             order: {
                 first_name: '',
                 last_name: '',
@@ -289,6 +293,7 @@ export default {
                 message: '',
                 department_id: 0,
             },
+            */
             message: '',
             rules: {
                     required: (v) => !!v || 'Required.',
@@ -298,6 +303,15 @@ export default {
                 },
 
             step: 1,
+            orders: {
+                bookee: {
+                    first_name: '',
+                    last_name: '',
+                    email: '',
+                },
+                tickets:[],
+            },
+            numberTickets: [],
         }
     },
     computed: {
@@ -354,6 +368,25 @@ export default {
         ticketCount(){
             return this.theEvent.tickets.length
         },
+        onTicketChange(event, ticket_id){
+            console.log(event.target.value)
+            /*this.numberTickets.push({
+                ticket_id: ticket_id,
+                number: event.target.value
+            })*/
+            console.log(this.numberTickets)
+        },
+        onOrderDetails() {
+            /*
+                this.order.push({
+                    id: 0,
+                    first_name: '',
+                    last_name: '',
+                    email: '',
+                    ticket_id: '',
+                });
+            */
+        },
 
         
 
@@ -362,3 +395,6 @@ export default {
     render() {}
 }
 </script>
+<style scoped>
+    .ticket-card{width:100%;}
+</style>

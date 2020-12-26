@@ -190,6 +190,10 @@ class TicketController extends Controller
      * Checkout from event
      */
     public function checkout(Request $request){
-        dd($request);
+        
+        $attendees = array_filter($request->input('attendee'));
+        $bookee = $request->input('bookee');
+        $event = $request->input('event');
+        dd($attendees, $bookee,$event);
     }
 }

@@ -1,79 +1,5 @@
 <template>
     <v-app>
-        <!--
-            <v-card-text>
-                <v-container>
-                    <v-row>
-                        <v-col cols="12" sm="10" md="10">
-                            <v-alert v-if="submitted" dense outlined type="info">{{message}}</v-alert>
-                        </v-col>
-                    </v-row>
-                    <v-form v-model="isValid" ref="form">
-                        <v-row v-for="ticket in theEvent.tickets" :key="ticket.id" class="ticket" property="offers" typeof="Offer">
-                            <v-col cols="12" sm="8" md="8">
-                                <span class="ticket-title semibold" property="name">
-                                    {{ticket.title}}
-                                </span>
-                                <p class="ticket-descripton mb0 text-muted" property="description">
-                                    {{ticket.description}}
-                                </p>
-                            </v-col>
-                            <v-col cols="12" sm="2" md="2">
-                                <div class="ticket-pricing float-right" style="margin-right: 20px;">
-                                    FREE
-                                </div>
-                            </v-col>
-                            <v-col cols="12" sm="2" md="2">
-                                <div v-if="ticket.is_paused" >
-                                    <span class="text-danger float-right">
-                                        Ticket currently not on sale
-                                    </span>
-                                </div>
-                                <div v-else>
-                                    <div v-if="ticket.quantity_available - ticket.quantity_booked == 0">
-                                        <span class="text-danger float-right" property="availability"
-                                                content="http://schema.org/SoldOut">
-                                                Sold out
-                                        </span>
-                                    </div>
-                                    <div v-else-if="ticket.start_book_date > currentTimestamp">
-                                        <span class="text-danger float-right" >
-                                            Sale not started yet
-                                        </span>
-                                    </div>
-                                    <div v-else-if="ticket.end_book_date > currentTimestamp">
-                                        <span class="text-danger float-right">
-                                            Sale has ended
-                                        </span>
-                                    </div>
-                                    <div v-else>
-                                        <input name="tickets[]" type="hidden" :value="ticket.id">
-                                        <meta property="availability" content="http://schema.org/InStock">
-                                        <select :name="`ticket_${ticket.id}`" class="form-control float-right" style="text-align: center">
-                                            <option v-if="ticketCount > 1" value="0">0</option>
-                                            <option v-for="i in (ticket.min_per_person, ticket.max_per_person)" :value="i" :key=i>{{i}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col cols="12" sm="12" md="12">
-                                <v-divider></v-divider>
-                                <p class="text-center">Choose the number of tickets and click "REGISTER". On the next step you will be asked for your information.</p>
-                                <v-divider></v-divider>
-                            </v-col>
-                        </v-row>
-                    </v-form>
-                </v-container>
-            </v-card-text>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" class="white--text" @click="checkout">REGISTER</v-btn>
-            </v-card-actions>
-        </v-card>
-        -->
-
         <v-card flat class="ticket-form">
             <v-card-title class="title font-weight-regular justify-space-between">
                 <h1 class='section_head text-center'>
@@ -151,7 +77,6 @@
                                 <v-text-field v-model="orders.bookee.first_name" label="First Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" ></v-text-field>
                                 <v-text-field v-model="orders.bookee.last_name" label="Last Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" ></v-text-field>
                                 <v-text-field v-model="orders.bookee.email" label="Email" :rules="[rules.required,rules.emailValid]" prepend-icon="mdi-mail" ></v-text-field>
-                                <input type="hidden" 
                                 <v-btn x-small depressed color="primary" @click="copyToHolder">Copy these details to all ticket holders</v-btn>
                             </v-col>
                             <v-col cols="12" sm="4" md="4">
@@ -248,15 +173,27 @@
             </v-window>
             <v-divider></v-divider>
             <v-card-actions>
-            <v-btn :disabled="step === 1" text @click="ticketBackButtonClicked">
-                Back
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" :disabled="!isValid || isSubmitting" depressed @click="ticketForwardButtonClicked">
-                {{buttonTitle}}
-            </v-btn>
+                <v-btn :disabled="step === 1" text @click="ticketBackButtonClicked">
+                    Back
+                </v-btn>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" :disabled="!isValid || isSubmitting" depressed @click="ticketForwardButtonClicked">
+                    {{buttonTitle}}
+                </v-btn>
             </v-card-actions>
         </v-card>
+        <v-dialog v-model="dialog" hide-overlay persistent width="300">
+            <v-card color="primary" dark>
+                <v-card-text>
+                    Please standby
+                    <v-progress-linear
+                        indeterminate
+                        color="white"
+                        class="mb-0"
+                    ></v-progress-linear>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
     </v-app>
 </template>
 
@@ -305,6 +242,7 @@ export default {
                 }
             },
             numberTickets: [],
+            dialog: false,
         }
     },
     computed: {
@@ -335,16 +273,17 @@ export default {
             // append recaptcha token
             //this.contact.g_recaptcha_response = token
             //this.contact.department_id = this.theEvent.department.id
+            this.dialog = true
+            this.isSubmitting = true
             // assign event and department id
             this.orders.event.event_id = this.theEvent.id 
             this.orders.event.department_id = this.theEvent.department_id
-            console.log(this.orders)
 
-            let filteredAttendees = this.orders.attendee.filter(function (el) {
+            /*let filteredAttendees = this.orders.attendee.filter(function (el) {
                 return el != null;
             });
             this.orders.attendee = filteredAttendees
-            console.log(this.orders)
+            console.log(this.orders)*/
             
             axios.post('/api/ticket/checkout', this.orders,)
             .then(response => {
@@ -402,7 +341,6 @@ export default {
                     first_name: '',
                     last_name: '',
                     email: '',
-                    ticket_id: ticket_id,
                 } 
                 this.orders.attendee[ticket_id].push(arr)
             }
@@ -418,10 +356,12 @@ export default {
         },
         ticketForwardButtonClicked(){
             console.log(this.step)
-            if (this.step < 3)
+            if (this.step < 3) {
                 this.step++
-            else
+            }
+            else {
                 this.checkout()
+            }
 
             this.scrollToElement()
         },

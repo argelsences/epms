@@ -143,7 +143,7 @@
                                             <v-card-title>
                                                 {{ticket.title}} Ticket Holder {{n}} Details
                                             </v-card-title>
-                                            <v-card-text id="ticket-holder-details">
+                                            <v-card-text id="ticket-holder-details" class="mt-2">
                                                 <p label="First Name"><strong>First Name:</strong> {{orders.attendee[ticket.id][i].first_name}}</p>
                                                 <p label="Last Name"><strong>Last Name:</strong>{{orders.attendee[ticket.id][i].last_name}}</p>
                                                 <p label="Email"><strong>Email:</strong>{{orders.attendee[ticket.id][i].email}}</p>

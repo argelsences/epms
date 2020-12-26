@@ -19,9 +19,9 @@ class CreateAttendeesTable extends Migration
             $table->string('last_name');
             $table->string('email');
             $table->string('private_reference_number');
-            $table->boolean('is_cancelled');
-            $table->boolean('has_arrived');
-            $table->dateTime('arrival_time');
+            $table->boolean('is_cancelled')->default(0);
+            $table->boolean('has_arrived')->default(0);
+            $table->dateTime('arrival_time')->nullable();
             $table->string('reference_index');
             $table->bigInteger('event_id')->unsigned();
             $table->bigInteger('book_id')->unsigned();

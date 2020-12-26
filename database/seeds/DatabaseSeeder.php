@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             UsersTableSeeder::class,
             EventSeeder::class,
             SettingSeeder::class,
+            ReserveStatusSeeder::class,
         ]);
     }
 }

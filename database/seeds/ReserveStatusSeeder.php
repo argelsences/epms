@@ -12,5 +12,35 @@ class ReserveStatusSeeder extends Seeder
     public function run()
     {
         //
+        $reserveStatus = DB::table('reserve_statuses')->insert([
+            'name'       => 'Completed',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        $reserveStatus = DB::table('reserve_statuses')->insert([
+            'name'       => 'Refunded',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        $reserveStatus = DB::table('reserve_statuses')->insert([
+            'name'       => 'Partially Refunded',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        $reserveStatus = DB::table('reserve_statuses')->insert([
+            'name'       => 'Cancelled',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        $reserveStatus = DB::table('reserve_statuses')->insert([
+            'name'       => 'Awaiting Payment',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        
     }
 }

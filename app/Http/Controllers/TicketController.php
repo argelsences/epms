@@ -186,4 +186,10 @@ class TicketController extends Controller
         $success = ($ticketIsPaused !== $ticket->is_paused ) ? true : false;
         return ['success' => $success, 'item' => $ticket];
     }
+    /**
+     * Checkout from event
+     */
+    public function checkout(Request $request){
+        dd($request);
+    }
 }

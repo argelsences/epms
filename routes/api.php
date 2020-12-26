@@ -22,6 +22,8 @@ Route::get('/departments-front-list', 'DepartmentController@front_list')->name('
 
 Route::post('/contact-us', 'EventController@contact_us')->name('events.contact_us');
 
+Route::post('/ticket/checkout', 'TicketController@checkout')->name('tickets.checkout');
+
 
 Route::group(['middleware' => ['auth:api']], function(){
     // users

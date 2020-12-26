@@ -74,34 +74,15 @@
         </v-card>
         -->
 
-        <v-card  flat>
-            
+        <v-card flat class="ticket-form">
             <v-card-title class="title font-weight-regular justify-space-between">
-                <!--<span>{{ currentTitle }}</span>
-                <v-avatar
-                    color="primary lighten-2"
-                    class="subheading white--text"
-                    size="24"
-                    v-text="step"
-                ></v-avatar>-->
                 <h1 class='section_head text-center'>
                     {{ currentTitle }}
                 </h1>
             </v-card-title>
-    
-
             <v-window v-model="step">
-                <v-window-item :value="1">
+                <v-window-item :value="1" ref="ticketWindow">
                     <v-card-text>
-                        <!--<v-text-field
-                            label="Email"
-                            value="john@vuetifyjs.com"
-                        ></v-text-field>
-                        <span class="caption grey--text text--darken-1">
-                            This is the email you will use to login to your Vuetify account
-                        </span>-->
-
-
                         <v-form v-model="isValid" ref="form">
                             <v-row v-for="ticket in theEvent.tickets" :key="ticket.id" class="ticket" property="offers" typeof="Offer">
                                 <v-col cols="12" sm="8" md="8">
@@ -143,7 +124,7 @@
                                         <div v-else>
                                             <input name="tickets[]" type="hidden" :value="ticket.id">
                                             <meta property="availability" content="http://schema.org/InStock">
-                                            <select :name="`ticket_${ticket.id}`" class="form-control float-right" style="text-align: center" @change="onTicketChange($event, ticket.id)" v-model="numberTickets[ticket.id]">
+                                            <select :name="`ticket_${ticket.id}`" class="form-control float-right" style="text-align: center" v-model="numberTickets[ticket.id]" @change="createEmptyAttendee($event,ticket.id)">
                                                 <option v-if="ticketCount > 1" value="0">0</option>
                                                 <option v-for="i in (ticket.min_per_person, ticket.max_per_person)" :value="i" :key=i>{{i}}</option>
                                             </select>
@@ -159,35 +140,19 @@
                                 </v-col>
                             </v-row>
                         </v-form>
-                        
-
-
-
                     </v-card-text>
                 </v-window-item>
-
-                <v-window-item :value="2">
+                <v-window-item :value="2" ref="orderWindow">
                     <v-card-text>
-                        <!--<v-text-field
-                            label="Password"
-                            type="password"
-                        ></v-text-field>
-                        <v-text-field
-                            label="Confirm Password"
-                            type="password"
-                        ></v-text-field>
-                        <span class="caption grey--text text--darken-1">
-                            Please enter a password for your account
-                        </span>-->
-
-
+                        <v-form v-model="isValid" ref="form">
                         <v-row>
                             <v-col cols="12" sm="8" md="8">
                                 <h3>Your Information</h3>
                                 <v-text-field v-model="orders.bookee.first_name" label="First Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" ></v-text-field>
                                 <v-text-field v-model="orders.bookee.last_name" label="Last Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" ></v-text-field>
                                 <v-text-field v-model="orders.bookee.email" label="Email" :rules="[rules.required,rules.emailValid]" prepend-icon="mdi-mail" ></v-text-field>
-                                <v-btn x-small depressed color="primary">Copy these details to all ticket holders</v-btn>
+                                <input type="hidden" 
+                                <v-btn x-small depressed color="primary" @click="copyToHolder">Copy these details to all ticket holders</v-btn>
                             </v-col>
                             <v-col cols="12" sm="4" md="4">
                                 <v-card elevation="5">
@@ -197,8 +162,10 @@
                                         </v-icon>
                                         Order Summary
                                     </v-card-title>
-                                    <v-card-text>
-                                        The order here
+                                    <v-card-text v-for="(t,i) in theEvent.tickets" :key="t.id" class="order">    
+                                        <div>{{t.title}} x <strong>{{numberTickets[t.id]}}</strong></div>
+                                        <div >FREE</div>
+                                        <v-divider></v-divider>
                                     </v-card-text>
                                 </v-card>
                             </v-col>
@@ -211,64 +178,85 @@
 
                         <v-row v-for="(ticket,index) in theEvent.tickets" :key="ticket.id" class="ticket">
                             <v-col cols="12" sm="8" md="8">
-                                <v-row v-for="n in numberTickets[ticket.id]" :key=n>
+                                <v-row v-for="(n,i) in numberTickets[ticket.id]" :key=i>
                                     <v-card raised class="mb-5 ticket-card" tile>
                                         <v-card-title class="white--text primary">
                                             {{ticket.title}} Ticket Holder {{n}} Details
                                         </v-card-title>
-                                        <v-card-text>
-                                            <v-text-field v-model="orders.first_name" label="First Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" ></v-text-field>
-                                            <v-text-field v-model="orders.last_name" label="Last Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" ></v-text-field>
-                                            <v-text-field v-model="orders.email" label="Email" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-mail" ></v-text-field> 
+                                        <v-card-text id="ticket-holder-details">
+                                            <v-text-field v-model="orders.attendee[ticket.id][i].first_name" label="First Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" ref="ticket-holder-detail-first-name"></v-text-field>
+                                            <v-text-field v-model="orders.attendee[ticket.id][i].last_name" label="Last Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" id="ticket-holder-detail-last-name"></v-text-field>
+                                            <v-text-field v-model="orders.attendee[ticket.id][i].email" label="Email" :rules="[rules.required,rules.emailValid]" prepend-icon="mdi-mail" id="ticket-holder-detail-email"></v-text-field>
                                         </v-card-text>
                                     </v-card>
                                 </v-row>
                             </v-col>
                         </v-row>
-
-                        
-                        
+                        </v-form>
                     </v-card-text>
                 </v-window-item>
-
-                <v-window-item :value="3">
-                    <div class="pa-4 text-center">
-                    <v-img
-                        class="mb-4"
-                        contain
-                        height="128"
-                        src="https://cdn.vuetifyjs.com/images/logos/v.svg"
-                    ></v-img>
-                    <h3 class="title font-weight-light mb-2">
-                        Welcome to Vuetify
-                    </h3>
-                    <span class="caption grey--text">Thanks for signing up!</span>
-                    </div>
+                <v-window-item :value="3" ref="confirmationWindow">
+                    <v-row>
+                        <v-col cols="12" sm="8" md="8">
+                            <v-alert icon="mdi-shield-lock-outline" prominent text type="info">
+                                We are ready to book your reservation, please review your order and click the <strong>RESERVE</strong> button to proceed.
+                            </v-alert>
+                            <v-card flat class="mb-5 ticket-card" tile>
+                                <v-card-title>
+                                    Bookee Details
+                                </v-card-title>
+                                <v-card-text id="ticket-holder-details">
+                                    <p label="First Name"><strong>First Name:</strong> {{orders.bookee.first_name}}</p>
+                                    <p label="Last Name"><strong>Last Name:</strong>{{orders.bookee.last_name}}</p>
+                                    <p label="Email"><strong>Email:</strong>{{orders.bookee.email}}</p>
+                                </v-card-text>
+                            </v-card>
+                            <v-row v-for="(ticket,index) in theEvent.tickets" :key="ticket.id" class="ticket">
+                                <v-col cols="12" sm="12" md="12">
+                                    <v-row v-for="(n,i) in numberTickets[ticket.id]" :key=i>
+                                        <v-card flat class="mb-5 ticket-card" tile>
+                                            <v-card-title>
+                                                {{ticket.title}} Ticket Holder {{n}} Details
+                                            </v-card-title>
+                                            <v-card-text id="ticket-holder-details">
+                                                <p label="First Name"><strong>First Name:</strong> {{orders.attendee[ticket.id][i].first_name}}</p>
+                                                <p label="Last Name"><strong>Last Name:</strong>{{orders.attendee[ticket.id][i].last_name}}</p>
+                                                <p label="Email"><strong>Email:</strong>{{orders.attendee[ticket.id][i].email}}</p>
+                                            </v-card-text>
+                                        </v-card>
+                                    </v-row>
+                                </v-col>
+                            </v-row>
+                        </v-col>
+                        <v-col cols="12" sm="4" md="4">
+                            <v-card elevation="5">
+                                <v-card-title>
+                                    <v-icon>
+                                        mdi-cart
+                                    </v-icon>
+                                    Order Summary
+                                </v-card-title>
+                                <v-card-text v-for="(t,i) in theEvent.tickets" :key="t.id" class="order">    
+                                    <div>{{t.title}} x <strong>{{numberTickets[t.id]}}</strong></div>
+                                    <div >FREE</div>
+                                    <v-divider></v-divider>
+                                </v-card-text>
+                            </v-card>
+                        </v-col>
+                    </v-row>
                 </v-window-item>
             </v-window>
-
             <v-divider></v-divider>
-
             <v-card-actions>
-            <v-btn
-                :disabled="step === 1"
-                text
-                @click="step--"
-            >
+            <v-btn :disabled="step === 1" text @click="ticketBackButtonClicked">
                 Back
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn
-                :disabled="step === 3"
-                color="primary"
-                depressed
-                @click="step++"
-            >
-                Next
+            <v-btn color="primary" :disabled="!isValid || isSubmitting" depressed @click="ticketForwardButtonClicked">
+                {{buttonTitle}}
             </v-btn>
             </v-card-actions>
         </v-card>
-        
     </v-app>
 </template>
 
@@ -276,6 +264,16 @@
 import moment from 'moment'
 export default {
     props: ['event'],
+    mounted() {
+        let numberTickets = this.numberTickets
+        this.theEvent.tickets.forEach(function(ticket){
+            console.log(numberTickets.length)
+            for (let i=0;i<numberTickets;i++) {
+                console.log(ticket)
+            }
+            
+        })
+    },
     data() {
         return {
             theEvent: _.cloneDeep(this.event),
@@ -285,15 +283,6 @@ export default {
             myForm: null,
             captcha_site_key: process.env.MIX_INVISIBLE_RECAPTCHA_SITEKEY,
             isValid: false,
-            /*
-            order: {
-                first_name: '',
-                last_name: '',
-                email: '',
-                message: '',
-                department_id: 0,
-            },
-            */
             message: '',
             rules: {
                     required: (v) => !!v || 'Required.',
@@ -309,7 +298,11 @@ export default {
                     last_name: '',
                     email: '',
                 },
-                tickets:[],
+                attendee:[],
+                event:{
+                    event_id: 0,
+                    department_id: 0,
+                }
             },
             numberTickets: [],
         }
@@ -319,7 +312,14 @@ export default {
             switch (this.step) {
             case 1: return 'Ticket(s)'
             case 2: return 'Order Details'
-            default: return 'Payment Information'
+            default: return 'Summary and Reservation'
+            }
+        },
+        buttonTitle () {
+            switch (this.step) {
+            case 1: return 'Register'
+            case 2: return 'Confirm Booking'
+            default: return 'Reserve'
             }
         },
     },
@@ -335,8 +335,18 @@ export default {
             // append recaptcha token
             //this.contact.g_recaptcha_response = token
             //this.contact.department_id = this.theEvent.department.id
+            // assign event and department id
+            this.orders.event.event_id = this.theEvent.id 
+            this.orders.event.department_id = this.theEvent.department_id
+            console.log(this.orders)
 
-            axios.post('/api/contact-us', this.contact,)
+            let filteredAttendees = this.orders.attendee.filter(function (el) {
+                return el != null;
+            });
+            this.orders.attendee = filteredAttendees
+            console.log(this.orders)
+            
+            axios.post('/api/ticket/checkout', this.orders,)
             .then(response => {
                 if (response.data.success) {
                     this.errors = []
@@ -355,6 +365,7 @@ export default {
                 this.isSubmitting = false
                 this.errors = err.response.data.errors
             })
+            
         },
         resetCaptcha() {
             this.$refs.recaptcha.reset()
@@ -368,29 +379,59 @@ export default {
         ticketCount(){
             return this.theEvent.tickets.length
         },
-        onTicketChange(event, ticket_id){
-            console.log(event.target.value)
-            /*this.numberTickets.push({
-                ticket_id: ticket_id,
-                number: event.target.value
-            })*/
-            console.log(this.numberTickets)
+        copyToHolder(){
+            let orders = this.orders
+            orders.attendee.forEach(function(value, i){
+                orders.attendee[i].forEach(function(val,k){
+                    orders.attendee[i][k].first_name = orders.bookee.first_name
+                    orders.attendee[i][k].last_name = orders.bookee.last_name
+                    orders.attendee[i][k].email = orders.bookee.email
+                    
+                })
+            })
+            this.orders.attendee = orders.attendee
+            this.$forceUpdate(); 
+            console.log(this.orders)
         },
-        onOrderDetails() {
-            /*
-                this.order.push({
-                    id: 0,
+        createEmptyAttendee(event, ticket_id){
+            let attendeeCount = event.target.value
+            this.orders.attendee[ticket_id] = []
+            for(let i=0;i<attendeeCount;i++){
+                let arr = []
+                arr = {
                     first_name: '',
                     last_name: '',
                     email: '',
-                    ticket_id: '',
-                });
-            */
+                    ticket_id: ticket_id,
+                } 
+                this.orders.attendee[ticket_id].push(arr)
+            }
+            console.log(this.orders.attendee[ticket_id])
         },
+        // remove later
+        theLength(ticketID){
+            return this.orders.attendee[ticketID].length
+        },
+        ticketBackButtonClicked(){
+            this.step--
+            this.scrollToElement()
+        },
+        ticketForwardButtonClicked(){
+            console.log(this.step)
+            if (this.step < 3)
+                this.step++
+            else
+                this.checkout()
 
-        
+            this.scrollToElement()
+        },
+        scrollToElement() {
+            const el = this.$el.getElementsByClassName('ticket-form')[0];
 
-
+            if (el) {
+                el.scrollIntoView();
+            }
+        }
     },
     render() {}
 }

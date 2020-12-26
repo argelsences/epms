@@ -197,20 +197,8 @@ class TicketController extends Controller
         $attendees = array_filter($request->input('attendee'));
         $bookee = $request->input('bookee');
         $event = $request->input('event');
-        /*
-        id
-        first_name
-        last_name
-        email
-        booking_reference
-        */
-
-        //dd($attendees, $bookee,$event);
 
         // the booking
-        // remove later
-        //dd($bookee);
-        
         $theBook = Book::create([
             'first_name' => $bookee['first_name'],
             'last_name' => $bookee['last_name'],
@@ -220,18 +208,13 @@ class TicketController extends Controller
         ]);
         
         // the book items
-
-        
         $theTicketIDs = array_keys($attendees);
 
         foreach ($theTicketIDs as $theTicketID){
             $theTicket = Ticket::findOrFail($theTicketID);
-
-            ?><pre><?php //print_r($attendees[$theTicketID]); ?></pre><?php
             // create book item
             
-            
-            $theBookItems = BookItem::create([
+            $theBookItems[] = BookItem::create([
                 'title' => $theTicket->title,
                 'quantity' => count($attendees[$theTicketID]),
                 'book_id' => $theBook->id
@@ -240,50 +223,31 @@ class TicketController extends Controller
         }
 
         // the attendees
-
+        $counter = 1;
         foreach($attendees as $tkt => $attendee){
-            ?><pre><?php print_r($tkt); ?></pre><?php 
-            ?><pre><?php print_r($attendee); ?></pre><?php
-            // get the ticket details
-            //$theTicket = Ticket::findOrFail($tkt);
-            
-            /*
-            $theBookItems = BookItems::create([
-                'title' =>
-                'quantity' =>
-                'book_id' =>
-            ]);
-            */
             foreach($attendee as $att){
-                ?><pre><?php print_r($att); ?></pre><?php 
-                
-                $theAttendee = Attendee::create([
+                $theAttendees[] = Attendee::create([
                     'first_name' => $att['first_name'],
                     'last_name' => $att['last_name'],
                     'email' => $att['email'],
-                    'private_reference_number' => $att['first_name'],
-                    'reference_index' => substr(md5(time()), 0, 15),
+                    'private_reference_number' => substr(md5(time()), 0, 15),
+                    'reference_index' => $counter,
                     'event_id' => $event['event_id'],
                     'book_id' => $theBook->id,
                     'ticket_id' => $tkt,
                 ]);
-                
-            }
-            
-            
-            
+                $counter++;
+            }    
         }
-        dd();
-        /* remove later
-        $theBookItems = BookItems::create([
-            'title' =>
-            'quantity' =>
-            'book_id' =>
-        ]);
-        */ 
+        
+        $theTicketDetails = [
+            'booking' => $theBook,
+            'booking_items' => $theBookItems,
+            'attendees' => $theAttendees,
+        ];
 
-        
-        
+        $success = ($theBook && $theBookItems && $theAttendees  ) ? true : false;
+        return ['success' => $success, 'item' => $theTicketDetails];
         
     }
 }

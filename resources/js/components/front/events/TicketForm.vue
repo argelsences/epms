@@ -292,6 +292,7 @@ export default {
                     this.isSubmitting = false
                     this.message = response.data.message
                     this.submitted = true
+                    console.log(response.data)
                 }
                 
                 this.$nextTick(() => {

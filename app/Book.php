@@ -19,4 +19,20 @@ class Book extends Model
         'first_name', 'last_name', 'email', 'business_name', 'business_address_line_1', 'business_address_line_2', 'business_address_state_province',
         'business_address_city', 'ticket_pdf_path', 'booking_reference', 'transaction_id', 'is_deleted', 'is_cancelled', 'reserve_status_id'
     ];
+
+    public function book_items(){
+        return $this->hasMany('App\BookItem');
+    }
+
+    public function attendees(){
+        return $this->hasMany('App\Attendee');
+    }
+
+    public function reserve_status(){
+        return $this->belongsTo('App\ReserveStatus');
+    }
+
+    public function tickets(){
+        return $this->belongsToMany('App\Ticket');
+    }
 }

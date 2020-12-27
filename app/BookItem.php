@@ -17,4 +17,8 @@ class BookItem extends Model
     protected $fillable = [
         'title', 'quantity', 'book_id', 'department_id', 
     ];
+
+    public function book(){
+        return $this->belongsTo('App\Book');
+    }
 }

@@ -24,6 +24,8 @@ Route::group(['prefix' => 'd'], function () {
 	/////Route::post('/{department_slug}/events/{event_id}/checkout', 'TicketController@checkout')->name('tickets.checkout');
 });
 
+Route::get('/booking/{reference}', 'TicketController@booking_details')->name('booking.details');
+
 Auth::routes(['verify' => true]);
 
 /////Route::get('{name}', 'HomeController@department')->name('department.homepage');

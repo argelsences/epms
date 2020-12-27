@@ -54,13 +54,13 @@
             <div class="event_buttons">
                 <div class="row">
                     <div class="col-md-4 col-sm-4">
-                        <a class="btn btn-event-link btn-lg" href="#tickets">TICKETS</a>
+                        <a class="btn btn-event-link btn-lg" href="{{route('event.display', ['department_slug' => $department->url, 'event_id' => $event->id])}}/#tickets">TICKETS</a>
                     </div>
                     <div class="col-md-4 col-sm-4">
-                        <a class="btn btn-event-link btn-lg" href="#details">DETAILS</a>
+                        <a class="btn btn-event-link btn-lg" href="{{route('event.display', ['department_slug' => $department->url, 'event_id' => $event->id])}}/#details">DETAILS</a>
                     </div>
                     <div class="col-md-4 col-sm-4">
-                        <a class="btn btn-event-link btn-lg" href="#location">VENUE</a>
+                        <a class="btn btn-event-link btn-lg" href="{{route('event.display', ['department_slug' => $department->url, 'event_id' => $event->id])}}/#location">VENUE</a>
                     </div>
                 </div>
             </div>

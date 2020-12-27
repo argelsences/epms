@@ -13,14 +13,14 @@ class CreateBookTicketsTable extends Migration
      */
     public function up()
     {
-        Schema::create('book_tickets', function (Blueprint $table) {
+        Schema::create('book_ticket', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('book_id')->unsigned();
             $table->bigInteger('ticket_id')->unsigned();
             $table->foreign('book_id')->references('id')->on('books');
             $table->foreign('ticket_id')->references('id')->on('tickets');
-            $table->timestamps();
-            $table->softDeletes();
+            //$table->timestamps();
+            //$table->softDeletes();
         });
     }
 

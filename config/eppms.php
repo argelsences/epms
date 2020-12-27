@@ -17,7 +17,8 @@ return [
         ],
     ],
     'default' => [
-        'logo' => '/images/eppms.png'
+        'logo' => '/images/eppms.png',
+        'datetime_format' => env('DEFAULT_DATETIME_FORMAT', 'Y-m-d H:i'),
     ],
     'security' => [
         'captcha' => [

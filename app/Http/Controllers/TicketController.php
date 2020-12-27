@@ -10,6 +10,7 @@ use App\Event;
 use App\Book;
 use App\BookItem;
 use App\Attendee;
+use App\Setting;
 
 class TicketController extends Controller
 {
@@ -219,6 +220,9 @@ class TicketController extends Controller
                 'quantity' => count($attendees[$theTicketID]),
                 'book_id' => $theBook->id
             ]);
+
+            // create pivot table entry book_tickets
+            $theTicket->books()->sync($theBook);
             
         }
 
@@ -247,7 +251,55 @@ class TicketController extends Controller
         ];
 
         $success = ($theBook && $theBookItems && $theAttendees  ) ? true : false;
-        return ['success' => $success, 'item' => $theTicketDetails];
+        return ['success' => $success, 'item' => $theBook->booking_reference];
         
+    }
+
+    /**
+     * Displays the order details based on reference number
+     */
+    public function booking_details(Request $request, $reference) {
+        
+        $is_embedded = null;
+
+        if ($request->exists('is_embedded')) {
+            $is_embedded = $request->query('is_embedded');
+        }
+
+        // the booking
+        $booking = Book::where('booking_reference',$reference)->first();
+
+        // attendees
+        $attendees = $booking->attendees;
+
+        // booking items
+        $book_items = $booking->book_items;
+
+        // the settings
+        $settings = Setting::all(['name', 'value']);
+        $objSettings = [];
+
+        foreach ($settings as $setting){
+            $value = $setting->value;
+
+            if (strpos($setting->name , 'is_') !== false)
+                $value = boolval($setting->value);
+
+            $objSettings[$setting->name] = $value;
+        }
+        // end of settings
+
+        $event = Event::findOrFail($booking->tickets->first()->event_id);
+
+        $department = $event->department;
+
+        return view('front.book.homepage', compact(
+            'booking',
+            'book_items',
+            'attendees',
+            'objSettings',
+            'event',
+            'department'
+        ));
     }
 }

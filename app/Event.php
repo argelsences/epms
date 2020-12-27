@@ -92,4 +92,13 @@ class Event extends Model
         return $query->where('is_public', 1)->where('is_approved', 1);
     }
 
+    /**
+     * Format end date from user preferences
+     * @return String Formatted date
+     */
+    public function endDateFormatted()
+    {
+        return $this->end_date->format(config('eppms.default.datetime_format'));
+    }
+
 }

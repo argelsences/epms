@@ -20,7 +20,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div onclick="window.location='#organiser'" class="event_organizer">
+                <div onclick="window.location=`{{route('event.display', ['department_slug' => $department->url, 'event_id' => $event->id])}}#organiser`" class="event_organizer">
                     <b>{{$event->department->name}}</b> presents
                 </div>
             </div>

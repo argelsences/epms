@@ -9,6 +9,9 @@
 @endsection
 
 @section('head')
+     @if($department->google_tag_manager_code)
+          @include('front.shared.partials.gtm-head', ['tagManager' => $department->google_tag_manager_code])
+     @endif
      <style>
           body { background-color: {{$department->page_bg_color ?? $objSettings['bg_color']}} !important; }
           section#intro {
@@ -22,11 +25,14 @@
 
      </style>
      @if($department->google_analytics_code)
-          @include('Public.Partials.ga', ['analyticsCode' => $department->google_analytics_code])
+          @include('front.shared.partials.ga', ['analyticsCode' => $department->google_analytics_code])
      @endif
 @endsection
 
 @section('content')
+     @if($department->google_tag_manager_code)    
+          @include('front.shared.partials.gtm-body', ['tagManager' => $department->google_tag_manager_code])
+     @endif
      <div id="event_page_wrap" vocab="http://schema.org/" typeof="Event">
           <!--@yield('content')
 
@@ -38,24 +44,11 @@
           @include('front.event.partials.map-section')
           @include('front.event.partials.organiser-section')
 
-          @stack('footer')
      </div>
 
-     {{-- Sticky Footer--}}
-     {{--
-     @yield('footer')
+     
+@endsection
 
-     <a href="#intro" style="display:none;" class="totop"><i class="ico-angle-up"></i>
-          <span style="font-size:11px;">@lang("basic.TOP")</span></a>
-
-     @include("Shared.Partials.LangScript")
-     {!!Html::script(config('attendize.cdn_url_static_assets').'/assets/javascript/frontend.js')!!}
-
-
-     @if(isset($secondsToExpire))
-     <script>if($('#countdown')) {setCountdown($('#countdown'), {{$secondsToExpire}});}</script>
-     @endif
-
-     @include('Shared.Partials.GlobalFooterJS')
-     --}}
+@section('footer')
+     @include('front.shared.partials.event-footer')
 @endsection

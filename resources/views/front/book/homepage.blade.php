@@ -9,6 +9,9 @@
 @endsection
 
 @section('head')
+     @if($department->google_tag_manager_code)
+          @include('front.shared.partials.gtm-head', ['tagManager' => $department->google_tag_manager_code])
+     @endif
      <style>
           body { background-color: {{$department->page_bg_color ?? $objSettings['bg_color']}} !important; }
           section#intro {
@@ -22,19 +25,23 @@
 
      </style>
      @if($department->google_analytics_code)
-          @include('Public.Partials.ga', ['analyticsCode' => $department->google_analytics_code])
+          @include('front.shared.partials.ga', ['analyticsCode' => $department->google_analytics_code])
      @endif
 @endsection
 
 @section('content')
+     @if($department->google_tag_manager_code)    
+          @include('front.shared.partials.gtm-body', ['tagManager' => $department->google_tag_manager_code])
+     @endif
      <div id="event_page_wrap" vocab="http://schema.org/" typeof="Event">
 
           @include('front.event.partials.header-section')
           @include('front.event.partials.share-section')
           @include('front.book.partials.view-order-section')
-          {{--
-               @include('front.book.partials.event-footer-section')
-          --}}
+          
      </div>
-    
-@stop
+@endsection
+
+@section('footer')
+     @include('front.shared.partials.event-footer')
+@endsection

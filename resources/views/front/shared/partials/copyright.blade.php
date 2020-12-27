@@ -1,1 +1,1 @@
-<a style="color: #FFF;" title="EPPMS - All in one Event Manager" href="https://vicuna.me">Event Publication and Poster Management System</a>
+<a style="color: #FFF;" title="EPPMS - All in one Event Manager" href="https://eppms.vicuna.me">Event Publication and Poster Management System</a>

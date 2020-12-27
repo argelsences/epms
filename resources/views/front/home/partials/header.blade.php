@@ -1,4 +1,4 @@
-<section id="intro" class="container">
+<section id="intro" class="container text-center">
     <div class="row">
         <div class="col-md-12">
             <div class="department_logo">

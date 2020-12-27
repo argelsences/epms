@@ -25,6 +25,7 @@ Route::group(['prefix' => 'd'], function () {
 });
 
 Route::get('/booking/{reference}', 'TicketController@booking_details')->name('booking.details');
+Route::get('/booking/{reference}/tickets','TicketController@booking_tickets')->name('booking.tickets');
 
 Auth::routes(['verify' => true]);
 

@@ -32,9 +32,9 @@
     <link href="{{ asset('css/front.css') }}" rel="stylesheet">
     @yield('head')
     </head>
-    <body class="{{ $class ?? '' }}">
+    <body>
       <div id="app">
-        <div id="department_page_wrap">
+        <!--<div id="department_page_wrap">-->
           @auth()
               <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                   @csrf
@@ -42,8 +42,16 @@
           @endauth
           
           @yield('content') 
-        </div>   
-      </div>  
+          @yield('footer')
+          <!--
+          <a href="#intro" style="display:none;" class="totop">
+            <i class="ico-angle-up"></i>
+            <span style="font-size:11px;">TOTOP</span>
+          </a>
+          -->
+        <!--</div>-->   
+      </div>
+      
       @stack('js')
     </body>
 </html>

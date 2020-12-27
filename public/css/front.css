@@ -11040,10 +11040,9 @@ section {
 }
 
 #event_page_wrap {
-  min-height: 100%;
+  /*min-height: 100%;
   margin: 0 auto -60px;
-  /* the bottom margin is the negative value of the footer's height */
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, .4);*/
   /*Resets for user provided content */
 }
 
@@ -11192,17 +11191,17 @@ section {
   min-height: 500px;
 }
 
-footer,
-.push {
-  height: 108px;
-  /* '.push' must be the same height as 'footer' */
+/*
+footer, .push {
+  height: 60px; 
 }
+*/
 
 #footer {
   background-color: #888;
   background-color: rgba(0, 0, 0, 0.4);
   min-height: 60px;
-  line-height: 60px;
+  /*line-height: 60px;*/
   color: #fff;
   text-align: center;
 }

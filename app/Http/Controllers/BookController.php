@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Book;
+use App\Event;
+use App\Ticket;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -81,5 +83,20 @@ class BookController extends Controller
     public function destroy(Book $book)
     {
         //
+    }
+    /**
+     * API function to list all bookings of an event
+     * @params event_id the id of the event
+     * @return json object containing all bookings related to the event
+     */
+    public function list(Book $model, $event_id){
+        
+        if (auth()->user()->hasPermissionTo('list booking', 'api') ){
+            return response('Unauthorized', 403);
+        }
+        
+        $bookings = $model::where('event_id', $event_id)->get();
+        //return response()->json(($model::orderBy('name', 'ASC')->get()));
+        return response()->json($bookings);
     }
 }

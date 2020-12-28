@@ -235,11 +235,14 @@ class EPPMSHelper {
         // get poster from the event
         $the_poster = '';
         $event = Event::findOrFail($booking->tickets->first()->event_id);
-        if ($event->poster->file_path){
-            $the_poster = base64_encode(file_get_contents(public_path($event->poster->file_path)));
-        }
-        elseif ($event->poster->poster_code){
-            $the_poster = $event->poster->poster_code;
+        
+        if ($event->poster){
+            if ($event->poster->file_path){
+                $the_poster = base64_encode(file_get_contents(public_path($event->poster->file_path)));
+            }
+            elseif ($event->poster->poster_code){
+                $the_poster = $event->poster->poster_code;
+            }
         }
 
         $data = [

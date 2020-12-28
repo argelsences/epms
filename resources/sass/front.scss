@@ -648,3 +648,10 @@ html, body {
 }
 
 /** END FRONTEND **/
+
+/** LOGIN PAGE **/
+.page-header.login-page,.wrapper.wrapper-full-page,.off-canvas-sidebar #app {
+  width: 100%;
+  height:100%;
+  float: left;
+}

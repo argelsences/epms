@@ -403,7 +403,107 @@
                                             <v-tab-item>
                                                 <v-card flat>
                                                     <v-card-text class="pt-0">
-                                                        booking
+                                                        <!-- theBooking -->
+                                                        <v-data-table :headers="bookingHeaders" :items="bookingRows" :search="search" :items-per-page="20" sort-by="name">
+                                                            <template v-slot:top>
+                                                                <!-- the toolbar -->
+                                                                <v-toolbar flat color="white">
+                                                                    <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details ></v-text-field>
+                                                                    <v-spacer></v-spacer>
+                                                                    <!-- the dialog box -->        
+                                                                    <v-dialog v-model="dialog"  width="80%" scrollable fullscreen>
+                                                                        <template v-slot:activator="{ on, attrs }">
+                                                                            <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Speaker</v-btn>
+                                                                        </template>
+                                                                        <v-card>
+                                                                            <v-card-title>
+                                                                                <!-- formTitle is  a computed property based on action edit or new -->
+                                                                                <span class="headline">{{ formTitle }}</span>
+                                                                                <v-spacer></v-spacer>
+                                                                                <v-btn absolute dark fab middle right color="pink" @click="close">
+                                                                                    <v-icon x-large>mdi-close</v-icon>
+                                                                                </v-btn>
+                                                                            </v-card-title>
+                                                                            <v-divider></v-divider>
+                                                                            <v-card-text>
+                                                                                <v-container>
+                                                                                    <v-form v-model="isValid" ref="form">
+                                                                                        <v-row>
+                                                                                            <v-col cols="12" sm="12" md="6">
+                                                                                                <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
+                                                                                            </v-col>
+                                                                                            <v-col cols="12" sm="12" md="6" v-cloak @drop.prevent="addDropFile" @dragover.prevent>
+                                                                                                <v-file-input v-model="photo" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping an image here" 
+                                                                                                prepend-icon="mdi-camera-iris" label="Photo" persistentHint chips
+                                                                                                hint="Selecting an image will replace the existing photo. Valid image formats are JPG, JPEG, PNG & BMP. Image size should not be greater than 2MB"
+                                                                                                @change="uploadLogo">
+                                                                                                </v-file-input>        
+                                                                                                
+                                                                                            </v-col>
+                                                                                        </v-row>
+                                                                                        <v-row>
+                                                                                            <v-col cols="12" sm="12" md="6">
+                                                                                                <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
+                                                                                            </v-col>
+                                                                                            <v-col cols="12" sm="12" md="6">
+                                                                                                <v-card v-if="editedItem.photo != null" class="my-2">
+                                                                                                    <v-card-text>
+                                                                                                        <v-img :lazy-src="base_url + editedItem.photo" max-height="150" max-width="250" :src="base_url + editedItem.photo"></v-img>
+                                                                                                        <v-divider class="my-2"></v-divider>
+                                                                                                        <p>{{editedItem.photo}}</p>
+                                                                                                    </v-card-text>
+                                                                                                </v-card>
+                                                                                            </v-col>
+                                                                                        </v-row>
+                                                                                        <v-row>
+                                                                                            <v-col cols="12" sm="12" md="12">
+                                                                                                <!--<v-textarea counter label="Profile" v-model="editedItem.profile" prepend-icon="mdi-face-profile"></v-textarea>-->
+                                                                                                <v-chip class="mb-6">
+                                                                                                    <v-icon left>mdi-face-profile</v-icon>
+                                                                                                    Profile
+                                                                                                </v-chip>
+                                                                                                <tiptap-vuetify
+                                                                                                    v-model="editedItem.profile"
+                                                                                                    :extensions="extensions"
+                                                                                                    id="profile"
+                                                                                                    min-height="400"
+                                                                                                ></tiptap-vuetify>
+                                                                                            </v-col>
+                                                                                        </v-row>
+                                                                                        <v-row>
+                                                                                            <v-col cols="12" sm="12" md="6">
+                                                                                                
+                                                                                            </v-col>
+                                                                                        </v-row>
+                                                                                    </v-form>
+                                                                                </v-container>
+                                                                            </v-card-text>
+                                                                            <v-divider></v-divider>
+                                                                            <v-card-actions>
+                                                                                <v-spacer></v-spacer>
+                                                                                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                                                                                <v-btn color="blue darken-1" :disabled="!isValid" text @click="save">Save</v-btn>
+                                                                            </v-card-actions>
+                                                                        </v-card>
+                                                                    </v-dialog>
+                                                                    <!-- the dialog box -->
+                                                                </v-toolbar>
+                                                            <!-- the toolbar -->
+                                                            </template>
+                                                            <template v-slot:item.photo="{ item }">
+                                                                <v-img v-if="item.photo" :src="base_url + item.photo" alt="" aspect-ratio=".7" max-height="100px" max-width="100px"></v-img>
+                                                                <v-icon size="100px" v-else>mdi-account-box</v-icon>
+                                                            </template>
+                                                            <template v-slot:item.actions="{ item }">
+                                                                <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+                                                                <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+                                                            </template>
+                                                            <template v-slot:no-data>
+                                                                <v-btn class="btn btn-sm btn-primary" @click="initialize">Reset</v-btn>
+                                                            </template>
+                                                        </v-data-table>
+
+
                                                     </v-card-text>
                                                 </v-card>
                                             </v-tab-item>
@@ -729,6 +829,7 @@
                 search : '',
                 feedbacks: [],
                 rows: [],
+                bookingRows: [],
                 departments: [],
                 venues: [],
                 speakers: [],
@@ -779,6 +880,14 @@
                     {text: 'Date', value: 'start_date'},
                     {text: 'Venue', value: 'venue'},
                     {text: 'Status', value: 'is_public'},
+                    {text: 'Actions', value: 'actions', sortable: false, class: 'data-actions', },
+                ],
+                bookingHeaders: [
+                    {text: 'Reference', value: 'title', class: 'data-title',},
+                    {text: 'Order Date', value: 'start_date'},
+                    {text: 'Name', value: 'venue'},
+                    {text: 'Email', value: 'is_public'},
+                    {text: 'Amount', value: 'is_public'},
                     {text: 'Actions', value: 'actions', sortable: false, class: 'data-actions', },
                 ],
                 editedItem: {
@@ -1042,6 +1151,12 @@
                     this.countries = response.data;
                 });
             },
+            getBookings(eventId) {
+                axios.get(`/api/bookings/event/${eventId}`)
+                .then( response => {
+                    this.bookingRows = response.data;
+                });
+            },
             editItem (item) {
                 this.editedIndex = this.rows.indexOf(item)
                 this.editedItem = Object.assign({}, item)
@@ -1054,7 +1169,10 @@
                 this.dialog = true
                 // get all tickets for this event
                 this.getTickets(this.editedItem.id)
+                // get the poster
                 this.getPoster(this.editedItem.id)
+                // get all bookings of an event
+                this.getBookings(this.editedItem.id)
             },
             deleteItem (item) {
                 const index = this.rows.indexOf(item)

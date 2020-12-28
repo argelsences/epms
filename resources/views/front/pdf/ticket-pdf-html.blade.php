@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
         <style>
             table.ticket{width:100%;border: 1px solid #000000;border-collapse: collapse;margin-bottom:20px;font-size:14px;color:grey}
-            table.ticket tr {border: 1px solid black;}
+            table.ticket tr {border: 1px solid black;height:350px;min-height:350px;}
             table.ticket tr td {padding: 40px 20px 40px 20px;vertical-align:top;}
             .logo img {display:block;}
             .cell-barcode {width:20%;}
@@ -33,6 +33,7 @@
                                 
                             </td>
                             <td rowspan="2" class="cell-event-details">
+                                <div style="height:470px;min-height:470px;">
                                 <h4>EVENT</h4>
                                 {{$data['event']->title}}
                                 <h4>DEPARTMENT</h4>
@@ -43,6 +44,7 @@
                                 {{$data['event']->startDateFormatted()}}
                                 <h4>END DATE/TIME</h4>
                                 {{$data['event']->endDateFormatted()}}
+                                </div>
                             </td>
                             <td rowspan="2" class="cell-attendee">
                                 <h4>NAME</h4>

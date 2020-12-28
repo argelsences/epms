@@ -17,7 +17,7 @@ class Book extends Model
      */
     protected $fillable = [
         'first_name', 'last_name', 'email', 'business_name', 'business_address_line_1', 'business_address_line_2', 'business_address_state_province',
-        'business_address_city', 'ticket_pdf_path', 'booking_reference', 'transaction_id', 'is_deleted', 'is_cancelled', 'reserve_status_id'
+        'business_address_city', 'ticket_pdf_path', 'booking_reference', 'transaction_id', 'is_deleted', 'is_cancelled', 'reserve_status_id', 'event_id'
     ];
 
     public function book_items(){

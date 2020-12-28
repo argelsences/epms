@@ -10939,6 +10939,21 @@ a.text-dark:focus {
   }
 }
 
+html,
+body {
+  height: 100%;
+}
+
+/* login page */
+
+.card-login h4 {
+  margin-top: 0.75rem;
+}
+
+.card-login .card-footer {
+  text-align: center;
+}
+
 .sidebar,
 .navbar.bg-dark {
   background-color: #283149 !important;

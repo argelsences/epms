@@ -43,6 +43,15 @@ $dialog_z_index: $toolbar_z_index + 8;
     border-color:  $primary-active;
 }
 
+html,body{height: 100%;}
+
+/* login page */
+.card-login {
+    h4 {margin-top:0.75rem;}
+    .card-footer{text-align:center;}
+}
+ 
+
 // sidebar changes
 .sidebar {
     background-color: $nav-color!important;

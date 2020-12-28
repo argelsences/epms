@@ -69,4 +69,6 @@ Route::group(['middleware' => ['auth:api']], function(){
     // poster
     Route::get('/posters/event/{event}', 'PosterController@list')->name('posters.list');
     Route::post('/posters/upload', 'PosterController@upload')->name('poster.upload');
+    // bookings
+    Route::get('/bookings/event/{event}', 'BookController@list')->name('bookings.list');
 });

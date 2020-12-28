@@ -210,6 +210,8 @@ class TicketController extends Controller
             'email' => $bookee['email'],
             'booking_reference' => substr(md5(time()), 0, 10),
             'reserve_status_id' => 1,
+            // 29 12 2020
+            'event_id' => $event['event_id'],
         ]);
         
         // the book items
@@ -382,6 +384,8 @@ class TicketController extends Controller
 
     public function booking_tickets(Request $request, $reference) {
 
+        $download = 0;
+        
         if ($request->exists('download')) {
             if ($request->get('download') == '1') {
                 $download = 1;

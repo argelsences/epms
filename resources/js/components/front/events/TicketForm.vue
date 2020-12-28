@@ -6,7 +6,7 @@
                     {{ currentTitle }}
                 </h1>
             </v-card-title>
-            <v-window v-model="step">
+            <v-window v-model="step" ref="ticketForm">
                 <v-window-item :value="1" ref="ticketWindow">
                     <v-card-text>
                         <v-form v-model="isValid" ref="form">
@@ -48,10 +48,10 @@
                                             </span>
                                         </div>
                                         <div v-else>
-                                            <input name="tickets[]" type="hidden" :value="ticket.id">
                                             <meta property="availability" content="http://schema.org/InStock">
+                                            <input name="tickets[]" type="hidden" :value="ticket.id">
                                             <select :name="`ticket_${ticket.id}`" class="form-control float-right" style="text-align: center" v-model="numberTickets[ticket.id]" @change="createEmptyAttendee($event,ticket.id)">
-                                                <option v-if="ticketCount > 1" value="0">0</option>
+                                                <!--<option v-if="ticketCount() > 1" value="0">0</option>-->
                                                 <option v-for="i in (ticket.min_per_person, ticket.max_per_person)" :value="i" :key=i>{{i}}</option>
                                             </select>
                                         </div>
@@ -71,52 +71,52 @@
                 <v-window-item :value="2" ref="orderWindow">
                     <v-card-text>
                         <v-form v-model="isValid" ref="form">
-                        <v-row>
-                            <v-col cols="12" sm="8" md="8">
-                                <h3>Your Information</h3>
-                                <v-text-field v-model="orders.bookee.first_name" label="First Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" ></v-text-field>
-                                <v-text-field v-model="orders.bookee.last_name" label="Last Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" ></v-text-field>
-                                <v-text-field v-model="orders.bookee.email" label="Email" :rules="[rules.required,rules.emailValid]" prepend-icon="mdi-mail" ></v-text-field>
-                                <v-btn x-small depressed color="primary" @click="copyToHolder">Copy these details to all ticket holders</v-btn>
-                            </v-col>
-                            <v-col cols="12" sm="4" md="4">
-                                <v-card elevation="5">
-                                    <v-card-title>
-                                        <v-icon>
-                                            mdi-cart
-                                        </v-icon>
-                                        Order Summary
-                                    </v-card-title>
-                                    <v-card-text v-for="(t,i) in theEvent.tickets" :key="t.id" class="order">    
-                                        <div>{{t.title}} x <strong>{{numberTickets[t.id]}}</strong></div>
-                                        <div >FREE</div>
-                                        <v-divider></v-divider>
-                                    </v-card-text>
-                                </v-card>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col cols="12" sm="8" md="8">
-                                <h3>Ticket Holder Information</h3>
-                            </v-col>
-                        </v-row>
-
-                        <v-row v-for="(ticket,index) in theEvent.tickets" :key="ticket.id" class="ticket">
-                            <v-col cols="12" sm="8" md="8">
-                                <v-row v-for="(n,i) in numberTickets[ticket.id]" :key=i>
-                                    <v-card raised class="mb-5 ticket-card" tile>
-                                        <v-card-title class="white--text primary">
-                                            {{ticket.title}} Ticket Holder {{n}} Details
+                            <v-row>
+                                <v-col cols="12" sm="8" md="8">
+                                    <h3>Your Information</h3>
+                                    <v-text-field v-model="orders.bookee.first_name" label="First Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" ></v-text-field>
+                                    <v-text-field v-model="orders.bookee.last_name" label="Last Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" ></v-text-field>
+                                    <v-text-field v-model="orders.bookee.email" label="Email" :rules="[rules.required,rules.emailValid]" prepend-icon="mdi-mail" ></v-text-field>
+                                    <v-btn x-small depressed color="primary" @click="copyToHolder">Copy these details to all ticket holders</v-btn>
+                                </v-col>
+                                <v-col cols="12" sm="4" md="4">
+                                    <v-card elevation="5">
+                                        <v-card-title>
+                                            <v-icon>
+                                                mdi-cart
+                                            </v-icon>
+                                            Order Summary
                                         </v-card-title>
-                                        <v-card-text id="ticket-holder-details">
-                                            <v-text-field v-model="orders.attendee[ticket.id][i].first_name" label="First Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" ref="ticket-holder-detail-first-name"></v-text-field>
-                                            <v-text-field v-model="orders.attendee[ticket.id][i].last_name" label="Last Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" id="ticket-holder-detail-last-name"></v-text-field>
-                                            <v-text-field v-model="orders.attendee[ticket.id][i].email" label="Email" :rules="[rules.required,rules.emailValid]" prepend-icon="mdi-mail" id="ticket-holder-detail-email"></v-text-field>
+                                        <v-card-text v-for="(t,i) in theEvent.tickets" :key="t.id" class="order">    
+                                            <div>{{t.title}} x <strong>{{numberTickets[t.id]}}</strong></div>
+                                            <div >FREE</div>
+                                            <v-divider></v-divider>
                                         </v-card-text>
                                     </v-card>
-                                </v-row>
-                            </v-col>
-                        </v-row>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col cols="12" sm="8" md="8">
+                                    <h3>Ticket Holder Information</h3>
+                                </v-col>
+                            </v-row>
+
+                            <v-row v-for="(ticket,index) in theEvent.tickets" :key="ticket.id" class="ticket">
+                                <v-col cols="12" sm="8" md="8">
+                                    <v-row v-for="(n,i) in numberTickets[ticket.id]" :key=i>
+                                        <v-card raised class="mb-5 ticket-card" tile>
+                                            <v-card-title class="white--text primary">
+                                                {{ticket.title}} Ticket Holder {{n}} Details
+                                            </v-card-title>
+                                            <v-card-text id="ticket-holder-details">
+                                                <v-text-field v-model="orders.attendee[ticket.id][i].first_name" label="First Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" ref="ticket-holder-detail-first-name"></v-text-field>
+                                                <v-text-field v-model="orders.attendee[ticket.id][i].last_name" label="Last Name" :rules="[rules.required,rules.maxName]" prepend-icon="mdi-account" id="ticket-holder-detail-last-name"></v-text-field>
+                                                <v-text-field v-model="orders.attendee[ticket.id][i].email" label="Email" :rules="[rules.required,rules.emailValid]" prepend-icon="mdi-mail" id="ticket-holder-detail-email"></v-text-field>
+                                            </v-card-text>
+                                        </v-card>
+                                    </v-row>
+                                </v-col>
+                            </v-row>
                         </v-form>
                     </v-card-text>
                 </v-window-item>
@@ -173,11 +173,14 @@
             </v-window>
             <v-divider></v-divider>
             <v-card-actions>
-                <v-btn :disabled="step === 1" text @click="ticketBackButtonClicked">
+                <v-btn :disabled="step === 1 || step === 2" text @click="ticketBackButtonClicked">
                     Back
                 </v-btn>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" :disabled="!isValid || isSubmitting" depressed @click="ticketForwardButtonClicked">
+                <v-btn text @click="resetTicketWindow">
+                    Reset
+                </v-btn>
+                <v-btn color="primary" :disabled="!isValid || isSubmitting || !numberTickets.length" depressed @click="ticketForwardButtonClicked">
                     {{buttonTitle}}
                 </v-btn>
             </v-card-actions>
@@ -204,9 +207,9 @@ export default {
     mounted() {
         let numberTickets = this.numberTickets
         this.theEvent.tickets.forEach(function(ticket){
-            console.log(numberTickets.length)
+            //console.log(numberTickets.length)
             for (let i=0;i<numberTickets;i++) {
-                console.log(ticket)
+                //console.log(ticket)
             }
             
         })
@@ -267,7 +270,6 @@ export default {
             this.$refs.recaptcha.execute()
         },*/
         checkout() {
-            //console.log(this.$refs.form)
             //this.resetCaptcha()
 
             // append recaptcha token
@@ -283,7 +285,7 @@ export default {
                 return el != null;
             });
             this.orders.attendee = filteredAttendees
-            console.log(this.orders)*/
+            */
             
             axios.post('/api/ticket/checkout', this.orders,)
             .then(response => {
@@ -292,7 +294,6 @@ export default {
                     this.isSubmitting = false
                     this.message = response.data.message
                     this.submitted = true
-                    // REMOVE LATER
                     window.location.href = "/booking/"+ response.data.item +"?is_embedded=0#order_form"
                 }
                 
@@ -331,8 +332,7 @@ export default {
                 })
             })
             this.orders.attendee = orders.attendee
-            this.$forceUpdate(); 
-            console.log(this.orders)
+            this.$forceUpdate();
         },
         createEmptyAttendee(event, ticket_id){
             let attendeeCount = event.target.value
@@ -348,16 +348,11 @@ export default {
             }
             console.log(this.orders.attendee[ticket_id])
         },
-        // remove later
-        theLength(ticketID){
-            return this.orders.attendee[ticketID].length
-        },
         ticketBackButtonClicked(){
             this.step--
             this.scrollToElement()
         },
         ticketForwardButtonClicked(){
-            console.log(this.step)
             if (this.step < 3) {
                 this.step++
             }
@@ -373,7 +368,10 @@ export default {
             if (el) {
                 el.scrollIntoView();
             }
-        }
+        },
+        resetTicketWindow() {
+            window.location.reload()
+        },
     },
     render() {}
 }

@@ -181,6 +181,8 @@ return [
         App\Providers\EPPMSServiceProvider::class,
         Mews\Purifier\PurifierServiceProvider::class,
         App\Providers\RecaptchaValidatorServiceProvider::class,
+        Milon\Barcode\BarcodeServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
 
     ],
 
@@ -236,6 +238,9 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'EPPMS'=> App\Facades\EPPMSFacade::class,
         'Purifier' => Mews\Purifier\Facades\Purifier::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
+        'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
+        'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
 
     ],
 

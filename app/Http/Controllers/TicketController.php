@@ -11,6 +11,8 @@ use App\Book;
 use App\BookItem;
 use App\Attendee;
 use App\Setting;
+use PDF;
+use DNS2D;
 
 class TicketController extends Controller
 {
@@ -251,6 +253,9 @@ class TicketController extends Controller
         ];
 
         $success = ($theBook && $theBookItems && $theAttendees  ) ? true : false;
+
+        // trigger sending email here
+        $bookingEmail = $this->booking_email();
         return ['success' => $success, 'item' => $theBook->booking_reference];
         
     }
@@ -348,15 +353,28 @@ class TicketController extends Controller
             'poster'    => $the_poster,
         ];
 
-        dd($data);
-
         if ($request->exists('download')) {
             if ($request->get('download') == '1') {
-                return PDF::html('front.pdf.ticket-pdf', $data, 'Tickets');
+                $pdf = PDF::loadView('front.pdf.ticket-pdf-html', compact('data'))->setPaper('a4', 'landscape');
+                //$pdf = PDF::loadView('front.pdf.ticket-pdf2', compact('data'));
+                return $pdf->stream('invoice.pdf');
             }
         }
 
         
-        return view('Public.ViewEvent.Partials.PDFTicket', $data);
+        return view('front.pdf.ticket-pdf-html', compact('data'));
+    }
+
+    /**
+     * Description: Function to send email to bookee after checkout
+     * 
+     */
+    private function booking_email(Request $request){
+        
+        SendBookingEmailJob::dispatch($request->except(['g_recaptcha_response']))
+                ->delay(now()->addSeconds(5)); 
+
+        return ['success' => true, 'message' => config('eppms.messages.frontend_success') ];
+       
     }
 }

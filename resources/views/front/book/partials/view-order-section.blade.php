@@ -5,7 +5,7 @@
                 <span class="mdi mdi-checkbox-marked-circle-outline" style="font-size:128px;color:#4CAF50"></span>
                 <h1>Thank you for your booking</h1>
                 <h2>
-                    Your <a href="{{ route('booking.tickets', ['reference' => $booking->booking_reference] ).'?download=1' }}">Ticket(s)</a> and a confirmation email have been sent to you.
+                    Your <a href="{{ route('booking.tickets', ['reference' => $booking->booking_reference] ).'?download=1' }}" target="_blank">Ticket(s)</a> and a confirmation email have been sent to you.
                 </h2>
             </div>
         </div>

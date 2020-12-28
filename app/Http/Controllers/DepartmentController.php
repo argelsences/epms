@@ -288,7 +288,8 @@ class DepartmentController extends Controller
             $department_event[$x]['department'] = $department;
             $department_event[$x]['events'] = $department->events()->where([
                                                 ['end_date', '>=', now()],
-                                                ['is_public', 1]
+                                                ['is_public', 1],
+                                                ['is_approved', 1]
                                             ])->get(['id','title','start_date']);
             $department_event[$x]['events']['count'] = count($department_event[$x]['events']);
             

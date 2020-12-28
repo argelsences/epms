@@ -11,8 +11,10 @@ use App\Book;
 use App\BookItem;
 use App\Attendee;
 use App\Setting;
+use App\Department;
 use PDF;
 use DNS2D;
+use App\Jobs\SendBookingEmailJob;
 
 class TicketController extends Controller
 {
@@ -250,12 +252,14 @@ class TicketController extends Controller
             'booking' => $theBook,
             'booking_items' => $theBookItems,
             'attendees' => $theAttendees,
+            'event' => Event::findOrFail($event['event_id']),
         ];
 
-        $success = ($theBook && $theBookItems && $theAttendees  ) ? true : false;
+        $success = ($theBook && $theBookItems && $theAttendees) ? true : false;
 
         // trigger sending email here
-        $bookingEmail = $this->booking_email();
+        $bookingEmail = $this->booking_email( $theTicketDetails );
+
         return ['success' => $success, 'item' => $theBook->booking_reference];
         
     }
@@ -319,7 +323,8 @@ class TicketController extends Controller
      * @param $order_reference
      * @return \Illuminate\View\View
      */
-    public function booking_tickets(Request $request, $reference)
+    /*
+    public function booking_ticketss(Request $request, $reference)
     {
         // the booking
         $booking = Book::where('booking_reference',$reference)->first();
@@ -364,14 +369,35 @@ class TicketController extends Controller
         
         return view('front.pdf.ticket-pdf-html', compact('data'));
     }
+    */
+
+    /**
+     * Allows a user to download ticket in PDF format
+     * Uses the function from EPPMS helper
+     *
+     * @param Request $request
+     * @param $order_reference
+     * @return \Illuminate\View\View
+     */
+
+    public function booking_tickets(Request $request, $reference) {
+
+        if ($request->exists('download')) {
+            if ($request->get('download') == '1') {
+                $download = 1;
+            }
+        }
+        return EPPMS::booking_tickets($reference, $download);
+        
+    }
 
     /**
      * Description: Function to send email to bookee after checkout
      * 
      */
-    private function booking_email(Request $request){
-        
-        SendBookingEmailJob::dispatch($request->except(['g_recaptcha_response']))
+    private function booking_email($theTicketDetails){
+
+        SendBookingEmailJob::dispatch($theTicketDetails)
                 ->delay(now()->addSeconds(5)); 
 
         return ['success' => true, 'message' => config('eppms.messages.frontend_success') ];

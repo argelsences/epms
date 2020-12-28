@@ -7,6 +7,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use App\Mail\SendBookingEmail;
+use Mail;
 
 class SendBookingEmailJob implements ShouldQueue
 {
@@ -26,24 +28,26 @@ class SendBookingEmailJob implements ShouldQueue
     }
 
     /**
-     * Execute the job.
+     * Send booking email job to queue
      *
      * @return void
      */
     public function handle()
     {
         //
-        $department = Department::findOrFail($this->details['department_id']);
+        /////dd($this->details['booking']->email, $this->details['booking']->first_name, $this->details['booking']->last_name);
+        /////$department = Department::findOrFail($this->details['department_id']);
         
         // add department name in details
-        $this->details['department_name'] = $department->name;
+        /////$this->details['department_name'] = $department->name;
         
         $to = [
             [
-                'email' => $department->email, 
-                'name' => $department->name,
+                'email' => $this->details['booking']->email, 
+                'name' => $this->details['booking']->first_name . ' ' . $this->details['booking']->last_name,
             ]
         ];
+        
         // send the email
         Mail::to($to)->send(new SendBookingEmail($this->details));
     }

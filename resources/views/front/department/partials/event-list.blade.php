@@ -25,8 +25,8 @@
                             </h2>
                             <p class="desc ellipsis">{{ $event->venue_name }}</p>
                             <ul>
-                                <li style="width:50%;"><a href="{{$event->event_url }}">Tickets</a></li>
-                                <li style="width:50%;"><a href="{{$event->event_url }}">Details</a></li>
+                                <li style="width:50%;"><a href="{{route('event.display', ['department_slug' => $department->url, 'event_id' => $event->id])}}/#tickets">Tickets</a></li>
+                                <li style="width:50%;"><a href="{{route('event.display', ['department_slug' => $department->url, 'event_id' => $event->id])}}/#details">Details</a></li>
                             </ul>
                         </div>
                     </li>

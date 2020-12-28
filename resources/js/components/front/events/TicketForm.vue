@@ -292,6 +292,7 @@ export default {
                     this.isSubmitting = false
                     this.message = response.data.message
                     this.submitted = true
+                    // REMOVE LATER
                     window.location.href = "/booking/"+ response.data.item +"?is_embedded=0#order_form"
                 }
                 

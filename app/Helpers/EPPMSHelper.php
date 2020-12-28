@@ -9,6 +9,8 @@ use Image;
 use Illuminate\Support\Facades\Auth;
 use App\Event;
 use App\Poster;
+use App\Book;
+use PDF;
 
 class EPPMSHelper {
 
@@ -208,5 +210,62 @@ class EPPMSHelper {
         }
         
         return $poster;
+    }
+    /**
+     * Generate PDF copy of booking tickets
+     * @param $request as request object
+     * @param $reference as event reference number
+     * @param (optional) $attachment true if used for attachment
+     * @return stream if request download is 1
+     * or @return attachment if $attachment is true
+     */
+    public function booking_tickets($reference, $download = 0, $attachment = 0) {
+        // the booking
+        $booking = Book::where('booking_reference',$reference)->first();
+
+        if (!$booking) {
+            abort(404);
+        }
+
+        //$images = [];
+        //$imgs = $booking->event->images;
+        //foreach ($imgs as $img) {
+            //$images[] = base64_encode(file_get_contents(public_path($img->image_path)));
+        //}
+        // get poster from the event
+        $the_poster = '';
+        $event = Event::findOrFail($booking->tickets->first()->event_id);
+        if ($event->poster->file_path){
+            $the_poster = base64_encode(file_get_contents(public_path($event->poster->file_path)));
+        }
+        elseif ($event->poster->poster_code){
+            $the_poster = $event->poster->poster_code;
+        }
+
+        $data = [
+            'booking'   => $booking,
+            'event'     => $event,
+            'tickets'   => $booking->tickets,
+            'attendees' => $booking->attendees,
+            'css'       => file_get_contents(public_path('css/ticket.css')),
+            'logo'      => base64_encode(file_get_contents(public_path($event->department->logo_path))),
+            'poster'    => $the_poster,
+        ];
+
+        
+        if ( $download ) {
+            $pdf = PDF::loadView('front.pdf.ticket-pdf-html', compact('data'))->setPaper('a4', 'landscape');
+            //$pdf = PDF::loadView('front.pdf.ticket-pdf2', compact('data'));
+            return $pdf->stream( $reference.'.pdf' );
+        }
+        
+
+        if( $attachment ) {
+            $pdf = PDF::loadView('front.pdf.ticket-pdf-html', compact('data'))->setPaper('a4', 'landscape');
+            //$pdf = PDF::loadView('front.pdf.ticket-pdf2', compact('data'));
+            return $pdf->output();
+        }
+        
+        return view('front.pdf.ticket-pdf-html', compact('data'));
     }
 }

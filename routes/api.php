@@ -71,4 +71,7 @@ Route::group(['middleware' => ['auth:api']], function(){
     Route::post('/posters/upload', 'PosterController@upload')->name('poster.upload');
     // bookings
     Route::get('/bookings/event/{event}', 'BookController@list')->name('bookings.list');
+    Route::post('/bookings/cancel', 'BookController@cancel')->name('bookings.cancel');
+    // attendee
+    Route::delete('/attendees/{attendee}', 'AttendeeController@destroy');
 });

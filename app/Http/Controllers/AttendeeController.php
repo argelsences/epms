@@ -80,6 +80,12 @@ class AttendeeController extends Controller
      */
     public function destroy(Attendee $attendee)
     {
-        //
+        if (auth()->user()->hasPermissionTo('delete attendee', 'api') ){
+            return response('Unauthorized', 403);
+        }
+
+        $attendee->delete();
+    
+        return ['success' => true];
     }
 }

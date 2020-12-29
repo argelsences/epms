@@ -271,4 +271,18 @@ class EPPMSHelper {
         
         return view('front.pdf.ticket-pdf-html', compact('data'));
     }
+
+    /**
+     * Generate unique string for use in booking and reference numbers
+     * @source Developer at https://stackoverflow.com/questions/1846202/php-how-to-generate-a-random-unique-alphanumeric-string-for-use-in-a-secret-l
+     */
+    public function generate_uuid() {
+        return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ),
+            mt_rand( 0, 0xffff ),
+            mt_rand( 0, 0x0C2f ) | 0x4000,
+            mt_rand( 0, 0x3fff ) | 0x8000,
+            mt_rand( 0, 0x2Aff ), mt_rand( 0, 0xffD3 ), mt_rand( 0, 0xff4B )
+        );
+    }
 }

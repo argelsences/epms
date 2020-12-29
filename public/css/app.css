@@ -11133,3 +11133,18 @@ footer.v-footer, .v-sheet.v-app-bar.v-toolbar {
   width: 30%;
 }
 
+/** booking data table **/
+
+.v-data-table.booking-data-table thead th:first-child,
+.v-data-table.booking-data-table thead th:nth-child(5),
+.v-data-table.booking-data-table thead th:nth-child(6),
+.v-data-table.booking-data-table thead th:nth-child(7) {
+  width: 10% !important;
+}
+
+.v-data-table.booking-data-table thead th:nth-child(2),
+.v-data-table.booking-data-table thead th:nth-child(3),
+.v-data-table.booking-data-table thead th:nth-child(4) {
+  width: 20% !important;
+}
+

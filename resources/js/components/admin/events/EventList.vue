@@ -404,14 +404,51 @@
                                                 <v-card flat>
                                                     <v-card-text class="pt-0">
                                                         <!-- theBooking -->
-                                                        <v-data-table :headers="bookingHeaders" :items="bookingRows" :search="search" :items-per-page="20" sort-by="name">
+                                                        <v-data-table :headers="bookingHeaders" :items="bookingRows" :search="search" :items-per-page="20" sort-by="name" class="booking-data-table">
                                                             <template v-slot:top>
                                                                 <!-- the toolbar -->
                                                                 <v-toolbar flat color="white">
                                                                     <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details ></v-text-field>
                                                                     <v-spacer></v-spacer>
                                                                     <!-- the dialog box -->
-
+                                                                    <v-dialog v-model="booking_cancel_dialog"  max-width="600px" scrollable>
+                                                                        <v-card>
+                                                                            <v-card-title color="primary">
+                                                                                
+                                                                                <span class="headline"><v-icon>mdi-cart</v-icon> Cancel Booking: {{editedBookingItem.booking_reference}}</span>
+                                                                                <v-spacer></v-spacer>
+                                                                                <!--<v-btn absolute dark fab middle right color="pink" @click="closeCancelBooking">
+                                                                                    <v-icon>mdi-close</v-icon>
+                                                                                </v-btn>-->
+                                                                            </v-card-title>
+                                                                            <v-divider></v-divider>
+                                                                            <v-card-text>
+                                                                                <v-container>
+                                                                                    <v-row >
+                                                                                        <v-col cols="12" sm="12" md="12" class="ma-2">
+                                                                                            <v-simple-table>
+                                                                                                <template v-slot:default>
+                                                                                                    <tbody>
+                                                                                                        <tr v-for="(attendee, i) in editedBookingItem.attendees" :key="attendee.id">
+                                                                                                            <td>{{attendee.first_name + " " + attendee.last_name}}</td>
+                                                                                                            <td>{{attendee.email}}</td>
+                                                                                                            <td>{{getTicketName(attendee.ticket_id) + " " + attendee.private_reference_number}}</td>
+                                                                                                            <td><v-icon color="pink" small @click="cancelAttendee(i)">mdi-delete</v-icon></td>
+                                                                                                        </tr>
+                                                                                                    </tbody>
+                                                                                                </template>
+                                                                                            </v-simple-table>
+                                                                                        </v-col>
+                                                                                    </v-row>
+                                                                                </v-container>
+                                                                            </v-card-text>
+                                                                            <v-divider></v-divider>
+                                                                            <v-card-actions>
+                                                                                <v-spacer></v-spacer>
+                                                                                <v-btn color="blue darken-1" text @click="closeCancelBooking">Close</v-btn>
+                                                                            </v-card-actions>
+                                                                        </v-card>
+                                                                    </v-dialog>
                                                                     <!--
                                                                     <v-dialog v-model="dialog"  width="80%" scrollable fullscreen>
                                                                         <template v-slot:activator="{ on, attrs }">
@@ -505,8 +542,11 @@
                                                                 <!-- Event is always free at the moment -->
                                                                 FREE
                                                             </template>
+                                                            <template v-slot:item.reserve_status="{ item }">
+                                                                {{item.reserve_status.name}}
+                                                            </template>
                                                             <template v-slot:item.actions="{ item }">
-                                                                <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+                                                                <v-icon color="pink" small class="mr-2" @click="cancelBooking(item)">mdi-cancel</v-icon>
                                                                 <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
                                                             </template>
                                                             <template v-slot:no-data>
@@ -832,6 +872,7 @@
                 ste_dialog: false,
                 start_time_dialog: false,
                 end_time_dialog: false,
+                booking_cancel_dialog: false,
                 isValid: true,
                 isValid1: true,
                 isValid2: true,
@@ -845,6 +886,7 @@
                 venues: [],
                 speakers: [],
                 editedIndex: -1,
+                editedBookingIndex: -1,
                 snackbar: false,
                 timeout: 5000,
                 error: false,
@@ -899,6 +941,7 @@
                     {text: 'Name', value: 'name'},
                     {text: 'Email', value: 'email'},
                     {text: 'Amount', value: 'amount'},
+                    {text: 'Status', value: 'reserve_status'},
                     {text: 'Actions', value: 'actions', sortable: false, class: 'data-actions', },
                 ],
                 editedItem: {
@@ -952,6 +995,18 @@
                     venue: [],
                     speakers: [],
                     tickets: [],
+                },
+                editedBookingItem : {
+                    id: 0,
+                    booking_reference: '',
+                    first_name: '',
+                    last_name: '',
+                },
+                bookingDefault: {
+                    id: 0,
+                    booking_reference: '',
+                    first_name: '',
+                    last_name: '',
                 },
                 textFieldProps: {
                     appendIcon: 'event',
@@ -1166,6 +1221,7 @@
                 axios.get(`/api/bookings/event/${eventId}`)
                 .then( response => {
                     this.bookingRows = response.data;
+                    console.log(this.bookingRows);
                 });
             },
             editItem (item) {
@@ -1449,6 +1505,60 @@
                 let theDepartment = this.departments.find(department => department.id == dID)
                 
                 window.open('/d/'+theDepartment.url+'/events/'+ vID, '_blank');
+            },
+            cancelBooking(item){
+                /////console.log(item)
+                this.booking_cancel_dialog = true
+                this.editedBookingIndex = this.bookingRows.indexOf(item)
+                this.editedBookingItem = item
+                /*this.editedBookingItem.tickets.filter(function(ticket){
+                    console.log(ticket.id)
+                })*/
+                
+                axios.post('/api/bookings/cancel', item)
+                .then(response => {
+                    if (response.data.success) {
+                        //this.getTickets(this.editedItem.id)
+                    }
+                })
+                .catch( error => {
+                    
+                })
+                
+            },
+            cancelAttendee(index){
+                if (confirm("Are you sure you want to cancel " + this.editedBookingItem.attendees[index].private_reference_number + " booking?")) {
+                    
+                    let id = this.editedBookingItem.attendees[index].id
+
+                    if (id > 0) {
+                        axios.delete('/api/attendees/' + id)
+                    }
+                    
+                    console.log(this.editedBookingItem.attendees[index])
+
+                    this.editedBookingItem.attendees.splice(index, 1);
+                }
+            },
+            getTicketName(ticket_id){
+
+                let theTicket = this.editedBookingItem.tickets.filter(function(ticket){
+                    return ticket.id === ticket_id
+                })
+                
+                return theTicket[0].title
+            },
+            closeCancelBooking(){
+                // make sure the dialog box is closed
+                this.booking_cancel_dialog = false
+                // next action is to make sure that the value of editedItem is on default, and re-initialize the editedIndex value
+                this.$nextTick(() => {
+                    // reset the form
+                    this.editedBookingItem = Object.assign({}, this.bookingDefault)
+                    //this.$refs.formTicket.reset();
+                    // make sure expansion tab in dialog is closed
+                    //this.ticketExpansionPanel = null
+                })
             }
         },
         created: function() {

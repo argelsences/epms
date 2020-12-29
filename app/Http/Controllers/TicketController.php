@@ -194,6 +194,7 @@ class TicketController extends Controller
         $success = ($ticketIsPaused !== $ticket->is_paused ) ? true : false;
         return ['success' => $success, 'item' => $ticket];
     }
+    
     /**
      * Checkout from event
      */
@@ -208,7 +209,7 @@ class TicketController extends Controller
             'first_name' => $bookee['first_name'],
             'last_name' => $bookee['last_name'],
             'email' => $bookee['email'],
-            'booking_reference' => substr(md5(time()), 0, 10),
+            'booking_reference' => substr(str_replace('-','',EPPMS::generate_uuid()), 0, 10 ),
             'reserve_status_id' => 1,
             // 29 12 2020
             'event_id' => $event['event_id'],
@@ -228,7 +229,8 @@ class TicketController extends Controller
             ]);
 
             // create pivot table entry book_tickets
-            $theTicket->books()->sync($theBook);
+            $theTicket->books()->attach($theBook);
+            //$theTicket->books()->sync($theBook);
             
         }
 
@@ -240,7 +242,7 @@ class TicketController extends Controller
                     'first_name' => $att['first_name'],
                     'last_name' => $att['last_name'],
                     'email' => $att['email'],
-                    'private_reference_number' => substr(md5(time()), 0, 15),
+                    'private_reference_number' => substr(str_replace('-','',EPPMS::generate_uuid()), 0, 15 ),
                     'reference_index' => $counter,
                     'event_id' => $event['event_id'],
                     'book_id' => $theBook->id,

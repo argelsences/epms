@@ -328,7 +328,7 @@ class TicketController extends Controller
      * @return \Illuminate\View\View
      */
     /*
-    public function booking_ticketss(Request $request, $reference)
+    public function booking_tickets(Request $request, $reference)
     {
         // the booking
         $booking = Book::where('booking_reference',$reference)->first();

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Attendee;
 use Illuminate\Http\Request;
+use App\Jobs\SendBookingCancelJob;
 
 class AttendeeController extends Controller
 {
@@ -85,7 +86,23 @@ class AttendeeController extends Controller
         }
 
         $attendee->delete();
+
+        // send email job
+        $cancelBookingEmail = $this->cancel_booking_email( $theBookingDetails );
     
         return ['success' => true];
+    }
+
+    /**
+     * Description: Function to send email to bookee after cancellation of attendee
+     * 
+     */
+    private function cancel_booking_email($theBookingDetails){
+
+        SendBookingCancelJob::dispatch($theBookingDetails)
+                ->delay(now()->addSeconds(5)); 
+
+        return ['success' => true, 'message' => config('eppms.messages.frontend_success') ];
+       
     }
 }

@@ -7,19 +7,25 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use App\Mail\SendBookingCancelEmail;
+use App\Department;
+use Mail;
 
 class SendBookingCancelJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    protected $details;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($details)
     {
         //
+        $this->details = $details;
     }
 
     /**
@@ -30,5 +36,18 @@ class SendBookingCancelJob implements ShouldQueue
     public function handle()
     {
         //
+        $department = Department::findOrFail($this->details['department_id']);
+        
+        // add department name in details
+        $this->details['department_name'] = $department->name;
+        
+        $to = [
+            [
+                'email' => $department->email, 
+                'name' => $department->name,
+            ]
+        ];
+        // send the email
+        Mail::to($to)->send(new SendBookingCancelEmail($this->details));
     }
 }

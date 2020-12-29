@@ -410,14 +410,16 @@
                                                                 <v-toolbar flat color="white">
                                                                     <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details ></v-text-field>
                                                                     <v-spacer></v-spacer>
-                                                                    <!-- the dialog box -->        
+                                                                    <!-- the dialog box -->
+
+                                                                    <!--
                                                                     <v-dialog v-model="dialog"  width="80%" scrollable fullscreen>
                                                                         <template v-slot:activator="{ on, attrs }">
                                                                             <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Speaker</v-btn>
                                                                         </template>
                                                                         <v-card>
                                                                             <v-card-title>
-                                                                                <!-- formTitle is  a computed property based on action edit or new -->
+                                                                                
                                                                                 <span class="headline">{{ formTitle }}</span>
                                                                                 <v-spacer></v-spacer>
                                                                                 <v-btn absolute dark fab middle right color="pink" @click="close">
@@ -457,7 +459,6 @@
                                                                                         </v-row>
                                                                                         <v-row>
                                                                                             <v-col cols="12" sm="12" md="12">
-                                                                                                <!--<v-textarea counter label="Profile" v-model="editedItem.profile" prepend-icon="mdi-face-profile"></v-textarea>-->
                                                                                                 <v-chip class="mb-6">
                                                                                                     <v-icon left>mdi-face-profile</v-icon>
                                                                                                     Profile
@@ -486,13 +487,23 @@
                                                                             </v-card-actions>
                                                                         </v-card>
                                                                     </v-dialog>
+                                                                    -->
+
                                                                     <!-- the dialog box -->
                                                                 </v-toolbar>
                                                             <!-- the toolbar -->
                                                             </template>
-                                                            <template v-slot:item.photo="{ item }">
-                                                                <v-img v-if="item.photo" :src="base_url + item.photo" alt="" aspect-ratio=".7" max-height="100px" max-width="100px"></v-img>
-                                                                <v-icon size="100px" v-else>mdi-account-box</v-icon>
+                                                            <template v-slot:item.booking_date="{ item }">
+                                                                {{item.created_at | formatDate}}
+                                                            </template>
+                                                            <template v-slot:item.name="{ item }">
+                                                                <!--<v-img v-if="item.photo" :src="base_url + item.photo" alt="" aspect-ratio=".7" max-height="100px" max-width="100px"></v-img>
+                                                                <v-icon size="100px" v-else>mdi-account-box</v-icon>-->
+                                                                {{item.first_name + ' ' + item.last_name}}
+                                                            </template>
+                                                            <template v-slot:item.amount="{ item }">
+                                                                <!-- Event is always free at the moment -->
+                                                                FREE
                                                             </template>
                                                             <template v-slot:item.actions="{ item }">
                                                                 <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
@@ -883,11 +894,11 @@
                     {text: 'Actions', value: 'actions', sortable: false, class: 'data-actions', },
                 ],
                 bookingHeaders: [
-                    {text: 'Reference', value: 'title', class: 'data-title',},
-                    {text: 'Order Date', value: 'start_date'},
-                    {text: 'Name', value: 'venue'},
-                    {text: 'Email', value: 'is_public'},
-                    {text: 'Amount', value: 'is_public'},
+                    {text: 'Reference', value: 'booking_reference', class: 'data-title',},
+                    {text: 'Booking Date', value: 'booking_date'},
+                    {text: 'Name', value: 'name'},
+                    {text: 'Email', value: 'email'},
+                    {text: 'Amount', value: 'amount'},
                     {text: 'Actions', value: 'actions', sortable: false, class: 'data-actions', },
                 ],
                 editedItem: {

@@ -35,4 +35,11 @@ class Book extends Model
     public function tickets(){
         return $this->belongsToMany('App\Ticket');
     }
+
+    /**
+     * Return dd mm YY @ h:i:s A
+     */
+    public function createdDateFormatted(){
+        return (new Carbon($this->created_at))->format('j F Y h:i A');
+    }
 }

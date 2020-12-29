@@ -32,8 +32,9 @@ class SendBookingCancelEmail extends Mailable
     public function build()
     {
         $details = $this->details;
-        return $this->view('front.email.frontend', compact('details'))
-                    ->replyTo($details['email'], $details['name'])
-                    ->subject('EPPMS');
+        
+        return $this->view('admin.email.cancel-booking', compact('details'))
+                    ->replyTo($details['department']['email'], $details['department']['name'])
+                    ->subject('Attendee Booking Cancelled | ' . $this->details['book']['booking_reference']);
     }
 }

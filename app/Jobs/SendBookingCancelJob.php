@@ -36,17 +36,14 @@ class SendBookingCancelJob implements ShouldQueue
     public function handle()
     {
         //
-        $department = Department::findOrFail($this->details['department_id']);
-        
-        // add department name in details
-        $this->details['department_name'] = $department->name;
         
         $to = [
             [
-                'email' => $department->email, 
-                'name' => $department->name,
+                'email' => $this->details['book']['email'], 
+                'name' => $this->details['book']['first_name'] . ' ' . $this->details['book']['last_name'],
             ]
         ];
+        
         // send the email
         Mail::to($to)->send(new SendBookingCancelEmail($this->details));
     }

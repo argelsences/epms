@@ -101,4 +101,8 @@ class Event extends Model
         return $this->end_date->format(config('eppms.default.datetime_format'));
     }
 
+    public function attendees(){
+        return $this->hasMany('App\Attendee');
+    }
+
 }

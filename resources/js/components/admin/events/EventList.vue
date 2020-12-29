@@ -426,7 +426,7 @@
                                                                                 <v-container>
                                                                                     <v-row >
                                                                                         <v-col cols="12" sm="12" md="12" class="ma-2">
-                                                                                            <v-simple-table>
+                                                                                            <v-simple-table v-if="Array.isArray(editedBookingItem.attendees) && editedBookingItem.attendees.length > 0 ">
                                                                                                 <template v-slot:default>
                                                                                                     <tbody>
                                                                                                         <tr v-for="(attendee, i) in editedBookingItem.attendees" :key="attendee.id">
@@ -438,7 +438,12 @@
                                                                                                     </tbody>
                                                                                                 </template>
                                                                                             </v-simple-table>
+                                                                                            <v-alert icon="mdi-delete-empty-outline" prominent text type="info" v-else>
+                                                                                                All attendees in this booking is cancelled.
+                                                                                            </v-alert>
                                                                                         </v-col>
+                                                                                        
+                                                                                            
                                                                                     </v-row>
                                                                                 </v-container>
                                                                             </v-card-text>

@@ -85,10 +85,32 @@ class AttendeeController extends Controller
             return response('Unauthorized', 403);
         }
 
-        $attendee->delete();
 
+        $theAttendee = [
+            'department' => [
+                'email' => $attendee->event->department->email,
+                'name' => $attendee->event->department->name
+            ],
+            'event' => [
+                'title' => $attendee->event->title,
+                'start_date' => $attendee->event->startDateFormatted(),
+            ],
+            'attendee' => [
+                'first_name' => $attendee->first_name,
+                'last_name' => $attendee->last_name,
+                'private_reference_number' => $attendee->private_reference_number,
+            ],
+            'book' => [
+                'email' => $attendee->book->email,
+                'first_name' => $attendee->book->first_name,
+                'last_name' => $attendee->book->last_name,
+                'booking_reference' => $attendee->book->booking_reference
+            ],
+        ];
         // send email job
-        $cancelBookingEmail = $this->cancel_booking_email( $theBookingDetails );
+        $cancelBookingEmail = $this->cancel_booking_email( $theAttendee );
+
+        $attendee->delete();
     
         return ['success' => true];
     }
@@ -97,9 +119,9 @@ class AttendeeController extends Controller
      * Description: Function to send email to bookee after cancellation of attendee
      * 
      */
-    private function cancel_booking_email($theBookingDetails){
+    private function cancel_booking_email($theAttendee){
 
-        SendBookingCancelJob::dispatch($theBookingDetails)
+        SendBookingCancelJob::dispatch($theAttendee)
                 ->delay(now()->addSeconds(5)); 
 
         return ['success' => true, 'message' => config('eppms.messages.frontend_success') ];

@@ -23,4 +23,8 @@ class Attendee extends Model
     public function ticket(){
         return $this->belongsTo('App\Ticket');
     }
+
+    public function event(){
+        return $this->belongsTo('App\Event');
+    }
 }

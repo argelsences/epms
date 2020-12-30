@@ -26,10 +26,11 @@ class CreateAttendeesTable extends Migration
             $table->bigInteger('event_id')->unsigned();
             $table->bigInteger('book_id')->unsigned();
             $table->bigInteger('ticket_id')->unsigned();
-            $table->foreign('event_id')->references('id')->on('events');
-            $table->foreign('book_id')->references('id')->on('books');
-            $table->foreign('ticket_id')->references('id')->on('tickets');
+            $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
+            $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');
+            $table->foreign('ticket_id')->references('id')->on('tickets')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

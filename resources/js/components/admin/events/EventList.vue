@@ -730,7 +730,7 @@
 
                                                                 <v-tooltip bottom>
                                                                     <template v-slot:activator="{ on, attrs }">
-                                                                        <v-icon color="error" dark v-bind="attrs" v-on="on" small @click="removeBooking(item)">mdi-cancel</v-icon>
+                                                                        <v-icon color="error" dark v-bind="attrs" v-on="on" small @click="removeBooking(item)">mdi-delete</v-icon>
                                                                     </template>
                                                                     <span>Cancel Booking</span>
                                                                 </v-tooltip>
@@ -1758,9 +1758,6 @@
                 this.$nextTick(() => {
                     // reset the form
                     this.editedBookingItem = Object.assign({}, this.bookingDefault)
-                    //this.$refs.formTicket.reset();
-                    // make sure expansion tab in dialog is closed
-                    //this.ticketExpansionPanel = null
                 })
             },
             detailsBooking(item){
@@ -1776,9 +1773,6 @@
                 this.$nextTick(() => {
                     // reset the form
                     this.editedBookingItem = Object.assign({}, this.bookingDefault)
-                    //this.$refs.formTicket.reset();
-                    // make sure expansion tab in dialog is closed
-                    //this.ticketExpansionPanel = null
                 })
             },
             resendBooking(){
@@ -1798,7 +1792,21 @@
                     
                 })
             },
-            removeBooking(item){}
+            removeBooking(item){
+                if (confirm("Are you sure you want to cancel this booking (" + item.booking_reference + ")?")) {
+
+                    const index = this.bookingRows.indexOf(item)
+                    //confirm('Are you sure you want to delete this item?') && this.rows.splice(index, 1)
+                    
+                    let id = item.id
+
+                    if (id > 0) {
+                        axios.delete(`/api/booking/delete/${id}`)
+                    }
+
+                    this.bookingRows.splice(index, 1);
+                }
+            },
         },
         created: function() {
             this.setHedeaderTitle()

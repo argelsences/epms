@@ -18,7 +18,7 @@ class CreateBookItemsTable extends Migration
             $table->string('title');
             $table->integer('quantity');
             $table->bigInteger('book_id')->unsigned();
-            $table->foreign('book_id')->references('id')->on('books');
+            $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

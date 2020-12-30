@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Book;
 use App\Event;
 use App\Ticket;
+use App\Attendee;
+use App\BookItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Jobs\SendBookingRemoveJob;
 
 class BookController extends Controller
 {
@@ -81,16 +84,6 @@ class BookController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Book  $book
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Book $book)
-    {
-        //
-    }
-    /**
      * API function to list all bookings of an event
      * @params event_id the id of the event
      * @return json object containing all bookings related to the event
@@ -151,5 +144,62 @@ class BookController extends Controller
         };
 
         return response()->stream($callback, 200, $headers);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Attendee  $attendee
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Book $book)
+    {
+        if (auth()->user()->hasPermissionTo('delete booking', 'api') ){
+            return response('Unauthorized', 403);
+        }
+
+        $theBooking = [
+            'department' => [
+                'email' => $book->event->department->email,
+                'name' => $book->event->department->name
+            ],
+            'event' => [
+                'title' => $book->event->title,
+                'start_date' => $book->event->startDateFormatted(),
+            ],
+            'attendees' => $book->attendees,
+            'book' => [
+                'email' => $book->email,
+                'first_name' => $book->first_name,
+                'last_name' => $book->last_name,
+                'booking_reference' => $book->booking_reference
+            ],
+        ];
+
+        // send email job
+        $removeBookingEmail = $this->remove_booking_email( $theBooking );
+
+        // delete all attendees
+        //$book->attendees->delete();
+        $deleteAttendees = Attendee::where('book_id', $book->id)->delete();
+        $bookItems = BookItem::where('book_id',$book->id)->delete();
+        //$book_tickets = BookTicket::where()
+        $book->tickets()->detach();
+        $book->delete();
+    
+        return ['success' => true];
+    }
+
+    /**
+     * Description: Function to send email to bookee after cancellation of attendee
+     * 
+     */
+    private function remove_booking_email($theBooking){
+
+        SendBookingRemoveJob::dispatch($theBooking)
+                ->delay(now()->addSeconds(5)); 
+
+        return ['success' => true, 'message' => config('eppms.messages.frontend_success') ];
+       
     }
 }

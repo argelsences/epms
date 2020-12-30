@@ -398,7 +398,7 @@ class TicketController extends Controller
     }
 
     /**
-     * Description: Function to send email to bookee after checkout
+     * Description: Function tresendBookingresendBookingo send email to bookee after checkout
      * 
      */
     private function booking_email($theTicketDetails){
@@ -408,5 +408,26 @@ class TicketController extends Controller
 
         return ['success' => true, 'message' => config('eppms.messages.frontend_success') ];
        
+    }
+    /**
+     * API function to resend booking tickets
+     */
+    public function resend_booking_tickets(Request $request){
+
+        $booking = $request->all();
+
+        $theBook = Book::findOrFail($booking['id']);
+
+        $theTicketDetails = [
+            'booking' => $theBook,
+            'booking_items' => $theBook->book_items,
+            'attendees' => $theBook->attendees,
+            'event' => $theBook->event,
+        ];
+
+        // trigger sending email here
+        $bookingEmail = $this->booking_email( $theTicketDetails );
+
+        return ['success' => true];
     }
 }

@@ -42,4 +42,8 @@ class Book extends Model
     public function createdDateFormatted(){
         return (new Carbon($this->created_at))->format('j F Y h:i A');
     }
+
+    public function event(){
+        return $this->belongsTo('App\Event');
+    }
 }

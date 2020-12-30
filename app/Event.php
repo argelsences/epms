@@ -105,4 +105,8 @@ class Event extends Model
         return $this->hasMany('App\Attendee');
     }
 
+    public function books(){
+        return $this->hasMany('App\Book');
+    }
+
 }

@@ -100,7 +100,7 @@ class BookController extends Controller
             return response('Unauthorized', 403);
         }
         
-        $bookings = $model::with(['reserve_status','attendees','tickets'])->where('event_id', $event_id)->get();
+        $bookings = $model::with(['reserve_status','attendees','tickets','book_items'])->where('event_id', $event_id)->get();
         
         return response()->json($bookings);
     }
@@ -110,17 +110,16 @@ class BookController extends Controller
      * Cancel a booking
      * @param request object containing details about the booking
      */
+    /*
     public function cancel(Request $request) {
 
-        /*if ( auth()->user()->can(['edit ticket']) ){
-            return response('Unauthorized', 403);
-        }*/
+        
 
         if (auth()->user()->hasPermissionTo('edit booking', 'api') ){
             return response('Unauthorized', 403);
         }
         
-        $bookingID = $request->id;
+        $cancel = $request->id;
         $booking = Book::findOrFail($bookingID);
         dd($booking->tickets->count());
         // save the previous pause value of ticket
@@ -134,4 +133,5 @@ class BookController extends Controller
         $success = ($ticketIsPaused !== $ticket->is_paused ) ? true : false;
         return ['success' => $success, 'item' => $ticket];
     }
+    */
 }

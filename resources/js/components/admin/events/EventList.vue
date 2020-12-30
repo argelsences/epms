@@ -519,35 +519,69 @@
                                                                                         <v-col cols="12" sm="12" md="12" class="ma-2">
                                                                                             <v-simple-table>
                                                                                                 <template v-slot:default>
-                                                                                                    <tbody>
+                                                                                                    <thead>
                                                                                                         <tr>
-                                                                                                            <td style="width:50%">
-                                                                                                                <p class="text-subtitle-2">First Name</p>
-                                                                                                                <p>{{editedBookingItem.first_name}}</p>
-                                                                                                            </td>
-                                                                                                            <td style="width:50%">
-                                                                                                                <p class="text-subtitle-2">Last Name</p>
-                                                                                                                <p>{{editedBookingItem.last_name}}</p>
-                                                                                                            </td>
+                                                                                                            <th class="text-left" style="width:50%;">
+                                                                                                                Ticket
+                                                                                                            </th>
+                                                                                                            <th class="text-left">
+                                                                                                                Quantity
+                                                                                                            </th>
+                                                                                                            <th class="text-left">
+                                                                                                                Price
+                                                                                                            </th>
+                                                                                                            <th class="text-left">
+                                                                                                                Booking Fee
+                                                                                                            </th>
+                                                                                                            <th class="text-left">
+                                                                                                                Total
+                                                                                                            </th>
                                                                                                         </tr>
-                                                                                                        <tr>
-                                                                                                            <td>
-                                                                                                                <p class="text-subtitle-2">Amount</p>
+                                                                                                    </thead>
+                                                                                                    <tbody>
+                                                                                                        <tr v-for="(book_item,i) in editedBookingItem.book_items" :key="book_item.id">
+                                                                                                            <td style="width:50%">
+                                                                                                                <p>{{book_item.title}}</p>
+                                                                                                            </td>
+                                                                                                            <td style="width:50%">
+                                                                                                                <p>{{book_item.quantity}}</p>
+                                                                                                            </td>
+                                                                                                            <td style="width:50%">
                                                                                                                 <p>FREE</p>
                                                                                                             </td>
-                                                                                                            <td>
-                                                                                                                <p class="text-subtitle-2">Reference</p>
-                                                                                                                <p>{{editedBookingItem.booking_reference}}</p>
+                                                                                                            <td style="width:50%">
+                                                                                                                <p>-</p>
+                                                                                                            </td>
+                                                                                                            <td style="width:50%">
+                                                                                                                <p>FREE</p>
                                                                                                             </td>
                                                                                                         </tr>
                                                                                                         <tr>
                                                                                                             <td>
-                                                                                                                <p class="text-subtitle-2">Date</p>
-                                                                                                                <p>{{editedBookingItem.created_at | formatDate}}</p>
                                                                                                             </td>
                                                                                                             <td>
-                                                                                                                <p class="text-subtitle-2">Email</p>
-                                                                                                                <p>{{editedBookingItem.email}}</p>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <b>Subtotal</b>
+                                                                                                            </td>
+                                                                                                            <td colspan="2">
+                                                                                                                0.00
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <b>Total</b>
+                                                                                                            </td>
+                                                                                                            <td colspan="2">
+                                                                                                                0.00
                                                                                                             </td>
                                                                                                         </tr>
                                                                                                     </tbody>
@@ -560,7 +594,20 @@
                                                                                             <span class="text-h6">Booking Attendees</span>
                                                                                         </v-col>
                                                                                         <v-col cols="12" sm="12" md="12" class="ma-2">
-                                                                                            Attendees
+                                                                                            <v-simple-table v-if="Array.isArray(editedBookingItem.attendees) && editedBookingItem.attendees.length > 0 ">
+                                                                                                <template v-slot:default>
+                                                                                                    <tbody>
+                                                                                                        <tr v-for="(attendee, i) in editedBookingItem.attendees" :key="attendee.id">
+                                                                                                            <td>{{attendee.first_name + " " + attendee.last_name}}</td>
+                                                                                                            <td>{{attendee.email}}</td>
+                                                                                                            <td>{{getTicketName(attendee.ticket_id) + " " + attendee.private_reference_number}}</td>                                                                                                           
+                                                                                                        </tr>
+                                                                                                    </tbody>
+                                                                                                </template>
+                                                                                            </v-simple-table>
+                                                                                            <v-alert icon="mdi-delete-empty-outline" prominent text type="info" v-else>
+                                                                                                All attendees in this booking is cancelled.
+                                                                                            </v-alert>
                                                                                         </v-col>
                                                                                     </v-row>
                                                                                 </v-container>
@@ -569,8 +616,8 @@
                                                                             <v-card-actions>
                                                                                 <v-spacer></v-spacer>
                                                                                 <v-btn color="blue darken-1" text @click="closeDetailsBooking">Edit</v-btn>
-                                                                                <v-btn color="blue darken-1" text @click="closeDetailsBooking">Print Tickets</v-btn>
-                                                                                <v-btn color="blue darken-1" text @click="closeDetailsBooking">Resend Tickets</v-btn>
+                                                                                <v-btn color="blue darken-1" text :href="`/booking/${editedBookingItem.booking_reference}/tickets?download=1`" target="blank">Print Tickets</v-btn>
+                                                                                <v-btn color="blue darken-1" text @click="resendBooking()">Resend Tickets</v-btn>
                                                                                 <v-btn color="blue darken-1" text @click="closeDetailsBooking">Close</v-btn>
                                                                             </v-card-actions>
                                                                         </v-card>
@@ -1645,6 +1692,7 @@
                     console.log(ticket.id)
                 })*/
                 
+                /*
                 axios.post('/api/bookings/cancel', item)
                 .then(response => {
                     if (response.data.success) {
@@ -1654,6 +1702,7 @@
                 .catch( error => {
                     
                 })
+                */
                 
             },
             cancelAttendee(index){
@@ -1706,6 +1755,23 @@
                     //this.ticketExpansionPanel = null
                 })
             },
+            resendBooking(){
+                axios.post('/api/bookings/resend-booking', {
+                    id : this.editedBookingItem.id
+                })
+                .then(response => {
+                    if (response.data.success) {
+                        this.feedbacks = []
+                        this.feedbacks[0] = 'An copy of booking is sent to the bookee.'
+                        this.snackbar = true
+                        this.error = false
+                        this.booking_details_dialog = false
+                    }
+                })
+                .catch( error => {
+                    
+                })
+            }
         },
         created: function() {
             this.setHedeaderTitle()

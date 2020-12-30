@@ -43,6 +43,12 @@ Route::group(['prefix' => 'web-admin','middleware' => ['auth']], function () {
 	Route::get('/profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
 	Route::put('/profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('/profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
+	
+});
+
+Route::group(['prefix' => 'web-admin','middleware' => ['role:Contributor|Author|Super Administrator|Administrator']], function () {
+	// export bookings
+	Route::get('/bookings/export-to-csv', 'BookController@exportToCSV')->name('bookings.export-to-csv');
 });
 
 Route::group(['prefix' => 'web-admin','middleware' => ['role:Super Administrator|Administrator']], function () {

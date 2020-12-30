@@ -6,6 +6,7 @@ use App\Book;
 use App\Event;
 use App\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class BookController extends Controller
 {
@@ -110,28 +111,45 @@ class BookController extends Controller
      * Cancel a booking
      * @param request object containing details about the booking
      */
-    /*
-    public function cancel(Request $request) {
+    public function exportToCSV(Book $model) {
 
-        
-
-        if (auth()->user()->hasPermissionTo('edit booking', 'api') ){
+        if (auth()->user()->hasPermissionTo('export booking', 'web') ){
             return response('Unauthorized', 403);
         }
-        
-        $cancel = $request->id;
-        $booking = Book::findOrFail($bookingID);
-        dd($booking->tickets->count());
-        // save the previous pause value of ticket
-        $ticketIsPaused = $ticket->is_paused;
 
-        if ( $ticket ){
-            $ticket->is_paused = !$ticket->is_paused;
-            $ticket->update();
-        }
+        //$fileName = Str::random() . '.csv';
+        $date = date('d-m-Y-g.i.a');
+        $filename = 'booking-as-of-' . $date . '.csv';
 
-        $success = ($ticketIsPaused !== $ticket->is_paused ) ? true : false;
-        return ['success' => $success, 'item' => $ticket];
+        $books = $model::all();
+
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$filename",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+        // "First Name","Last Name","Email","Reference","Amount"
+        $columns = array('First Name','Last Name','Email','Reference','Amount');
+
+        $callback = function() use($books, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            foreach ($books as $book) {
+                $row['First Name']  = $book->first_name;
+                $row['Last Name']    = $book->last_name;
+                $row['Email']    = $book->email;
+                $row['Reference']  = $book->booking_reference;
+                $row['Amount']  = 'FREE';
+
+                fputcsv($file, array($row['First Name'], $row['Last Name'], $row['Email'], $row['Reference'], $row['Amount']));
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
-    */
 }

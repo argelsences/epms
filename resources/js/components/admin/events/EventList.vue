@@ -404,6 +404,11 @@
                                                 <v-card flat>
                                                     <v-card-text class="pt-0">
                                                         <!-- theBooking -->
+                                                        <v-row>
+                                                            <v-col cols="12" sm="12" md="12">
+                                                                <v-btn small color="#1f4068" class="white--text" href="/web-admin/bookings/export-to-csv"><v-icon class="mr-2">mdi-export</v-icon>Export bookings to CSV</v-btn>
+                                                            </v-col>
+                                                        </v-row>
                                                         <v-data-table :headers="bookingHeaders" :items="bookingRows" :search="search" :items-per-page="20" sort-by="name" class="booking-data-table">
                                                             <template v-slot:top>
                                                                 <!-- the toolbar -->
@@ -415,7 +420,7 @@
                                                                         <v-card>
                                                                             <v-card-title color="primary">
                                                                                 
-                                                                                <span class="headline"><v-icon>mdi-cart</v-icon> Cancel Booking: {{editedBookingItem.booking_reference}}</span>
+                                                                                <span class="headline"><v-icon>mdi-cart</v-icon> Cancel Booking Attendee: {{editedBookingItem.booking_reference}}</span>
                                                                                 <v-spacer></v-spacer>
                                                                                 <!--<v-btn absolute dark fab middle right color="pink" @click="closeCancelBooking">
                                                                                     <v-icon>mdi-close</v-icon>
@@ -720,8 +725,29 @@
                                                                 {{item.reserve_status.name}}
                                                             </template>
                                                             <template v-slot:item.actions="{ item }">
-                                                                <v-icon color="pink" small class="mr-2" @click="cancelBooking(item)">mdi-cancel</v-icon>
-                                                                <v-icon color="primary" small @click="detailsBooking(item)">mdi-information</v-icon>
+                                                                <!--<v-icon color="error" small class="mr-2" @click="cancelBooking(item)">mdi-account-cancel</v-icon>
+                                                                <v-icon color="pink" small class="mr-2" @click="cancelBooking(item)">mdi-cancel</v-icon>-->
+
+                                                                <v-tooltip bottom>
+                                                                    <template v-slot:activator="{ on, attrs }">
+                                                                        <v-icon color="error" dark v-bind="attrs" v-on="on" small @click="removeBooking(item)">mdi-cancel</v-icon>
+                                                                    </template>
+                                                                    <span>Cancel Booking</span>
+                                                                </v-tooltip>
+
+                                                                <v-tooltip bottom>
+                                                                    <template v-slot:activator="{ on, attrs }">
+                                                                        <v-icon color="pink" dark v-bind="attrs" v-on="on" small @click="cancelBooking(item)">mdi-account-cancel</v-icon>
+                                                                    </template>
+                                                                    <span>Cancel Attendees</span>
+                                                                </v-tooltip>
+                                                                
+                                                                <v-tooltip bottom>
+                                                                    <template v-slot:activator="{ on, attrs }">
+                                                                        <v-icon color="primary" dark v-bind="attrs" v-on="on" small @click="detailsBooking(item)">mdi-information</v-icon>
+                                                                    </template>
+                                                                    <span>Booking Details</span>
+                                                                </v-tooltip>
                                                             </template>
                                                             <template v-slot:no-data>
                                                                 <v-btn class="btn btn-sm btn-primary" @click="initialize">Reset</v-btn>
@@ -1771,7 +1797,8 @@
                 .catch( error => {
                     
                 })
-            }
+            },
+            removeBooking(item){}
         },
         created: function() {
             this.setHedeaderTitle()

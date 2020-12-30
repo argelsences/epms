@@ -433,7 +433,7 @@
                                                                                                             <td>{{attendee.first_name + " " + attendee.last_name}}</td>
                                                                                                             <td>{{attendee.email}}</td>
                                                                                                             <td>{{getTicketName(attendee.ticket_id) + " " + attendee.private_reference_number}}</td>
-                                                                                                            <td><v-icon color="pink" small @click="cancelAttendee(i)">mdi-delete</v-icon></td>
+                                                                                                            <td><v-icon color="pink" small @click="cancelAttendee(i)">mdi-delete</v-icon></td>                                                                                                            
                                                                                                         </tr>
                                                                                                     </tbody>
                                                                                                 </template>
@@ -454,6 +454,128 @@
                                                                             </v-card-actions>
                                                                         </v-card>
                                                                     </v-dialog>
+
+                                                                    <!-- booking details dialog -->
+                                                                    <v-dialog v-model="booking_details_dialog"  max-width="600px" scrollable>
+                                                                        <v-card>
+                                                                            <v-card-title color="primary">
+                                                                                
+                                                                                <span class="headline"><v-icon>mdi-cart</v-icon> Booking: {{editedBookingItem.booking_reference}}</span>
+                                                                                <v-spacer></v-spacer>
+                                                                                <!--<v-btn absolute dark fab middle right color="pink" @click="closeCancelBooking">
+                                                                                    <v-icon>mdi-close</v-icon>
+                                                                                </v-btn>-->
+                                                                            </v-card-title>
+                                                                            <v-divider></v-divider>
+                                                                            <v-card-text>
+                                                                                <v-container>
+                                                                                    <v-row >
+                                                                                        <v-col cols="12" sm="12" md="12" class="ma-2">
+                                                                                            <span class="text-h6">Booking Details</span>
+                                                                                        </v-col>
+                                                                                        <v-col cols="12" sm="12" md="12" class="ma-2">
+                                                                                            <v-simple-table>
+                                                                                                <template v-slot:default>
+                                                                                                    <tbody>
+                                                                                                        <tr>
+                                                                                                            <td style="width:50%">
+                                                                                                                <p class="text-subtitle-2">First Name</p>
+                                                                                                                <p>{{editedBookingItem.first_name}}</p>
+                                                                                                            </td>
+                                                                                                            <td style="width:50%">
+                                                                                                                <p class="text-subtitle-2">Last Name</p>
+                                                                                                                <p>{{editedBookingItem.last_name}}</p>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td>
+                                                                                                                <p class="text-subtitle-2">Amount</p>
+                                                                                                                <p>FREE</p>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <p class="text-subtitle-2">Reference</p>
+                                                                                                                <p>{{editedBookingItem.booking_reference}}</p>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td>
+                                                                                                                <p class="text-subtitle-2">Date</p>
+                                                                                                                <p>{{editedBookingItem.created_at | formatDate}}</p>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <p class="text-subtitle-2">Email</p>
+                                                                                                                <p>{{editedBookingItem.email}}</p>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                    </tbody>
+                                                                                                </template>
+                                                                                            </v-simple-table>
+                                                                                        </v-col>
+                                                                                    </v-row>
+                                                                                    <v-row >
+                                                                                        <v-col cols="12" sm="12" md="12" class="ma-2">
+                                                                                            <span class="text-h6">Booking Items</span>
+                                                                                        </v-col>
+                                                                                        <v-col cols="12" sm="12" md="12" class="ma-2">
+                                                                                            <v-simple-table>
+                                                                                                <template v-slot:default>
+                                                                                                    <tbody>
+                                                                                                        <tr>
+                                                                                                            <td style="width:50%">
+                                                                                                                <p class="text-subtitle-2">First Name</p>
+                                                                                                                <p>{{editedBookingItem.first_name}}</p>
+                                                                                                            </td>
+                                                                                                            <td style="width:50%">
+                                                                                                                <p class="text-subtitle-2">Last Name</p>
+                                                                                                                <p>{{editedBookingItem.last_name}}</p>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td>
+                                                                                                                <p class="text-subtitle-2">Amount</p>
+                                                                                                                <p>FREE</p>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <p class="text-subtitle-2">Reference</p>
+                                                                                                                <p>{{editedBookingItem.booking_reference}}</p>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td>
+                                                                                                                <p class="text-subtitle-2">Date</p>
+                                                                                                                <p>{{editedBookingItem.created_at | formatDate}}</p>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <p class="text-subtitle-2">Email</p>
+                                                                                                                <p>{{editedBookingItem.email}}</p>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                    </tbody>
+                                                                                                </template>
+                                                                                            </v-simple-table>
+                                                                                        </v-col>
+                                                                                    </v-row>
+                                                                                    <v-row >
+                                                                                        <v-col cols="12" sm="12" md="12" class="ma-2">
+                                                                                            <span class="text-h6">Booking Attendees</span>
+                                                                                        </v-col>
+                                                                                        <v-col cols="12" sm="12" md="12" class="ma-2">
+                                                                                            Attendees
+                                                                                        </v-col>
+                                                                                    </v-row>
+                                                                                </v-container>
+                                                                            </v-card-text>
+                                                                            <v-divider></v-divider>
+                                                                            <v-card-actions>
+                                                                                <v-spacer></v-spacer>
+                                                                                <v-btn color="blue darken-1" text @click="closeDetailsBooking">Edit</v-btn>
+                                                                                <v-btn color="blue darken-1" text @click="closeDetailsBooking">Print Tickets</v-btn>
+                                                                                <v-btn color="blue darken-1" text @click="closeDetailsBooking">Resend Tickets</v-btn>
+                                                                                <v-btn color="blue darken-1" text @click="closeDetailsBooking">Close</v-btn>
+                                                                            </v-card-actions>
+                                                                        </v-card>
+                                                                    </v-dialog>
+                                                                    <!-- booking details dialog -->
                                                                     <!--
                                                                     <v-dialog v-model="dialog"  width="80%" scrollable fullscreen>
                                                                         <template v-slot:activator="{ on, attrs }">
@@ -552,7 +674,7 @@
                                                             </template>
                                                             <template v-slot:item.actions="{ item }">
                                                                 <v-icon color="pink" small class="mr-2" @click="cancelBooking(item)">mdi-cancel</v-icon>
-                                                                <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+                                                                <v-icon color="primary" small @click="detailsBooking(item)">mdi-information</v-icon>
                                                             </template>
                                                             <template v-slot:no-data>
                                                                 <v-btn class="btn btn-sm btn-primary" @click="initialize">Reset</v-btn>
@@ -727,6 +849,7 @@
                 <v-card-title>
                     <span class="headline">{{ticketFormTitle}}</span>
                 </v-card-title>
+                <v-divider></v-divider>
                 <v-card-text>
                     <v-container>
                         <v-form v-model="isValid1" ref="formTicket">
@@ -837,6 +960,7 @@
                         </v-form>
                     </v-container>
                 </v-card-text>
+                <v-divider></v-divider>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="blue darken-1" text @click="closeTicket">
@@ -878,6 +1002,7 @@
                 start_time_dialog: false,
                 end_time_dialog: false,
                 booking_cancel_dialog: false,
+                booking_details_dialog: false,
                 isValid: true,
                 isValid1: true,
                 isValid2: true,
@@ -1537,10 +1662,8 @@
                     let id = this.editedBookingItem.attendees[index].id
 
                     if (id > 0) {
-                        axios.delete('/api/attendees/' + id)
+                        axios.delete('/api/attendees/delete/' + id)
                     }
-                    
-                    console.log(this.editedBookingItem.attendees[index])
 
                     this.editedBookingItem.attendees.splice(index, 1);
                 }
@@ -1564,7 +1687,25 @@
                     // make sure expansion tab in dialog is closed
                     //this.ticketExpansionPanel = null
                 })
-            }
+            },
+            detailsBooking(item){
+                this.booking_details_dialog = true
+                this.editedBookingIndex = this.bookingRows.indexOf(item)
+                this.editedBookingItem = item
+                console.log(item)
+            },
+            closeDetailsBooking(){
+                // make sure the dialog box is closed
+                this.booking_details_dialog = false
+                // next action is to make sure that the value of editedItem is on default, and re-initialize the editedIndex value
+                this.$nextTick(() => {
+                    // reset the form
+                    this.editedBookingItem = Object.assign({}, this.bookingDefault)
+                    //this.$refs.formTicket.reset();
+                    // make sure expansion tab in dialog is closed
+                    //this.ticketExpansionPanel = null
+                })
+            },
         },
         created: function() {
             this.setHedeaderTitle()

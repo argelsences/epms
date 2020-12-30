@@ -180,10 +180,8 @@ class BookController extends Controller
         $removeBookingEmail = $this->remove_booking_email( $theBooking );
 
         // delete all attendees
-        //$book->attendees->delete();
         $deleteAttendees = Attendee::where('book_id', $book->id)->delete();
         $bookItems = BookItem::where('book_id',$book->id)->delete();
-        //$book_tickets = BookTicket::where()
         $book->tickets()->detach();
         $book->delete();
     

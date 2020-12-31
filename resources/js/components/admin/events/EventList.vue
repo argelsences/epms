@@ -634,7 +634,7 @@
                                                                         <v-card>
                                                                             <v-card-title color="primary">
                                                                                 
-                                                                                <span class="headline"><v-icon>mdi-cart</v-icon> Cancel Booking Attendee: {{editedBookingItem.booking_reference}}</span>
+                                                                                <span class="headline"><v-icon>mdi-cart</v-icon> Edit Booking Attendee: {{editedBookingItem.booking_reference}}</span>
                                                                                 <v-spacer></v-spacer>
                                                                                 <!--<v-btn absolute dark fab middle right color="pink" @click="closeCancelBooking">
                                                                                     <v-icon>mdi-close</v-icon>
@@ -644,31 +644,24 @@
                                                                             <v-card-text>
                                                                                 <v-container>
                                                                                     <v-row >
-                                                                                        <v-col cols="12" sm="12" md="12" class="ma-2">
-                                                                                            <v-simple-table v-if="Array.isArray(editedBookingItem.attendees) && editedBookingItem.attendees.length > 0 ">
-                                                                                                <template v-slot:default>
-                                                                                                    <tbody>
-                                                                                                        <tr v-for="(attendee, i) in editedBookingItem.attendees" :key="attendee.id">
-                                                                                                            <td>{{attendee.first_name + " " + attendee.last_name}}</td>
-                                                                                                            <td>{{attendee.email}}</td>
-                                                                                                            <td>{{getTicketName(attendee.ticket_id) + " " + attendee.private_reference_number}}</td>
-                                                                                                            <td><v-icon color="pink" small @click="cancelAttendee(i)">mdi-delete</v-icon></td>                                                                                                            
-                                                                                                        </tr>
-                                                                                                    </tbody>
-                                                                                                </template>
-                                                                                            </v-simple-table>
-                                                                                            <v-alert icon="mdi-delete-empty-outline" prominent text type="info" v-else>
-                                                                                                All attendees in this booking is cancelled.
-                                                                                            </v-alert>
-                                                                                        </v-col>
-                                                                                        
-                                                                                            
+                                                                                        <v-form v-model="isValid6" ref="bookingForm">
+                                                                                            <v-col cols="12" sm="12" md="12" class="ma-2">
+                                                                                                <v-text-field v-model="editedBookingItem.first_name" label="First Name" :rules="[rules.required]" prepend-icon="mdi-account" ></v-text-field>
+                                                                                            </v-col> 
+                                                                                            <v-col cols="12" sm="12" md="12" class="ma-2">
+                                                                                                <v-text-field v-model="editedBookingItem.last_name" label="Last Name" :rules="[rules.required]" prepend-icon="mdi-account" ></v-text-field>
+                                                                                            </v-col>
+                                                                                            <v-col cols="12" sm="12" md="12" class="ma-2">
+                                                                                                <v-text-field v-model="editedBookingItem.email" label="Email" :rules="[rules.required]" prepend-icon="mdi-email" ></v-text-field>
+                                                                                            </v-col>
+                                                                                        </v-form>
                                                                                     </v-row>
                                                                                 </v-container>
                                                                             </v-card-text>
                                                                             <v-divider></v-divider>
                                                                             <v-card-actions>
                                                                                 <v-spacer></v-spacer>
+                                                                                <v-btn color="blue darken-1" :disabled="!isValid6" text @click="updateBooking">Save</v-btn>
                                                                                 <v-btn color="blue darken-1" text @click="closeEditBooking">Close</v-btn>
                                                                             </v-card-actions>
                                                                         </v-card>
@@ -1129,6 +1122,7 @@
                 isValid2: true,
                 isValid3: true,
                 isValid5: true,
+                isValid6: true,
                 search : '',
                 feedbacks: [],
                 rows: [],
@@ -1840,15 +1834,47 @@
             },
             editBooking(){
                 this.booking_edit_dialog = true
+                /////this.editedBookingIndex = this.bookingRows.indexOf(item)
+                //this.editedBookingItem = item
                 console.log(this.editedBookingItem)
             },
             closeEditBooking(){
                 // make sure the dialog box is closed
                 this.booking_edit_dialog = false
+                console.log(this.booking_edit_dialog)
                 // next action is to make sure that the value of editedItem is on default, and re-initialize the editedIndex value
                 this.$nextTick(() => {
                     // reset the form
                     this.editedBookingItem = Object.assign({}, this.bookingDefault)
+                })
+            },
+            updateBooking(){
+                console.log(this.editedBookingItem)
+                console.log(this.editedBookingIndex)
+                axios.post('/api/bookings/update', this.editedBookingItem)
+                .then(response => {
+                    if (response.data.success) {
+                        this.feedbacks = []
+                        this.feedbacks[0] = 'Changes for booking ' + this.editedBookingItem.booking_reference + ' is saved.'
+                        this.snackbar = true
+                        this.error = false
+                
+                        if ( this.editedBookingIndex > -1 )
+                            Object.assign(this.bookingRows[this.editedBookingIndex], response.data.item)
+                        //else
+                            //this.rows.push(response.data.item)
+
+                        // close the dialog box
+                        this.closeEditBooking()  
+                        this.closeDetailsBooking()
+                        //this.booking_edit_dialog = false
+                    }
+                })
+                .catch( error => {
+                    let messages = Object.values(error.response.data.errors); 
+                    this.feedbacks = [].concat.apply([], messages)
+                    this.snackbar = true
+                    this.error = true
                 })
             },
         },

@@ -72,15 +72,26 @@ class BookController extends Controller
     }
 
     /**
+     * API Function
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Book $book)
-    {
+    public function update(Request $request, Book $book) {
         //
+        $booking = $book::findOrFail($request->input('id'));
+        //dd($booking);
+        $theBooking = $booking->update([
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
+            'email' => $request->input('email'),
+        ]);
+
+        $success = ($theBooking) ? true : false;
+
+        return [ 'success' => $success, 'item' => $theBooking ]; 
     }
 
     /**

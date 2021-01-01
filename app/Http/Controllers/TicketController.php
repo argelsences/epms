@@ -249,7 +249,12 @@ class TicketController extends Controller
                     'ticket_id' => $tkt,
                 ]);
                 $counter++;
-            }    
+            }
+            $theTicketUpdated = Ticket::findOrFail($tkt);
+            $bookedCountPerTicket = $theTicketUpdated->attendees()->count();
+            $bookedCountPerTicketUpdated = $theTicketUpdated->update([
+                'quantity_booked' => $bookedCountPerTicket,
+            ]);  
         }
         
         $theTicketDetails = [

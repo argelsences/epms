@@ -29,4 +29,8 @@ class Attendee extends Model
     public function event(){
         return $this->belongsTo('App\Event');
     }
+
+    public function getFullNameAttribute(){
+        return $this->first_name . " " . $this->last_name;
+    }
 }

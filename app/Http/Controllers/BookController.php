@@ -111,8 +111,8 @@ class BookController extends Controller
     }
 
     /**
-     * API function
-     * Cancel a booking
+     * Admin Function to export bookings to CSV file
+     * 
      * @param request object containing details about the booking
      */
     public function exportToCSV(Book $model) {

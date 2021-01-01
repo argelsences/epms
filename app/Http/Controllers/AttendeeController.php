@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Attendee;
+use App\Event;
 use Illuminate\Http\Request;
 use App\Jobs\SendBookingCancelJob;
 
@@ -126,5 +127,83 @@ class AttendeeController extends Controller
 
         return ['success' => true, 'message' => config('eppms.messages.frontend_success') ];
        
+    }
+    
+    /**
+     * API function to list all bookings of an event
+     * @params event_id the id of the event
+     * @return json object containing all bookings related to the event
+     */
+    public function list(Attendee $model, $event_id){
+        
+        if (auth()->user()->hasPermissionTo('list attendee', 'api') ){
+            return response('Unauthorized', 403);
+        }
+        
+        $attendees = $model::with(['book','ticket'])->where('event_id', $event_id)->get();
+        
+        return response()->json($attendees);
+    }
+
+    /**
+     * Admin Function to export attendees to CSV file
+     * 
+     * @param request object containing details about the booking
+     */
+    public function exportToCSV(Attendee $model) {
+
+        if (auth()->user()->hasPermissionTo('export booking', 'web') ){
+            return response('Unauthorized', 403);
+        }
+
+        //$fileName = Str::random() . '.csv';
+        $date = date('d-m-Y-g.i.a');
+        $filename = 'attendess-as-of-' . $date . '.csv';
+
+        $attendees = $model::all();
+
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$filename",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+        // "First Name","Last Name","Email","Reference","Amount"
+        $columns = array('First Name','Last Name','Email', 'Ticket ID', 'Reference','Ticket Name');
+
+        $callback = function() use($attendees, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            foreach ($attendees as $attendee) {
+                $row['First Name']  = $attendee->first_name;
+                $row['Last Name']    = $attendee->last_name;
+                $row['Email']    = $attendee->email;
+                $row['Ticket ID']  = $attendee->private_reference_number;
+                $row['Reference']  = $attendee->book->booking_reference;
+                $row['Ticket Name']  = $attendee->ticket->title;
+
+                fputcsv($file, array($row['First Name'], $row['Last Name'], $row['Email'], $row['Ticket ID'],  $row['Reference'], $row['Ticket Name']));
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    /**
+     * Display printable page of attendees
+     *
+     * @param $event_id
+     * @return View
+     */
+    public function displayPrintableAttendees(Event $event)
+    {
+        $event = $event;
+        $attendees = $event->attendees()->orderBy('first_name')->get();
+
+        return view('admin.print.attendees', compact('event','attendees') );
     }
 }

@@ -127,8 +127,6 @@ class AttendeeController extends Controller
         // send email job
         $cancelBookingEmail = $this->cancel_booking_email( $theAttendee );
 
-        
-
         $ticketID = $attendee->ticket->id;
 
         $theTicket = Ticket::findOrFail($ticketID);

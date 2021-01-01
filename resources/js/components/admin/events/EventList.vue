@@ -644,17 +644,19 @@
                                                                             <v-card-text>
                                                                                 <v-container>
                                                                                     <v-row >
-                                                                                        <v-form v-model="isValid6" ref="bookingForm">
-                                                                                            <v-col cols="12" sm="12" md="12" class="ma-2">
-                                                                                                <v-text-field v-model="editedBookingItem.first_name" label="First Name" :rules="[rules.required]" prepend-icon="mdi-account" ></v-text-field>
-                                                                                            </v-col> 
-                                                                                            <v-col cols="12" sm="12" md="12" class="ma-2">
-                                                                                                <v-text-field v-model="editedBookingItem.last_name" label="Last Name" :rules="[rules.required]" prepend-icon="mdi-account" ></v-text-field>
-                                                                                            </v-col>
-                                                                                            <v-col cols="12" sm="12" md="12" class="ma-2">
-                                                                                                <v-text-field v-model="editedBookingItem.email" label="Email" :rules="[rules.required]" prepend-icon="mdi-email" ></v-text-field>
-                                                                                            </v-col>
-                                                                                        </v-form>
+                                                                                        <v-col cols="12" sm="12" md="12" class="ma-2">
+                                                                                            <v-form v-model="isValid6" ref="bookingForm">
+                                                                                                <v-col cols="12" sm="12" md="12" class="ma-2">
+                                                                                                    <v-text-field v-model="editedBookingItem.first_name" label="First Name" :rules="[rules.required]" prepend-icon="mdi-account" ></v-text-field>
+                                                                                                </v-col> 
+                                                                                                <v-col cols="12" sm="12" md="12" class="ma-2">
+                                                                                                    <v-text-field v-model="editedBookingItem.last_name" label="Last Name" :rules="[rules.required]" prepend-icon="mdi-account" ></v-text-field>
+                                                                                                </v-col>
+                                                                                                <v-col cols="12" sm="12" md="12" class="ma-2">
+                                                                                                    <v-text-field v-model="editedBookingItem.email" label="Email" :rules="[rules.required]" prepend-icon="mdi-email" ></v-text-field>
+                                                                                                </v-col>
+                                                                                            </v-form>
+                                                                                         </v-col>
                                                                                     </v-row>
                                                                                 </v-container>
                                                                             </v-card-text>
@@ -816,7 +818,7 @@
                                                                     <!-- the dialog box -->
     
                                                                     <!-- attendee edit dialog -->
-                                                                    <v-dialog v-model="booking_edit_dialog"  max-width="600px" scrollable>
+                                                                    <v-dialog v-model="attendee_edit_dialog"  max-width="600px" scrollable>
                                                                         <v-card>
                                                                             <v-card-title color="primary">
                                                                                 
@@ -828,27 +830,29 @@
                                                                             </v-card-title>
                                                                             <v-divider></v-divider>
                                                                             <v-card-text>
-                                                                                <v-container>
+                                                                                <v-container fluid>
                                                                                     <v-row >
-                                                                                        <v-form v-model="isValid6" ref="bookingForm">
-                                                                                            <v-col cols="12" sm="12" md="12" class="ma-2">
-                                                                                                <v-text-field v-model="editedBookingItem.first_name" label="First Name" :rules="[rules.required]" prepend-icon="mdi-account" ></v-text-field>
-                                                                                            </v-col> 
-                                                                                            <v-col cols="12" sm="12" md="12" class="ma-2">
-                                                                                                <v-text-field v-model="editedBookingItem.last_name" label="Last Name" :rules="[rules.required]" prepend-icon="mdi-account" ></v-text-field>
-                                                                                            </v-col>
-                                                                                            <v-col cols="12" sm="12" md="12" class="ma-2">
-                                                                                                <v-text-field v-model="editedBookingItem.email" label="Email" :rules="[rules.required]" prepend-icon="mdi-email" ></v-text-field>
-                                                                                            </v-col>
-                                                                                        </v-form>
+                                                                                        <v-col cols="12" sm="12" md="12" class="ma-2">
+                                                                                            <v-form v-model="isValid7" ref="attendeeForm" >
+                                                                                                <v-col cols="12" sm="12" md="12" class="ma-2">
+                                                                                                    <v-text-field v-model="editedAttendeeItem.first_name" label="First Name" :rules="[rules.required]" prepend-icon="mdi-account" ></v-text-field>
+                                                                                                </v-col> 
+                                                                                                <v-col cols="12" sm="12" md="12" class="ma-2">
+                                                                                                    <v-text-field v-model="editedAttendeeItem.last_name" label="Last Name" :rules="[rules.required]" prepend-icon="mdi-account" ></v-text-field>
+                                                                                                </v-col>
+                                                                                                <v-col cols="12" sm="12" md="12" class="ma-2">
+                                                                                                    <v-text-field v-model="editedAttendeeItem.email" label="Email" :rules="[rules.required]" prepend-icon="mdi-email" ></v-text-field>
+                                                                                                </v-col>
+                                                                                            </v-form>
+                                                                                        </v-col>
                                                                                     </v-row>
                                                                                 </v-container>
                                                                             </v-card-text>
                                                                             <v-divider></v-divider>
                                                                             <v-card-actions>
                                                                                 <v-spacer></v-spacer>
-                                                                                <v-btn color="blue darken-1" :disabled="!isValid6" text @click="updateBooking">Save</v-btn>
-                                                                                <v-btn color="blue darken-1" text @click="closeEditBooking">Close</v-btn>
+                                                                                <v-btn color="blue darken-1" :disabled="!isValid7" text @click="updateAttendee">Save</v-btn>
+                                                                                <v-btn color="blue darken-1" text @click="closeEditAttendee">Close</v-btn>
                                                                             </v-card-actions>
                                                                         </v-card>
                                                                     </v-dialog>
@@ -869,16 +873,16 @@
                                                             <template v-slot:item.actions="{ item }">
                                                                 <v-tooltip bottom>
                                                                     <template v-slot:activator="{ on, attrs }">
+                                                                        <v-icon color="primary" dark v-bind="attrs" v-on="on" small @click="editAttendee(item)">mdi-pencil</v-icon>
+                                                                    </template>
+                                                                    <span>Edit Attendee</span>
+                                                                </v-tooltip>
+                                                                <v-tooltip bottom>
+                                                                    <template v-slot:activator="{ on, attrs }">
                                                                         <v-icon color="error" dark v-bind="attrs" v-on="on" small @click="removeAttendee(item)">mdi-delete</v-icon>
                                                                     </template>
                                                                     <span>Cancel Attendee</span>
                                                                 </v-tooltip> 
-                                                                <v-tooltip bottom>
-                                                                    <template v-slot:activator="{ on, attrs }">
-                                                                        <v-icon color="primary" dark v-bind="attrs" v-on="on" small @click="detailsBooking(item)">mdi-information</v-icon>
-                                                                    </template>
-                                                                    <span>Edit Attendee</span>
-                                                                </v-tooltip>
                                                             </template>
                                                             <template v-slot:no-data>
                                                                 <v-btn class="btn btn-sm btn-primary" @click="initialize">Reset</v-btn>
@@ -1200,12 +1204,14 @@
                 booking_cancel_dialog: false,
                 booking_details_dialog: false,
                 booking_edit_dialog: false,
+                attendee_edit_dialog: false,
                 isValid: true,
                 isValid1: true,
                 isValid2: true,
                 isValid3: true,
                 isValid5: true,
                 isValid6: true,
+                isValid7: true,
                 search : '',
                 feedbacks: [],
                 rows: [],
@@ -1343,6 +1349,20 @@
                     booking_reference: '',
                     first_name: '',
                     last_name: '',
+                },
+                editedAttendeeItem : {
+                    id: 0,
+                    private_reference_number: '',
+                    first_name: '',
+                    last_name: '',
+                    email: '',
+                },
+                attendeeDefault : {
+                    id: 0,
+                    private_reference_number: '',
+                    first_name: '',
+                    last_name: '',
+                    email: '',
                 },
                 textFieldProps: {
                     appendIcon: 'event',
@@ -1941,7 +1961,7 @@
             closeEditBooking(){
                 // make sure the dialog box is closed
                 this.booking_edit_dialog = false
-                console.log(this.booking_edit_dialog)
+                ///console.log(this.booking_edit_dialog)
                 // next action is to make sure that the value of editedItem is on default, and re-initialize the editedIndex value
                 this.$nextTick(() => {
                     // reset the form
@@ -1993,6 +2013,49 @@
                 }
                 
             },
+            editAttendee(item){
+                console.log(item)
+                this.attendee_edit_dialog = true
+                this.editedAttendeeItem = item
+            },
+            closeEditAttendee(){
+                // make sure the dialog box is closed
+                this.attendee_edit_dialog = false
+                ///console.log(this.booking_edit_dialog)
+                // next action is to make sure that the value of editedItem is on default, and re-initialize the editedIndex value
+                this.$nextTick(() => {
+                    // reset the form
+                    this.editedAttendeeItem = Object.assign({}, this.attendeeDefault)
+                })
+            },
+            updateAttendee(){
+                
+                axios.post('/api/attendees/update', this.editedAttendeeItem)
+                .then(response => {
+                    if (response.data.success) {
+                        this.feedbacks = []
+                        this.feedbacks[0] = 'Changes for attendee with booking number ' + this.editedAttendeeItem.book.booking_reference + ' is saved.'
+                        this.snackbar = true
+                        this.error = false
+                
+                        if ( this.editedAttendeeIndex > -1 )
+                            Object.assign(this.attendeeRows[this.editedAttendeeIndex], response.data.item)
+                        //else
+                            //this.rows.push(response.data.item)
+
+                        // close the dialog box
+                        this.closeEditAttendee()  
+                        //this.booking_edit_dialog = false
+                    }
+                })
+                .catch( error => {
+                    let messages = Object.values(error.response.data.errors); 
+                    this.feedbacks = [].concat.apply([], messages)
+                    this.snackbar = true
+                    this.error = true
+                })
+            },
+
         },
         created: function() {
             this.setHedeaderTitle()

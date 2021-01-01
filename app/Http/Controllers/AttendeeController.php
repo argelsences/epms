@@ -72,6 +72,21 @@ class AttendeeController extends Controller
     public function update(Request $request, Attendee $attendee)
     {
         //
+        if (auth()->user()->hasPermissionTo('edit attendee', 'api') ){
+            return response('Unauthorized', 403);
+        }
+
+        $att = $attendee::findOrFail($request->input('id'));
+
+        $theAttendee = $att->update([
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
+            'email' => $request->input('email'),
+        ]);
+
+        $success = ($theAttendee) ? true : false;
+
+        return [ 'success' => $success, 'item' => $theAttendee ]; 
     }
 
     /**

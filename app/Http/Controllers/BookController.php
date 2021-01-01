@@ -81,6 +81,10 @@ class BookController extends Controller
      */
     public function update(Request $request, Book $book) {
         //
+        if (auth()->user()->hasPermissionTo('edit booking', 'api') ){
+            return response('Unauthorized', 403);
+        }
+
         $booking = $book::findOrFail($request->input('id'));
         //dd($booking);
         $theBooking = $booking->update([

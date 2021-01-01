@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Attendee;
 use App\Event;
+use App\Ticket;
 use Illuminate\Http\Request;
 use App\Jobs\SendBookingCancelJob;
 
@@ -125,6 +126,16 @@ class AttendeeController extends Controller
         ];
         // send email job
         $cancelBookingEmail = $this->cancel_booking_email( $theAttendee );
+
+        
+
+        $ticketID = $attendee->ticket->id;
+
+        $theTicket = Ticket::findOrFail($ticketID);
+        $bookedCountPerTicket = $theTicket->attendees()->count() - 1;
+        $bookedCountPerTicketUpdated = $theTicket->update([
+            'quantity_booked' => $bookedCountPerTicket,
+        ]);
 
         $attendee->delete();
     

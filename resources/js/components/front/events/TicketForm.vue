@@ -50,7 +50,6 @@
                                         <div v-else>
                                             <meta property="availability" content="http://schema.org/InStock">
                                             <input name="tickets[]" type="hidden" :value="ticket.id">
-                                            {{ticket.quantity_available - ticket.quantity_booked}}
                                             <select v-if="(ticket.quantity_available - ticket.quantity_booked) > 1" :name="`ticket_${ticket.id}`" class="form-control float-right" style="text-align: center" v-model="numberTickets[ticket.id]" @change="createEmptyAttendee($event,ticket.id)">
                                                 <!--<option v-if="ticketCount() > 1" value="0">0</option>-->
                                                 <option v-for="i in (ticket.min_per_person, ticket.max_per_person)" :value="i" :key=i>{{i}}</option>

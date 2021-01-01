@@ -633,7 +633,6 @@
                                                                     <v-dialog v-model="booking_edit_dialog"  max-width="600px" scrollable>
                                                                         <v-card>
                                                                             <v-card-title color="primary">
-                                                                                
                                                                                 <span class="headline"><v-icon>mdi-cart</v-icon> Edit Booking: {{editedBookingItem.booking_reference}}</span>
                                                                                 <v-spacer></v-spacer>
                                                                                 <!--<v-btn absolute dark fab middle right color="pink" @click="closeCancelBooking">

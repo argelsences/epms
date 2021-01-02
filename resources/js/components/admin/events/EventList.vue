@@ -327,6 +327,15 @@
                                                                     </v-col>
                                                                     <v-col cols="12" sm="12" md="12">
                                                                         <div class="text-h6  text-left mb-10">Or, select from the list of templates to generate a poster</div>
+                                                                        <!-- template lists -->
+                                                                        <div v-for="(template, i) in templateRows" :key="template.id">
+                                                                            {{i}}
+                                                                            {{template.id}}
+                                                                            {{template.name}}
+                                                                            {{template.department_id}}
+                                                                            <v-img :src="`/web-admin/templates/screenshot/${template.id}?rnd=${cacheKey}`" @error="imageUrl='alt-image.jpg'" max-height="133px" max-width="100px" @click.stop="imageDialogUrl(item)" ></v-img>
+                                                                        </div>
+                                                                        <!-- template lists -->
                                                                     </v-col>
                                                                 </v-row>
                                                             </v-col>
@@ -1216,6 +1225,7 @@
                 rows: [],
                 bookingRows: [],
                 attendeeRows: [],
+                templateRows: [],
                 departments: [],
                 venues: [],
                 speakers: [],
@@ -1229,6 +1239,7 @@
                 end_date: new Date().toISOString().substr(0, 10),
                 start_time: '00:00',
                 end_time: '00:00',
+                cacheKey: +new Date(),
                 // declare extensions you want to use
                 extensions: [
                     History,
@@ -1586,6 +1597,13 @@
                     console.log(this.attendeeRows);
                 });
             },
+            getTemplates(eventId) {
+                axios.get('/api/templates')
+                .then( response => {
+                    this.templateRows = response.data;
+                    console.log(this.templateRows);
+                });
+            },
             editItem (item) {
                 this.editedIndex = this.rows.indexOf(item)
                 this.editedItem = Object.assign({}, item)
@@ -1604,6 +1622,8 @@
                 this.getBookings(this.editedItem.id)
                 // get all attendees of an event
                 this.getAttendees(this.editedItem.id)
+                // get all templates
+                this.getTemplates(this.editedItem.id)
             },
             deleteItem (item) {
                 const index = this.rows.indexOf(item)
@@ -2053,6 +2073,10 @@
                     this.snackbar = true
                     this.error = true
                 })
+            },
+            imageDialogUrl(item){
+                this.dialog = true
+                this.theImageSrc = "/web-admin/templates/screenshot/" + item.id
             },
 
         },

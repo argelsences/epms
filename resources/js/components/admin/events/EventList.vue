@@ -319,27 +319,81 @@
                                                                                 <div class="text-caption pl-2">Uploading a new file will replace the existing poster. Only accepting JPG/PNG/BMP files. File size should not be greater than 2MB</div>
                                                                             </div>
                                                                             
+                                                                            <v-row>
+                                                                                <v-col>
+                                                                                    <v-chip class="ma-2 white--text poster-file-name" v-if="poster.file_path && !poster.template_id" color="blue darken-1" @click="deletePoster">
+                                                                                        <v-icon left>mdi-trash-can</v-icon> 
+                                                                                        <span>{{posterFilePath()}}</span>
+                                                                                    </v-chip>
+                                                                                </v-col>
+                                                                                <v-spacer></v-spacer>
+                                                                                <v-col>
+                                                                                    <v-btn text depressed :loading="isSelecting" class="float-right" :disabled="uploadReady" @click="uploadPoster">Upload Poster</v-btn>
+                                                                                </v-col>
+                                                                            </v-row>
+                                                                            <!--
                                                                             <v-spacer></v-spacer>
                                                                             <div>
                                                                                 <v-btn text depressed :loading="isSelecting" class="float-right" :disabled="uploadReady" @click="uploadPoster">Upload Poster</v-btn>
                                                                             </div>
+                                                                            -->
                                                                         </v-form>
                                                                     </v-col>
                                                                     <v-col cols="12" sm="12" md="12">
-                                                                        <div class="text-h6  text-left mb-10">Or, select from the list of templates to generate a poster</div>
-                                                                        <!-- template lists -->
-                                                                        <div v-for="(template, i) in templateRows" :key="template.id">
-                                                                            {{i}}
-                                                                            {{template.id}}
-                                                                            {{template.name}}
-                                                                            {{template.department_id}}
-                                                                            <v-img :src="`/web-admin/templates/screenshot/${template.id}?rnd=${cacheKey}`" @error="imageUrl='alt-image.jpg'" max-height="133px" max-width="100px" @click.stop="imageDialogUrl(item)" ></v-img>
+                                                                        <div class="text-h6  text-left mb-10">
+                                                                            Or, select from the list of templates to generate a poster
+                                                                            <div v-if="poster.file_path && !poster.template_id" class="text-caption red--text">Remove all existing poster to use this option</div>
                                                                         </div>
+                                                                        <!-- template lists -->
+                                                                        <v-row>
+                                                                            <v-col cols="12" sm="4" md="4" v-for="(template, i) in templateRows" :key="template.id">
+                                                                                <v-lazy v-model="isActive" :options="{threshold: .8}" min-height="200" transition-group="fade-transition">
+                                                                                    <v-card :disabled="poster.file_path && !poster.template_id" class="mx-auto" max-width="180" @click="selectTemplate(template.id)">
+                                                                                        <v-img class="white--text align-end"  :src="`/web-admin/templates/screenshot/${template.id}?rnd=${cacheKey}`">
+                                                                                            <v-card-title  class="text-left secondary opacity-half" elevation=24>{{template.name}}</v-card-title>
+                                                                                        </v-img>
+                                                                                        <v-card-text class="text--primary" >
+                                                                                            <div class="text-caption">{{template.description}}</div>
+                                                                                        </v-card-text>
+                                                                                        <v-card-actions>
+                                                                                            <div class="d-flex justify-end">
+                                                                                                <v-icon color="success" v-if="selectedTemplate === template.id">mdi-check-circle</v-icon>
+                                                                                            </div>
+                                                                                        </v-card-actions>
+                                                                                    </v-card>
+                                                                                </v-lazy>
+                                                                                <v-btn :disabled="poster.file_path && !poster.template_id" color="primary" class="ma-2 white--text" @click.stop="imageDialogUrl(template.id)">
+                                                                                    Preview
+                                                                                    <v-icon left dark class="ml-2">
+                                                                                        mdi-magnify
+                                                                                    </v-icon>
+                                                                                </v-btn>
+                                                                            </v-col>
+                                                                        </v-row>
+                                                                        <v-dialog v-model="templatePreview" hide-overlay  scrollable fullscreen>
+                                                                            <v-card tile>
+                                                                                <v-card-text>
+                                                                                    <v-container fill-height>
+                                                                                        <v-row justify="center" align="center">
+                                                                                            <v-col cols="12" sm="4">
+                                                                                                <v-img :src="theImageSrc" @error="imageUrl='alt-image.jpg'" height="auto" ></v-img>
+                                                                                            </v-col>
+                                                                                        </v-row>
+                                                                                    </v-container> 
+                                                                                </v-card-text>
+                                                                                <v-card-actions>
+                                                                                    <v-spacer></v-spacer>
+                                                                                    <v-btn absolute dark fab top right right color="pink" class="mt-10" @click="templatePreview=false">
+                                                                                        <v-icon x-large>mdi-close</v-icon>
+                                                                                    </v-btn>
+                                                                                </v-card-actions>
+                                                                            </v-card>
+                                                                        </v-dialog>
                                                                         <!-- template lists -->
                                                                     </v-col>
                                                                 </v-row>
                                                             </v-col>
-                                                            <v-col cols="12" sm="4" md="4" class="align-self-center">
+                                                            <v-col cols="12" sm="4" md="4" >
                                                                 <v-card outlined min-height="500px">
                                                                     <v-card-title>
                                                                         Preview
@@ -456,8 +510,6 @@
                                                                                                 All attendees in this booking is cancelled.
                                                                                             </v-alert>
                                                                                         </v-col>
-                                                                                        
-                                                                                            
                                                                                     </v-row>
                                                                                 </v-container>
                                                                             </v-card-text>
@@ -1234,6 +1286,7 @@
                 snackbar: false,
                 timeout: 5000,
                 error: false,
+                isActive: false,
                 base_url: window.location.origin + '/',
                 start_date: new Date().toISOString().substr(0, 10),
                 end_date: new Date().toISOString().substr(0, 10),
@@ -1446,6 +1499,9 @@
                     template_id: 0,
                 },
                 posterFormats: ['JPG', 'PNG', 'BMP', 'PDF'],
+                selectedTemplate: 0,
+                templatePreview: false,
+                theImageSrc: '',
             }
         },
         computed: {
@@ -2016,7 +2072,7 @@
                 })
             },
             removeAttendee(item){
-                console.log(item)
+                
                 let index = this.attendeeRows.indexOf(item)
                 
                 if (confirm("Are you sure you want to cancel this attendee? (" + item.book.booking_reference + ")")) {
@@ -2074,11 +2130,37 @@
                     this.error = true
                 })
             },
-            imageDialogUrl(item){
-                this.dialog = true
-                this.theImageSrc = "/web-admin/templates/screenshot/" + item.id
+            selectTemplate(templateID){
+                console.log(templateID)
+                this.selectedTemplate = templateID
             },
+            downloadPoster(){
 
+            },
+            imageDialogUrl(templateID){
+                this.templatePreview = true
+                this.theImageSrc = "/web-admin/templates/screenshot/" + templateID
+            },
+            posterFilePath(){
+                return this.poster.file_path.split('\\').pop().split('/').pop()
+            },
+            deletePoster(){
+                console.log(this.poster.id)
+                // delete poster file here
+                
+                if (confirm("Are you sure you want to this poster image?") ){
+                    
+                    let id = this.poster.id
+
+                    if (id > 0) {
+                        axios.delete('/api/poster/file/delete/' + id)
+                        .then(response => {
+                            this.poster = response.data.item
+                            this.posterFile = ''
+                        })
+                    }
+                }
+            }
         },
         created: function() {
             this.setHedeaderTitle()
@@ -2094,4 +2176,10 @@
 <style scoped>
     .v-icon.no-poster-icon {margin-top:35%;}
     .ticket-header:hover {cursor: pointer;}
+    .poster-file-name{width:auto;}
+    .poster-file-name span{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 </style>

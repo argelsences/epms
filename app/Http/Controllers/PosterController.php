@@ -150,4 +150,21 @@ class PosterController extends Controller
         $success = ($thePoster) ? true : false;
         return ['success' => $success, 'item' => $thePoster];
     }
+
+    /**
+     * API Function
+     * Remove an image file from poster
+     */
+    public function deleteFile(Poster $poster) {
+
+        if (auth()->user()->hasPermissionTo('edit poster', 'api') && auth()->user()->hasPermissionTo('add poster', 'api') ){
+            return response('Unauthorized', 403);
+        }
+
+        $removeFile = $poster->update(['file_path' => '']);  
+        
+        $success = ($removeFile) ? true : false;
+        return ['success' => $success, 'item' => $poster];
+    }
+
 }

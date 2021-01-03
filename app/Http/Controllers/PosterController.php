@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Poster;
+use App\Template;
+use App\Event;
 use Illuminate\Http\Request;
 use EPPMS;
 
@@ -142,7 +144,7 @@ class PosterController extends Controller
                 'photo' => $photo,
             ];
 
-            $thePoster = EPPMS::generatePoster($params);
+            $thePoster = EPPMS::uploadPoster($params);
             $generateSuccess = ($thePoster->id) ? true : false;
         }
         // to access public files in url http://localhost:8000/files/eclOueMC57PBMVylqzhIiumaoGh72UHZFbEyjiz5.jpeg
@@ -165,6 +167,17 @@ class PosterController extends Controller
         
         $success = ($removeFile) ? true : false;
         return ['success' => $success, 'item' => $poster];
+    }
+
+    /**
+     * Generate poster
+     */
+    public function generate(Request $request){
+        
+        $template = Template::findOrFail($request->post('template_id'));
+        $event = Event::findOrFail($request->post('event_id'));
+        // fix later to allow event embed or better yet create another function
+        return EPPMS::generatePoster($template, $event);
     }
 
 }

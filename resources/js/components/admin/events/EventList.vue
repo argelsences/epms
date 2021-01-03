@@ -300,6 +300,13 @@
                                                         <v-row>
                                                             <v-col cols="12" sm="8" md="8">
                                                                 <v-row>
+                                                                    <v-col cols="12" sm="12" md="12">
+                                                                        <v-alert icon="mdi-alert-circle-outline" prominent text type="warning">
+                                                                            Uploading or generating a new file will replace the existing poster.
+                                                                        </v-alert>
+                                                                    </v-col>
+                                                                </v-row>
+                                                                <v-row>
                                                                     <v-col cols="12" sm=12 md="12">
                                                                         <div class="text-h6  text-left mb-2">Upload a poster file</div>
                                                                         <v-form v-model="isValid5" ref="posterForm">
@@ -316,7 +323,7 @@
                                                                                     {{ uploadButtonText }}
                                                                                 </v-btn>
                                                                                 <input ref="uploader" class="d-none" type="file" accept="image/png, image/jpeg, image/bmp, image/jpg" @change="onFileChanged">
-                                                                                <div class="text-caption pl-2">Uploading a new file will replace the existing poster. Only accepting JPG/PNG/BMP files. File size should not be greater than 2MB</div>
+                                                                                <div class="text-caption pl-2">Only accepts JPG/PNG/BMP files. File size should not be greater than 2MB</div>
                                                                             </div>
                                                                             
                                                                             <v-row>
@@ -342,13 +349,12 @@
                                                                     <v-col cols="12" sm="12" md="12">
                                                                         <div class="text-h6  text-left mb-10">
                                                                             Or, select from the list of templates to generate a poster
-                                                                            <div v-if="poster.file_path && !poster.template_id" class="text-caption red--text">Remove all existing poster to use this option</div>
                                                                         </div>
                                                                         <!-- template lists -->
                                                                         <v-row>
                                                                             <v-col cols="12" sm="4" md="4" v-for="(template, i) in templateRows" :key="template.id">
                                                                                 <v-lazy v-model="isActive" :options="{threshold: .8}" min-height="200" transition-group="fade-transition">
-                                                                                    <v-card :disabled="poster.file_path && !poster.template_id" class="mx-auto" max-width="180" @click="selectTemplate(template.id)">
+                                                                                    <v-card class="mx-auto" max-width="180" @click="selectTemplate(template.id)">
                                                                                         <v-img class="white--text align-end"  :src="`/web-admin/templates/screenshot/${template.id}?rnd=${cacheKey}`">
                                                                                             <v-card-title  class="text-left secondary opacity-half" elevation=24>{{template.name}}</v-card-title>
                                                                                         </v-img>
@@ -360,14 +366,19 @@
                                                                                                 <v-icon color="success" v-if="selectedTemplate === template.id">mdi-check-circle</v-icon>
                                                                                             </div>
                                                                                         </v-card-actions>
-                                                                                    </v-card>
+                                                                                     </v-card>
                                                                                 </v-lazy>
-                                                                                <v-btn :disabled="poster.file_path && !poster.template_id" color="primary" class="ma-2 white--text" @click.stop="imageDialogUrl(template.id)">
+                                                                                <v-btn color="primary" class="ma-2 white--text" @click.stop="imageDialogUrl(template.id)">
                                                                                     Preview
                                                                                     <v-icon left dark class="ml-2">
                                                                                         mdi-magnify
                                                                                     </v-icon>
                                                                                 </v-btn>
+                                                                            </v-col>
+                                                                        </v-row>
+                                                                        <v-row>
+                                                                            <v-col cols="12" sm="12" md="12">
+                                                                                <v-btn text depressed :loading="isSelecting"  class="float-right" :disabled="!selectedTemplate" @click="generatePoster">Generate Poster</v-btn>
                                                                             </v-col>
                                                                         </v-row>
                                                                         <v-dialog v-model="templatePreview" hide-overlay  scrollable fullscreen>
@@ -383,7 +394,7 @@
                                                                                 </v-card-text>
                                                                                 <v-card-actions>
                                                                                     <v-spacer></v-spacer>
-                                                                                    <v-btn absolute dark fab top right right color="pink" class="mt-10" @click="templatePreview=false">
+                                                                                    <v-btn absolute dark fab top right color="pink" class="mt-10" @click="templatePreview=false">
                                                                                         <v-icon x-large>mdi-close</v-icon>
                                                                                     </v-btn>
                                                                                 </v-card-actions>
@@ -2131,7 +2142,6 @@
                 })
             },
             selectTemplate(templateID){
-                console.log(templateID)
                 this.selectedTemplate = templateID
             },
             downloadPoster(){
@@ -2160,6 +2170,26 @@
                         })
                     }
                 }
+            },
+            generatePoster(){
+                console.log(this.editedItem)
+                
+                axios.post('/api/posters/generate', {
+                    event_id : this.editedItem.id,
+                    template_id: this.selectedTemplate,
+                })
+                .then(response => {
+                    if (response.data.success) {
+                        this.feedbacks = []
+                        this.feedbacks[0] = 'An copy of booking is sent to the bookee.'
+                        this.snackbar = true
+                        this.error = false
+                        this.booking_details_dialog = false
+                    }
+                })
+                .catch( error => {
+                    
+                })
             }
         },
         created: function() {

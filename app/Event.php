@@ -109,4 +109,12 @@ class Event extends Model
         return $this->hasMany('App\Book');
     }
 
+    public function startDateNoTimeFormatted(){
+        return (new Carbon($this->start_date))->format('j F Y');
+    }
+
+    public function endDateNoTimeFormatted(){
+        return (new Carbon($this->end_date))->format('j F Y');
+    }
+
 }

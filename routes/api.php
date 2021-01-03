@@ -70,6 +70,7 @@ Route::group(['middleware' => ['auth:api']], function(){
     Route::get('/posters/event/{event}', 'PosterController@list')->name('posters.list');
     Route::post('/posters/upload', 'PosterController@upload')->name('poster.upload');
     Route::delete('/poster/file/delete/{poster}', 'PosterController@deleteFile');
+    Route::post('/posters/generate', 'PosterController@generate')->name('poster.generate');
     // bookings
     Route::get('/bookings/event/{event}', 'BookController@list')->name('bookings.list');
     Route::delete('/booking/delete/{book}', 'BookController@destroy');

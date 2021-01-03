@@ -177,7 +177,12 @@ class PosterController extends Controller
         $template = Template::findOrFail($request->post('template_id'));
         $event = Event::findOrFail($request->post('event_id'));
         // fix later to allow event embed or better yet create another function
-        return EPPMS::generatePoster($template, $event);
+        $generatePosters = EPPMS::generatePoster($template, $event);
+        $success = $generatePosters;
+        // return poster object
+        $poster = Event::findOrFail($event->id)->poster;
+
+        return ['success' => $success, 'item' => $poster];
     }
 
 }

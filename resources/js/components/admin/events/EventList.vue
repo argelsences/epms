@@ -378,7 +378,8 @@
                                                                         </v-row>
                                                                         <v-row>
                                                                             <v-col cols="12" sm="12" md="12">
-                                                                                <v-btn text depressed :loading="isSelecting"  class="float-right" :disabled="!selectedTemplate" @click="generatePoster">Generate Poster</v-btn>
+                                                                                <span v-if="generatingPoster" class="red--text">Generating posters, please do not refresh the page</span>
+                                                                                <v-btn text depressed :loading="generatingPoster"  class="float-right" :disabled="!selectedTemplate" @click="generatePoster">Generate Poster</v-btn>
                                                                             </v-col>
                                                                         </v-row>
                                                                         <v-dialog v-model="templatePreview" hide-overlay  scrollable fullscreen>
@@ -410,13 +411,13 @@
                                                                         Preview
                                                                     </v-card-title>
                                                                     <v-card-text class="align-self-center">
-                                                                        <v-img v-if="poster.file_path" :src="base_url + poster.file_path" alt="" aspect-ratio=".7" ></v-img>
+                                                                        <v-img v-if="poster.file_path" :src="`${base_url}${poster.file_path}?rnd=${cacheKey}`" alt="" aspect-ratio=".7" ></v-img>
                                                                         <v-icon size=200 v-else class="d-flex justify-center no-poster-icon">mdi-image</v-icon>
                                                                     </v-card-text>
                                                                     <v-card-actions v-if="poster.file_path">
                                                                         <v-spacer></v-spacer>
-                                                                        <v-select dense :items="posterFormats" label="Output Format"></v-select>
-                                                                        <v-btn color="primary" class="text-none" text  depressed @click="downloadPoster">
+                                                                        <v-select dense :items="posterFormats" v-model="selectedFormat" label="Output Format"></v-select>
+                                                                        <v-btn color="primary" class="text-none" text depressed  download :href="downloadPoster()">
                                                                             <v-icon left>mdi-download</v-icon>
                                                                             DOWNLOAD
                                                                         </v-btn>
@@ -1509,10 +1510,12 @@
                     event_id: 0,
                     template_id: 0,
                 },
-                posterFormats: ['JPG', 'PNG', 'BMP', 'PDF'],
+                posterFormats: ['JPG', 'PNG' , 'PDF'],
+                selectedFormat: 'JPG',
                 selectedTemplate: 0,
                 templatePreview: false,
                 theImageSrc: '',
+                generatingPoster: false,
             }
         },
         computed: {
@@ -1855,7 +1858,6 @@
                         }
                     })
                     .then(response => {
-                        console.log(response.data.success)
                         if (response.data.success) {
                             // set the path on the global editedItem
                             //this.poster_thumb = response.data.poster_thumb 
@@ -2013,7 +2015,7 @@
                 .then(response => {
                     if (response.data.success) {
                         this.feedbacks = []
-                        this.feedbacks[0] = 'An copy of booking is sent to the bookee.'
+                        this.feedbacks[0] = 'Posters are generated successfully.'
                         this.snackbar = true
                         this.error = false
                         this.booking_details_dialog = false
@@ -2145,7 +2147,18 @@
                 this.selectedTemplate = templateID
             },
             downloadPoster(){
-
+                console.log(this.selectedFormat)
+                let path = `${this.base_url}files/events/${this.editedItem.id}/poster/${this.editedItem.id}`
+                if (this.selectedFormat == 'JPG'){
+                    path = `${path}.jpg`
+                }
+                else if(this.selectedFormat == 'PNG'){
+                    path = `${path}.png`
+                }
+                else if(this.selectedFormat == 'PDF'){
+                    path = `${path}.pdf`
+                }
+                return path
             },
             imageDialogUrl(templateID){
                 this.templatePreview = true
@@ -2155,7 +2168,6 @@
                 return this.poster.file_path.split('\\').pop().split('/').pop()
             },
             deletePoster(){
-                console.log(this.poster.id)
                 // delete poster file here
                 
                 if (confirm("Are you sure you want to this poster image?") ){
@@ -2172,19 +2184,20 @@
                 }
             },
             generatePoster(){
-                console.log(this.editedItem)
-                
+                this.generatingPoster = true
                 axios.post('/api/posters/generate', {
                     event_id : this.editedItem.id,
                     template_id: this.selectedTemplate,
                 })
                 .then(response => {
                     if (response.data.success) {
+                        this.poster = response.data.item
                         this.feedbacks = []
-                        this.feedbacks[0] = 'An copy of booking is sent to the bookee.'
+                        this.feedbacks[0] = 'Posters generated successfully.'
                         this.snackbar = true
                         this.error = false
-                        this.booking_details_dialog = false
+                        this.generatingPoster = false
+                        this.$forceUpdate()
                     }
                 })
                 .catch( error => {

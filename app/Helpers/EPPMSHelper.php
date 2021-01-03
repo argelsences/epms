@@ -183,7 +183,7 @@ class EPPMSHelper {
      * 1. Edit a poster object when an object exists for an event parent
      */
     public function uploadPoster($params){
-        //dd($params);
+        
         $posterParams = $poster = $thePoster = [];
         $photo = $params['photo'];
         $id = $params['id'];
@@ -319,38 +319,13 @@ class EPPMSHelper {
         foreach ($event->speakers as $speaker){
             $the_event['speakers'][$i]['speaker_name'] = $speaker->name;
             $the_event['speakers'][$i]['speaker_profile'] = $speaker->profile;
-            $the_event['speakers'][$i]['speaker_photo'] = $speaker->photo;
+            $the_event['speakers'][$i]['speaker_photo'] = config("eppms.general.app_url") . "/" . $speaker->photo;
             $i++;
         }
-
-        //dd($the_event);
         
         $the_template = $this->templateParser($the_template, $the_event);
 
-        dd($the_template);
-        
-        /*
-        You can use the format method and provide a format size:
-        Browsershot::html('https://example.com')->format('A4')->save('example.pdf');
-        */
-
-        Browsershot::html($the_template)
-                /////->setOption('addStyleTag',json_encode(['content' => $the_css_code]))
-
-                ->disableJavascript()
-
-                ->noSandbox()
-                ->setScreenshotType('jpeg', 100)
-                ->disableJavascript()
-                ->windowSize(595, 842)
-                /////->windowSize(600, 782)
-                /////->select('.poster')
-                /////->setNodeBinary('/usr/bin/node')
-                /////->setNpmBinary('/usr/bin/npm')
-                /////->setIncludePath('$PATH:/usr/bin')
-                ->setDelay(1000)
-                ->waitUntilNetworkIdle()
-                ->save(Storage::disk('local')->path('templates/'.$template->id. '/' .'screenshot.jpg' ));
+        $posters = $this->generatePosters($the_template, $event);
 
         return true;
     }
@@ -378,19 +353,12 @@ class EPPMSHelper {
         ];
         $speaker_count = count($the_event['speakers']);
 
-        
-
-        //if ( $preview ){
         foreach ( $fields[1] as $field ) {
             $the_field = explode(' ', $field);
             
             if ( in_array( $the_field[0],$this->shortcode_list() )){
                 // set content from default config, if applicable
-                //$the_field_text = config("eppms.templates.default.$the_field[0]");
-                //echo $the_field[0];
                 if ($the_field[0] == 'speakers'){
-                    //start counter
-                    $s = 0;
                     $template_code = str_replace("[$field]", "", $template_code); 
                 }
                 elseif(in_array($the_field[0], $skip_fields)){ 
@@ -401,11 +369,7 @@ class EPPMSHelper {
                             $arr_event_index = $event_index - 1;
     
                             if ( array_key_exists($arr_event_index , $the_event['speakers']) ){
-                                echo ($arr_event_index);
-                                echo ('true'); 
                                 $the_speaker_att = str_replace('_'.$event_index , '' ,$the_field[0]);
-                                echo $the_field[0] . ' => ' .($the_event['speakers'][$arr_event_index][$the_speaker_att]);
-
                                 $the_field_text = $the_event['speakers'][$arr_event_index][$the_speaker_att];
                                 //$template_code = str_replace("[$the_field[0]]", $the_field_text, $template_code);
 
@@ -422,8 +386,6 @@ class EPPMSHelper {
                                 }
                             }
                             else {
-                                echo ($arr_event_index);
-                                echo ('false');
                                 $the_field_text = '';
                                 if (count( $the_field ) > 1 ) {
                                     // we only have 1 parameter supported, which is limit
@@ -470,5 +432,83 @@ class EPPMSHelper {
 
         return $template_code;
         
+    }
+
+    private function generatePosters($html_code, $event) {
+
+        $unique_id = uniqid();
+
+        Browsershot::html($html_code)
+            ->disableJavascript()
+            ->noSandbox()
+            ->setScreenshotType('jpeg', 100)
+            ->disableJavascript()
+            ->setOption('portrait', true)
+            ->windowSize(1785, 2526)
+            ->select('.poster')
+            //->fullPage()
+            ->setDelay(1000)
+            ->waitUntilNetworkIdle()
+            ->save(Storage::disk('local')->path("files/events/$event->id/poster/$event->id.jpg" ));
+
+        
+        Browsershot::html($html_code)
+            ->disableJavascript()
+            ->noSandbox()
+            //->setScreenshotType('png', 100)
+            ->disableJavascript()
+            ->setOption('portrait', true)
+            ->windowSize(1785, 2526)
+            ->select('.poster')
+            ->setDelay(1000)
+            ->waitUntilNetworkIdle()
+            ->save(Storage::disk('local')->path("files/events/$event->id/poster/$event->id.png" ));
+        
+        Browsershot::html($html_code)
+            /////->setOption('addStyleTag',json_encode(['content' => $the_css_code]))
+            ->disableJavascript()
+            ->noSandbox()
+            ->setScreenshotType('jpeg', 100)
+            ->disableJavascript()
+            ->setOption('portrait', true)
+            ->windowSize(595, 842)
+            ->select('.poster')
+            /////->windowSize(600, 782)
+            /////->select('.poster')
+            /////->setNodeBinary('/usr/bin/node')
+            /////->setNpmBinary('/usr/bin/npm')
+            /////->setIncludePath('$PATH:/usr/bin')
+            ->setDelay(1000)
+            ->waitUntilNetworkIdle()
+            ->save(Storage::disk('local')->path("files/events/$event->id/poster/screenshot-$unique_id.jpg" ));
+        
+        Browsershot::html($html_code)
+            ->disableJavascript()
+            ->noSandbox()
+            ->setScreenshotType('pdf')
+            //->windowSize(1785, 2526)
+            ->select('.poster')
+            ->margins(20, 20, 20, 20, 'px')
+            ->setOption('portrait', true)
+            //->deviceScaleFactor(3)
+            /////->paperSize(595, 842)
+            ->showBackground()
+            ->format('A4')
+            ->setDelay(1000)
+            ->waitUntilNetworkIdle()
+            ->savePDF(Storage::disk('local')->path("files/events/$event->id/poster/$event->id.pdf"));
+        
+        // bmp file
+        /////$bmp = Image::make("files/events/$event->id/poster/$event->id.jpg");
+        /////$bmp->save("files/events/$event->id/poster/$event->id.bmp");
+        // update the event for the screenshot
+        $poster = Poster::where('event_id', $event->id);
+
+        $update = $poster->update([
+            'file_path' => "files/events/$event->id/poster/screenshot-$unique_id.jpg",
+            'poster_code' => htmlentities($html_code, ENT_QUOTES, 'UTF-8'),
+        ]);
+
+        return true;
     }
 }

@@ -36,5 +36,8 @@ return [
     'messages' => [
         'frontend_success' => 'Thank you for your message, we will get back to you shortly.' 
     ],
+    'general' => [
+        'app_url' => 'http://eppms.vicuna.me'
+    ],
     
 ];

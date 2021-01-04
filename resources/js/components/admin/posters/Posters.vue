@@ -345,7 +345,6 @@
                 axios.get('/api/templates')
                 .then( response => {
                     this.templateRows = response.data;
-                    console.log(this.templateRows);
                 });
             },
             editItem (item) {
@@ -355,7 +354,6 @@
                 // get all templates
                 this.getTemplates(this.editedItem.id)
 
-                console.log(this.editedItem)
             },
 
             deleteItem (item) {
@@ -519,12 +517,10 @@
             },
             generatePoster(){
                 this.generatingPoster = true
-                console.log(this.editedIndex)
-                console.log(this.editedItem)
 
                 var editedItem = this.editedItem
                 var editedIndex = this.editedIndex
-                
+
                 axios.post('/api/posters/generate', {
                     event_id : this.editedItem.event_id,
                     template_id: this.selectedTemplate,

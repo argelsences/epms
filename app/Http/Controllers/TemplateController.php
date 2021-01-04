@@ -139,7 +139,16 @@ class TemplateController extends Controller
             return response('Unauthorized', 403);
         }
 
-        return response()->json(($model::orderBy('name', 'ASC')->get()));
+        if (auth()->user()->is_super_admin('api')){
+            $templates = $model::orderBy('name', 'ASC')->get();
+        }
+        else {
+            $templates = $model::filterByDepartment()->get();
+        }
+
+        return response()->json($templates);
+
+        //return response()->json(($model::orderBy('name', 'ASC')->get()));
     }
     /**
      * Saving codes from template choice of upload

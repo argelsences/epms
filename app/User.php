@@ -78,7 +78,6 @@ class User extends Authenticatable
      */
     public function is_super_admin($guard = 'web') {
 
-        dd(auth()->user()->hasRole('Super Administrator', $guard));
         if (auth()->user()->hasRole('Super Administrator', $guard))
             return true;
 

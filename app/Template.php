@@ -19,4 +19,8 @@ class Template extends Model
     public function department(){
         return $this->belongsTo('App\Department');
     }
+
+    public function scopeFilterByDepartment($query) {
+        return $query->where('department_id', auth()->user()->department_id);
+    }
 }

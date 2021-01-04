@@ -201,6 +201,7 @@ class EPPMSHelper {
             'poster_code' => '',
             'event_id' => $id
         ];
+
         // check if we have an existing poster linked to event, if none, create one, else update it
         if ( $poster ){
             $posterParams['id'] = $poster->id;
@@ -438,6 +439,12 @@ class EPPMSHelper {
 
         $unique_id = uniqid();
 
+        $path = "files/events/$event->id/poster/";
+
+        if ( !Storage::disk('local')->exists($path) ) {
+            Storage::makeDirectory($path);
+        }
+
         Browsershot::html($html_code)
             ->disableJavascript()
             ->noSandbox()
@@ -450,8 +457,7 @@ class EPPMSHelper {
             ->setDelay(1000)
             ->waitUntilNetworkIdle()
             ->save(Storage::disk('local')->path("files/events/$event->id/poster/$event->id.jpg" ));
-
-        
+ 
         Browsershot::html($html_code)
             ->disableJavascript()
             ->noSandbox()
@@ -502,12 +508,28 @@ class EPPMSHelper {
         /////$bmp = Image::make("files/events/$event->id/poster/$event->id.jpg");
         /////$bmp->save("files/events/$event->id/poster/$event->id.bmp");
         // update the event for the screenshot
-        $poster = Poster::where('event_id', $event->id);
+        /////$poster = Poster::where('event_id', $event->id);
 
-        $update = $poster->update([
+        $poster = Poster::where('event_id', $event->id)->first();
+
+        $posterParams = [
             'file_path' => "files/events/$event->id/poster/screenshot-$unique_id.jpg",
             'poster_code' => htmlentities($html_code, ENT_QUOTES, 'UTF-8'),
-        ]);
+            'event_id' => $event->id
+        ];
+
+        if ($poster){
+            $posterParams['id'] = $poster->id;
+            $posterParams = $this->setAuthorship($posterParams);
+            $poster->update($posterParams);
+        }
+        else{
+            $posterParams['id'] = 0;
+            $posterParams = $this->setAuthorship($posterParams);
+            // since this is new, we do not need the id key
+            unset($posterParams['id']);
+            $poster = Poster::create($posterParams);
+        }
 
         return true;
     }

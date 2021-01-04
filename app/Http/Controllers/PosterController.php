@@ -138,7 +138,6 @@ class PosterController extends Controller
         if (null != $request->file('poster') )
             $photo = $request->file('poster');
 
-
         if ( $id && $photo ){
             $params = [
                 'id' => $id,
@@ -177,6 +176,7 @@ class PosterController extends Controller
         
         $template = Template::findOrFail($request->post('template_id'));
         $event = Event::findOrFail($request->post('event_id'));
+
         // fix later to allow event embed or better yet create another function
         $generatePosters = EPPMS::generatePoster($template, $event);
         $success = $generatePosters;

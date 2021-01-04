@@ -328,10 +328,10 @@
                                                                             
                                                                             <v-row>
                                                                                 <v-col>
-                                                                                    <v-chip class="ma-2 white--text poster-file-name" v-if="poster.file_path && !poster.template_id" color="blue darken-1" @click="deletePoster">
+                                                                                    <!--<v-chip class="ma-2 white--text poster-file-name" v-if="poster.file_path && !poster.template_id" color="blue darken-1" @click="deletePoster">
                                                                                         <v-icon left>mdi-trash-can</v-icon> 
                                                                                         <span>{{posterFilePath()}}</span>
-                                                                                    </v-chip>
+                                                                                    </v-chip>-->
                                                                                 </v-col>
                                                                                 <v-spacer></v-spacer>
                                                                                 <v-col>
@@ -347,12 +347,12 @@
                                                                         </v-form>
                                                                     </v-col>
                                                                     <v-col cols="12" sm="12" md="12">
-                                                                        <div class="text-h6  text-left mb-10">
+                                                                        <div class="text-h6  text-left mb-10 mt-10">
                                                                             Or, select from the list of templates to generate a poster
                                                                         </div>
                                                                         <!-- template lists -->
                                                                         <v-row>
-                                                                            <v-col cols="12" sm="4" md="4" v-for="(template, i) in templateRows" :key="template.id">
+                                                                            <v-col cols="12" sm="4" md="4" v-for="(template, i) in templateRows" :key="template.id" class="text-center">
                                                                                 <v-lazy v-model="isActive" :options="{threshold: .8}" min-height="200" transition-group="fade-transition">
                                                                                     <v-card class="mx-auto" max-width="180" @click="selectTemplate(template.id)">
                                                                                         <v-img class="white--text align-end"  :src="`/web-admin/templates/screenshot/${template.id}?rnd=${cacheKey}`">
@@ -408,7 +408,7 @@
                                                             <v-col cols="12" sm="4" md="4" >
                                                                 <v-card outlined min-height="500px">
                                                                     <v-card-title>
-                                                                        Preview
+                                                                        Poster Preview
                                                                     </v-card-title>
                                                                     <v-card-text class="align-self-center">
                                                                         <v-img v-if="poster.file_path" :src="`${base_url}${poster.file_path}?rnd=${cacheKey}`" alt="" aspect-ratio=".7" ></v-img>
@@ -2203,7 +2203,7 @@
                 .catch( error => {
                     
                 })
-            }
+            },
         },
         created: function() {
             this.setHedeaderTitle()

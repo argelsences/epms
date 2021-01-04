@@ -13,78 +13,149 @@
                         <!-- the dialog box -->        
                         <v-dialog v-model="dialog"  width="80%" scrollable fullscreen>
                             <template v-slot:activator="{ on, attrs }">
-                                <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Speaker</v-btn>
+                                <!--<v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Speaker</v-btn>-->
                             </template>
-                            <v-card>
+                            
+
+                            <!-- poster modification here -->
+                            <v-card flat>
                                 <v-card-title>
-                                    <!-- formTitle is  a computed property based on action edit or new -->
-                                    <span class="headline">{{ formTitle }}</span>
-                                    <v-spacer></v-spacer>
-                                    <v-btn absolute dark fab middle right color="pink" @click="close">
-                                        <v-icon x-large>mdi-close</v-icon>
-                                    </v-btn>
+                                    <v-row>
+                                        <v-col cols="12" sm="12" md="12">
+                                            <div class="text-h5  text-left mb-10">How do you want to {{ formTitle }} your poster?</div>
+                                            <v-divider />
+                                        </v-col>
+                                         <v-spacer />
+                                        <v-btn absolute dark fab middle right color="pink" @click="close">
+                                            <v-icon x-large>mdi-close</v-icon>
+                                        </v-btn>
+                                    </v-row>
                                 </v-card-title>
-                                <v-divider></v-divider>
-                                <v-card-text>
-                                    <v-container>
-                                        <v-form v-model="isValid" ref="form">
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6" v-cloak @drop.prevent="addDropFile" @dragover.prevent>
-                                                    <v-file-input v-model="photo" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping an image here" 
-                                                    prepend-icon="mdi-camera-iris" label="Photo" persistentHint chips
-                                                    hint="Selecting an image will replace the existing photo. Valid image formats are JPG, JPEG, PNG & BMP. Image size should not be greater than 2MB"
-                                                    @change="uploadLogo">
-                                                    </v-file-input>        
-                                                    
-                                                </v-col>
-                                            </v-row>
-                                            <v-row>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
-                                                </v-col>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    <v-card v-if="editedItem.photo != null" class="my-2">
-                                                        <v-card-text>
-                                                            <v-img :lazy-src="base_url + editedItem.photo" max-height="150" max-width="250" :src="base_url + editedItem.photo"></v-img>
-                                                            <v-divider class="my-2"></v-divider>
-                                                            <p>{{editedItem.photo}}</p>
-                                                        </v-card-text>
-                                                    </v-card>
-                                                </v-col>
-                                            </v-row>
+                                <v-card-text class="pt-0">
+                                    <v-row>
+                                        <v-col cols="12" sm="8" md="8">
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="12">
-                                                    <!--<v-textarea counter label="Profile" v-model="editedItem.profile" prepend-icon="mdi-face-profile"></v-textarea>-->
-                                                    <v-chip class="mb-6">
-                                                        <v-icon left>mdi-face-profile</v-icon>
-                                                        Profile
-                                                    </v-chip>
-                                                    <tiptap-vuetify
-                                                        v-model="editedItem.profile"
-                                                        :extensions="extensions"
-                                                        id="profile"
-                                                        min-height="400"
-                                                    ></tiptap-vuetify>
+                                                    <v-alert icon="mdi-alert-circle-outline" prominent text type="warning">
+                                                        Uploading or generating a new file will replace the existing poster.
+                                                    </v-alert>
                                                 </v-col>
                                             </v-row>
                                             <v-row>
-                                                <v-col cols="12" sm="12" md="6">
-                                                    
+                                                <v-col cols="12" sm=12 md="12">
+                                                    <div class="text-h6  text-left mb-2">Upload a poster file</div>
+                                                    <v-form v-model="isValid5" ref="posterForm">
+                                                        <div>
+                                                            <v-btn color="primary" class="text-none" rounded  depressed :loading="isSelecting" @click="onButtonClick">
+                                                                <v-icon left>cloud_upload</v-icon>
+                                                                {{ uploadButtonText }}
+                                                            </v-btn>
+                                                            <input ref="uploader" class="d-none" type="file" accept="image/png, image/jpeg, image/bmp, image/jpg" @change="onFileChanged">
+                                                            <div class="text-caption pl-2">Only accepts JPG/PNG/BMP files. File size should not be greater than 2MB</div>
+                                                        </div>
+                                                        
+                                                        <v-row>
+                                                            <v-col>
+                                                                <!--<v-chip class="ma-2 white--text poster-file-name" v-if="editedItem.file_path && !editedItem.template_id" color="blue darken-1" @click="deletePoster">
+                                                                    <v-icon left>mdi-trash-can</v-icon> 
+                                                                    <span>{{posterFilePath()}}</span>
+                                                                </v-chip>-->
+                                                            </v-col>
+                                                            <v-spacer></v-spacer>
+                                                            <v-col>
+                                                                <v-btn text depressed :loading="isSelecting" class="float-right" :disabled="uploadReady" @click="uploadPoster">Upload Poster</v-btn>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <!--
+                                                        <v-spacer></v-spacer>
+                                                        <div>
+                                                            <v-btn text depressed :loading="isSelecting" class="float-right" :disabled="uploadReady" @click="uploadPoster">Upload Poster</v-btn>
+                                                        </div>
+                                                        -->
+                                                    </v-form>
+                                                </v-col>
+                                                <v-col cols="12" sm="12" md="12">
+                                                    <div class="text-h6  text-left mb-10 mt-10">
+                                                        Or, select from the list of templates to generate a poster
+                                                    </div>
+                                                    <!-- template lists -->
+                                                    <v-row>
+                                                        <v-col cols="12" sm="4" md="4" v-for="(template, i) in templateRows" :key="template.id" class="text-center">
+                                                            <v-lazy v-model="isActive" :options="{threshold: .8}" min-height="200" transition-group="fade-transition">
+                                                                <v-card class="mx-auto" max-width="180" @click="selectTemplate(template.id)">
+                                                                    <v-img class="white--text align-end"  :src="`/web-admin/templates/screenshot/${template.id}?rnd=${cacheKey}`">
+                                                                        <v-card-title  class="text-left secondary opacity-half" elevation=24>{{template.name}}</v-card-title>
+                                                                    </v-img>
+                                                                    <v-card-text class="text--primary" >
+                                                                        <div class="text-caption">{{template.description}}</div>
+                                                                    </v-card-text>
+                                                                    <v-card-actions>
+                                                                        <div class="d-flex justify-end">
+                                                                            <v-icon color="success" v-if="selectedTemplate === template.id">mdi-check-circle</v-icon>
+                                                                        </div>
+                                                                    </v-card-actions>
+                                                                    </v-card>
+                                                            </v-lazy>
+                                                            <v-btn color="primary" class="ma-2 white--text text-center" @click.stop="imageDialogUrl(template.id)">
+                                                                Preview
+                                                                <v-icon left dark class="ml-2">
+                                                                    mdi-magnify
+                                                                </v-icon>
+                                                            </v-btn>
+                                                        </v-col>
+                                                    </v-row>
+                                                    <v-row>
+                                                        <v-col cols="12" sm="12" md="12">
+                                                            <span v-if="generatingPoster" class="red--text">Generating posters, please do not refresh the page</span>
+                                                            <v-btn text depressed :loading="generatingPoster"  class="float-right" :disabled="!selectedTemplate" @click="generatePoster">Generate Poster</v-btn>
+                                                        </v-col>
+                                                    </v-row>
+                                                    <v-dialog v-model="templatePreview" hide-overlay  scrollable fullscreen>
+                                                        <v-card tile>
+                                                            <v-card-text>
+                                                                <v-container fill-height>
+                                                                    <v-row justify="center" align="center">
+                                                                        <v-col cols="12" sm="4">
+                                                                            <v-img :src="theImageSrc" @error="imageUrl='alt-image.jpg'" height="auto" ></v-img>
+                                                                        </v-col>
+                                                                    </v-row>
+                                                                </v-container> 
+                                                            </v-card-text>
+                                                            <v-card-actions>
+                                                                <v-spacer></v-spacer>
+                                                                <v-btn absolute dark fab top right color="pink" class="mt-10" @click="templatePreview=false">
+                                                                    <v-icon x-large>mdi-close</v-icon>
+                                                                </v-btn>
+                                                            </v-card-actions>
+                                                        </v-card>
+                                                    </v-dialog>
+                                                    <!-- template lists -->
                                                 </v-col>
                                             </v-row>
-                                        </v-form>
-                                    </v-container>
+                                        </v-col>
+                                        <v-col cols="12" sm="4" md="4" >
+                                            <v-card outlined min-height="500px">
+                                                <v-card-title>
+                                                    Poster Preview
+                                                </v-card-title>
+                                                <v-card-text class="align-self-center">
+                                                    <v-img v-if="editedItem.file_path" :src="`${base_url}${editedItem.file_path}?rnd=${cacheKey}`" alt="" aspect-ratio=".7" ></v-img>
+                                                    <v-icon size=200 v-else class="d-flex justify-center no-poster-icon">mdi-image</v-icon>
+                                                </v-card-text>
+                                                <v-card-actions v-if="editedItem.file_path">
+                                                    <v-spacer></v-spacer>
+                                                    <v-select dense :items="posterFormats" v-model="selectedFormat" label="Output Format"></v-select>
+                                                    <v-btn color="primary" class="text-none" text depressed  download :href="downloadPoster()">
+                                                        <v-icon left>mdi-download</v-icon>
+                                                        DOWNLOAD
+                                                    </v-btn>
+                                                </v-card-actions>
+                                            </v-card>
+                                        </v-col>
+                                    </v-row>
                                 </v-card-text>
-                                <v-divider></v-divider>
-                                <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                                    <v-btn color="blue darken-1" :disabled="!isValid" text @click="save">Save</v-btn>
-                                </v-card-actions>
                             </v-card>
+                            <!-- poster modification ends here -->
                         </v-dialog>
                         <!-- the dialog box -->
                     </v-toolbar>
@@ -218,11 +289,36 @@
                     photo: null,
                     department_id: '',
                 },
+                isValid5: false,
+                defaultUploadButtonText: 'Choose a file',
+                posterFile: null,
+                isSelecting: false,
+                uploadReady: true,
+                poster: {
+                    file_path: '',
+                    poster_code: '',
+                    created_by: 0,
+                    edited_by: 0,
+                    event_id: 0,
+                    template_id: 0,
+                },
+                posterFormats: ['JPG', 'PNG' , 'PDF'],
+                selectedFormat: 'JPG',
+                selectedTemplate: 0,
+                templatePreview: false,
+                theImageSrc: '',
+                generatingPoster: false,
+                templateRows: [],
+                cacheKey: +new Date(),
+                isActive: false,
             }
         },
         computed: {
             formTitle () {
-                return this.editedIndex === -1 ? 'New Speaker' : 'Edit Speaker'
+                return this.editedIndex === -1 ? 'create' : 'update'
+            },
+            uploadButtonText() {
+                return this.posterFile ? this.posterFile.name : this.defaultUploadButtonText
             },
         },
         watch: {
@@ -245,10 +341,21 @@
                     this.departments = response.data;
                 });
             },
+            getTemplates(eventId) {
+                axios.get('/api/templates')
+                .then( response => {
+                    this.templateRows = response.data;
+                    console.log(this.templateRows);
+                });
+            },
             editItem (item) {
                 this.editedIndex = this.rows.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 this.dialog = true
+                // get all templates
+                this.getTemplates(this.editedItem.id)
+
+                console.log(this.editedItem)
             },
 
             deleteItem (item) {
@@ -266,7 +373,7 @@
                     // reset the edit flag
                     this.editedIndex = -1
                     // reset the form
-                    this.$refs.form.reset();
+                    /////this.$refs.form.reset();
                 })
             },
             save () {
@@ -344,13 +451,138 @@
                 document.title = 'Posters - Event Publication and Poster Management System (EPPMS)';
             },
             addDropFile(e) { 
-                this.file = e.dataTransfer.files[0]
-                console.log(this.file) 
+                this.file = e.dataTransfer.files[0] 
             },
             getTheDepartment(id){
-                var filterDepartment = this.departments.filter( department => department.id == id )
-                return filterDepartment[0].name
-            }
+                let filterDepartment = this.departments.filter(function(department){
+                    return department.id === id
+                })
+    
+                if (filterDepartment.length)
+                    return filterDepartment[0].name
+            },
+            onButtonClick() {
+                this.isSelecting = true
+                window.addEventListener('focus', () => {
+                    this.isSelecting = false
+                }, { once: true })
+
+                this.$refs.uploader.click()
+            },
+            onFileChanged(e) {
+                this.posterFile = e.target.files[0]
+
+                if (this.posterFile)
+                    this.uploadReady = false
+                else
+                    this.uploadReady = true
+                
+            },
+            selectTemplate(templateID){
+                this.selectedTemplate = templateID
+            },
+            downloadPoster(){
+                let path = `${this.base_url}files/events/${this.editedItem.id}/poster/${this.editedItem.id}`
+                if (this.selectedFormat == 'JPG'){
+                    path = `${path}.jpg`
+                }
+                else if(this.selectedFormat == 'PNG'){
+                    path = `${path}.png`
+                }
+                else if(this.selectedFormat == 'PDF'){
+                    path = `${path}.pdf`
+                }
+                return path
+            },
+            imageDialogUrl(templateID){
+                this.templatePreview = true
+                this.theImageSrc = "/web-admin/templates/screenshot/" + templateID
+            },
+            posterFilePath(){
+                return this.editedItem.file_path.split('\\').pop().split('/').pop()
+            },
+            deletePoster(){
+                // delete poster file here
+                
+                if (confirm("Are you sure you want to this poster image?") ){
+                    
+                    let id = this.poster.id
+
+                    if (id > 0) {
+                        axios.delete('/api/poster/file/delete/' + id)
+                        .then(response => {
+                            this.poster = response.data.item
+                            this.posterFile = ''
+                        })
+                    }
+                }
+            },
+            generatePoster(){
+                this.generatingPoster = true
+                console.log(this.editedIndex)
+                console.log(this.editedItem)
+
+                var editedItem = this.editedItem
+                var editedIndex = this.editedIndex
+                
+                axios.post('/api/posters/generate', {
+                    event_id : this.editedItem.event_id,
+                    template_id: this.selectedTemplate,
+                })
+                .then(response => {
+                    if (response.data.success) {
+                        this.editedItem = response.data.item
+                        this.feedbacks = []
+                        this.feedbacks[0] = 'Posters generated successfully.'
+                        this.snackbar = true
+                        this.error = false
+                        this.generatingPoster = false
+                        Object.assign(this.rows[editedIndex], response.data.item)
+                        this.$forceUpdate()
+                    }
+                })
+                .catch( error => {
+                    
+                })
+            },
+            uploadPoster(){
+                if ( this.posterFile ){
+                    let formData = new FormData()
+                    formData.append('poster', this.posterFile)
+
+                    var editedItem = this.editedItem
+                    var editedIndex = this.editedIndex
+                    
+                    // use event id as id 
+                    if ( this.editedItem.event_id )
+                        formData.append('id', this.editedItem.event_id)
+
+                    axios.post('/api/posters/upload', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    })
+                    .then(response => {
+                        if (response.data.success) {
+                            this.feedbacks = []
+                            this.feedbacks[0] = 'Changes to this poster is applied.'
+                            this.snackbar = true
+                            this.error = false
+                            // set the path on the global editedItem
+                            //this.poster_thumb = response.data.poster_thumb 
+                            this.editedItem = response.data.item
+                            Object.assign(this.rows[editedIndex], response.data.item)
+                        }
+                    })
+                    .catch( error => {
+                        let messages = Object.values(error.response.data.errors); 
+                        this.feedbacks = [].concat.apply([], messages)
+                        this.snackbar = true
+                        this.error = true
+                        this.logo = null
+                    })
+                }
+            },
         },
         created: function() {
             this.setHedeaderTitle()

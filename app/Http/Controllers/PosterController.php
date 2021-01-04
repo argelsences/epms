@@ -18,6 +18,7 @@ class PosterController extends Controller
     public function index()
     {
         //
+        return view('admin.posters.list');
     }
 
     /**
@@ -183,6 +184,19 @@ class PosterController extends Controller
         $poster = Event::findOrFail($event->id)->poster;
 
         return ['success' => $success, 'item' => $poster];
+    }
+    /**
+     * API function 
+     * List all posters
+     */
+    public function listAll(Poster $model){
+        if (auth()->user()->hasPermissionTo('view poster', 'api') ){
+            return response('Unauthorized', 403);
+        }
+
+        $posters = $model::with(['event', 'user'])->orderBy('created_at', 'ASC')->get();
+
+        return response()->json($posters);
     }
 
 }

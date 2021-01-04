@@ -69,6 +69,7 @@ Route::group(['prefix' => 'web-admin','middleware' => ['role:Super Administrator
 	Route::get('/templates/screenshot/{id}', 'TemplateController@screenshot')->name('templates.screenshot');
 	
 	Route::get('/settings', 'SettingController@edit')->name('settings.edit');
+	Route::get('/posters', 'PosterController@index')->name('posters.index');
 });
 
 /////Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');

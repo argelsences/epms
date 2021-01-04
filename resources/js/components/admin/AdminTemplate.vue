@@ -18,6 +18,14 @@
             <v-list-item-title>Events</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item link :to="{name: `posters`}">
+          <v-list-item-action>
+            <v-icon>mdi-file-image-outline</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Posters</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item link :to="{name: `speakers`}">
           <v-list-item-action>
             <v-icon>mdi-bullhorn</v-icon>

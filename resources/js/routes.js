@@ -12,7 +12,8 @@ import TemplateUpload from './components/admin/templates/TemplateByUpload.vue'
 import TemplateCode from './components/admin/templates/TemplateByCode.vue'
 import TemplateCanvas from './components/admin/templates/TemplateByCanvas.vue'
 import TemplateChoice from './components/admin/templates/TemplateChoice.vue'
-import Settings from './components/admin/settings/Settings.vue' 
+import Settings from './components/admin/settings/Settings.vue'
+import Posters from './components/admin/posters/Posters.vue'
 
 Vue.use(VueRouter)
 
@@ -91,6 +92,12 @@ const router =  new VueRouter({
             name: 'settings',
             component: Settings,
             meta: {title: 'Settings'}
+        },
+        {
+            path: '/web-admin/posters',
+            name: 'posters',
+            component: Posters,
+            meta: {title: 'Posters'}
         },
         /* check later {
             path: '*',

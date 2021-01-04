@@ -330,29 +330,7 @@
                     this.feedbacks = [].concat.apply([], messages)
                     this.snackbar = true
                     this.error = true
-                    console.log(this.errors)
                 })
-
-                /////if (this.editedIndex > -1) {
-                    // push changes to server
-                    /////axios.post('/api/users/update', {
-                        /////user: editedItem,
-                    /////})
-                    /////.then(response => {
-                        /////if (response.data.success) {
-                            /////this.feedback = 'Changes for ' + editedItem.name + ' is saved.'
-                            /////this.successAlert = true
-                            /////Object.assign(this.rows[editedIndex], editedItem)
-                        /////}
-                    /////})
-                    //Object.assign(this.rows[this.editedIndex], this.editedItem)
-                /////} else {
-                    // perform the create action here
-                    // action ...
-                    /////this.rows.push(this.editedItem)
-                    /////console.log(this.rows)
-                /////}
-
                 // close the dialog box
                 this.close()
                 

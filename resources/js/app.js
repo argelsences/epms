@@ -106,7 +106,8 @@ Vue.component('template-choice', require('./components/admin/templates/TemplateC
 Vue.component('by-upload', require('./components/admin/templates/TemplateByUpload.vue').default);
 Vue.component('by-code', require('./components/admin/templates/TemplateByCode.vue').default);
 Vue.component('by-canvas', require('./components/admin/templates/TemplateByCanvas.vue').default);
-Vue.component('settings', require('./components/admin/settings/Settings.vue').default); 
+Vue.component('settings', require('./components/admin/settings/Settings.vue').default);
+Vue.component('poster-list', require('./components/admin/posters/Posters.vue').default);
 // Frontend components
 Vue.component('department', require('./components/front/departments/Department.vue').default);
 Vue.component('event', require('./components/front/events/Event.vue').default);

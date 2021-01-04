@@ -67,6 +67,7 @@ Route::group(['middleware' => ['auth:api']], function(){
     Route::post('/tickets/upsert', 'TicketController@upsert')->name('tickets.upsert');
     Route::post('/tickets/pause', 'TicketController@pause')->name('tickets.pause');
     // poster
+    Route::get('/posters', 'PosterController@listAll')->name('posters.list_all');
     Route::get('/posters/event/{event}', 'PosterController@list')->name('posters.list');
     Route::post('/posters/upload', 'PosterController@upload')->name('poster.upload');
     Route::delete('/poster/file/delete/{poster}', 'PosterController@deleteFile');

@@ -24,6 +24,8 @@ Route::post('/contact-us', 'EventController@contact_us')->name('events.contact_u
 
 Route::post('/ticket/checkout', 'TicketController@checkout')->name('tickets.checkout');
 
+Route::post('/subscribe', 'SubscriberController@subscribe')->name('subscribers.subscribe');
+
 
 Route::group(['middleware' => ['auth:api']], function(){
     // users

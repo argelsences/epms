@@ -32,7 +32,7 @@
                                 @expired="resetCaptcha"
                                 size="invisible"
                                 :sitekey="captcha_site_key"
-                                :loadRecaptchaScript="true"
+                                
                                 >
                             </vue-recaptcha>
                         </v-row>

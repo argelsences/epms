@@ -190,59 +190,17 @@ class DepartmentController extends Controller
         $theURI = filter_var($URI, FILTER_SANITIZE_STRING);
         $department = Department::where('url', $URI)->firstOrFail();
     
-        /// script
-        /** @var Organiser $organiser */
-        /*$organiser = Organiser::findOrFail($organiser_id);
-
-        if (!$organiser->enable_organiser_page && !Utils::userOwns($organiser)) {
-            abort(404);
-        }*/
-
-        /*
-         * If we are previewing styles from the backend we set them here.
-         */
-        /*
-        if ($request->get('preview_styles') && Auth::check()) {
-            $query_string = rawurldecode($request->get('preview_styles'));
-            parse_str($query_string, $preview_styles);
-
-            $organiser->page_bg_color = $preview_styles['page_bg_color'];
-            $organiser->page_header_bg_color = $preview_styles['page_header_bg_color'];
-            $organiser->page_text_color = $preview_styles['page_text_color'];
-        }*/
-
-        /*$upcoming_events = $department->events()->where([
-            ['end_date', '>=', now()],
-            ['is_public', 1],
-            ['is_approved', 1]
-        ])->get();*/
         $upcoming_events = $department->events()->where('end_date', '>=', now())
             ->live()
             ->orderBy('start_date', 'DESC')
             ->get();
 
-        /*$past_events = $department->events()->where([
-            ['end_date', '<', now()],
-            ['is_public', 1],
-            ['is_approved', 1]
-        ])->limit(10)->get();*/
         $past_events = $department->events()->where( 'end_date', '<', now() )
             ->live()
             ->orderBy('start_date', 'DESC')
             ->limit(10)
             ->get();
         
-        /*
-        $data = [
-            'department'       => $organiser,
-            'tickets'         => $organiser->events()->orderBy('created_at', 'desc')->get(),
-            'is_embedded'     => 0,
-            'upcoming_events' => $upcoming_events,
-            'past_events'     => $past_events,
-        ];
-        */
-        
-        /// end script
         // settings
         $settings = Setting::all(['name', 'value']);
         $objSettings = [];
@@ -255,8 +213,6 @@ class DepartmentController extends Controller
 
             $objSettings[$setting->name] = $value;
         }
-
-        //dd($objSettings);
         
         return view('front.department.homepage', compact(
             'department',
@@ -268,17 +224,6 @@ class DepartmentController extends Controller
 
     public function front_list(Department $model){
         
-        //$theURI = filter_var($URI, FILTER_SANITIZE_STRING);
-        //$department = Department::where('url', $URI)->firstOrFail();
-        //$departments = $this->departments::orderBy('name', 'ASC')->get(['name','logo_path','page_header_bg_color','url']);
-
-        //dd($departments);
-        /*
-        $upcoming_events = $department->events()->where([
-            ['end_date', '>=', now()],
-            ['is_public', 1]
-        ])->get();
-        */
         $department_event = [];
         $x = 0;
 
@@ -296,13 +241,6 @@ class DepartmentController extends Controller
             $x++;
         }
         
-        /*foreach ( $departments as $department ) {
-            $department_event [] = $department->events;
-        }*/
-
-        //dd($department_event);
-
-
         return response()->json($department_event);
 
     }

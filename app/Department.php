@@ -27,4 +27,8 @@ class Department extends Model
     public function getLogoPathAttribute($value){
         return ($value) ? $value :   config('eppms.default.logo');
     }
+
+    public function subscribers(){
+        return $this->hasMany('App\Subscriber');
+    }
 }

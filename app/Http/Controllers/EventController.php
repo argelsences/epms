@@ -10,6 +10,7 @@ use App\Department;
 use App\Setting;
 use App\Http\Requests\ContactFormRequest;
 use App\Jobs\SendEmailFrontendJob;
+use Validator;
 
 class EventController extends Controller
 {
@@ -110,7 +111,7 @@ class EventController extends Controller
             return response('Unauthorized', 403);
         }
 
-        $events = $model::with(['venue','speakers','tickets'])->orderBy('title', 'ASC')->get();
+        $events = $model::with(['venue','speakers','tickets'])->orderBy('start_date', 'DESC')->get();
         /*
         $tickets = [];
         foreach($events as $event){
@@ -134,7 +135,7 @@ class EventController extends Controller
         if (auth()->user()->hasPermissionTo('edit event', 'api') && auth()->user()->hasPermissionTo('create event', 'api') ){
             return response('Unauthorized', 403);
         }
-        /////dd($request->all());
+
         $upsertSuccess = false;
         $event = $request->post('payload');
         $event['barcode_type'] = (!$event['barcode_type']) ? 'QRCODE' : '';
@@ -316,7 +317,14 @@ class EventController extends Controller
     /**
      * for frontend contact form
      */
-    public function contact_us(ContactFormRequest $request){
+    public function contact_us(Request $request){
+
+        $validate = Validator::make($request->all(), [
+            'g-recaptcha-response' => 'required|captcha',
+            'name' => 'required|alpha_dash|max:80',
+            'email' => 'required|email',
+            'message' => 'required|alpha_dash|max:255',
+        ]);
         
         SendEmailFrontendJob::dispatch($request->except(['g_recaptcha_response']))
                 ->delay(now()->addSeconds(5)); 

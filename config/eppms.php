@@ -35,7 +35,7 @@ return [
     ],
     'messages' => [
         'frontend_success' => 'Thank you for your message, we will get back to you shortly.',
-        'subscribe_message' => 'Thank you for subscribing, a confirmation email has been sent to you email address', 
+        'subscribe_message' => 'Thank you for subscribing, a confirmation email has been sent to your email address', 
         'existing_subscriber' => 'It appears that you are already subscribed. Thank you.'
     ],
     'general' => [

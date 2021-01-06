@@ -111,7 +111,14 @@ class EventController extends Controller
             return response('Unauthorized', 403);
         }
 
-        $events = $model::with(['venue','speakers','tickets'])->orderBy('start_date', 'DESC')->get();
+        if (auth()->user()->is_super_admin('api')){
+            $events = $model::with(['venue','speakers','tickets'])->orderBy('start_date', 'DESC')->get();
+        }
+        else {
+            $events = $model::filterByDepartment()->orderBy('start_date', 'DESC')->get();
+        }
+
+        //$events = $model::with(['venue','speakers','tickets'])->orderBy('start_date', 'DESC')->get();
         /*
         $tickets = [];
         foreach($events as $event){
@@ -320,7 +327,7 @@ class EventController extends Controller
     public function contact_us(Request $request){
 
         $validate = Validator::make($request->all(), [
-            'g-recaptcha-response' => 'required|captcha',
+            'g_recaptcha_response' => 'required|captcha',
             'name' => 'required|alpha_dash|max:80',
             'email' => 'required|email',
             'message' => 'required|alpha_dash|max:255',

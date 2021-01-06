@@ -23,9 +23,11 @@ Route::group(['prefix' => 'd'], function () {
 	Route::get('/{department_slug}/events/{event_id}', 'EventController@display_event')->name('event.display');
 	/////Route::post('/{department_slug}/events/{event_id}/checkout', 'TicketController@checkout')->name('tickets.checkout');
 });
-
+// booking
 Route::get('/booking/{reference}', 'TicketController@booking_details')->name('booking.details');
 Route::get('/booking/{reference}/tickets','TicketController@booking_tickets')->name('booking.tickets');
+// subscriber
+Route::get('/unsubscribe', 'SubscriberController@unsubscribe')->name('subscriber.unsubscribe');
 
 Auth::routes(['verify' => true]);
 

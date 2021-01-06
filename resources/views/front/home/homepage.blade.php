@@ -21,11 +21,6 @@
           }
 
      </style>
-     {{--
-     @if($department->google_analytics_code)
-          @include('Public.Partials.ga', ['analyticsCode' => $department->google_analytics_code])
-     @endif
-     --}}
 @endsection
 
 @section('content')

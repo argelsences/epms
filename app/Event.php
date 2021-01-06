@@ -117,4 +117,8 @@ class Event extends Model
         return (new Carbon($this->end_date))->format('j F Y');
     }
 
+    public function scopeFilterByDepartment($query) {
+        return $query->where('department_id', auth()->user()->department_id);
+    }
+
 }

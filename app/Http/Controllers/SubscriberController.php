@@ -92,7 +92,7 @@ class SubscriberController extends Controller
     public function subscribe(Request $request){
 
         $validate = Validator::make($request->all(), [
-            'g-recaptcha-response' => 'required|captcha',
+            'g_recaptcha_response' => 'required|captcha',
             'email' => 'required|email',
         ]);
 
@@ -134,6 +134,46 @@ class SubscriberController extends Controller
         }
 
         return ['success' => $success, 'message' => $message ];
+    }
+
+    /**
+     * Unsubscribe a user if one opt-out
+     * @params token => unique token assigned to a subscriber
+     */
+    public function unsubscribe(Request $request){
+        $token = null;
+
+        if ($request->exists('token')) {
+            $token = $request->query('token');
+            $subscriber = Subscriber::where('token', $token)->first();
+            
+            if ($subscriber){
+                return view('front.subscriber.homepage', compact('subscriber'));
+            }
+            else {
+                abort(404);
+            }
+        }
+        else {
+            abort(404);
+        }
+        
+    }
+
+    /**
+     * API function to unsubscribe subscriber
+     */
+    public function unsubscribed(Request $request){
+        $validate = Validator::make($request->all(), [
+            'g_recaptcha_response' => 'required|captcha',
+            'token' => 'required',
+        ]);
+
+        $token = $request->input('s_token');
+
+        $subscriber = Subscriber::where('token', $token)->delete();
+
+        return ['success' => true, 'message' => 'You are now unsubscribe, we will redirect this page shortly' ];
     }
 
 }

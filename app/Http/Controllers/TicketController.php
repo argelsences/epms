@@ -327,61 +327,6 @@ class TicketController extends Controller
 
     /**
      * Allows a user to download ticket in PDF format
-     *
-     * @param Request $request
-     * @param $order_reference
-     * @return \Illuminate\View\View
-     */
-    /*
-    public function booking_tickets(Request $request, $reference)
-    {
-        // the booking
-        $booking = Book::where('booking_reference',$reference)->first();
-
-        if (!$booking) {
-            abort(404);
-        }
-
-        //$images = [];
-        //$imgs = $booking->event->images;
-        //foreach ($imgs as $img) {
-            //$images[] = base64_encode(file_get_contents(public_path($img->image_path)));
-        //}
-        // get poster from the event
-        $the_poster = '';
-        $event = Event::findOrFail($booking->tickets->first()->event_id);
-        if ($event->poster->file_path){
-            $the_poster = base64_encode(file_get_contents(public_path($event->poster->file_path)));
-        }
-        elseif ($event->poster->poster_code){
-            $the_poster = $event->poster->poster_code;
-        }
-
-        $data = [
-            'booking'   => $booking,
-            'event'     => $event,
-            'tickets'   => $booking->tickets,
-            'attendees' => $booking->attendees,
-            'css'       => file_get_contents(public_path('css/ticket.css')),
-            'logo'      => base64_encode(file_get_contents(public_path($event->department->logo_path))),
-            'poster'    => $the_poster,
-        ];
-
-        if ($request->exists('download')) {
-            if ($request->get('download') == '1') {
-                $pdf = PDF::loadView('front.pdf.ticket-pdf-html', compact('data'))->setPaper('a4', 'landscape');
-                //$pdf = PDF::loadView('front.pdf.ticket-pdf2', compact('data'));
-                return $pdf->stream('invoice.pdf');
-            }
-        }
-
-        
-        return view('front.pdf.ticket-pdf-html', compact('data'));
-    }
-    */
-
-    /**
-     * Allows a user to download ticket in PDF format
      * Uses the function from EPPMS helper
      *
      * @param Request $request
@@ -435,4 +380,5 @@ class TicketController extends Controller
 
         return ['success' => true];
     }
+    
 }

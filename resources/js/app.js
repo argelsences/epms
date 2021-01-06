@@ -114,6 +114,7 @@ Vue.component('event', require('./components/front/events/Event.vue').default);
 Vue.component('contact-form', require('./components/front/events/ContactForm.vue').default);
 Vue.component('ticket-form', require('./components/front/events/TicketForm.vue').default);
 Vue.component('subscribe-form', require('./components/front/events/SubscribeForm.vue').default);
+Vue.component('unsubscribe-form', require('./components/front/subscriber/UnsubscribeForm.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

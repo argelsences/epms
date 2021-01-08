@@ -105,16 +105,16 @@ class TicketController extends Controller
      * 
      */
     public function list($event){
-        /*if ( auth()->user()->can(['list ticket']) ){
-            return response('Unauthorized', 403);
-        }*/
-
-        if (auth()->user()->hasPermissionTo('list ticket', 'api') ){
+        if ( !auth()->user()->can(['list ticket']) ){
             return response('Unauthorized', 403);
         }
 
+        /*if (auth()->user()->hasPermissionTo('list ticket', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
+
         $theTickets = Ticket::where('event_id', $event)->orderBy('title', 'ASC')->get();
-        ///dd($theTickets);
+        
         return response()->json(($theTickets));
     }
     /**
@@ -128,13 +128,13 @@ class TicketController extends Controller
      */
     public function upsert(Request $request)
     {
-        /*if ( auth()->user()->can(['edit ticket', 'add ticket']) ){
-            return response('Unauthorized', 403);
-        }*/
-
-        if (auth()->user()->hasPermissionTo('edit ticket', 'api') && auth()->user()->hasPermissionTo('add ticket', 'api') ){
+        if ( !auth()->user()->can(['edit ticket', 'add ticket']) ){
             return response('Unauthorized', 403);
         }
+
+        /*if (auth()->user()->hasPermissionTo('edit ticket', 'api') && auth()->user()->hasPermissionTo('add ticket', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
 
         $upsertSuccess = false;
         // retrieve payload
@@ -173,13 +173,13 @@ class TicketController extends Controller
      */
     public function pause(Request $request) {
 
-        /*if ( auth()->user()->can(['edit ticket']) ){
-            return response('Unauthorized', 403);
-        }*/
-
-        if (auth()->user()->hasPermissionTo('edit ticket', 'api') ){
+        if ( !auth()->user()->can(['edit ticket']) ){
             return response('Unauthorized', 403);
         }
+
+        /*if (auth()->user()->hasPermissionTo('edit ticket', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
         
         $ticketID = $request->post('payload');
         $ticket = $this->tickets->findOrFail($ticketID);
@@ -363,6 +363,10 @@ class TicketController extends Controller
      * API function to resend booking tickets
      */
     public function resend_booking_tickets(Request $request){
+
+        if ( !auth()->user()->can(['list ticket']) ){
+            return response('Unauthorized', 403);
+        }
 
         $booking = $request->all();
 

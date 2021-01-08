@@ -40,8 +40,8 @@
           @include('front.event.partials.header-section')
           @include('front.event.partials.ticket-section')
           @include('front.event.partials.description-section')
-          @include('front.event.partials.share-section')
           @include('front.event.partials.map-section')
+          @include('front.event.partials.share-section')
           @include('front.event.partials.organiser-section')
           @include('front.event.partials.subscribe')
 

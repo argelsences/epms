@@ -81,7 +81,11 @@ class BookController extends Controller
      */
     public function update(Request $request, Book $book) {
         //
-        if (auth()->user()->hasPermissionTo('edit booking', 'api') ){
+        /*if (auth()->user()->hasPermissionTo('edit booking', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if ( !auth()->user()->can(['edit booking']) ){
             return response('Unauthorized', 403);
         }
 
@@ -105,7 +109,11 @@ class BookController extends Controller
      */
     public function list(Book $model, $event_id){
         
-        if (auth()->user()->hasPermissionTo('list booking', 'api') ){
+        /*if (auth()->user()->hasPermissionTo('list booking', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if ( !auth()->user()->can(['list booking']) ){
             return response('Unauthorized', 403);
         }
         
@@ -119,9 +127,12 @@ class BookController extends Controller
      * 
      * @param request object containing details about the booking
      */
-    public function exportToCSV(Book $model) {
+    public function exportToCSV(Book $model, $event_id) {
 
-        if (auth()->user()->hasPermissionTo('export booking', 'web') ){
+        /*if (auth()->user()->hasPermissionTo('export booking', 'web') ){
+            return response('Unauthorized', 403);
+        }*/
+        if ( !auth()->user()->can(['export booking']) ){
             return response('Unauthorized', 403);
         }
 
@@ -129,7 +140,8 @@ class BookController extends Controller
         $date = date('d-m-Y-g.i.a');
         $filename = 'booking-as-of-' . $date . '.csv';
 
-        $books = $model::all();
+        //$books = $model::all();
+        $books = $model::where('event_id', $event_id)->get();
 
         $headers = array(
             "Content-type"        => "text/csv",
@@ -169,7 +181,11 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        if (auth()->user()->hasPermissionTo('delete booking', 'api') ){
+        /*if (auth()->user()->hasPermissionTo('delete booking', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if ( !auth()->user()->can(['delete booking']) ){
             return response('Unauthorized', 403);
         }
 

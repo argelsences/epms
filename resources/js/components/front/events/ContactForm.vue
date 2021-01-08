@@ -1,8 +1,9 @@
 <template>
     <v-app>
         <v-card flat>
-            <v-card-title>
-                <h3>Contact <i>{{theEvent.department.name}}</i></h3>
+            <v-card-title >
+                <!--<h3>Contact <i>{{theEvent.department.name}}</i></h3>-->
+                <h3 class="contact-header">Contact Us</h3>
             </v-card-title>
             <v-card-text>
                 <v-container>
@@ -124,4 +125,5 @@
     .grecaptcha-badge {
         visibility: hidden !important;
     }
+    h3.contact-header{margin: 0 auto;}
 </style>

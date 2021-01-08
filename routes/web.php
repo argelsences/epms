@@ -50,9 +50,9 @@ Route::group(['prefix' => 'web-admin','middleware' => ['auth']], function () {
 
 Route::group(['prefix' => 'web-admin','middleware' => ['role:Contributor|Author|Super Administrator|Administrator']], function () {
 	// export bookings
-	Route::get('/bookings/export-to-csv', 'BookController@exportToCSV')->name('bookings.export-to-csv');
+	Route::get('/bookings/export-to-csv/{event_id}', 'BookController@exportToCSV')->name('bookings.export-to-csv');
 	// export attendees
-	Route::get('/attendees/export-to-csv', 'AttendeeController@exportToCSV')->name('attendees.export-to-csv');
+	Route::get('/attendees/export-to-csv/{event_id}', 'AttendeeController@exportToCSV')->name('attendees.export-to-csv');
 	Route::get('/attendees/print/{event}', 'AttendeeController@displayPrintableAttendees')->name('attendees.print');
 });
 

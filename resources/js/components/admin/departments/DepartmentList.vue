@@ -1,42 +1,10 @@
-<!--<template>              
-    <table class="table table-striped">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col" v-for="(column, index) in columns" :key="index">{{column.label}}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="(row, index) in rows" :key="row.id">
-                <td>{{row.id}}</td>
-                <td>{{row.name}}</td>
-                <td>{{row.designation}}</td>
-                <td>{{row.email}}</td>
-                <td><a :href="`/web-admin/users/${row.id}/edit`">Edit</a></td>
-            </tr>
-        </tbody>
-    </table>      
-</template>
-** search what is map function {{desserts.map(function(x) {return x.id; }).indexOf(item.id)}}
-1. API for department list, and selected department DONE
-2. Work on pushing the list of departments DONE
-3. Fix issue with department when editing entry DONE
-4. Disable editing email on update DONE
-5. For designation, work on pushing the list of unique designations and allow user to add new input (use combobox) DONE
-6. Add Role
-7. Fix the password when user is editing DONE, confirm password is not shown
-8. Changed password field with input to show the password DONE
-9. BUG: when edit then add new, the password is prefilled and you can save without setting the password. Designation is affected. DONE
-10. Fix the message output after successful create or update
-11. Push changes to API backend
-12. Force form reset
--->
 <template>
     <v-app>
         <div class="text-h4 text-left">Departments</div>
         <div class="text-subtitle-1 text-left">You can manage the departments here</div>
         <v-divider></v-divider>
         <v-card>
-            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" sort-by="name">
+            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" sort-by="name" :loading="isLoading" :loading-text="loadingText">
                 <template v-slot:top>
                     <!-- the toolbar -->
                     <v-toolbar flat color="white">
@@ -347,6 +315,8 @@
                     url: '',
                     about: '',
                 },
+                isLoading: true,
+                loadingText: "Loading items, please wait."
             }
         },
         computed: {
@@ -414,7 +384,8 @@
             initialize: function() {
                 axios.get('/api/departments')
                 .then( response => {
-                    this.rows = response.data;
+                    this.rows = response.data
+                    this.isLoading = false
                 });
             },
             editItem (item) {

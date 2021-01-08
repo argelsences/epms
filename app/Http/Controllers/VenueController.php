@@ -92,13 +92,15 @@ class VenueController extends Controller
      */
     public function list(Venue $model){
         
-        /*if ( auth()->user()->can(['list venue']) ){
-            return response('Unauthorized', 403);
-        }*/
-
-        if (auth()->user()->hasPermissionTo('list venue', 'api') ){
+        if ( !auth()->user()->can(['list venue']) ){
             return response('Unauthorized', 403);
         }
+
+        /*
+        if (!auth()->user()->hasPermissionTo('list venue', 'api') ){
+            return response('Unauthorized', 403);
+        }
+        */
 
         return response()->json(($model::orderBy('name', 'ASC')->get()));
     }
@@ -114,13 +116,13 @@ class VenueController extends Controller
      */
     public function upsert(Request $request)
     {
-        /*if ( auth()->user()->can(['edit venue', 'add venue']) ){
-            return response('Unauthorized', 403);
-        }*/
-
-        if (auth()->user()->hasPermissionTo('edit venue', 'api') && auth()->user()->hasPermissionTo('add venue', 'api') ){
+        if ( !auth()->user()->can(['edit venue', 'add venue']) ){
             return response('Unauthorized', 403);
         }
+
+        /*if (!auth()->user()->hasPermissionTo('edit venue', 'api') && auth()->user()->hasPermissionTo('add venue', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
 
         $upsertSuccess = false;
         $venue = $request->post('payload');
@@ -146,13 +148,13 @@ class VenueController extends Controller
      */
     public function countries(Country $country){
 
-        /*if ( auth()->user()->can(['list venue']) ){
-            return response('Unauthorized', 403);
-        }*/
-
-        if (auth()->user()->hasPermissionTo('list venue', 'api') ){
+        if ( !auth()->user()->can(['list venue']) ){
             return response('Unauthorized', 403);
         }
+
+        /*if (!auth()->user()->hasPermissionTo('list venue', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
 
         return response()->json($country->all('countries'));
     }

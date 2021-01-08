@@ -61,19 +61,6 @@ class SettingController extends Controller
      * @param  \App\Setting  $setting
      * @return \Illuminate\Http\Response
      */
-    /**
-     * TODAY: 14 10 2020
-     * 1. Create a seeder for settings DONE
-     * 2. Load values to edit and to template (use boolval to evaluate values with "is" fields) DONE
-     * 3. Allow to save and update the values DONE
-     * 4. Fonts to resize based on the parent container (templates)
-     * 5. Configure list of timezones (DONE)
-     * TODAY: 15 10 2020 
-     * 1. Allow to save and update the values (backlog) DONE
-     * 2. Fonts to resize based on the parent container (templates) (backlog) DONE
-     * 3. Create homepage
-     * 4. Create frontpage for each department
-     */
     public function edit(Setting $setting)
     {
         //
@@ -110,13 +97,14 @@ class SettingController extends Controller
      */
     public function list(Setting $model){
         
-        /*if ( auth()->user()->can(['edit settings']) ){
+        if ( !auth()->user()->can(['edit settings']) ){
             return response('Unauthorized', 403);
-        }*/
-
+        }
+        /*
         if (auth()->user()->hasPermissionTo('edit settings', 'api') ){
             return response('Unauthorized', 403);
         }
+        */
         // assign values here manually
         $settings = $model::all(['name', 'value']);
         $objSettings = [];
@@ -136,13 +124,13 @@ class SettingController extends Controller
      * Retrieve list of timezones
      */
     public function timezones(Country $country){
-        /*if ( auth()->user()->can(['edit settings']) ){
-            return response('Unauthorized', 403);
-        }*/
-
-        if (auth()->user()->hasPermissionTo('edit settings', 'api') ){
+        if ( !auth()->user()->can(['edit settings']) ){
             return response('Unauthorized', 403);
         }
+
+        /*if (auth()->user()->hasPermissionTo('edit settings', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
 
         return response()->json($country->timezones());
     }
@@ -151,13 +139,13 @@ class SettingController extends Controller
      */
     public function upsert(Request $request)
     {
-        /*if ( auth()->user()->can(['edit settings']) ){
-            return response('Unauthorized', 403);
-        }*/
-
-        if (auth()->user()->hasPermissionTo('edit settings', 'api') ){
+        if ( !auth()->user()->can(['edit settings']) ){
             return response('Unauthorized', 403);
         }
+
+        /*if (auth()->user()->hasPermissionTo('edit settings', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
 
         $objSettings = $request->post('payload');
 

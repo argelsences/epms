@@ -210,7 +210,7 @@ class RolesAndPermissionSeeder extends Seeder
                 'list speaker','edit speaker','list venue','edit venue',
                 'list booking','list attendee','delete booking','export booking',
                 'print booking','list attendee','delete booking','export booking',
-                'list subscriber','delete subscriber', 'export booking', 'edit profile'
+                'list subscriber','delete subscriber', 'export booking', 'edit profile', 'list template'
         ]);
 
         $role = Role::create(['name' => 'Contributor','guard_name' => 'api'])
@@ -219,7 +219,7 @@ class RolesAndPermissionSeeder extends Seeder
                 'list speaker','edit speaker','list venue','edit venue',
                 'list booking','list attendee','delete booking','export booking',
                 'print booking','list attendee','delete booking','export booking',
-                'list subscriber','delete subscriber', 'export booking', 'edit profile'
+                'list subscriber','delete subscriber', 'export booking', 'edit profile', 'list template'
         ]);
         // author
         $role = Role::create(['name' => 'Author'])
@@ -231,7 +231,7 @@ class RolesAndPermissionSeeder extends Seeder
                 'list venue','edit venue', 'add venue', 'delete venue',
                 'list booking','list attendee','edit booking','delete booking','export booking',
                 'print booking','list attendee','edit attendee', 'delete booking','export booking',
-                'list subscriber','delete subscriber', 'export booking', 'edit profile'
+                'list subscriber','delete subscriber', 'export booking', 'edit profile', 'list template'
             ]);
         $role = Role::create(['name' => 'Author','guard_name' => 'api'])
             ->givePermissionTo([
@@ -242,7 +242,7 @@ class RolesAndPermissionSeeder extends Seeder
                 'list venue','edit venue', 'add venue', 'delete venue',
                 'list booking','list attendee','edit booking','delete booking','export booking',
                 'print booking','list attendee','edit attendee', 'delete booking','export booking',
-                'list subscriber','delete subscriber', 'export booking', 'edit profile'
+                'list subscriber','delete subscriber', 'export booking', 'edit profile', 'list template'
             ]);
         // administrator
         $role = Role::create(['name' => 'Administrator'])

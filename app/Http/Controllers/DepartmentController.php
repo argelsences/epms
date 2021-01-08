@@ -95,11 +95,11 @@ class DepartmentController extends Controller
      */
     public function list(Department $model){
         
-        /*if ( auth()->user()->can(['list department']) ){
+        /*if (auth()->user()->hasPermissionTo('list department', 'api') ){
             return response('Unauthorized', 403);
         }*/
-        
-        if (auth()->user()->hasPermissionTo('list department', 'api') ){
+
+        if ( !auth()->user()->can(['list department']) ){
             return response('Unauthorized', 403);
         }
 
@@ -117,11 +117,11 @@ class DepartmentController extends Controller
      */
     public function upsert(DepartmentRequest $request)
     {
-        /*if ( auth()->user()->can(['edit department', 'add department']) ){
+        /*if (auth()->user()->hasPermissionTo('edit department', 'api') && auth()->user()->hasPermissionTo('add department', 'api') ){
             return response('Unauthorized', 403);
         }*/
 
-        if (auth()->user()->hasPermissionTo('edit department', 'api') && auth()->user()->hasPermissionTo('add department', 'api') ){
+        if ( !auth()->user()->can(['edit department', 'add_department']) ){
             return response('Unauthorized', 403);
         }
 
@@ -152,13 +152,13 @@ class DepartmentController extends Controller
      */
     public function uploadLogo(Request $request){
 
-        /*if ( auth()->user()->can(['edit department', 'add department']) ){
-            return response('Unauthorized', 403);
-        }*/
-        
-        if (auth()->user()->hasPermissionTo('edit department', 'api') && auth()->user()->hasPermissionTo('add department', 'api') ){
+        if ( !auth()->user()->can(['edit department', 'add department']) ){
             return response('Unauthorized', 403);
         }
+        
+        /*if (auth()->user()->hasPermissionTo('edit department', 'api') && auth()->user()->hasPermissionTo('add department', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
 
         $validatedData = $request->validate([
             "logo" => "nullable|sometimes|image|mimes:jpeg,bmp,png,jpg|max:2000"

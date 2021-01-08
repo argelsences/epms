@@ -4,7 +4,7 @@
         <div class="text-subtitle-1 text-left">You can manage your events here</div>
         <v-divider></v-divider>
         <v-card>
-            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" sort-by="name">
+            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" sort-by="name" :loading="isLoading" :loading-text="loadingText">
                 <template v-slot:top>
                     <!-- the toolbar -->
                     <v-toolbar flat color="white">
@@ -67,7 +67,7 @@
                                                 <v-icon left>mdi-ticket-account</v-icon>
                                                 Attendee
                                             </v-tab>
-
+                                            <!-- -->
                                             <v-tab-item>
                                                 <v-card flat>
                                                     <v-card-text class="pt-0">
@@ -83,7 +83,8 @@
                                                                     
                                                                 </v-col>
                                                             </v-row>
-                                                            <v-row>
+                                                            <!--1 -->
+                                                            <v-row v-if="isSuperAdmin">
                                                                 <v-col cols="12" sm="12" md="12">
                                                                     <div class="text-h5  text-left">Department</div>
                                                                     <v-divider />
@@ -94,6 +95,7 @@
                                                                 <v-col cols="12" sm="12" md="6">
                                                                 </v-col>
                                                             </v-row>
+                                                            <!--1 -->
                                                             <v-row>
                                                                 <v-col cols="12" sm="12" md="12">
                                                                     <div class="text-h5 text-left mt-10">Details</div>
@@ -103,6 +105,7 @@
                                                                     <v-text-field v-model="editedItem.title" label="Title" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
                                                                 </v-col>
                                                             </v-row>
+                                                            <!-- -->
                                                             <v-row>
                                                                 <v-col cols="12" sm="12" md="12">
                                                                     <v-chip class="mb-6">
@@ -117,11 +120,13 @@
                                                                     ></tiptap-vuetify>
                                                                 </v-col>
                                                             </v-row>
+                                                            <!-- -->
                                                             <v-row>
                                                                 <v-col cols="12" sm="12" md="12">
                                                                     <v-textarea counter label="Excerpt" v-model="editedItem.excerpt" :rules=[rules.limitCharacters] prepend-icon="mdi-face-profile" hint="Limit to 150 characters only" persisten-hint></v-textarea>
                                                                 </v-col>
                                                             </v-row>
+                                                            <!-- -->
                                                             <v-row>
                                                                 <v-col cols="12" sm="12" md="12">
                                                                     <div class="text-h5  text-left mt-10">Dates</div>
@@ -192,20 +197,6 @@
                                                                     </v-dialog>
                                                                 </v-col>
                                                             </v-row>
-                                                            <!--
-                                                            <v-row>
-                                                                <v-col cols="12" sm="12" md="12">
-                                                                    <div class="text-h4  text-left mt-10">Page</div>
-                                                                    <v-divider />
-                                                                </v-col>
-                                                                <v-col cols="12" sm="12" md="6">
-                                                                    <v-textarea counter label="Pre booking display message" v-model="editedItem.pre_booking_display_message" prepend-icon="mdi-face-profile"></v-textarea>
-                                                                </v-col>
-                                                                <v-col cols="12" sm="12" md="6">
-                                                                    <v-textarea counter label="Post booking display message" v-model="editedItem.post_booking_display_message" prepend-icon="mdi-face-profile"></v-textarea>
-                                                                </v-col>
-                                                            </v-row>
-                                                            -->
                                                             <v-row>
                                                                 <v-col cols="12" sm="12" md="12">
                                                                     <div class="text-h4  text-left mt-10">Social Media</div>
@@ -224,6 +215,7 @@
                                                                 </v-col>
                                                             </v-row>
                                                             <v-row>
+                                                                <!-- 2 -->
                                                                 <v-col cols="12" sm="12" md="6">
                                                                     <v-row>
                                                                         <v-col cols="12" sm="12" md="12">
@@ -242,10 +234,11 @@
                                                                         </v-col>
                                                                     </v-row>
                                                                 </v-col>
+                                                                <!-- -->
                                                                 <v-col cols="12" sm="12" md="6">
                                                                     <v-row>
                                                                         <v-col cols="12" sm="12" md="12">
-                                                                            <div class="text-h5  text-left mt-10">Speaker</div>
+                                                                            <div class="text-h5  text-left mt-10">Speakers</div>
                                                                             <v-divider />
                                                                         </v-col>
                                                                         <v-col cols="12" sm="12" md="12">
@@ -288,6 +281,7 @@
                                                     </v-card-text>
                                                 </v-card>
                                             </v-tab-item>
+                                            <!-- -->
                                             <v-tab-item>
                                                 <v-card flat>
                                                     <v-card-text class="pt-0">
@@ -355,7 +349,7 @@
                                                                             <v-col cols="12" sm="4" md="4" v-for="(template, i) in templateRows" :key="template.id" class="text-center">
                                                                                 <v-lazy v-model="isActive" :options="{threshold: .8}" min-height="200" transition-group="fade-transition">
                                                                                     <v-card class="mx-auto" max-width="180" @click="selectTemplate(template.id)">
-                                                                                        <v-img class="white--text align-end"  :src="`/web-admin/templates/screenshot/${template.id}?rnd=${cacheKey}`">
+                                                                                        <v-img class="white--text align-end"  :src="`/web-admin/templates/screenshot/${template.id}?rnd=${cacheKey}`" :lazy-src="`${base_url}images/eppms.png?rnd=${cacheKey}`">
                                                                                             <v-card-title  class="text-left secondary opacity-half" elevation=24>{{template.name}}</v-card-title>
                                                                                         </v-img>
                                                                                         <v-card-text class="text--primary" >
@@ -481,7 +475,7 @@
                                                         <!-- theBooking -->
                                                         <v-row>
                                                             <v-col cols="12" sm="12" md="12">
-                                                                <v-btn small color="#1f4068" class="white--text" href="/web-admin/bookings/export-to-csv"><v-icon class="mr-2">mdi-export</v-icon>Export bookings to CSV</v-btn>
+                                                                <v-btn small color="#1f4068" class="white--text" :href="`/web-admin/bookings/export-to-csv/${editedItem.id}`"><v-icon class="mr-2">mdi-export</v-icon>Export bookings to CSV</v-btn>
                                                             </v-col>
                                                         </v-row>
                                                         <v-data-table :headers="bookingHeaders" :items="bookingRows" :search="search" :items-per-page="20" sort-by="name" class="booking-data-table">
@@ -740,85 +734,6 @@
                                                                             </v-card-actions>
                                                                         </v-card>
                                                                     </v-dialog>
-
-                                                                    <!-- booking edit dialog -->
-                                                                    <!--
-                                                                    <v-dialog v-model="dialog"  width="80%" scrollable fullscreen>
-                                                                        <template v-slot:activator="{ on, attrs }">
-                                                                            <v-btn color="#1f4068" class="white--text" v-bind="attrs" v-on="on"><i class="material-icons ">add_box</i> Speaker</v-btn>
-                                                                        </template>
-                                                                        <v-card>
-                                                                            <v-card-title>
-                                                                                
-                                                                                <span class="headline">{{ formTitle }}</span>
-                                                                                <v-spacer></v-spacer>
-                                                                                <v-btn absolute dark fab middle right color="pink" @click="close">
-                                                                                    <v-icon x-large>mdi-close</v-icon>
-                                                                                </v-btn>
-                                                                            </v-card-title>
-                                                                            <v-divider></v-divider>
-                                                                            <v-card-text>
-                                                                                <v-container>
-                                                                                    <v-form v-model="isValid" ref="form">
-                                                                                        <v-row>
-                                                                                            <v-col cols="12" sm="12" md="6">
-                                                                                                <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
-                                                                                            </v-col>
-                                                                                            <v-col cols="12" sm="12" md="6" v-cloak @drop.prevent="addDropFile" @dragover.prevent>
-                                                                                                <v-file-input v-model="photo" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping an image here" 
-                                                                                                prepend-icon="mdi-camera-iris" label="Photo" persistentHint chips
-                                                                                                hint="Selecting an image will replace the existing photo. Valid image formats are JPG, JPEG, PNG & BMP. Image size should not be greater than 2MB"
-                                                                                                @change="uploadLogo">
-                                                                                                </v-file-input>        
-                                                                                                
-                                                                                            </v-col>
-                                                                                        </v-row>
-                                                                                        <v-row>
-                                                                                            <v-col cols="12" sm="12" md="6">
-                                                                                                <v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
-                                                                                            </v-col>
-                                                                                            <v-col cols="12" sm="12" md="6">
-                                                                                                <v-card v-if="editedItem.photo != null" class="my-2">
-                                                                                                    <v-card-text>
-                                                                                                        <v-img :lazy-src="base_url + editedItem.photo" max-height="150" max-width="250" :src="base_url + editedItem.photo"></v-img>
-                                                                                                        <v-divider class="my-2"></v-divider>
-                                                                                                        <p>{{editedItem.photo}}</p>
-                                                                                                    </v-card-text>
-                                                                                                </v-card>
-                                                                                            </v-col>
-                                                                                        </v-row>
-                                                                                        <v-row>
-                                                                                            <v-col cols="12" sm="12" md="12">
-                                                                                                <v-chip class="mb-6">
-                                                                                                    <v-icon left>mdi-face-profile</v-icon>
-                                                                                                    Profile
-                                                                                                </v-chip>
-                                                                                                <tiptap-vuetify
-                                                                                                    v-model="editedItem.profile"
-                                                                                                    :extensions="extensions"
-                                                                                                    id="profile"
-                                                                                                    min-height="400"
-                                                                                                ></tiptap-vuetify>
-                                                                                            </v-col>
-                                                                                        </v-row>
-                                                                                        <v-row>
-                                                                                            <v-col cols="12" sm="12" md="6">
-                                                                                                
-                                                                                            </v-col>
-                                                                                        </v-row>
-                                                                                    </v-form>
-                                                                                </v-container>
-                                                                            </v-card-text>
-                                                                            <v-divider></v-divider>
-                                                                            <v-card-actions>
-                                                                                <v-spacer></v-spacer>
-                                                                                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                                                                                <v-btn color="blue darken-1" :disabled="!isValid" text @click="save">Save</v-btn>
-                                                                            </v-card-actions>
-                                                                        </v-card>
-                                                                    </v-dialog>
-                                                                    -->
-
                                                                     <!-- the dialog box -->
                                                                 </v-toolbar>
                                                             <!-- the toolbar -->
@@ -870,14 +785,14 @@
                                                     </v-card-text>
                                                 </v-card>
                                             </v-tab-item>
-
+                                            <!-- -->
                                             <!-- the attendee -->
                                             <v-tab-item>
                                                 <v-card flat>
                                                     <v-card-text class="pt-0">
                                                         <v-row>
                                                             <v-col cols="12" sm="12" md="12">
-                                                                <v-btn small color="#1f4068" class="white--text" href="/web-admin/attendees/export-to-csv"><v-icon class="mr-2">mdi-export</v-icon>Export Attendees to CSV</v-btn>
+                                                                <v-btn small color="#1f4068" class="white--text" :href="`/web-admin/attendees/export-to-csv/${editedItem.id}`"><v-icon class="mr-2">mdi-export</v-icon>Export Attendees to CSV</v-btn>
                                                                 <v-btn small color="#1f4068" class="white--text" :href="`/web-admin/attendees/print/${editedItem.id}`" target="blank" ><v-icon class="mr-2">mdi-printer</v-icon>Print Attendees List</v-btn>                                                       
                                                             </v-col>
                                                         </v-row>
@@ -963,6 +878,7 @@
                                                     </v-card-text>
                                                 </v-card>
                                             </v-tab-item>
+                                            <!-- -->
                                             <!-- the attendees -->
                                         </v-tabs>  
                                     </v-container>
@@ -1516,6 +1432,10 @@
                 templatePreview: false,
                 theImageSrc: '',
                 generatingPoster: false,
+                userProfile: [],
+                isSuperAdmin: false,
+                isLoading: true,
+                loadingText: "Loading items, please wait.",
             }
         },
         computed: {
@@ -1608,7 +1528,8 @@
             initialize: function() {
                 axios.get('/api/events')
                 .then( response => {
-                    this.rows = response.data;
+                    this.rows = response.data
+                    this.isLoading = false
                 });
             },
             getDepartments: function() {
@@ -1626,7 +1547,7 @@
             getVenues: function() {
                 axios.get('/api/venues')
                 .then( response => {
-                    this.venues = response.data;
+                    this.venues = response.data
                 });
             },
             getSpeakers: function() {
@@ -1657,21 +1578,26 @@
                 axios.get(`/api/bookings/event/${eventId}`)
                 .then( response => {
                     this.bookingRows = response.data;
-                    console.log(this.bookingRows);
                 });
             },
             getAttendees(eventId) {
                 axios.get(`/api/attendees/event/${eventId}`)
                 .then( response => {
                     this.attendeeRows = response.data;
-                    console.log(this.attendeeRows);
                 });
             },
             getTemplates(eventId) {
                 axios.get('/api/templates')
                 .then( response => {
                     this.templateRows = response.data;
-                    console.log(this.templateRows);
+                });
+            },
+            getUserProfile() {
+                axios.get('/api/profile')
+                .then( response => {
+                    this.userProfile = response.data;
+                    if ( this.userProfile.roles[0].name === 'Super Administrator' )
+                        this.isSuperAdmin = true
                 });
             },
             editItem (item) {
@@ -1892,7 +1818,6 @@
                 return `${month}/${day}/${year}`
             },
             formatTime (time) {
-                console.log(time)
                 if (!time) return null
 
                 // Check correct time format and split into components
@@ -1948,9 +1873,6 @@
                     this.uploadReady = false
                 else
                     this.uploadReady = true
-                // do something
-
-                console.log(this.posterFile)
             },
             eventURL(item) {
                 let dID= (item) ? item.department_id : this.editedItem.department_id
@@ -2091,7 +2013,6 @@
                 if (confirm("Are you sure you want to cancel this attendee? (" + item.book.booking_reference + ")")) {
                     
                     let id = item.id
-                    console.log(id)
 
                     if (id > 0) {
                         axios.delete('/api/attendees/delete/' + id)
@@ -2102,7 +2023,6 @@
                 
             },
             editAttendee(item){
-                console.log(item)
                 this.attendee_edit_dialog = true
                 this.editedAttendeeItem = item
             },
@@ -2147,7 +2067,6 @@
                 this.selectedTemplate = templateID
             },
             downloadPoster(){
-                console.log(this.selectedFormat)
                 let path = `${this.base_url}files/events/${this.editedItem.id}/poster/${this.editedItem.id}`
                 if (this.selectedFormat == 'JPG'){
                     path = `${path}.jpg`
@@ -2213,6 +2132,7 @@
             this.getVenues()
             this.getSpeakers()
             this.getCountries()
+            this.getUserProfile()
         },
     }
 </script>

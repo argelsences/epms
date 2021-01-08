@@ -4,7 +4,7 @@
         <div class="text-subtitle-1 text-left">You can manage the event venues here</div>
         <v-divider></v-divider>
         <v-card>
-            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" sort-by="name">
+            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" sort-by="name" :loading="isLoading" :loading-text="loadingText">
                 <template v-slot:top>
                     <!-- the toolbar -->
                     <v-toolbar flat color="white">
@@ -204,6 +204,8 @@
                     lat: null,
                     long: '',
                 },
+                isLoading: true,
+                loadingText: "Loading items, please wait."
             }
         },
         computed: {
@@ -225,7 +227,8 @@
             initialize: function() {
                 axios.get('/api/venues')
                 .then( response => {
-                    this.rows = response.data;
+                    this.rows = response.data
+                    this.isLoading = false
                 });
             },
             getCountries() {

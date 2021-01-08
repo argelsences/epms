@@ -4,7 +4,7 @@
         <div class="text-subtitle-1 text-left">You can manage the event posters here</div>
         <v-divider></v-divider>
         <v-card>
-            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" sort-by="name">
+            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" sort-by="name" :loading="isLoading" :loading-text="loadingText">
                 <template v-slot:top>
                     <!-- the toolbar -->
                     <v-toolbar flat color="white">
@@ -311,6 +311,8 @@
                 templateRows: [],
                 cacheKey: +new Date(),
                 isActive: false,
+                isLoading: true,
+                loadingText: "Loading items, please wait."
             }
         },
         computed: {
@@ -332,7 +334,8 @@
             initialize: function() {
                 axios.get('/api/posters')
                 .then( response => {
-                    this.rows = response.data;
+                    this.rows = response.data
+                    this.isLoading = false
                 });
             },
             getDepartments: function() {

@@ -131,13 +131,13 @@ class TemplateController extends Controller
      */
     public function list(Template $model){
         
-        /*if ( auth()->user()->can(['list template']) ){
-            return response('Unauthorized', 403);
-        }*/
-
-        if (auth()->user()->hasPermissionTo('list template', 'api') ){
+        if ( !auth()->user()->can(['list template']) ){
             return response('Unauthorized', 403);
         }
+
+        /*if (!auth()->user()->hasPermissionTo('list template', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
 
         if (auth()->user()->is_super_admin('api')){
             $templates = $model::orderBy('name', 'ASC')->get();
@@ -155,13 +155,13 @@ class TemplateController extends Controller
      */
     public function upsert(Request $request) {
 
-        /*if ( auth()->user()->can(['edit template', 'add template']) ){
-            return response('Unauthorized', 403);
-        }*/
-
-        if (auth()->user()->hasPermissionTo('edit template', 'api') && auth()->user()->hasPermissionTo('add template', 'api') ){
+        if ( !auth()->user()->can(['edit template', 'add template']) ){
             return response('Unauthorized', 403);
         }
+
+        /*if (auth()->user()->hasPermissionTo('edit template', 'api') && auth()->user()->hasPermissionTo('add template', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
 
         if ($request->input('method') == 'upload'){
             $return = $this->create_by_upload($request);
@@ -174,68 +174,6 @@ class TemplateController extends Controller
         return $return;
     }
 
-    /**
-     * TODO
-     * 
-     * 12. Poster list and media generation
-     * 
-     * TODAY (12/10/20)
-     * 
-     * 1. Allow to download the template files
-     * 2. Create guide on how to create template
-     * 3. Create a sample templates (3) partial (2)
-     * 4. Frontend for each department DONE
-     * 5. System setting page DONE
-     * 
-     * Logic for upload edit
-     * 
-     */
-    /**
-    * 1. When html file is present
-    *    -- read the existing css file
-    *    -- read the existing images
-    *    -- build the html again    
-    *    2. When css file is present
-    *    -- read the existing html file
-    *    -- insert the css file to the existing html file
-    *    -- read the existing images
-    *    -- build the html again
-    *
-    *    3. When image is present
-    *    -- read the existing html file
-    *    -- read the existing css file
-    *    -- insert the existing css file to html
-    *    -- build the html again
-    *
-    *    4. When html and css is present
-    *    -- read the existing image
-    *    -- read the new html code
-    *    -- read the new css code
-    *    -- rebuild the html 
-    *
-    *    5. when html, css and images are present
-    *    -- rebuild all
-    *
-    * TODAY (09/10/20)
-    * 1. Display department name in template list DONE
-    * 2. Edit for template code DONE
-    * 3. Generate screenshot based on shortcodes DONE
-    * %title%
-    * %date%
-    * %excerpt%
-    * %synopsis%
-    * %start_date%
-    * %end_date%
-    * %speakers%
-    * %department_name%
-    * %event_date%
-    * 4. Generate a config file for EPPMS only DONE
-    * 5. Create guide on how to create template
-    * 6. Frontend for each department
-    * 7. System setting page
-    * 8. Create a sample templates (3) partial (2)
-    * 9. BUG: When no css code for existing templates, edit throws error DONE
-     */
     private function create_by_upload(Request $request){
 
         $html_code = $css_code = "";
@@ -547,8 +485,17 @@ class TemplateController extends Controller
     }
 
     public function screenshot($id){
+
+        if ( !auth()->user()->can(['list template']) ){
+            return response('Unauthorized', 403);
+        }
+
         $template = $this->templates->findOrFail($id);
         
         return EPPMS::getScreenshot($template->file_path['path']);
     }
+
+
+    
+
 }

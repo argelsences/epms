@@ -35,7 +35,7 @@
                             </v-btn>
                         @endif
                         <!-- set toggle here -->
-                        <v-btn icon  class="ma-5 white--text" fab>
+                        <v-btn icon  class="ma-5 white--text" href="mailto:{{$event->department->email}}" fab>
                             <v-icon x-large dark >
                                 mdi-email
                             </v-icon>

@@ -234,11 +234,6 @@ class EPPMSHelper {
             abort(404);
         }
 
-        //$images = [];
-        //$imgs = $booking->event->images;
-        //foreach ($imgs as $img) {
-            //$images[] = base64_encode(file_get_contents(public_path($img->image_path)));
-        //}
         // get poster from the event
         $the_poster = '';
         $event = Event::findOrFail($booking->tickets->first()->event_id);
@@ -259,7 +254,8 @@ class EPPMSHelper {
             'attendees' => $booking->attendees,
             'css'       => file_get_contents(public_path('css/ticket.css')),
             'logo'      => base64_encode(file_get_contents(public_path($event->department->logo_path))),
-            'poster'    => $the_poster,
+            //'poster'    => $the_poster,
+            'poster'    => '',
         ];
 
         

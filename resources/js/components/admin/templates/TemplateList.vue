@@ -4,7 +4,7 @@
         <div class="text-subtitle-1 text-left">You can manage the templates here</div>
         <v-divider></v-divider>
         <v-card>
-            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" sort-by="name">
+            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" sort-by="name" :loading="isLoading" :loading-text="loadingText">
                 <template v-slot:top>
                     <!-- the toolbar -->
                     <v-toolbar flat color="white">
@@ -121,6 +121,8 @@
                     images: null,
                 },
                 templateMethod: '',
+                isLoading: true,
+                loadingText: "Loading items, please wait."
             }
         },
         computed: {
@@ -140,6 +142,7 @@
                 axios.get('/api/templates')
                 .then( response => {
                     this.rows = response.data;
+                    this.isLoading = false
                 });
             },
             getDepartments: function() {
@@ -157,7 +160,6 @@
             editItem (item) {
                 this.editedIndex = this.rows.indexOf(item)
                 this.editedItem = Object.assign({}, item)
-                /////this.dialog = true
                 console.log(this.editedItem.method)
                 if ( this.editedItem.method == 'upload' )
                     this.$router.push({name: 'add-by-upload', params: this.editedItem})

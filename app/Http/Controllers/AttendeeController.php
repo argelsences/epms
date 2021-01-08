@@ -73,9 +73,14 @@ class AttendeeController extends Controller
     public function update(Request $request, Attendee $attendee)
     {
         //
-        if (auth()->user()->hasPermissionTo('edit attendee', 'api') ){
+        /*if (auth()->user()->hasPermissionTo('edit attendee', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if ( !auth()->user()->can(['edit attendee']) ){
             return response('Unauthorized', 403);
         }
+        
 
         $att = $attendee::findOrFail($request->input('id'));
 
@@ -98,7 +103,10 @@ class AttendeeController extends Controller
      */
     public function destroy(Attendee $attendee)
     {
-        if (auth()->user()->hasPermissionTo('delete attendee', 'api') ){
+        /*if (!auth()->user()->hasPermissionTo('delete attendee', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
+        if ( !auth()->user()->can(['delete attendee']) ){
             return response('Unauthorized', 403);
         }
 
@@ -160,7 +168,11 @@ class AttendeeController extends Controller
      */
     public function list(Attendee $model, $event_id){
         
-        if (auth()->user()->hasPermissionTo('list attendee', 'api') ){
+        /*if (auth()->user()->hasPermissionTo('list attendee', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if ( !auth()->user()->can(['list attendee']) ){
             return response('Unauthorized', 403);
         }
         
@@ -174,17 +186,20 @@ class AttendeeController extends Controller
      * 
      * @param request object containing details about the booking
      */
-    public function exportToCSV(Attendee $model) {
+    public function exportToCSV(Attendee $model, $event_id) {
 
-        if (auth()->user()->hasPermissionTo('export booking', 'web') ){
+        /*if (auth()->user()->hasPermissionTo('export booking', 'web') ){
+            return response('Unauthorized', 403);
+        }*/
+        if ( !auth()->user()->can(['export booking']) ){
             return response('Unauthorized', 403);
         }
 
-        //$fileName = Str::random() . '.csv';
         $date = date('d-m-Y-g.i.a');
         $filename = 'attendess-as-of-' . $date . '.csv';
 
-        $attendees = $model::all();
+        //$attendees = $model::all();
+        $attendees = $model::where('event_id', $event_id)->get();
 
         $headers = array(
             "Content-type"        => "text/csv",
@@ -225,6 +240,10 @@ class AttendeeController extends Controller
      */
     public function displayPrintableAttendees(Event $event)
     {
+        if ( !auth()->user()->can(['list attendee']) ){
+            return response('Unauthorized', 403);
+        }
+
         $event = $event;
         $attendees = $event->attendees()->orderBy('first_name')->get();
 

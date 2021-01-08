@@ -103,30 +103,21 @@ class EventController extends Controller
      */
     public function list(Event $model){
         
-        /*if ( auth()->user()->can(['list event']) ){
-            return response('Unauthorized', 403);
-        }*/
-
-        if (auth()->user()->hasPermissionTo('list event', 'api') ){
+        if ( !auth()->user()->can(['list event']) ){
             return response('Unauthorized', 403);
         }
+        /*
+        if (!auth()->user()->hasPermissionTo('list event', 'api') ){
+            return response('Unauthorized', 403);
+        }
+        */
 
         if (auth()->user()->is_super_admin('api')){
             $events = $model::with(['venue','speakers','tickets'])->orderBy('start_date', 'DESC')->get();
         }
         else {
-            $events = $model::filterByDepartment()->orderBy('start_date', 'DESC')->get();
+            $events = $model::with(['venue','speakers','tickets'])->filterByDepartment()->orderBy('start_date', 'DESC')->get();
         }
-
-        //$events = $model::with(['venue','speakers','tickets'])->orderBy('start_date', 'DESC')->get();
-        /*
-        $tickets = [];
-        foreach($events as $event){
-            $tickets[] = $event->tickets();
-        }
-        dd($tickets);
-        */
-        //dd($events);
 
         return response()->json($events);
     }
@@ -135,13 +126,13 @@ class EventController extends Controller
      */
     public function upsert(Request $request){
 
-        /*if ( auth()->user()->can(['edit event', 'create event']) ){
-            return response('Unauthorized', 403);
-        }*/
-
-        if (auth()->user()->hasPermissionTo('edit event', 'api') && auth()->user()->hasPermissionTo('create event', 'api') ){
+        if ( !auth()->user()->can(['edit event', 'add event']) ){
             return response('Unauthorized', 403);
         }
+
+        /*if (auth()->user()->hasPermissionTo('edit event', 'api') && auth()->user()->hasPermissionTo('create event', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
 
         $upsertSuccess = false;
         $event = $request->post('payload');
@@ -174,7 +165,6 @@ class EventController extends Controller
             $theEvent = $theEvent->fresh();
 
             $theEvent = Event::with(['venue','speakers'])->find($theEvent->id);
-            /////dd($theEvents);
 
             $upsertSuccess = ($theEvent->id) ? true : false;
         }
@@ -192,13 +182,13 @@ class EventController extends Controller
      */
     public function uploadPoster(Request $request){
 
-        /*if ( auth()->user()->can(['edit poster', 'add poster']) ){
-            return response('Unauthorized', 403);
-        }*/
-
-        if (auth()->user()->hasPermissionTo('edit poster', 'api') && auth()->user()->hasPermissionTo('add poster', 'api') ){
+        if ( !auth()->user()->can(['edit poster', 'add poster']) ){
             return response('Unauthorized', 403);
         }
+
+        /*if (auth()->user()->hasPermissionTo('edit poster', 'api') && auth()->user()->hasPermissionTo('add poster', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
 
         $validatedData = $request->validate([
             "photo" => "nullable|sometimes|image|mimes:jpeg,bmp,png,jpg|max:2000"
@@ -232,14 +222,6 @@ class EventController extends Controller
         $theEventID = filter_var($event_id, FILTER_SANITIZE_NUMBER_INT);
         $department = Department::where('url', $URI)->firstOrFail();
 
-        /*
-            1. get the event
-            2. check if it is live
-            3. if yes, then display
-            4. if not, check if the user is the author of the event, the administrator of the department or superadministrator
-            5. if yes, display the event
-            6. if not throw 404 
-        */
         $theEvent = $this->events->findOrFail($theEventID);
 
         if( $theEvent->is_public && $theEvent->is_approved ){
@@ -248,7 +230,6 @@ class EventController extends Controller
         else {
             if (auth()->check()){
                 $auth_user = auth()->user();
-                //dd($auth_user->is_super_admin() );
                 // check if author of event || administrator of department || super administrator
                 if ( ($auth_user->is_event_author($theEvent->created_by)) || 
                     ( $auth_user->is_department_admin($theEvent->department_id) ) ||
@@ -268,39 +249,6 @@ class EventController extends Controller
             }
         }
         
-    
-        /// script
-        /** @var Organiser $organiser */
-        /*$organiser = Organiser::findOrFail($organiser_id);
-
-        if (!$organiser->enable_organiser_page && !Utils::userOwns($organiser)) {
-            abort(404);
-        }*/
-
-        /*
-         * If we are previewing styles from the backend we set them here.
-         */
-        /*
-        if ($request->get('preview_styles') && Auth::check()) {
-            $query_string = rawurldecode($request->get('preview_styles'));
-            parse_str($query_string, $preview_styles);
-
-            $organiser->page_bg_color = $preview_styles['page_bg_color'];
-            $organiser->page_header_bg_color = $preview_styles['page_header_bg_color'];
-            $organiser->page_text_color = $preview_styles['page_text_color'];
-        }*/
-        
-        /*
-        $data = [
-            'department'       => $organiser,
-            'tickets'         => $organiser->events()->orderBy('created_at', 'desc')->get(),
-            'is_embedded'     => 0,
-            'upcoming_events' => $upcoming_events,
-            'past_events'     => $past_events,
-        ];
-        */
-        
-        /// end script
         // settings
         $settings = Setting::all(['name', 'value']);
         $objSettings = [];

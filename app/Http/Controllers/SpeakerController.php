@@ -91,13 +91,13 @@ class SpeakerController extends Controller
      * 
      */
     public function list(Speaker $model){
-        /*if ( auth()->user()->can(['list speaker']) ){
-            return response('Unauthorized', 403);
-        }*/
-
-        if (auth()->user()->hasPermissionTo('list speaker', 'api') ){
+        if ( !auth()->user()->can(['list speaker']) ){
             return response('Unauthorized', 403);
         }
+
+        /*if (!auth()->user()->hasPermissionTo('list speaker', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
 
         return response()->json(($model::orderBy('name', 'ASC')->get()));
     }
@@ -112,13 +112,13 @@ class SpeakerController extends Controller
      */
     public function upsert(Request $request)
     {
-        /*if ( auth()->user()->can(['edit speaker', 'add speaker']) ){
-            return response('Unauthorized', 403);
-        }*/
-
-        if (auth()->user()->hasPermissionTo('edit speaker', 'api') && auth()->user()->hasPermissionTo('add speaker', 'api') ){
+        if ( !auth()->user()->can(['edit speaker', 'add speaker']) ){
             return response('Unauthorized', 403);
         }
+
+        /*if (auth()->user()->hasPermissionTo('edit speaker', 'api') && auth()->user()->hasPermissionTo('add speaker', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
 
         $upsertSuccess = false;
         $speaker = $request->post('payload');
@@ -147,13 +147,13 @@ class SpeakerController extends Controller
      */
     public function uploadPhoto(Request $request){
 
-        /*if ( auth()->user()->can(['edit speaker', 'add speaker']) ){
-            return response('Unauthorized', 403);
-        }*/
-
-        if (auth()->user()->hasPermissionTo('edit speaker', 'api') && auth()->user()->hasPermissionTo('add speaker', 'api') ){
+        if ( !auth()->user()->can(['edit speaker', 'add speaker']) ){
             return response('Unauthorized', 403);
         }
+
+        /*if (auth()->user()->hasPermissionTo('edit speaker', 'api') && auth()->user()->hasPermissionTo('add speaker', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
 
         $validatedData = $request->validate([
             "photo" => "nullable|sometimes|image|mimes:jpeg,bmp,png,jpg|max:2000"

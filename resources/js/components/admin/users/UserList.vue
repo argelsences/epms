@@ -36,7 +36,7 @@
         <div class="text-subtitle-1 text-left">You can manage your users here</div>
         <v-divider></v-divider>
         <v-card>
-            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" :single-expand="singleExpand" :expanded.sync="expanded" show-expand sort-by="name">
+            <v-data-table :headers="headers" :items="rows" :search="search" :items-per-page="20" :single-expand="singleExpand" :expanded.sync="expanded" show-expand sort-by="name" :loading="isLoading" :loading-text="loadingText">
                 <template v-slot:top>
                     <!-- the toolbar -->
                     <v-toolbar flat color="white">
@@ -228,6 +228,8 @@
                     ],
                     password: '',
                 },
+                isLoading: true,
+                loadingText: "Loading items, please wait."
             }
         },
         computed: {
@@ -249,9 +251,9 @@
             initialize: function() {
                 axios.get('/api/users')
                 .then( response => {
-                    this.rows = response.data;
-                });
-                //console.log("the rows" + this.rows)
+                    this.rows = response.data
+                    this.isLoading = false
+                })
             },
             getDepartments: function() {
                 axios.get('/api/departments')

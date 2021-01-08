@@ -145,13 +145,13 @@ class UserController extends Controller
      */
     public function list(User $model) {
 
-        /*if (auth()->user()->can(['list user'])){
-            return response('Unauthorized', 403);
-        }*/
-
-        if (auth()->user()->hasPermissionTo('list user', 'api') ){
+        if (!auth()->user()->can(['list user'])){
             return response('Unauthorized', 403);
         }
+
+        /*if (!auth()->user()->hasPermissionTo('list user', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
 
         $dataObject = [];
 
@@ -185,12 +185,12 @@ class UserController extends Controller
      */
     public function getAllRoles (Role $model){
 
-        /*if (auth()->user()->can(['list role'])){
-            return response('Unauthorized', 403);
-        }*/
-        if (auth()->user()->hasPermissionTo('list role', 'api') ){
+        if (!auth()->user()->can(['list role'])){
             return response('Unauthorized', 403);
         }
+        /*if (auth()->user()->hasPermissionTo('list role', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
 
         return response()->json(($model::orderBy('name', 'ASC')->get(['id','name'])));
     }
@@ -219,7 +219,8 @@ class UserController extends Controller
      */
     public function getProfile(){
         $user = Auth::user();
-        return response()->json( $user );
+        $objUser = User::with(['department','roles'])->findOrFail($user->id);
+        return response()->json( $objUser );
     }
 
 }

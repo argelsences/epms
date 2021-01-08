@@ -93,13 +93,13 @@ class PosterController extends Controller
      * 
      */
     public function list($event){
-        /*if ( auth()->user()->can(['view poster']) ){
-            return response('Unauthorized', 403);
-        }*/
-
-        if (auth()->user()->hasPermissionTo('view poster', 'api') ){
+        if ( !auth()->user()->can(['list poster']) ){
             return response('Unauthorized', 403);
         }
+
+        /*if (auth()->user()->hasPermissionTo('view poster', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
 
         $thePoster = Poster::where('event_id', $event)->first();
         
@@ -118,13 +118,13 @@ class PosterController extends Controller
      */
     public function upload(Request $request){
 
-        /*if ( auth()->user()->can(['edit speaker', 'add speaker']) ){
-            return response('Unauthorized', 403);
-        }*/
-
-        if (auth()->user()->hasPermissionTo('edit poster', 'api') && auth()->user()->hasPermissionTo('add poster', 'api') ){
+        if ( !auth()->user()->can(['edit poster', 'add poster']) ){
             return response('Unauthorized', 403);
         }
+
+        /*if (auth()->user()->hasPermissionTo('edit poster', 'api') && auth()->user()->hasPermissionTo('add poster', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
 
         $validatedData = $request->validate([
             "photo" => "nullable|sometimes|image|mimes:jpeg,bmp,png,jpg|max:2000"
@@ -159,7 +159,11 @@ class PosterController extends Controller
      */
     public function deleteFile(Poster $poster) {
 
-        if (auth()->user()->hasPermissionTo('edit poster', 'api') && auth()->user()->hasPermissionTo('add poster', 'api') ){
+        /*if (auth()->user()->hasPermissionTo('edit poster', 'api') && auth()->user()->hasPermissionTo('add poster', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if ( !auth()->user()->can(['edit poster', 'add poster']) ){
             return response('Unauthorized', 403);
         }
 
@@ -174,6 +178,10 @@ class PosterController extends Controller
      */
     public function generate(Request $request){
         
+        if ( !auth()->user()->can(['add poster', 'edit poster']) ){
+            return response('Unauthorized', 403);
+        }
+
         $template = Template::findOrFail($request->post('template_id'));
         $event = Event::findOrFail($request->post('event_id'));
 
@@ -190,7 +198,10 @@ class PosterController extends Controller
      * List all posters
      */
     public function listAll(Poster $model){
-        if (auth()->user()->hasPermissionTo('view poster', 'api') ){
+        /*if (auth()->user()->hasPermissionTo('view poster', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
+        if ( !auth()->user()->can(['view poster']) ){
             return response('Unauthorized', 403);
         }
 

@@ -15,8 +15,12 @@
     <meta property="og:type" content="article" />
     <meta property="og:url" content="{{ url('/d/' . $url) }}" />
     <meta property="og:image" content="{{ url( $logo_path ) }}" />
-    <meta property="og:description" content="{{{Str::words(strip_tags('An event publication and poster generation system')), 20}}}" />
+    <meta property="og:description" content="{{{Str::words(strip_tags('description here')), 20}}}" />
     <meta property="og:site_name" content="EPPMS" />
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
     
     <!--     Fonts and icons     -->
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />

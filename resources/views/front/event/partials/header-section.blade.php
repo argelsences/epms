@@ -1,5 +1,3 @@
-<!-- TODO check if live, if not, create a bar to offer the super admin, administrator or the author to make it live -->
-
 @if (auth()->check())
     @if( auth()->user()->can(["edit event","create event"]) )
         @if(!$event->is_public)

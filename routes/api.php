@@ -27,6 +27,8 @@ Route::post('/ticket/checkout', 'TicketController@checkout')->name('tickets.chec
 Route::post('/subscribe', 'SubscriberController@subscribe')->name('subscribers.subscribe');
 Route::post('/unsubscribed', 'SubscriberController@unsubscribed')->name('subscribers.unsubscribed');
 
+Route::get('/latest-events', 'EventController@latest_events')->name('departments.latestEvents');
+
 
 Route::group(['middleware' => ['auth:api']], function(){
     // users

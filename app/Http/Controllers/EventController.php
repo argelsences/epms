@@ -287,4 +287,31 @@ class EventController extends Controller
         return ['success' => true, 'message' => config('eppms.messages.frontend_success') ];
        
     }
+    /**
+     * API function
+     * 
+     * List all departments
+     * 
+     */
+    public function latest_events(Event $model){
+        /*
+        if ( !auth()->user()->can(['list event']) ){
+            return response('Unauthorized', 403);
+        }
+        */
+        /*
+        if (!auth()->user()->hasPermissionTo('list event', 'api') ){
+            return response('Unauthorized', 403);
+        }
+        */
+
+        //if (auth()->user()->is_super_admin('api')){
+            //$events = $model::with(['venue','speakers','tickets'])->orderBy('start_date', 'DESC')->get();
+        //}
+        //else {
+            $events = $model::with(['venue','speakers', 'department','poster'])->orderBy('start_date', 'DESC')->take(5)->get();
+        //}
+
+        return response()->json($events);
+    }
 }

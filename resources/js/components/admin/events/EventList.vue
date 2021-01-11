@@ -2120,7 +2120,12 @@
                     }
                 })
                 .catch( error => {
-                    
+                    this.generatingPoster = false
+                    //let messages = Object.values(error.response.data.errors); 
+                    let messages = ['An error encountered, please contact the administrator.']
+                    this.feedbacks = [].concat.apply([], messages)
+                    this.snackbar = true
+                    this.error = true
                 })
             },
         },

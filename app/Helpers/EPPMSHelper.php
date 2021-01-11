@@ -30,7 +30,7 @@ class EPPMSHelper {
         Browsershot::html($the_template)
                 /////->setOption('addStyleTag',json_encode(['content' => $the_css_code]))
                 ->noSandbox()
-                ->setScreenshotType('jpeg', 100)
+                ->setScreenshotType('jpeg', 70)
                 ->disableJavascript()
                 ->windowSize(595, 842)
                 /////->windowSize(600, 782)
@@ -41,6 +41,20 @@ class EPPMSHelper {
                 ->setDelay(1000)
                 ->waitUntilNetworkIdle()
                 ->save(Storage::disk('local')->path('templates/'.$template->id. '/' .'screenshot.jpg' ));
+       
+        $path = "files/templates/$template->id/";
+
+        // Create a copy of the screenshot
+
+        if ( !Storage::disk('local')->exists($path) ) {
+            Storage::makeDirectory($path);
+        }
+
+        if (Storage::exists('files/templates/'.$template->id.'/screenshot.jpg')) {
+            Storage::delete('files/templates/'.$template->id.'/screenshot.jpg');
+        }
+
+        Storage::copy('templates/'.$template->id. '/' .'screenshot.jpg', 'files/templates/'.$template->id.'/screenshot.jpg');
 
         return true;
     }
@@ -470,7 +484,7 @@ class EPPMSHelper {
             /////->setOption('addStyleTag',json_encode(['content' => $the_css_code]))
             ->disableJavascript()
             ->noSandbox()
-            ->setScreenshotType('jpeg', 100)
+            ->setScreenshotType('jpeg', 70)
             ->disableJavascript()
             ->setOption('portrait', true)
             ->windowSize(595, 842)

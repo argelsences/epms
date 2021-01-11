@@ -34,7 +34,7 @@
                 <!-- the toolbar -->
                 </template>
                 <template v-slot:item.screenshot="{ item }">
-                   <v-img :src="`/web-admin/templates/screenshot/${item.id}?rnd=${cacheKey}`" @error="imageUrl='alt-image.jpg'" max-height="133px" max-width="100px" @click.stop="imageDialogUrl(item)" ></v-img>
+                   <v-img :src="`${base_url}/files/templates/${item.id}/screenshot.jpg?rnd=${cacheKey}`" @error="imageUrl='alt-image.jpg'" max-height="133px" max-width="100px" @click.stop="imageDialogUrl(item)" ></v-img>
                 </template>
                 <template v-slot:item.department="{ item }">
                    <span>{{ getDepartment(item.department_id) }}</span>
@@ -122,7 +122,8 @@
                 },
                 templateMethod: '',
                 isLoading: true,
-                loadingText: "Loading items, please wait."
+                loadingText: "Loading items, please wait.",
+                base_url: window.location.origin,
             }
         },
         computed: {
@@ -160,7 +161,7 @@
             editItem (item) {
                 this.editedIndex = this.rows.indexOf(item)
                 this.editedItem = Object.assign({}, item)
-                console.log(this.editedItem.method)
+                //console.log(this.editedItem.method)
                 if ( this.editedItem.method == 'upload' )
                     this.$router.push({name: 'add-by-upload', params: this.editedItem})
                 else if( this.editedItem.method == 'code' )
@@ -241,14 +242,15 @@
             },
             imageDialogUrl(item){
                 this.dialog = true
-                this.theImageSrc = "/web-admin/templates/screenshot/" + item.id
+                //this.theImageSrc = "/web-admin/templates/screenshot/" + item.id
+                this.theImageSrc = `${this.base_url}/files/templates/${item.id}/screenshot.jpg?rnd=${this.cacheKey}`
             },
             getDepartment(id) {
                 return this.departments.find(department => department.id == id).name
             }
         },
         updated: function(){
-            console.log(this.templateMethod)
+            //console.log(this.templateMethod)
         }, 
         created: function() {
             /////this.setCanvasEditor()

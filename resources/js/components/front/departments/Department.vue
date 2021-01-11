@@ -8,7 +8,6 @@
             <v-col cols="4" v-for="row in rows" :key="row.id">
                 <v-lazy v-model="isActive" :options="{threshold: .8}" min-height="200" transition="fade-transition">
                     <v-card class="mx-auto" max-width="400">
-                        <!--<v-img class="white--text align-end" height="200px" src="https://cdn.vuetifyjs.com/images/cards/docks.jpg">-->
                         <v-img contain class="white--text align-end grey lighten-2" height="200px" :src="row.department.logo_path">
                             <v-card-title  class="text-left secondary opacity-half" elevation=24>{{row.department.name}}</v-card-title>
                         </v-img>

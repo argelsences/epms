@@ -99,7 +99,15 @@
 
     <v-app-bar app class="cyan darken-4" dark>
       <!--<v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>-->
-      <v-toolbar-title>EPPMS</v-toolbar-title>
+      <v-toolbar-title>
+        
+        <v-btn class="ma-2 text-h5" text dark :href="`${base_url}`" target="_blank">
+          EPPMS
+          <v-icon dark right>
+            mdi-home
+          </v-icon>
+        </v-btn>
+      </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn :to="{name: `settings`}" icon>
         <v-icon>mdi-cogs</v-icon>
@@ -136,6 +144,7 @@
         drawer: null,
         expandOnHover: true,
         profile: [],
+        base_url: window.location.origin + '/',
       }  
     },
     watch: {

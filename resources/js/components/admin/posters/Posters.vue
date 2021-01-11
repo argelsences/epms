@@ -158,11 +158,32 @@
                             <!-- poster modification ends here -->
                         </v-dialog>
                         <!-- the dialog box -->
+                        <!-- the dialog box for poster preview in poster list -->
+                        <v-dialog v-model="dialog2" hide-overlay  scrollable fullscreen>
+                            <v-card tile>
+                                <v-card-text>
+                                    <v-container fill-height>
+                                        <v-row justify="center" align="center">
+                                            <v-col cols="12" sm="4">
+                                                <v-img :src="theImageSrc" @error="imageUrl='alt-image.jpg'" height="auto" ></v-img>
+                                            </v-col>
+                                        </v-row>
+                                    </v-container> 
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn absolute dark fab top right right color="pink" class="mt-10" @click="dialog2=false">
+                                        <v-icon x-large>mdi-close</v-icon>
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
+                        <!-- the dialog box for preview -->
                     </v-toolbar>
                 <!-- the toolbar -->
                 </template>
                 <template v-slot:item.photo="{ item }">
-                    <v-img v-if="item.file_path" :src="base_url + item.file_path" alt="" aspect-ratio=".7" max-height="100px" max-width="100px"></v-img>
+                    <v-img v-if="item.file_path" :src="base_url + item.file_path" alt="" aspect-ratio=".7" max-height="100px" max-width="100px" @click.stop="imageDialogUrl(item)"></v-img>
                     <v-icon size="100px" v-else>mdi-account-box</v-icon>
                 </template>
                 <template v-slot:item.name="{ item }">
@@ -216,6 +237,7 @@
         data() {
             return {
                 dialog: false,
+                dialog2: false,
                 isValid: true,
                 search : '',
                 feedbacks: [],
@@ -312,7 +334,8 @@
                 cacheKey: +new Date(),
                 isActive: false,
                 isLoading: true,
-                loadingText: "Loading items, please wait."
+                loadingText: "Loading items, please wait.",
+                theImageSrc: '',
             }
         },
         computed: {
@@ -495,9 +518,9 @@
                 }
                 return path
             },
-            imageDialogUrl(templateID){
-                this.templatePreview = true
-                this.theImageSrc = "/web-admin/templates/screenshot/" + templateID
+            imageDialogUrl(item){
+                this.dialog2 = true
+                this.theImageSrc = this.base_url + item.file_path
             },
             posterFilePath(){
                 return this.editedItem.file_path.split('\\').pop().split('/').pop()

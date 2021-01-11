@@ -1,35 +1,3 @@
-<!--<template>              
-    <table class="table table-striped">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col" v-for="(column, index) in columns" :key="index">{{column.label}}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="(row, index) in rows" :key="row.id">
-                <td>{{row.id}}</td>
-                <td>{{row.name}}</td>
-                <td>{{row.designation}}</td>
-                <td>{{row.email}}</td>
-                <td><a :href="`/web-admin/users/${row.id}/edit`">Edit</a></td>
-            </tr>
-        </tbody>
-    </table>      
-</template>
-** search what is map function {{desserts.map(function(x) {return x.id; }).indexOf(item.id)}}
-1. API for department list, and selected department DONE
-2. Work on pushing the list of departments DONE
-3. Fix issue with department when editing entry DONE
-4. Disable editing email on update DONE
-5. For designation, work on pushing the list of unique designations and allow user to add new input (use combobox) DONE
-6. Add Role
-7. Fix the password when user is editing DONE, confirm password is not shown
-8. Changed password field with input to show the password DONE
-9. BUG: when edit then add new, the password is prefilled and you can save without setting the password. Designation is affected. DONE
-10. Fix the message output after successful create or update
-11. Push changes to API backend
-12. Force form reset
--->
 <template>
     <v-app>
         <div class="text-h4 text-left">Users</div>
@@ -82,8 +50,7 @@
                                             </v-row>
                                             <v-row>
                                                 <v-col cols="12" sm="12" md="6">
-                                                    <!--<v-text-field label="Password" type="password" v-model="password" :rules="[rules.required, rules.min]"></v-text-field>-->
-                                                    <v-autocomplete v-model="editedItem.role_id" :items="roles" item-text="name" item-value="id"  label="Role" :rules="[rules.required]" prepend-icon="mdi-shield-account" hint="Type to select"></v-autocomplete>
+                                                    <v-autocomplete v-model="editedItem.role_name" :items="roles" item-text="name" item-value="name"  label="Role" :rules="[rules.required]" prepend-icon="mdi-shield-account" hint="Type to select" placeholder=" "></v-autocomplete>
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">
                                                     <!--<v-text-field v-if="editedIndex == -1" label="Confirm Password" type="password" v-model="passwordConfirm" :rules="[rules.required,rules.passwordMatch]"></v-text-field>-->
@@ -229,7 +196,7 @@
                     password: '',
                 },
                 isLoading: true,
-                loadingText: "Loading items, please wait."
+                loadingText: "Loading items, please wait.",
             }
         },
         computed: {
@@ -311,7 +278,7 @@
                 this.editedItem.department_name = filterDepartment[0].name
                 // get role name based on role_id
                 var filterRole = this.roles.filter( role => role.id == editedItem.role_id )
-                this.editedItem.role_name = filterRole[0].name
+                /////this.editedItem.role_name = filterRole[0].name
 
                 axios.post('/api/users/upsert', {
                     payload: editedItem,

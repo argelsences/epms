@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <div class="department_logo">
                 <div class="thumbnail">
-                    <img src="{{ url($department->logo_path) }}" />
+                    <a href="{{ Config::get('eppms.generar.app_url') }}/d/{{$department->url}}"><img src="{{ url($department->logo_path) }}" /></a>
                 </div>
             </div>
             <h1>{{$department->name}}</h1>

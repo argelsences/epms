@@ -3,10 +3,10 @@
         <div class="col-md-12">
             <div class="department_logo">
                 <div class="thumbnail">
-                    <img style="height:100px;" src="{{ Config::get('eppms.default.logo')}}" />
+                    <a href="{{ Config::get('eppms.generar.app_url') }}/d/{{$subscriber->department->url}}"><img src="{{ url($subscriber->department->logo_path) }}" /></a>
                 </div>
             </div>
-            <h1>{{Config::get('app.name')}}</h1>
+            <h1>{{$subscriber->department->name}}</h1>
         </div>
     </div>
 </section>

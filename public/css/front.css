@@ -11592,3 +11592,7 @@ h3 {
   float: left;
 }
 
+.department_logo .thumbnail img {
+  max-height: 150px;
+}
+

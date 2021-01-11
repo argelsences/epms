@@ -29,7 +29,7 @@ Route::get('/booking/{reference}/tickets','TicketController@booking_tickets')->n
 // subscriber
 Route::get('/unsubscribe', 'SubscriberController@unsubscribe')->name('subscriber.unsubscribe');
 
-Auth::routes(['verify' => true]);
+Auth::routes(['verify' => true, 'register' => false,]);
 
 /////Route::get('{name}', 'HomeController@department')->name('department.homepage');
 

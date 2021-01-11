@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <div class="department_logo">
                 <div class="thumbnail">
-                    <img src="{{ Config::get('eppms.default.logo')}}" />
+                    <a href="{{ Config::get('eppms.generar.app_url') }}"><img src="{{ Config::get('eppms.default.logo' )}}" /></a>
                 </div>
             </div>
             <h1>{{Config::get('app.name')}}</h1>

@@ -277,5 +277,11 @@ class RolesAndPermissionSeeder extends Seeder
         // all permissions are allowed, the check is done via AuthServiceProvider using Gate::before
         $role = Role::create(['name' => 'Super Administrator']);
         $role = Role::create(['name' => 'Super Administrator','guard_name' => 'api']);
+
+        $role = Role::create(['name' => 'Application'])
+            ->givePermissionTo(['list event']);
+        $role = Role::create(['name' => 'Application','guard_name' => 'api'])
+            ->givePermissionTo(['list event']);
+
     }
 }

@@ -72,8 +72,9 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
+     * @TODO for removal
      */
-    public function upsert(UserRequest $request)
+    public function upsertVersion1(UserRequest $request)
     {
         /*if ( auth()->user()->can(['edit user', 'add user']) ){
             return response('Unauthorized', 403);
@@ -84,6 +85,7 @@ class UserController extends Controller
         }
 
         $user = $request->post('payload');
+
         
         if ( $user['id'] ){
             // retrieve the user object
@@ -131,6 +133,71 @@ class UserController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function upsert(UserRequest $request)
+    {
+        /*if ( auth()->user()->can(['edit user', 'add user']) ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if (auth()->user()->hasPermissionTo('edit user', 'api') && auth()->user()->hasPermissionTo('add user', 'api') ){
+            return response('Unauthorized', 403);
+        }
+
+        $user = $request->post('payload');
+
+        
+        if ( $user['id'] ){
+            // retrieve the user object
+            $theUser = User::findOrFail($user['id']);
+
+            // update the user object with updated details
+            $updateSuccess = $theUser->update([
+                'name' => $user['name'],
+                'designation' => $user['designation'],
+                'department_id' => $user['department_id'],
+                'designation' => $user['designation'],
+            ]);
+            
+            // if password is changed, update it
+            if (isset($user['password']) && $user['password'] !== ''){
+                $theUser->update([
+                    'password' => Hash::make($user['password']),
+                ]);
+            }
+            
+            // remove all roles of the user first
+            foreach($theUser->getRoleNames() as $role){
+                $theUser->removeRole($role);
+            }
+            // update user role
+            $roleStoreSuccess = $this->storeRole($theUser, $user['role_name']);
+        }
+        else{
+            $theUser = User::create([
+                'name' => $user['name'],
+                'designation' => $user['designation'],
+                'department_id' => $user['department_id'],
+                'designation' => $user['designation'],
+                'email' => $user['email'],
+                'password' => Hash::make($user['password']),
+            ]);
+            
+            // assign the roles
+            $roleStoreSuccess = $this->storeRole($theUser, $user['role_name']);
+        }
+        
+        // return the same data compared to list to ensure using the same 
+        $success = ($theUser && $roleStoreSuccess) ? true : false;
+        return ['success' => $success,];
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
@@ -159,6 +226,7 @@ class UserController extends Controller
                 ->orderBy('id', 'ASC')
                 ->get();
         
+        
         foreach ($users as $user){
             $dataObject[] = (object) [
                 'id' => $user->id,
@@ -177,7 +245,7 @@ class UserController extends Controller
             ->orderBy('id', 'ASC')
             ->get())
         );*/
-
+        //////return response()->json($users);
         return response()->json($dataObject);
     }
     /**
@@ -191,14 +259,40 @@ class UserController extends Controller
         /*if (auth()->user()->hasPermissionTo('list role', 'api') ){
             return response('Unauthorized', 403);
         }*/
+        $uniqueRoles = $model::select('name')->groupBy('name')->get();
 
-        return response()->json(($model::orderBy('name', 'ASC')->get(['id','name'])));
+        //return response()->json(($model::orderBy('name', 'ASC')->get(['id','name'])));
+        return response()->json($uniqueRoles);
     }
 
     /**
      * Assign role to a user
      */
-    private function storeRole( User $user, $role_id ){
+    private function storeRole( User $user, $role_name ){
+        
+        $assignedRole = false;
+
+        /*if (isset($role_id)){
+            $role_r = Role::where('id', '=', $role_id)->firstOrFail();
+            // $role_r is the object, pass it as it is needed by polymorph table model_has_roles
+            // better this way, but you can also use the name itself
+            $assignedRole = $user->assignRole($role_r); //Assigning role to user
+        }*/
+        if (isset($role_name)){
+            $role_r = Role::where('name', '=', $role_name)->get();
+            // $role_r is the object, pass it as it is needed by polymorph table model_has_roles
+            // better this way, but you can also use the name itself
+            $assignedRole = $user->assignRole($role_r); //Assigning role to user
+        }
+
+        return $assignedRole;
+    }
+
+    /**
+     * Assign role to a user using role id as parameter
+     * 
+     */
+    private function storeRoleByRoleID( User $user, $role_id ){
         
         $assignedRole = false;
 

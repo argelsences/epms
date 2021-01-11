@@ -140,20 +140,6 @@ html,body{height: 100%;}
 
 // vuetify override
 .v-navigation-drawer a:hover, .v-toolbar a:hover {text-decoration:none;}
-/*.v-dialog__content {z-index:$dialog_z_index!important;}*/
-/*.toolbar-placeholder:not(.toolbar-placeholder-inside){
-    z-index: 0!important;
-}*/
-
-
-/*
-footer.v-footer, .v-sheet.v-app-bar.v-toolbar {
-    z-index:$toolbar_z_index;
-}
-.v-navigation-drawer {z-index:$navigation_z_index!important ;}
-*/
-
-/*.v-overlay{z-index:1008!important;}*/
 .v-data-table thead th.data-actions {width: 10%;}
 .v-data-table thead th.data-title {width: 30%;}
 /** booking data table **/

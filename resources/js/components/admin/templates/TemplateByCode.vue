@@ -17,10 +17,10 @@
                         </v-row>
                         <v-row>
                             <v-col cols="12" sm="12" md="6">
-                                <v-textarea counter label="Description" v-model="editedItem.description" prepend-icon="mdi-typewriter" rows="10"></v-textarea>
+                                <v-textarea counter label="Description" v-model="editedItem.description" prepend-icon="mdi-typewriter" rows="5" hint="Input description of the template eg. How many speakers it can accommodate, the limit of description, etc" persistent-hint></v-textarea>
                             </v-col>
                             <v-col cols="12" sm="12" md="6" align-self="center">
-                                <v-file-input v-model="editedItem.images" class="mb-8" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
+                                <v-file-input v-model="editedItem.images" class="mb-8" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Click to upload an image" 
                                     prepend-icon="mdi-camera-iris" label="Images" persistentHint chips
                                     hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB"
                                     multiple

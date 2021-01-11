@@ -33,7 +33,7 @@
                                                     <v-text-field v-model="editedItem.name" label="Name" :rules="[rules.required]" prepend-icon="mdi-information" ></v-text-field>
                                                 </v-col>
                                                 <v-col cols="12" sm="12" md="6">
-                                                    <v-file-input v-model="photo" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping an image here" 
+                                                    <v-file-input v-model="photo" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Click to upload an image" 
                                                     prepend-icon="mdi-camera-iris" label="Photo" persistentHint chips
                                                     hint="Selecting an image will replace the existing photo. Valid image formats are JPG, JPEG, PNG & BMP. Image size should not be greater than 2MB"
                                                     @change="uploadLogo" @click.stop="{event => {event.stopPropagation()}}" ref="uploader">

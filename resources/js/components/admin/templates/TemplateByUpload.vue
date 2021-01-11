@@ -23,7 +23,7 @@
                                 </v-row>
                                 <v-row>
                                     <v-col cols="12" sm="12" md="12">
-                                        <v-textarea counter label="Description" v-model="editedItem.description" prepend-icon="mdi-typewriter" rows="5"></v-textarea>
+                                        <v-textarea counter label="Description" v-model="editedItem.description" prepend-icon="mdi-typewriter" rows="5" hint="Input description of the template eg. How many speakers it can accommodate, the limit of description, etc" persistent-hint></v-textarea>
                                     </v-col>
                                 </v-row>
                                 <v-row>
@@ -35,7 +35,7 @@
                             <v-col cols="12" sm="12" md="6">
                                 <v-row>
                                     <v-col cols="12" sm="12" md="12">
-                                        <v-file-input v-model="editedItem.html_code" class="mb-8" accept=".html" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
+                                        <v-file-input v-model="editedItem.html_code" class="mb-8" accept=".html" :rule="[rules.limitFileSize]" clearable placeholder="Click to upload an HTML file" 
                                             prepend-icon="mdi-language-html5" label="HTML File" persistentHint chips
                                             hint="Uploading a new file will replace the existing template code. Only accept HTML file. File size should not be greater than 2MB"
                                             :disabled="!switchFile"
@@ -50,7 +50,7 @@
                                 </v-row>
                                 <v-row>
                                     <v-col cols="12" sm="12" md="12">
-                                        <v-file-input v-model="editedItem.css_code" class="mb-8" accept=".css" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
+                                        <v-file-input v-model="editedItem.css_code" class="mb-8" accept=".css" :rule="[rules.limitFileSize]" clearable placeholder="Click to upload a CSS file" 
                                             prepend-icon="mdi-language-css3" label="CSS File" persistentHint chips
                                             hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB"
                                             :disabled="!switchFile"
@@ -65,7 +65,7 @@
                                 </v-row>
                                 <v-row>
                                     <v-col cols="12" sm="12" md="12">
-                                        <v-file-input v-model="editedItem.images" class="mb-8" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping a file here" 
+                                        <v-file-input v-model="editedItem.images" class="mb-8" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Click to upload an image" 
                                             prepend-icon="mdi-camera-iris" label="Images" persistentHint chips
                                             hint="Uploading a new file will replace the existing images. Only accepting JPG/PNG/BMP files. File size should not be greater than 2MB"
                                             multiple

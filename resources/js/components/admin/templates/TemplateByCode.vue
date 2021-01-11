@@ -24,6 +24,7 @@
                                     prepend-icon="mdi-camera-iris" label="Images" persistentHint chips
                                     hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB"
                                     multiple
+                                    @click.stop="onButtonClick($event)"
                                     >
                                 </v-file-input> 
                                 <v-chip class="ma-2 white--text" v-for="image in editedItem.file_path.images" :key="image" v-if="editedItem.file_path.images" color="blue darken-1">
@@ -304,6 +305,9 @@
 
                 return str;
             },
+            onButtonClick(e){
+                e.stopPropagation()
+            }
         },
         updated: function(){
             console.log(this.templateMethod)

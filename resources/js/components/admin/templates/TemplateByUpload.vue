@@ -40,6 +40,7 @@
                                             hint="Uploading a new file will replace the existing template code. Only accept HTML file. File size should not be greater than 2MB"
                                             :disabled="!switchFile"
                                             :required="switchFile"
+                                            @click.stop="onButtonClick($event)"
                                         >
                                         </v-file-input>
                                         <v-chip class="ma-2 white--text" v-if="editedItem.file_path.html_code" color="blue darken-1" >
@@ -54,6 +55,7 @@
                                             hint="Uploading a new file will replace the existing template code. Only accepting CSS file. File size should not be greater than 2MB"
                                             :disabled="!switchFile"
                                             :required="switchFile"
+                                            @click.stop="onButtonClick($event)"
                                             >
                                         </v-file-input>
                                         <v-chip class="ma-2 white--text" v-if="editedItem.file_path.css_code" color="blue darken-1">
@@ -68,7 +70,8 @@
                                             hint="Uploading a new file will replace the existing images. Only accepting JPG/PNG/BMP files. File size should not be greater than 2MB"
                                             multiple
                                             :disabled="!switchFile"
-                                            :required="switchFile"
+                                            :required="switchFile" 
+                                            @click.stop="onButtonClick($event)"
                                             >
                                         </v-file-input>
                                         <v-chip class="ma-2 white--text" v-for="image in editedItem.file_path.images" :key="image" v-if="editedItem.file_path.images" color="blue darken-1">
@@ -329,6 +332,9 @@
             setEditItems(item){
                 this.editedItem = item
             },
+            onButtonClick(e){
+                e.stopPropagation()
+            }
         },
         updated: function(){
             console.log(this.templateMethod)

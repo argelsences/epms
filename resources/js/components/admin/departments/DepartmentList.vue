@@ -47,11 +47,12 @@
                                                     <!--<v-select :items="departments" label="Department" item-text="name" item-value="id" v-model="editedItem.department_id" :rules="[rules.required]"></v-select>-->
                                                     <!--<v-autocomplete v-model="editedItem.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select"></v-autocomplete>-->
                                                 </v-col>
-                                                <v-col cols="12" sm="12" md="6" v-cloak @drop.prevent="addDropFile" @dragover.prevent>    
+                                                <v-col cols="12" sm="12" md="6">    
                                                     <v-file-input v-model="logo" accept="image/png, image/jpeg, image/bmp, image/jpg" :rule="[rules.limitFileSize]" clearable placeholder="Select by clicking or dropping an image here" 
                                                     prepend-icon="mdi-camera-iris" label="Logo" persistentHint chips
                                                     hint="Selecting an image will replace the existing logo. Valid image formats are JPG, JPEG, PNG & BMP. Image size should not be greater than 2MB"
-                                                    @change="uploadLogo">
+                                                    @change="uploadLogo" @click.stop="{event => {event.stopPropagation()}}" ref="uploader">
+
                                                     </v-file-input>        
                                                     <v-card v-if="editedItem.logo_path != null" class="my-2">
                                                         <v-card-text>
@@ -489,7 +490,7 @@
             addDropFile(e) { 
                 this.file = e.dataTransfer.files[0]
                 console.log(this.file) 
-            }
+            },
         },
         created: function() {
             this.setHedeaderTitle()

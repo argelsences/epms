@@ -11472,7 +11472,7 @@ Event Listing / department Page
   }
 
   .event-list > li > time > .day {
-    font-size: 56pt;
+    font-size: 40px;
   }
 
   .event-list > li > .info {
@@ -11594,5 +11594,23 @@ h3 {
 
 .department_logo .thumbnail img {
   max-height: 150px;
+}
+
+/* EVENT PAGE */
+
+.event-list > li time > span {
+  display: block;
+}
+
+.event-list > li time > .month {
+  font-size: 1.8em !important;
+}
+
+.event-list > li time > .day {
+  font-size: 2.2em !important;
+}
+
+.event-list > li time {
+  padding: 10px;
 }
 

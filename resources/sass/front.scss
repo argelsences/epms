@@ -550,7 +550,7 @@ html, body {
     }
   
     .event-list > li > time > .day {
-      font-size: 56pt;
+      font-size: 40px;
     }
   
     .event-list > li > .info {
@@ -658,3 +658,22 @@ html, body {
 
 // header
 .department_logo .thumbnail img {max-height: 150px;}
+
+/* EVENT PAGE */
+
+
+.event-list > li {
+  time > span {
+    display:block;
+  }
+  time > .month {
+    font-size:1.8em!important;
+  }
+  time > .day {
+    font-size:2.2em!important;
+  }
+  time {
+    padding: 10px;
+  }
+  
+}

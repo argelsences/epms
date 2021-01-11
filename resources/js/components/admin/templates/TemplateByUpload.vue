@@ -101,7 +101,7 @@
                     Go back to Template List
                 </v-btn>
                 <v-btn
-                    :disabled="templateMethod === 'templateChoice'"
+                    :disabled="!isValid"
                     color="blue darken-1"
                     text
                     v-on:click="save()"

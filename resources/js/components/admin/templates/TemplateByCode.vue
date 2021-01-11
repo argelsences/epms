@@ -34,7 +34,7 @@
                         </v-row>
                         <v-row>
                             <v-col cols="12" sm="12" md="6">
-                                <v-textarea counter label="HTML Codes" v-model="editedItem.html_code" prepend-icon="mdi-language-html5" rows="10" persistent-hint hint="Input a valid HTML code, no Javascript included"></v-textarea>
+                                <v-textarea counter label="HTML Codes" v-model="editedItem.html_code" prepend-icon="mdi-language-html5" rows="10" persistent-hint hint="Input a valid HTML code, no Javascript included" :rules="[rules.required]"></v-textarea>
                             </v-col>
                             <v-col cols="12" sm="12" md="6">
                                 <v-textarea counter label="CSS Codes" v-model="editedItem.css_code" prepend-icon="mdi-language-css3" rows="10" persistent-hint hint="Input a valid CSS code"></v-textarea>
@@ -61,7 +61,7 @@
                     Go back to Template List
                 </v-btn>
                 <v-btn
-                    :disabled="templateMethod === 'templateChoice'"
+                    :disabled="!isValid"
                     color="blue darken-1"
                     text
                     v-on:click="save()"

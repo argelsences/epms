@@ -270,7 +270,7 @@
                                                                                     </v-autocomplete>
                                                                                 </v-col>
                                                                                 <v-col cols="4" sm="4" md="4">
-                                                                                    <v-btn color="#1f4068" class="white--text" @click="dialog3 = !dialog3"><i class="material-icons ">add_box</i> Speaker</v-btn>
+                                                                                    <v-btn color="#1f4068" class="white--text" @click="openSpeakerDialog"><i class="material-icons ">add_box</i> Speaker</v-btn>
                                                                                 </v-col>
                                                                             </v-row>
                                                                         </v-col>
@@ -964,12 +964,16 @@
                             <v-col cols="12" sm="12" md="12">
                                 <v-textarea counter label="Profile" required v-model="speaker.profile"></v-textarea>
                             </v-col>
+                            <!--
                             <v-col cols="12" sm="12" md="12">
                                 <v-text-field label="Photo" hint="example of helper text only on focus" v-model="speaker.photo"></v-text-field>
                             </v-col>
-                            <v-col cols="12" sm="12" md="12">
+                            -->
+                            <!--
+                            <v-col cols="12" sm="12" md="12" v-if="isSuperAdmin">
                                 <v-autocomplete v-model="speaker.department_id" :items="departments" item-text="name" item-value="id"  label="Department" :rules="[rules.required]" hint="Type to select" prepend-icon="mdi-office-building"></v-autocomplete>
                             </v-col>
+                            -->
                         </v-row>
                         </v-form>
                     </v-container>
@@ -1497,32 +1501,13 @@
                     this.editedItem.social_show_whatsapp = this.settings.is_whatsapp
                     this.editedItem.social_show_email = this.settings.is_email
                     this.editedItem.social_show_facebook = this.settings.is_facebook
+
+                    this.editedItem.department_id = this.userProfile.department_id
                 }
 
                 val || this.close()
             },
 
-            /*
-            'editedItem.start_date': function (val){
-                console.log(val)
-                let eventStartDate = new Date(val)
-                this.start_date = eventStartDate.toISOString().substr(0, 10) 
-            },
-            */
-           /*
-           editedItem: {
-                // This will let Vue know to look inside the array
-                deep: true,
-
-                // We have to move our method to a handler field
-                handler(val){
-                    //console.log('The list of colours has changed!');
-                    console.log(val)
-                    let eventStartDate = new Date(val)
-                    this.start_date = eventStartDate.toISOString().substr(0, 10) 
-                }
-            },
-            */
         },
         methods: {
             initialize: function() {
@@ -1598,6 +1583,9 @@
                     this.userProfile = response.data;
                     if ( this.userProfile.roles[0].name === 'Super Administrator' )
                         this.isSuperAdmin = true
+
+                    if (this.editedIndex === -1 )
+                        this.editedItem.department_id = this.userProfile.department_id
                 });
             },
             editItem (item) {
@@ -1966,12 +1954,10 @@
                 this.booking_edit_dialog = true
                 /////this.editedBookingIndex = this.bookingRows.indexOf(item)
                 //this.editedBookingItem = item
-                //console.log(this.editedBookingItem)
             },
             closeEditBooking(){
                 // make sure the dialog box is closed
                 this.booking_edit_dialog = false
-                ///console.log(this.booking_edit_dialog)
                 // next action is to make sure that the value of editedItem is on default, and re-initialize the editedIndex value
                 this.$nextTick(() => {
                     // reset the form
@@ -2029,7 +2015,6 @@
             closeEditAttendee(){
                 // make sure the dialog box is closed
                 this.attendee_edit_dialog = false
-                ///console.log(this.booking_edit_dialog)
                 // next action is to make sure that the value of editedItem is on default, and re-initialize the editedIndex value
                 this.$nextTick(() => {
                     // reset the form
@@ -2128,6 +2113,10 @@
                     this.error = true
                 })
             },
+            openSpeakerDialog(){
+                this.dialog3 = true
+                this.speaker.department_id = this.editedItem.department_id
+            }
         },
         created: function() {
             this.setHedeaderTitle()

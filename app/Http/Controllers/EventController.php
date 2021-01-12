@@ -160,17 +160,21 @@ class EventController extends Controller
         }
         else{
             $theEvent = $this->events->create($event);
-            // attach speakers to event
-            $theSpeakers = $theEvent->speakers()->attach($event['speakers']);
+            // sync speakers to event
+            $theEvent->speakers()->sync( $event['speakers'] );
+
             $theEvent = $theEvent->fresh();
 
             $theEvent = Event::with(['venue','speakers'])->find($theEvent->id);
 
             $upsertSuccess = ($theEvent->id) ? true : false;
         }
+
+        $theEventObj = Event::with(['venue','speakers','tickets'])->findOrFail($theEvent->id);
+
         // return the same data compared to list to ensure using the same 
         $success = ($theEvent) ? true : false;
-        return ['success' => $success, 'item' => $theEvent];
+        return ['success' => $success, 'item' => $theEventObj];
     }
 
     /**
@@ -294,23 +298,8 @@ class EventController extends Controller
      * 
      */
     public function latest_events(Event $model){
-        /*
-        if ( !auth()->user()->can(['list event']) ){
-            return response('Unauthorized', 403);
-        }
-        */
-        /*
-        if (!auth()->user()->hasPermissionTo('list event', 'api') ){
-            return response('Unauthorized', 403);
-        }
-        */
-
-        //if (auth()->user()->is_super_admin('api')){
-            //$events = $model::with(['venue','speakers','tickets'])->orderBy('start_date', 'DESC')->get();
-        //}
-        //else {
-            $events = $model::with(['venue','speakers', 'department','poster'])->orderBy('start_date', 'DESC')->take(5)->get();
-        //}
+        
+        $events = $model::with(['venue','speakers', 'department','poster'])->orderBy('start_date', 'DESC')->take(5)->get();
 
         return response()->json($events);
     }

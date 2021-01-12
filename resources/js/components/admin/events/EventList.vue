@@ -1846,6 +1846,14 @@
             openTicketDialog(){
                 this.dialog1 = true
                 this.ticket = Object.assign({}, this.ticketDefault)
+                
+                //let eventStartDate = new Date(this.editedItem.start_date)
+                let eventStartDate = new Date(this.editedItem.start_date)
+                let end_book_date = eventStartDate.toISOString().substr(0, 10)
+                let end_book_time = String(eventStartDate.getHours()).padStart(2, '0') + ":" + String(eventStartDate.getMinutes()).padStart(2, '0')
+
+                this.ticket.end_book_date = end_book_date
+                this.ticket.end_book_time = moment(end_book_time, 'HH:mm:ss').subtract(60, 'minutes').format('HH:mm')
             },
             editTicket(ticket) {
                 let bookStartDate =ticket.start_book_date
@@ -2130,11 +2138,10 @@
                 this.speaker.department_id = this.editedItem.department_id
             },
             updateEndDate(e){
-                //console.log(e)
                 this.end_date = e
             },
             updateEndTime(e){
-                let endTime = moment(e, 'HH:mm:ss').add(60, 'minutes').format('HH:mm');
+                let endTime = moment(e, 'HH:mm:ss').add(60, 'minutes').format('HH:mm')
                 this.end_time = endTime
             },
         },

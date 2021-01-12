@@ -37,12 +37,12 @@
                                                     Sold out
                                             </span>
                                         </div>
-                                        <div v-else-if="ticket.start_book_date > currentTimestamp">
+                                        <div v-else-if="!canStartSale(ticket.start_book_date)">
                                             <span class="text-danger float-right" >
                                                 Sale not started yet
                                             </span>
                                         </div>
-                                        <div v-else-if="ticket.end_book_date > currentTimestamp">
+                                        <div v-else-if="!isEndOfSale(ticket.end_book_date)">
                                             <span class="text-danger float-right">
                                                 Sale has ended
                                             </span>
@@ -317,11 +317,18 @@ export default {
         resetCaptcha() {
             this.$refs.recaptcha.reset()
         },
-        tickets(){
-            console.log(this.theEvent.tickets)
-        },
+        tickets(){},
         currentTimestamp(){
-            return moment().toISOString()
+            //return moment().toISOString()
+            return moment().format('YYYY-MM-DD HH:mm:ss')
+        },
+        canStartSale(date){
+            let currentTimestamp = this.currentTimestamp()
+            return moment(date).isSameOrBefore(currentTimestamp)
+        },
+        isEndOfSale(date){
+            let currentTimestamp = this.currentTimestamp()
+            return moment(date).isSameOrAfter(currentTimestamp)
         },
         ticketCount(){
             return this.theEvent.tickets.length
@@ -351,7 +358,6 @@ export default {
                 } 
                 this.orders.attendee[ticket_id].push(arr)
             }
-            console.log(this.orders.attendee[ticket_id])
         },
         ticketBackButtonClicked(){
             this.step--

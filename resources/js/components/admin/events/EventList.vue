@@ -137,7 +137,7 @@
                                                                         <template v-slot:activator="{ on, attrs }">
                                                                             <v-text-field  :label="computedStartDateFormatted" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" hint="Start Date" persistent-hint></v-text-field>
                                                                         </template>
-                                                                        <v-date-picker v-model="start_date" no-title scrollable>
+                                                                        <v-date-picker v-model="start_date" @change="updateEndDate($event)">
                                                                             <v-spacer></v-spacer>
                                                                             <v-btn text color="primary" @click="st_menu = false">
                                                                                 Cancel
@@ -153,7 +153,7 @@
                                                                         <template v-slot:activator="{ on, attrs }">
                                                                             <v-text-field :label="computedStartTimeFormatted" prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on" hint="Start Time" persistent-hint></v-text-field>
                                                                         </template>
-                                                                        <v-time-picker v-if="stt_dialog" v-model="start_time" full-width>
+                                                                        <v-time-picker v-if="stt_dialog" v-model="start_time" full-width @input="updateEndTime($event)">
                                                                             <v-spacer></v-spacer>
                                                                             <v-btn text color="primary" @click="stt_dialog = false">
                                                                                 Cancel
@@ -171,7 +171,7 @@
                                                                         <template v-slot:activator="{ on, attrs }">
                                                                             <v-text-field :label="computedEndDateFormatted"  prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" hint="End Date" persistent-hint></v-text-field>
                                                                         </template>
-                                                                        <v-date-picker v-model="end_date" no-title scrollable :min="start_date">
+                                                                        <v-date-picker v-model="end_date" :min="start_date">
                                                                         <v-spacer></v-spacer>
                                                                             <v-btn text color="primary" @click="se_menu = false" > Cancel</v-btn>
                                                                             <v-btn text color="primary" @click="$refs.se_menu.save(end_date)" >
@@ -1222,8 +1222,8 @@
                 base_url: window.location.origin + '/',
                 start_date: new Date().toISOString().substr(0, 10),
                 end_date: new Date().toISOString().substr(0, 10),
-                start_time: '00:00',
-                end_time: '00:00',
+                start_time: moment().startOf('hour').format('HH:mm'),
+                end_time: moment().startOf('hour').format('HH:mm'),
                 cacheKey: +new Date(),
                 // declare extensions you want to use
                 extensions: [
@@ -1506,11 +1506,19 @@
                     // dirty
                     this.editedItem.is_public = 1
                     this.editedItem.is_approved = 1
+                    this.start_date = new Date().toISOString().substr(0, 10)
+                    this.end_date = new Date().toISOString().substr(0, 10)
+                    this.start_time = moment().startOf('hour').format('HH:mm')
+                    this.end_time = moment().startOf('hour').format('HH:mm')
                     // dirty
                 }
 
                 val || this.close()
             },
+            /*start_date(val) {
+                // always change the end date based on start date value
+                this.end_date = val
+            },*/
 
         },
         methods: {
@@ -2120,7 +2128,15 @@
             openSpeakerDialog(){
                 this.dialog3 = true
                 this.speaker.department_id = this.editedItem.department_id
-            }
+            },
+            updateEndDate(e){
+                //console.log(e)
+                this.end_date = e
+            },
+            updateEndTime(e){
+                let endTime = moment(e, 'HH:mm:ss').add(60, 'minutes').format('HH:mm');
+                this.end_time = endTime
+            },
         },
         created: function() {
             this.setHedeaderTitle()

@@ -1501,8 +1501,12 @@
                     this.editedItem.social_show_whatsapp = this.settings.is_whatsapp
                     this.editedItem.social_show_email = this.settings.is_email
                     this.editedItem.social_show_facebook = this.settings.is_facebook
-
+                    
                     this.editedItem.department_id = this.userProfile.department_id
+                    // dirty
+                    this.editedItem.is_public = 1
+                    this.editedItem.is_approved = 1
+                    // dirty
                 }
 
                 val || this.close()

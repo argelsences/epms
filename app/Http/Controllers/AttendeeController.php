@@ -249,4 +249,23 @@ class AttendeeController extends Controller
 
         return view('admin.print.attendees', compact('event','attendees') );
     }
+    /**
+     * API function to list all attendees
+     * 
+     * @return json object containing all bookings related to the event
+     */
+    public function listAll(Attendee $model){
+        
+        /*if (auth()->user()->hasPermissionTo('list attendee', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
+
+        if ( !auth()->user()->can(['list attendee']) ){
+            return response('Unauthorized', 403);
+        }
+        
+        $attendees = $model::all();
+        
+        return response()->json($attendees);
+    }
 }

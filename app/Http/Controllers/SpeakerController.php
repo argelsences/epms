@@ -98,8 +98,14 @@ class SpeakerController extends Controller
         /*if (!auth()->user()->hasPermissionTo('list speaker', 'api') ){
             return response('Unauthorized', 403);
         }*/
+        if (auth()->user()->is_super_admin('api')){
+            $speakers = $model::orderBy('name', 'ASC')->get();
+        }
+        else {
+            $speakers = $model::filterByDepartment()->orderBy('name', 'ASC')->get();
+        }
 
-        return response()->json(($model::orderBy('name', 'ASC')->get()));
+        return response()->json($speakers);
     }
     /**
      * Update the specified resource in storage.
@@ -177,5 +183,20 @@ class SpeakerController extends Controller
         
         $success = $file_path ? true : false;
         return ['success' => $success, 'file_path' => $file_path ];
+    }
+
+    /**
+     * API
+     * Description: return speakers by department
+     */
+    public function list_by_department($department_id){
+        
+        if ( !auth()->user()->can(['list speaker']) ){
+            return response('Unauthorized', 403);
+        }
+
+        $speakers = Speaker::where('department_id', $department_id)->orderBy('name', 'ASC')->get();
+
+        return response()->json($speakers);
     }
 }

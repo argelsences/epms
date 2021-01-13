@@ -1741,7 +1741,8 @@
                 })
                 .then(response => {
                     if (response.data.success) {
-                        this.editedItem.speakers.push(response.data.item.id)
+                        // this is a pesky bug
+                        this.editedItem.speakers.push(response.data.item)
                         this.closeSpeaker() 
                     }
                 })

@@ -22,4 +22,8 @@ class Speaker extends Model
     public function events(){
         return $this->belongsToMany('App\Event')->withTimestamps();
     }
+
+    public function scopeFilterByDepartment($query) {
+        return $query->where('department_id', auth()->user()->department_id);
+    }
 }

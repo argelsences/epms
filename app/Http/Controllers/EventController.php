@@ -135,12 +135,28 @@ class EventController extends Controller
         }*/
 
         $upsertSuccess = false;
+        $theSpeakers = [];
         $event = $request->post('payload');
         $event['barcode_type'] = (!$event['barcode_type']) ? 'QRCODE' : '';
         $event['start_date'] = Carbon::parse($event['start_date']);
         $event['end_date'] = Carbon::parse($event['end_date']);
         // Set event edited by and created by
         $event = EPPMS::setEventAuthorship($event);
+
+        // fixing issues with combi of array object and array
+        foreach ($event['speakers'] as $speaker){
+            if ( is_array($speaker) ){
+                if (array_key_exists('id', $speaker)){
+                    array_push($theSpeakers, $speaker['id']);
+                }
+            }
+            else {
+                array_push($theSpeakers, $speaker);
+            }
+            
+        }
+        $event['speakers'] = $theSpeakers;
+        //fixing 
 
         if ( $event['id'] ){
             // retrieve the user object
@@ -151,7 +167,7 @@ class EventController extends Controller
             // in the list function, we pass speakers as object to simplify the query
             // however, when update is performed and no speaker is selected, the request is passing speaker untouched
             // and the values are in object
-            //$the_speakers = $event['speakers'];
+            
             if (strpos(json_encode($event['speakers']), 'id') > 0 ) {
                 $event['speakers'] = array_column($event['speakers'], 'id');
             }
@@ -161,6 +177,7 @@ class EventController extends Controller
         else{
             $theEvent = $this->events->create($event);
             // sync speakers to event
+
             $theEvent->speakers()->sync( $event['speakers'] );
 
             $theEvent = $theEvent->fresh();

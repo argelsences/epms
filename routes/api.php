@@ -45,6 +45,8 @@ Route::group(['middleware' => ['auth:api']], function(){
     Route::get('/speakers', 'SpeakerController@list')->name('speakers.list');
     Route::post('/speakers/upsert', 'SpeakerController@upsert')->name('speakers.upsert');
     Route::post('/speakers/uploadPhoto', 'SpeakerController@uploadPhoto')->name('speakers.uploadPhoto');
+    Route::get('/speakers/by-department/{id}', 'SpeakerController@list_by_department')->name('speakers.list_by_department');
+    
     // venues
     Route::get('/venues', 'VenueController@list')->name('venues.list');
     Route::post('/venues/upsert', 'VenueController@upsert')->name('venues.upsert');

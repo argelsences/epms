@@ -303,4 +303,57 @@ class EventController extends Controller
 
         return response()->json($events);
     }
+
+    /**
+     * API function
+     * 
+     * List all events with department
+     * 
+     */
+    public function list_with_department(Event $model){
+        
+        if ( !auth()->user()->can(['list event']) ){
+            return response('Unauthorized', 403);
+        }
+        /*
+        if (!auth()->user()->hasPermissionTo('list event', 'api') ){
+            return response('Unauthorized', 403);
+        }
+        */
+
+        if (auth()->user()->is_super_admin('api')){
+            $events = $model::with(['venue','department'])->orderBy('start_date', 'DESC')->get();
+        }
+        else {
+            $events = $model::with(['venue','department'])->filterByDepartment()->orderBy('start_date', 'DESC')->get();
+        }
+
+        return response()->json($events);
+    }
+
+    /**
+     * API function
+     * Description: function to retrieve events based on range
+     */
+    public function list_by_range($min, $max){
+
+        if ( !auth()->user()->can(['list event']) ){
+            return response('Unauthorized', 403);
+        }
+
+        if (auth()->user()->is_super_admin('api')){
+            $events = Event::with(['venue','department'])->where([
+                ['start_date', '>=', $min],
+                ['end_date', '<=', $max]
+            ])->orderBy('start_date', 'DESC')->get();
+        }
+        else {
+            $events = Event::with(['venue','department'])->filterByDepartment()->where([
+                ['start_date', '>=', $min],
+                ['end_date', '<=', $max]
+            ])->orderBy('start_date', 'DESC')->get();
+        }
+
+        return response()->json($events);
+    }
 }

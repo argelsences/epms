@@ -54,6 +54,8 @@ Route::group(['middleware' => ['auth:api']], function(){
     // Events
     Route::get('/events', 'EventController@list')->name('events.list');
     Route::get('/events/upload-poster', 'EventController@uploadPoster')->name('upload-poster.list');
+    Route::get('/dashboard/events', 'EventController@list_with_department')->name('events.list_with_department');
+    Route::get('/events-by-range/{min}/{max}', 'EventController@list_by_range')->name('events.list_by_range');
     // Templates
     Route::get('/templates', 'TemplateController@list')->name('templates.list');
     Route::post('/templates/upsert', 'TemplateController@upsert')->name('templates.upsert');

@@ -19,7 +19,7 @@
                             <h5>{{slide.start_date | formatDate}}</h5>
                             <h5 class="pb-5">{{slide.venue.name}}</h5>
                             <h6>{{slide.excerpt}}</h6>
-                            <v-btn text class="ma-5 white--text" ripple dark absolute bottom right :href="`${base_url}/d/a/events/${slide.id}`">
+                            <v-btn text class="ma-5 white--text" ripple dark absolute bottom right :href="`${base_url}/d/${slide.department.url}/events/${slide.id}`">
                                 View Event
                                 <v-icon>mdi-chevron-right-circle-outline</v-icon>
                             </v-btn> 

@@ -13,6 +13,12 @@
             <div class="col-md-5">
                 <div class="content event_poster">
                     <v-img src="/{{$event->poster->file_path}}" property="image" alt="{{$event->title}}"></v-img>
+                    @if(Storage::exists('files/events/56/poster/56.pdf'))
+                        <a href="{{Storage::disk('public')->url('/files/events/56/poster/56.pdf')}}" download style="text-align:right;">
+                            <v-icon>mdi-file-pdf-outline</v-icon>
+                            DOWNLOAD PDF
+                        </a>
+                    @endif
                 </div>
             </div>
         @endif

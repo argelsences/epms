@@ -66,7 +66,6 @@
                 .then( response => {
                     this.slides = response.data
                     this.isLoading = false
-                    console.log(this.slides)
                 });
             },
             setHedeaderTitle(){

@@ -205,6 +205,9 @@ class EPPMSHelper {
         $photo_filename  = $photo->getClientOriginalName();
         $file_path = $photo->storeAs("files/events/$id/poster", $photo_filename);
 
+        // convert the image to other format
+        $this->generatePosterFromFile($file_path, $id);
+
         // retrieve the event object
         $event = Event::findOrFail($id);
         // retrieve the poster object, if any
@@ -504,7 +507,7 @@ class EPPMSHelper {
             ->setScreenshotType('pdf')
             //->windowSize(1785, 2526)
             ->select('.poster')
-            ->margins(20, 20, 20, 20, 'px')
+            /////->margins(20, 20, 20, 20, 'px')
             ->setOption('portrait', true)
             //->deviceScaleFactor(3)
             /////->paperSize(595, 842)
@@ -513,12 +516,6 @@ class EPPMSHelper {
             ->setDelay(1000)
             ->waitUntilNetworkIdle()
             ->savePDF(Storage::disk('local')->path("files/events/$event->id/poster/$event->id.pdf"));
-        
-        // bmp file
-        /////$bmp = Image::make("files/events/$event->id/poster/$event->id.jpg");
-        /////$bmp->save("files/events/$event->id/poster/$event->id.bmp");
-        // update the event for the screenshot
-        /////$poster = Poster::where('event_id', $event->id);
 
         $poster = Poster::where('event_id', $event->id)->first();
 
@@ -542,5 +539,42 @@ class EPPMSHelper {
         }
 
         return true;
+    }
+
+    private function generatePosterFromFile($file_path, $event_id){
+        
+        $full_path = Storage::disk('public')->url($file_path);
+        
+        $img = Image::make($full_path);
+
+        $img->save("files/events/$event_id/poster/$event_id.png");
+
+        $img->save("files/events/$event_id/poster/$event_id.jpg");
+            
+        $html_code = '<html style="height: 100%;">
+                    <head><meta name="viewport" content="width=device-width, minimum-scale=0.1">
+                    <title></title></head>
+                    <body style="margin: 0px; background: #0e0e0e; height: 100%;text-align:center;">
+                    <img style="-webkit-user-select: none;margin: auto;cursor: zoom-in;height: 100%;" src="'.$full_path.'">
+                    </body></html>';
+    
+        Browsershot::html($html_code)
+            ->disableJavascript()
+            ->noSandbox()
+            ->setScreenshotType('pdf')
+            //->windowSize(1785, 2526)
+            //->select('.poster')
+            //->margins(20, 20, 20, 20, 'px')
+            ->setOption('portrait', true)
+            //->deviceScaleFactor(3)
+            /////->paperSize(595, 842)
+            ->showBackground()
+            ->format('A4')
+            ->setDelay(1000)
+            ->waitUntilNetworkIdle()
+            ->savePDF(Storage::disk('local')->path("files/events/$event_id/poster/$event_id.pdf"));
+
+        return true;
+        
     }
 }

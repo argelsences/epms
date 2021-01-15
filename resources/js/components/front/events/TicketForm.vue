@@ -257,7 +257,7 @@ export default {
         currentTitle () {
             switch (this.step) {
             case 1: return 'Ticket(s)'
-            case 2: return 'Order Details'
+            case 2: return 'Booking Details'
             default: return 'Summary and Reservation'
             }
         },

@@ -214,12 +214,7 @@ class DepartmentController extends Controller
             $objSettings[$setting->name] = $value;
         }
         
-        return view('front.department.homepage', compact(
-            'department',
-            'upcoming_events',
-            'past_events',
-            'objSettings',
-        ));
+        return view('front.department.homepage', compact('department', 'upcoming_events', 'past_events', 'objSettings' ));
     }
 
     public function front_list(Department $model){

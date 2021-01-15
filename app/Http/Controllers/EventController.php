@@ -316,7 +316,12 @@ class EventController extends Controller
      */
     public function latest_events(Event $model){
         
-        $events = $model::with(['venue','speakers', 'department','poster'])->orderBy('start_date', 'DESC')->take(5)->get();
+        $events = $model::with(['venue','speakers', 'department','poster'])
+            ->where([
+                ['is_public', 1],
+                ['is_approved', 1]
+            ])
+            ->orderBy('start_date', 'DESC')->take(5)->get();
 
         return response()->json($events);
     }

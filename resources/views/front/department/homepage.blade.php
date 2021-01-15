@@ -36,6 +36,7 @@
      
      @include('front.department.partials.header')
      @include('front.department.partials.events')
+     @include('front.department.partials.contact-section')
      @include('front.department.partials.subscribe')
      @include('front.department.partials.footer')
 @endsection

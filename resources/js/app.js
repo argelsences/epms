@@ -118,6 +118,7 @@ Vue.component('unsubscribe-form', require('./components/front/subscriber/Unsubsc
 
 
 Vue.component('subscribe-department-form', require('./components/front/departments/SubscribeDepartmentForm.vue').default);
+Vue.component('contact-department-form', require('./components/front/departments/ContactDepartmentForm.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

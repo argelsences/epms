@@ -283,11 +283,7 @@ class EventController extends Controller
             $objSettings[$setting->name] = $value;
         }
         
-        return view('front.event.homepage', compact(
-            'department',
-            'event',
-            'objSettings',
-        ));
+        return view('front.event.homepage', compact('department', 'event', 'objSettings'));
     }
 
     /**

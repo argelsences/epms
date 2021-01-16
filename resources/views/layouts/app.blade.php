@@ -20,11 +20,13 @@
     <script src="{{ asset('material') }}/js/core/jquery.min.js"></script>
 
     <!-- include default laravel JS and SASS -->
+    <script src="{{ asset('/js/manifest.js') }}" defer></script>
+    <script src="{{ asset('/js/vendor.js') }}" defer></script>
     <script src="{{ asset('js/app.js') }}" defer></script>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     <!--<script src="{{ asset('js/drawerJs.standalone.js') }}" ></script>-->
-    <link href="{{ mix('css/drawerJs.css') }}" rel="stylesheet">
+    <!--<link href="{{-- mix('css/drawerJs.css') --}}" rel="stylesheet">-->
     
     
     </head>
@@ -40,7 +42,7 @@
               @include('layouts.page_templates.guest')
           @endguest
       </div>     
-      <script src="{{ mix('js/drawerJs.js') }}" ></script>
+      <!--<script src="{{-- mix('js/drawerJs.js') --}}" ></script>-->
       @stack('js')
     </body>
 </html>

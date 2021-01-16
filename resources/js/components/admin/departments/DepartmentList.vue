@@ -244,9 +244,6 @@
                 timeout: 5000,
                 error: false,
                 logo: null,
-                //c_picker: '',
-                //c_pickers: ['page_header_bg_color', 'page_bg_color', 'page_text_color'],
-                // declare extensions you want to use
                 extensions: [
                     History,
                     Blockquote,
@@ -271,7 +268,6 @@
 
                 rules: {
                     required: (v) => !!v || 'Required.',
-                    /////min: (v) => v && v.length >= 8 || 'Minimum of 8 characters.',
                     emailValid: (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
                     phoneValid: (v) => !v || /^(?=.*[0-9])[- +()x0-9]+$/.test(v) || 'Tel. # must be valid',
                     urlValid: (v) => !v || /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(v) || 'URL must be valid',

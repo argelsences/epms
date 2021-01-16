@@ -2,6 +2,6 @@
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/css/front.css": "/css/front.css",
-    "/js/drawerJs.js": "/js/drawerJs.js",
-    "/css/drawerJs.css": "/css/drawerJs.css"
+    "/js/manifest.js": "/js/manifest.js",
+    "/js/vendor.js": "/js/vendor.js"
 }

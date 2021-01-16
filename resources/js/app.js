@@ -105,7 +105,7 @@ Vue.component('template-list', require('./components/admin/templates/TemplateLis
 Vue.component('template-choice', require('./components/admin/templates/TemplateChoice.vue').default);
 Vue.component('by-upload', require('./components/admin/templates/TemplateByUpload.vue').default);
 Vue.component('by-code', require('./components/admin/templates/TemplateByCode.vue').default);
-Vue.component('by-canvas', require('./components/admin/templates/TemplateByCanvas.vue').default);
+/////Vue.component('by-canvas', require('./components/admin/templates/TemplateByCanvas.vue').default);
 Vue.component('settings', require('./components/admin/settings/Settings.vue').default);
 Vue.component('poster-list', require('./components/admin/posters/Posters.vue').default);
 // Frontend components
@@ -115,8 +115,6 @@ Vue.component('contact-form', require('./components/front/events/ContactForm.vue
 Vue.component('ticket-form', require('./components/front/events/TicketForm.vue').default);
 Vue.component('subscribe-form', require('./components/front/events/SubscribeForm.vue').default);
 Vue.component('unsubscribe-form', require('./components/front/subscriber/UnsubscribeForm.vue').default);
-
-
 Vue.component('subscribe-department-form', require('./components/front/departments/SubscribeDepartmentForm.vue').default);
 Vue.component('contact-department-form', require('./components/front/departments/ContactDepartmentForm.vue').default);
 /**

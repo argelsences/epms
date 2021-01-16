@@ -25,6 +25,8 @@
     <!-- Jquery? -->
     <script src="{{ asset('material') }}/js/core/jquery.min.js"></script>
     <!-- include default laravel JS and SASS -->
+    <script src="{{ asset('/js/manifest.js') }}" defer></script>
+    <script src="{{ asset('/js/vendor.js') }}" defer></script>
     <script src="{{ asset('js/app.js') }}" defer></script>
     <link href="{{ asset('css/front.css') }}" rel="stylesheet">
     @yield('head')

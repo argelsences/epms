@@ -29,7 +29,6 @@ window.Vue = require('vue');
 window.Vue.use(Vuetify);
 window.Vue.use(VueMask);
 
-
 /// drawerJS
 /////window.Vue.use(DrawerJs);
 moment.tz.setDefault('Asia/Singapore')
@@ -94,29 +93,54 @@ Vue.filter('formatDate', function(value) {
 
 //Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 // Admin components
-Vue.component('admin-template', require('./components/admin/AdminTemplate.vue').default);
-Vue.component('dashboard', require('./components/admin/Dashboard.vue').default);
-Vue.component('user-list', require('./components/admin/users/UserList.vue').default);
-Vue.component('department-list', require('./components/admin/departments/DepartmentList.vue').default);
-Vue.component('speaker-list', require('./components/admin/speakers/SpeakerList.vue').default);
-Vue.component('venue-list', require('./components/admin/venues/VenueList.vue').default);
-Vue.component('event-list', require('./components/admin/events/EventList.vue').default);
-Vue.component('template-list', require('./components/admin/templates/TemplateList.vue').default);
-Vue.component('template-choice', require('./components/admin/templates/TemplateChoice.vue').default);
-Vue.component('by-upload', require('./components/admin/templates/TemplateByUpload.vue').default);
-Vue.component('by-code', require('./components/admin/templates/TemplateByCode.vue').default);
+//////Vue.component('admin-template', require('./components/admin/AdminTemplate.vue').default);
+//////Vue.component('dashboard', require('./components/admin/Dashboard.vue').default);
+//////Vue.component('user-list', require('./components/admin/users/UserList.vue').default);
+//////Vue.component('department-list', require('./components/admin/departments/DepartmentList.vue').default);
+//////Vue.component('speaker-list', require('./components/admin/speakers/SpeakerList.vue').default);
+//////Vue.component('venue-list', require('./components/admin/venues/VenueList.vue').default);
+/////Vue.component('event-list', require('./components/admin/events/EventList.vue').default);
+/////Vue.component('template-list', require('./components/admin/templates/TemplateList.vue').default);
+//////Vue.component('template-choice', require('./components/admin/templates/TemplateChoice.vue').default);
+//////Vue.component('by-upload', require('./components/admin/templates/TemplateByUpload.vue').default);
+//////Vue.component('by-code', require('./components/admin/templates/TemplateByCode.vue').default);
 /////Vue.component('by-canvas', require('./components/admin/templates/TemplateByCanvas.vue').default);
-Vue.component('settings', require('./components/admin/settings/Settings.vue').default);
-Vue.component('poster-list', require('./components/admin/posters/Posters.vue').default);
+/////Vue.component('settings', require('./components/admin/settings/Settings.vue').default);
+//////Vue.component('poster-list', require('./components/admin/posters/Posters.vue').default);
 // Frontend components
-Vue.component('department', require('./components/front/departments/Department.vue').default);
-Vue.component('event', require('./components/front/events/Event.vue').default);
-Vue.component('contact-form', require('./components/front/events/ContactForm.vue').default);
-Vue.component('ticket-form', require('./components/front/events/TicketForm.vue').default);
-Vue.component('subscribe-form', require('./components/front/events/SubscribeForm.vue').default);
-Vue.component('unsubscribe-form', require('./components/front/subscriber/UnsubscribeForm.vue').default);
-Vue.component('subscribe-department-form', require('./components/front/departments/SubscribeDepartmentForm.vue').default);
-Vue.component('contact-department-form', require('./components/front/departments/ContactDepartmentForm.vue').default);
+///////Vue.component('department', require('./components/front/departments/Department.vue').default);
+///////Vue.component('event', require('./components/front/events/Event.vue').default);
+//////Vue.component('contact-form', require('./components/front/events/ContactForm.vue').default);
+//////Vue.component('ticket-form', require('./components/front/events/TicketForm.vue').default);
+//////Vue.component('subscribe-form', require('./components/front/events/SubscribeForm.vue').default);
+//////Vue.component('unsubscribe-form', require('./components/front/subscriber/UnsubscribeForm.vue').default);
+//////Vue.component('subscribe-department-form', require('./components/front/departments/SubscribeDepartmentForm.vue').default);
+//////Vue.component('contact-department-form', require('./components/front/departments/ContactDepartmentForm.vue').default);
+
+//Vue.component('AsyncComponent', () => import('./components/AsyncComponent') )
+// BACKEND
+Vue.component('admin-template', () => import('./components/admin/AdminTemplate.vue'));
+Vue.component('dashboard', () => import('./components/admin/Dashboard.vue'));
+Vue.component('user-list', () => import('./components/admin/users/UserList.vue'));
+Vue.component('department-list', () => import('./components/admin/departments/DepartmentList.vue'));
+Vue.component('speaker-list', () => import('./components/admin/speakers/SpeakerList.vue'));
+Vue.component('venue-list', () => import('./components/admin/venues/VenueList.vue'));
+Vue.component('event-list', () => import('./components/admin/events/EventList.vue'));
+Vue.component('template-list', () => import('./components/admin/templates/TemplateList.vue'));
+Vue.component('template-choice', () => import('./components/admin/templates/TemplateChoice.vue'));
+Vue.component('by-upload', () => import('./components/admin/templates/TemplateByUpload.vue'));
+Vue.component('by-code', () => import('./components/admin/templates/TemplateByCode.vue'));
+Vue.component('settings', () => import('./components/admin/settings/Settings.vue'));
+Vue.component('poster-list', () => import('./components/admin/posters/Posters.vue'));
+// FRONTEND
+Vue.component('department', () => import('./components/front/departments/Department.vue'));
+Vue.component('event', () => import('./components/front/events/Event.vue'));
+Vue.component('contact-form', () => import('./components/front/events/ContactForm.vue'));
+Vue.component('ticket-form', () => import('./components/front/events/TicketForm.vue'));
+Vue.component('subscribe-form', () => import('./components/front/events/SubscribeForm.vue'));
+Vue.component('unsubscribe-form', () => import('./components/front/subscriber/UnsubscribeForm.vue' ));
+Vue.component('subscribe-department-form', () => import('./components/front/departments/SubscribeDepartmentForm.vue'));
+Vue.component('contact-department-form', () => import('./components/front/departments/ContactDepartmentForm.vue'));
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

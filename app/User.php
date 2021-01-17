@@ -87,4 +87,8 @@ class User extends Authenticatable
     public function posters(){
         return $this->hasMany('App\Poster');
     }
+
+    public function scopeFilterByDepartment($query) {
+        return $query->where('department_id', auth()->user()->department_id);
+    }
 }

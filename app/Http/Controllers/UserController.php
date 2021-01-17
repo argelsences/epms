@@ -222,10 +222,19 @@ class UserController extends Controller
 
         $dataObject = [];
 
-        $users = $model::with(['department:id,name','roles:id,name'])
+        // fix for listing only based on department of is a super admin
+
+        if (auth()->user()->is_super_admin('api')){
+            $users = $model::with(['department:id,name','roles:id,name'])
                 ->orderBy('id', 'ASC')
                 ->get();
-        
+        }
+        else {
+            $users = $model::with(['department:id,name','roles:id,name'])
+                ->filterByDepartment()
+                ->orderBy('id', 'ASC')
+                ->get();
+        }        
         
         foreach ($users as $user){
             $dataObject[] = (object) [

@@ -143,6 +143,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     source: String
@@ -151,8 +160,14 @@ __webpack_require__.r(__webpack_exports__);
     return {
       drawer: null,
       expandOnHover: true,
-      profile: [],
-      base_url: window.location.origin + '/'
+      profile: {
+        department: {
+          url: '',
+          name: ''
+        }
+      },
+      base_url: window.location.origin + '/',
+      isSuperAdmin: false
     };
   },
   watch: {
@@ -165,8 +180,15 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get('/api/profile').then(function (response) {
-        _this.profile = response.data;
+        //this.profile = response.data
+        _this.setUserProfile(response.data);
+
+        if (_this.profile.roles[0].name === 'Super Administrator') _this.isSuperAdmin = true;
+        console.log(_this.profile);
       });
+    },
+    setUserProfile: function setUserProfile(userProfile) {
+      this.profile = userProfile;
     }
   },
   created: function created() {
@@ -470,25 +492,49 @@ var render = function() {
           _c(
             "v-toolbar-title",
             [
-              _c(
-                "v-btn",
-                {
-                  staticClass: "ma-2 text-h5",
-                  attrs: {
-                    text: "",
-                    dark: "",
-                    href: "" + _vm.base_url,
-                    target: "_blank"
-                  }
-                },
-                [
-                  _vm._v("\n        EPPMS\n        "),
-                  _c("v-icon", { attrs: { dark: "", right: "" } }, [
-                    _vm._v("\n          mdi-home\n        ")
-                  ])
-                ],
-                1
-              )
+              _vm.isSuperAdmin
+                ? _c(
+                    "v-btn",
+                    {
+                      staticClass: "ma-2 text-h5",
+                      attrs: {
+                        text: "",
+                        dark: "",
+                        href: "" + _vm.base_url,
+                        target: "_blank"
+                      }
+                    },
+                    [
+                      _vm._v("\n          EPPMS\n        "),
+                      _c("v-icon", { attrs: { dark: "", right: "" } }, [
+                        _vm._v("\n          mdi-home\n        ")
+                      ])
+                    ],
+                    1
+                  )
+                : _c(
+                    "v-btn",
+                    {
+                      staticClass: "ma-2 text-h5",
+                      attrs: {
+                        text: "",
+                        dark: "",
+                        href: _vm.base_url + "d/" + _vm.profile.department.url,
+                        target: "_blank"
+                      }
+                    },
+                    [
+                      _vm._v(
+                        "\n          " +
+                          _vm._s(_vm.profile.department.name) +
+                          "\n        "
+                      ),
+                      _c("v-icon", { attrs: { dark: "", right: "" } }, [
+                        _vm._v("\n          mdi-home\n        ")
+                      ])
+                    ],
+                    1
+                  )
             ],
             1
           ),

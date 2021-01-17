@@ -101,12 +101,21 @@
       <!--<v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>-->
       <v-toolbar-title>
         
-        <v-btn class="ma-2 text-h5" text dark :href="`${base_url}`" target="_blank">
-          EPPMS
+        
+        <v-btn v-if="isSuperAdmin" class="ma-2 text-h5" text dark :href="`${base_url}`" target="_blank">
+            EPPMS
           <v-icon dark right>
             mdi-home
           </v-icon>
         </v-btn>
+
+         <v-btn v-else class="ma-2 text-h5" text dark :href="`${base_url}d/${profile.department.url}`" target="_blank">
+            {{profile.department.name}}
+          <v-icon dark right>
+            mdi-home
+          </v-icon>
+        </v-btn>
+
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn :to="{name: `settings`}" icon>
@@ -143,8 +152,14 @@
       return {
         drawer: null,
         expandOnHover: true,
-        profile: [],
+        profile: {
+          department: {
+            url: '',
+            name: '',
+          },
+        },
         base_url: window.location.origin + '/',
+        isSuperAdmin: false
       }  
     },
     watch: {
@@ -156,8 +171,16 @@
       getProfile: function() {
         axios.get('/api/profile')
           .then( response => {
-              this.profile = response.data;
+              //this.profile = response.data
+              this.setUserProfile(response.data)
+              if ( this.profile.roles[0].name === 'Super Administrator' )
+                this.isSuperAdmin = true
+              
+              console.log(this.profile)
           });
+      },
+      setUserProfile(userProfile){
+        this.profile = userProfile
       },
     },
     created: function() {

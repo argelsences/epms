@@ -208,7 +208,9 @@
                     department_id: '',
                 },
                 isLoading: true,
-                loadingText: "Loading items, please wait."
+                loadingText: "Loading items, please wait.",
+                userProfile: [],
+                isSuperAdmin: false,
             }
         },
         computed: {
@@ -220,6 +222,11 @@
             dialog (val) {
                 // if val is true, then statement is true, if not the default value is this.close
                 // eg. the_title = title || "Error"; if title is true, the the value of the_title is the value of title, else the value of the_title is "Error"
+
+                if (val && this.editedIndex === -1){
+                    this.editedItem.department_id = this.userProfile.department_id
+                }
+
                 val || this.close()
             },
         },
@@ -338,10 +345,22 @@
             addDropFile(e) { 
                 this.file = e.dataTransfer.files[0]
                 console.log(this.file) 
-            }
+            },
+            getUserProfile() {
+                axios.get('/api/profile')
+                .then( response => {
+                    this.userProfile = response.data;
+                    if ( this.userProfile.roles[0].name === 'Super Administrator' )
+                        this.isSuperAdmin = true
+
+                    if (this.editedIndex === -1 )
+                        this.editedItem.department_id = this.userProfile.department_id
+                });
+            },
         },
         created: function() {
             this.setHedeaderTitle()
+            this.getUserProfile()
             this.initialize()
             this.getDepartments()
         },

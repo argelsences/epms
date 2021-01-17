@@ -184,7 +184,6 @@ __webpack_require__.r(__webpack_exports__);
         _this.setUserProfile(response.data);
 
         if (_this.profile.roles[0].name === 'Super Administrator') _this.isSuperAdmin = true;
-        console.log(_this.profile);
       });
     },
     setUserProfile: function setUserProfile(userProfile) {

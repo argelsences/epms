@@ -176,7 +176,6 @@
               if ( this.profile.roles[0].name === 'Super Administrator' )
                 this.isSuperAdmin = true
               
-              console.log(this.profile)
           });
       },
       setUserProfile(userProfile){

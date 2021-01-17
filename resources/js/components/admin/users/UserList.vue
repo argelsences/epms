@@ -77,8 +77,8 @@
                     {{rows.map(function(x) {return x.id; }).indexOf(item.id)+1}}
                 </template>-->
                 <template v-slot:item.actions="{ item }">
-                    <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-                    <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+                    <v-icon small class="mr-2" @click="editItem(item)" v-if="evaluateAction(item)">mdi-pencil</v-icon>
+                    <v-icon small @click="deleteItem(item)" v-if="evaluateAction(item)">mdi-delete</v-icon>
                 </template>
                 <template v-slot:no-data>
                     <v-btn class="btn btn-sm btn-primary" @click="initialize">Reset</v-btn>
@@ -325,6 +325,14 @@
                         this.editedItem.department_id = this.userProfile.department_id
                 });
             },
+            evaluateAction(item){
+                if ( item.role_name === 'Super Administrator' && !this.isSuperAdmin){
+                    return false
+                }
+                else {
+                    return true
+                }
+            }
         },
         created: function() {
             this.setHedeaderTitle()

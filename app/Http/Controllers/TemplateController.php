@@ -140,10 +140,10 @@ class TemplateController extends Controller
         }*/
 
         if (auth()->user()->is_super_admin('api')){
-            $templates = $model::orderBy('name', 'ASC')->get();
+            $templates = $model::select('id','name', 'description', 'file_path', 'department_id', 'method')->orderBy('name', 'ASC')->get();
         }
         else {
-            $templates = $model::filterByDepartment()->get();
+            $templates = $model::select('id','name', 'description', 'file_path', 'department_id', 'method')->filterByDepartment()->get();
         }
 
         return response()->json($templates);

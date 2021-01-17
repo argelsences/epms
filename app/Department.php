@@ -31,4 +31,8 @@ class Department extends Model
     public function subscribers(){
         return $this->hasMany('App\Subscriber');
     }
+
+    public function scopeFilterByDepartment($query) {
+        return $query->where('id', auth()->user()->department_id);
+    }
 }

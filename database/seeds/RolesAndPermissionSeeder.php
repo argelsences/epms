@@ -199,10 +199,10 @@ class RolesAndPermissionSeeder extends Seeder
 
         // reviewer
         $role = Role::create(['name' => 'Reviewer'])
-            ->givePermissionTo(['list event review','edit event review','view event', 'view poster', 'edit profile']);
+            ->givePermissionTo(['list event review','edit event review','view event', 'view poster', 'edit profile', 'list settings', 'list department']);
 
         $role = Role::create(['name' => 'Reviewer','guard_name' => 'api'])
-            ->givePermissionTo(['list event review','edit event review','view event', 'view poster', 'edit profile']);
+            ->givePermissionTo(['list event review','edit event review','view event', 'view poster', 'edit profile', 'list settings', 'list department']);
         // contributor
         $role = Role::create(['name' => 'Contributor'])
             ->givePermissionTo([
@@ -210,7 +210,7 @@ class RolesAndPermissionSeeder extends Seeder
                 'list speaker','edit speaker','list venue','edit venue',
                 'list booking','list attendee','delete booking','export booking',
                 'print booking','list attendee','delete booking','export booking',
-                'list subscriber','delete subscriber', 'export booking', 'edit profile', 'list template'
+                'list subscriber','delete subscriber', 'export booking', 'edit profile', 'list template', 'list settings', 'list department'
         ]);
 
         $role = Role::create(['name' => 'Contributor','guard_name' => 'api'])
@@ -219,7 +219,7 @@ class RolesAndPermissionSeeder extends Seeder
                 'list speaker','edit speaker','list venue','edit venue',
                 'list booking','list attendee','delete booking','export booking',
                 'print booking','list attendee','delete booking','export booking',
-                'list subscriber','delete subscriber', 'export booking', 'edit profile', 'list template'
+                'list subscriber','delete subscriber', 'export booking', 'edit profile', 'list template', 'list settings', 'list department'
         ]);
         // author
         $role = Role::create(['name' => 'Author'])
@@ -231,7 +231,7 @@ class RolesAndPermissionSeeder extends Seeder
                 'list venue','edit venue', 'add venue', 'delete venue',
                 'list booking','list attendee','edit booking','delete booking','export booking',
                 'print booking','list attendee','edit attendee', 'delete booking','export booking',
-                'list subscriber','delete subscriber', 'export booking', 'edit profile', 'list template'
+                'list subscriber','delete subscriber', 'export booking', 'edit profile', 'list template', 'list settings', 'list department'
             ]);
         $role = Role::create(['name' => 'Author','guard_name' => 'api'])
             ->givePermissionTo([
@@ -242,7 +242,7 @@ class RolesAndPermissionSeeder extends Seeder
                 'list venue','edit venue', 'add venue', 'delete venue',
                 'list booking','list attendee','edit booking','delete booking','export booking',
                 'print booking','list attendee','edit attendee', 'delete booking','export booking',
-                'list subscriber','delete subscriber', 'export booking', 'edit profile', 'list template'
+                'list subscriber','delete subscriber', 'export booking', 'edit profile', 'list template', 'list settings', 'list department'
             ]);
         // administrator
         $role = Role::create(['name' => 'Administrator'])
@@ -256,7 +256,7 @@ class RolesAndPermissionSeeder extends Seeder
                 'print booking','list attendee','edit attendee', 'delete booking','export booking',
                 'list subscriber','delete subscriber', 'export booking', 'edit profile',
                 'add user', 'edit user', 'list user', 'delete user',
-                'list template', 'add template', 'edit template', 'delete template'
+                'list template', 'add template', 'edit template', 'delete template', 'list settings', 'list department'
             ]);
         $role = Role::create(['name' => 'Administrator','guard_name' => 'api'])
             ->givePermissionTo([
@@ -269,7 +269,7 @@ class RolesAndPermissionSeeder extends Seeder
                 'print booking','list attendee','edit attendee', 'delete booking','export booking',
                 'list subscriber','delete subscriber', 'export booking', 'edit profile',
                 'add user', 'edit user', 'list user', 'delete user',
-                'list template', 'add template', 'edit template', 'delete template'
+                'list template', 'add template', 'edit template', 'delete template', 'list settings', 'list department'
             ]);
         // super-administrator
         /*$role = Role::create(['name' => 'super-administrator'])

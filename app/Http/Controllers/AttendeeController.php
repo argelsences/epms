@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Attendee;
 use App\Event;
 use App\Ticket;
+use App\Department;
 use Illuminate\Http\Request;
 use App\Jobs\SendBookingCancelJob;
 
@@ -250,7 +251,8 @@ class AttendeeController extends Controller
         return view('admin.print.attendees', compact('event','attendees') );
     }
     /**
-     * API function to list all attendees
+     * API function to list all attendees counter per department
+     * If user is super-admin, return all count
      * 
      * @return json object containing all bookings related to the event
      */
@@ -260,12 +262,23 @@ class AttendeeController extends Controller
             return response('Unauthorized', 403);
         }*/
 
+        $total_attendees = 0;
+
         if ( !auth()->user()->can(['list attendee']) ){
             return response('Unauthorized', 403);
         }
         
-        $attendees = $model::all();
+        if (auth()->user()->is_super_admin('api')){
+            $total_attendees = Attendee::all()->count();
+        }
+        else {
+            $departments = Department::findOrFail(auth()->user()->department_id);
+            foreach ($departments->events as $event){
+                $total_attendees += $event->attendees->count();
+            }
+        }
         
-        return response()->json($attendees);
+        return response()->json($total_attendees);
+    
     }
 }

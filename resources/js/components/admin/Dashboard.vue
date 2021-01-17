@@ -180,7 +180,7 @@
             return {
                 rows: [],
                 templates: [],
-                attendees: [],
+                attendees: 0,
 
                 focus: '',
                 type: 'month',
@@ -208,7 +208,7 @@
                 return this.templates.length
             },
             numberOfAttendees(){
-                return this.attendees.length
+                return this.attendees
             },
         },
         watch: {
@@ -219,6 +219,15 @@
                 axios.get('/api/dashboard/events')
                 .then( response => {
                     this.rows = response.data
+                });
+            },
+            getUserProfile() {
+                axios.get('/api/profile')
+                .then( response => {
+                    this.userProfile = response.data;
+                    if ( this.userProfile.roles[0].name === 'Super Administrator' )
+                        this.isSuperAdmin = true
+
                 });
             },
             getTemplates: function() {
@@ -332,6 +341,7 @@
         },
         created: function() {
             this.setHedeaderTitle()
+            this.getUserProfile()
             this.initialize()
             this.getTemplates()
             this.getAttendees()

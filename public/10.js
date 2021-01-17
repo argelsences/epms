@@ -1,4 +1,4 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[8],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[10],{
 
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/front/events/TicketForm.vue?vue&type=script&lang=js&":
 /*!**********************************************************************************************************************************************************************************!*\
@@ -220,16 +220,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['event'],
   mounted: function mounted() {
     var numberTickets = this.numberTickets;
+    console.log(this.theEvent.tickets);
     this.theEvent.tickets.forEach(function (ticket) {
       //console.log(numberTickets.length)
       for (var i = 0; i < numberTickets; i++) {//console.log(ticket)
@@ -1030,7 +1027,7 @@ var render = function() {
                                             )
                                           ]),
                                           _vm._v(
-                                            "\n                                        Booking Summary\n                                    "
+                                            "\n                                        Order Summary\n                                    "
                                           )
                                         ],
                                         1
@@ -1044,33 +1041,22 @@ var render = function() {
                                           "v-card-text",
                                           { key: t.id, staticClass: "order" },
                                           [
-                                            _vm.numberTickets[t.id]
-                                              ? _c(
-                                                  "div",
-                                                  [
-                                                    _c("div", [
-                                                      _vm._v(
-                                                        _vm._s(t.title) + " x "
-                                                      ),
-                                                      _c("strong", [
-                                                        _vm._v(
-                                                          _vm._s(
-                                                            _vm.numberTickets[
-                                                              t.id
-                                                            ]
-                                                          )
-                                                        )
-                                                      ])
-                                                    ]),
-                                                    _vm._v(" "),
-                                                    _c("div", [_vm._v("FREE")]),
-                                                    _vm._v(" "),
-                                                    _c("v-divider")
-                                                  ],
-                                                  1
+                                            _c("div", [
+                                              _vm._v(_vm._s(t.title) + " x "),
+                                              _c("strong", [
+                                                _vm._v(
+                                                  _vm._s(
+                                                    _vm.numberTickets[t.id]
+                                                  )
                                                 )
-                                              : _vm._e()
-                                          ]
+                                              ])
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("div", [_vm._v("FREE")]),
+                                            _vm._v(" "),
+                                            _c("v-divider")
+                                          ],
+                                          1
                                         )
                                       })
                                     ],
@@ -1484,29 +1470,18 @@ var render = function() {
                                   "v-card-text",
                                   { key: t.id, staticClass: "order" },
                                   [
-                                    _vm.numberTickets[t.id]
-                                      ? _c(
-                                          "div",
-                                          [
-                                            _c("div", [
-                                              _vm._v(_vm._s(t.title) + " x "),
-                                              _c("strong", [
-                                                _vm._v(
-                                                  _vm._s(
-                                                    _vm.numberTickets[t.id]
-                                                  )
-                                                )
-                                              ])
-                                            ]),
-                                            _vm._v(" "),
-                                            _c("div", [_vm._v("FREE")]),
-                                            _vm._v(" "),
-                                            _c("v-divider")
-                                          ],
-                                          1
-                                        )
-                                      : _vm._e()
-                                  ]
+                                    _c("div", [
+                                      _vm._v(_vm._s(t.title) + " x "),
+                                      _c("strong", [
+                                        _vm._v(_vm._s(_vm.numberTickets[t.id]))
+                                      ])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("div", [_vm._v("FREE")]),
+                                    _vm._v(" "),
+                                    _c("v-divider")
+                                  ],
+                                  1
                                 )
                               })
                             ],

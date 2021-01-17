@@ -1779,6 +1779,8 @@
                     if ( this.editedItem.id )
                         formData.append('id', this.editedItem.id)
 
+                    this.isSelecting = true
+
                     axios.post('/api/posters/upload', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
@@ -1789,6 +1791,8 @@
                             // set the path on the global editedItem
                             //this.poster_thumb = response.data.poster_thumb 
                             this.poster = response.data.item
+
+                            this.isSelecting = false
                         }
                     })
                     .catch( error => {
@@ -1797,6 +1801,8 @@
                         this.snackbar = true
                         this.error = true
                         this.logo = null
+
+                        this.isSelecting = false
                     })
                 }
             },
@@ -1946,7 +1952,7 @@
                 .then(response => {
                     if (response.data.success) {
                         this.feedbacks = []
-                        this.feedbacks[0] = 'Posters are generated successfully.'
+                        this.feedbacks[0] = 'Tickets successfully sent'
                         this.snackbar = true
                         this.error = false
                         this.booking_details_dialog = false
@@ -2148,13 +2154,14 @@
         },
         created: function() {
             this.setHedeaderTitle()
+            this.getUserProfile()
             this.initialize()
             this.getSettings()
             this.getDepartments()
             this.getVenues()
             this.getSpeakers()
             this.getCountries()
-            this.getUserProfile()
+            
         },
     }
 </script>

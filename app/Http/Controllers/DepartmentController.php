@@ -103,7 +103,15 @@ class DepartmentController extends Controller
             return response('Unauthorized', 403);
         }
 
-        return response()->json(($model::orderBy('name', 'ASC')->get()));
+        if (auth()->user()->is_super_admin('api')){
+            $departments = $model::orderBy('name', 'DESC')->get();
+        }
+        else {
+            $departments = $model::filterByDepartment()->orderBy('name', 'DESC')->get();
+        }
+
+        return response()->json($departments);
+        //return response()->json(($model::orderBy('name', 'ASC')->get()));
     }
 
     /**

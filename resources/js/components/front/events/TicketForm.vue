@@ -90,12 +90,14 @@
                                             <v-icon>
                                                 mdi-cart
                                             </v-icon>
-                                            Order Summary
+                                            Booking Summary
                                         </v-card-title>
-                                        <v-card-text v-for="(t,i) in theEvent.tickets" :key="t.id" class="order">    
-                                            <div>{{t.title}} x <strong>{{numberTickets[t.id]}}</strong></div>
-                                            <div >FREE</div>
-                                            <v-divider></v-divider>
+                                        <v-card-text v-for="(t,i) in theEvent.tickets" :key="t.id" class="order">  
+                                            <div v-if="numberTickets[t.id]">  
+                                                <div>{{t.title}} x <strong>{{numberTickets[t.id]}}</strong></div>
+                                                <div >FREE</div>
+                                                <v-divider></v-divider>
+                                            </div>
                                         </v-card-text>
                                     </v-card>
                                 </v-col>
@@ -166,10 +168,12 @@
                                     </v-icon>
                                     Order Summary
                                 </v-card-title>
-                                <v-card-text v-for="(t,i) in theEvent.tickets" :key="t.id" class="order">    
-                                    <div>{{t.title}} x <strong>{{numberTickets[t.id]}}</strong></div>
-                                    <div >FREE</div>
-                                    <v-divider></v-divider>
+                                <v-card-text v-for="(t,i) in theEvent.tickets" :key="t.id" class="order"> 
+                                    <div v-if="numberTickets[t.id]">   
+                                        <div>{{t.title}} x <strong>{{numberTickets[t.id]}}</strong></div>
+                                        <div >FREE</div>
+                                        <v-divider></v-divider>
+                                    </div>
                                 </v-card-text>
                             </v-card>
                         </v-col>
@@ -206,6 +210,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import moment from 'moment'
 export default {
     props: ['event'],

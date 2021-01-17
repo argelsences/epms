@@ -33,4 +33,8 @@ class Attendee extends Model
     public function getFullNameAttribute(){
         return $this->first_name . " " . $this->last_name;
     }
+
+    public function scopeFilterByDepartment($query) {
+        return $query->where('department_id', auth()->user()->department_id);
+    }
 }

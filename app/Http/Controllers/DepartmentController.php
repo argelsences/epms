@@ -104,10 +104,10 @@ class DepartmentController extends Controller
         }
 
         if (auth()->user()->is_super_admin('api')){
-            $departments = $model::orderBy('name', 'DESC')->get();
+            $departments = $model::orderBy('name', 'ASC')->get();
         }
         else {
-            $departments = $model::filterByDepartment()->orderBy('name', 'DESC')->get();
+            $departments = $model::filterByDepartment()->orderBy('name', 'ASC')->get();
         }
 
         return response()->json($departments);

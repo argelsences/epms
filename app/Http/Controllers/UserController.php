@@ -145,7 +145,10 @@ class UserController extends Controller
             return response('Unauthorized', 403);
         }*/
 
-        if (auth()->user()->hasPermissionTo('edit user', 'api') && auth()->user()->hasPermissionTo('add user', 'api') ){
+        /*if (auth()->user()->hasPermissionTo('edit user', 'api') && auth()->user()->hasPermissionTo('add user', 'api') ){
+            return response('Unauthorized', 403);
+        }*/
+        if ( !auth()->user()->can(['edit user', 'add user']) ){
             return response('Unauthorized', 403);
         }
 
@@ -268,7 +271,13 @@ class UserController extends Controller
         /*if (auth()->user()->hasPermissionTo('list role', 'api') ){
             return response('Unauthorized', 403);
         }*/
-        $uniqueRoles = $model::select('name')->groupBy('name')->get();
+
+        if (auth()->user()->is_super_admin('api')){
+            $uniqueRoles = $model::select('name')->groupBy('name')->get();
+        }
+        else {
+            $uniqueRoles = $model::select('name')->whereNotIn('name', ['Super Administrator'])->groupBy('name')->get();
+        }
 
         //return response()->json(($model::orderBy('name', 'ASC')->get(['id','name'])));
         return response()->json($uniqueRoles);

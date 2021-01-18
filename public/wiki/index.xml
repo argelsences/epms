@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>EPPMS Wiki on EPPMS</title>
+    <link>https://eppms.vicuna.me/wiki/</link>
+    <description>Recent content in EPPMS Wiki on EPPMS</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 17 Jan 2021 22:59:10 +0800</lastBuildDate><atom:link href="https://eppms.vicuna.me/wiki/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Booking for an Event</title>
+      <link>https://eppms.vicuna.me/wiki/posts/booking-for-an-event/</link>
+      <pubDate>Mon, 18 Jan 2021 22:58:21 +0800</pubDate>
+      
+      <guid>https://eppms.vicuna.me/wiki/posts/booking-for-an-event/</guid>
+      <description>Guide   Visit a department homepage, or visit the event page directly.
+  In the event page, look for the ticket section
+  Select number of tickets to be reserved and click the &amp;ldquo;REGISTER&amp;rdquo; button.
+  Fill in the details for the bookie (the person performing the booking).
+  If the bookie and the attendee is the same, click the &amp;ldquo;COPY THESE DETAILS TO ALL TICKET HOLDER&amp;rdquo; button, else, fill up the details of the attendee.</description>
+    </item>
+    
+    <item>
+      <title>Viewing a Department Homepage</title>
+      <link>https://eppms.vicuna.me/wiki/posts/viewing-a-department-homepage/</link>
+      <pubDate>Mon, 18 Jan 2021 22:06:46 +0800</pubDate>
+      
+      <guid>https://eppms.vicuna.me/wiki/posts/viewing-a-department-homepage/</guid>
+      <description>Guide   Visit the demo main landing page website at https://eppms.vicuna.me. Or the designated homepage that you installed this system.
+  View all the departments from the department section.
+  Visit a department by clicking the &amp;ldquo;URL&amp;rdquo; button from the department card.
+  You should be able to see the department homepage.
+  </description>
+    </item>
+    
+    <item>
+      <title>Viewing the System Homepage</title>
+      <link>https://eppms.vicuna.me/wiki/posts/viewing-the-system-homepage/</link>
+      <pubDate>Mon, 18 Jan 2021 21:57:26 +0800</pubDate>
+      
+      <guid>https://eppms.vicuna.me/wiki/posts/viewing-the-system-homepage/</guid>
+      <description>Guide   Visit the demo main landing page website at https://eppms.vicuna.me. Or the designated homepage that you installed this system.
+  View the latest events from the slider.
+  View all the departments from the department section.
+  Visit a department by clicking the &amp;ldquo;URL&amp;rdquo; button from the department card.
+  </description>
+    </item>
+    
+    <item>
+      <title>Downloading an Event Poster</title>
+      <link>https://eppms.vicuna.me/wiki/posts/downloading-an-event-poster/</link>
+      <pubDate>Mon, 18 Jan 2021 21:48:01 +0800</pubDate>
+      
+      <guid>https://eppms.vicuna.me/wiki/posts/downloading-an-event-poster/</guid>
+      <description>Pre-requisites  A user account who has super-administrator, an administrator or an author of a department.  Guide   Login to the demo site, for more details visit Logging in to system.
+  Click the &amp;ldquo;Events&amp;rdquo; link from the menu.
+  Select an event to be edited by using the search input box or browsing the list.
+  Click the pencil icon in the action column of the selected event</description>
+    </item>
+    
+    <item>
+      <title>Generating an Event Poster by Uploading an Existing Media</title>
+      <link>https://eppms.vicuna.me/wiki/posts/generating-an-event-poster-by-uploading-an-existing-media/</link>
+      <pubDate>Mon, 18 Jan 2021 21:35:35 +0800</pubDate>
+      
+      <guid>https://eppms.vicuna.me/wiki/posts/generating-an-event-poster-by-uploading-an-existing-media/</guid>
+      <description>Pre-requisites  A user account who has super-administrator, an administrator or an author of a department.  Guide   Login to the demo site, for more details visit Logging in to system.
+  Click the &amp;ldquo;Events&amp;rdquo; link from the menu.
+  Select an event to be edited by using the search input box or browsing the list.
+  Click the pencil icon in the action column of the selected event</description>
+    </item>
+    
+    <item>
+      <title>Generating an Event Poster From a Template</title>
+      <link>https://eppms.vicuna.me/wiki/posts/generating-an-event-poster-from-a-template/</link>
+      <pubDate>Mon, 18 Jan 2021 21:28:32 +0800</pubDate>
+      
+      <guid>https://eppms.vicuna.me/wiki/posts/generating-an-event-poster-from-a-template/</guid>
+      <description>Pre-requisites  A user account who has super-administrator, an administrator or an author of a department.  Guide   Login to the demo site, for more details visit Logging in to system.
+  Click the &amp;ldquo;Events&amp;rdquo; link from the menu.
+  Select an event to be edited by using the search input box or browsing the list.
+  Click the pencil icon in the action column of the selected event</description>
+    </item>
+    
+    <item>
+      <title>Create a Ticket for an Event</title>
+      <link>https://eppms.vicuna.me/wiki/posts/create-a-ticket-for-an-event/</link>
+      <pubDate>Mon, 18 Jan 2021 21:16:40 +0800</pubDate>
+      
+      <guid>https://eppms.vicuna.me/wiki/posts/create-a-ticket-for-an-event/</guid>
+      <description>Pre-requisites  A user account who has super-administrator, an administrator or an author of a department.  Guide   Login to the demo site, for more details visit Logging in to system.
+  Click the &amp;ldquo;Events&amp;rdquo; link from the menu.
+  Select an event to be edited by using the search input box or browsing the list.
+  Click the pencil icon in the action column of the selected event</description>
+    </item>
+    
+    <item>
+      <title>Create an Event</title>
+      <link>https://eppms.vicuna.me/wiki/posts/create-an-event/</link>
+      <pubDate>Mon, 18 Jan 2021 13:40:02 +0800</pubDate>
+      
+      <guid>https://eppms.vicuna.me/wiki/posts/create-an-event/</guid>
+      <description>Pre-requisites  A user account who has super-administrator, an administrator or an author of a department.  Guide   Login to the demo site, for more details visit Logging in to system.
+  Click the &amp;ldquo;Events&amp;rdquo; link from the menu.
+  Click the &amp;ldquo;+EVENT&amp;rdquo; button.
+  Define the following:
+ Department: available only to super administrator Title: the title of the event Synopsis: the synopsis of the event Excerpt: the excerpt of the event Start date: start date of the event Start time of the event End date: end date of the event End time: end time of the event Social media toggles  Facebook: allow event to be shared on Facebook Twitter: allow event to be shared on Twitter Email: share event by Email Whatsapp: allow event to be shared on Whatsapp LinkedIn: allow event to be shared via LinkedIn      Select venue.</description>
+    </item>
+    
+    <item>
+      <title>Create a Speaker</title>
+      <link>https://eppms.vicuna.me/wiki/posts/create-a-speaker/</link>
+      <pubDate>Mon, 18 Jan 2021 13:22:43 +0800</pubDate>
+      
+      <guid>https://eppms.vicuna.me/wiki/posts/create-a-speaker/</guid>
+      <description>Pre-requisites  A user account who has super-administrator, an administrator and an author of a department.  Guide   Login to the demo site, for more details visit Logging in to system.
+  Click the &amp;ldquo;Speakers&amp;rdquo; link from the menu.
+  Click the +SPEAKER button.
+  Define these items
+ Name: full name of the speaker Photo: a JPG, PNG or BMP file type, with dimensions of at least 190px X 240px.</description>
+    </item>
+    
+    <item>
+      <title>Create a Template</title>
+      <link>https://eppms.vicuna.me/wiki/posts/create-a-template/</link>
+      <pubDate>Mon, 18 Jan 2021 00:23:53 +0800</pubDate>
+      
+      <guid>https://eppms.vicuna.me/wiki/posts/create-a-template/</guid>
+      <description>Pre-requisites  A user account who has super-administrator or is an administrator of a department.  Test Materials Download a sample template from thes pages
+ Create template by uploading HTML, CSS and image files: https://github.com/argelsences/eppms-templates/raw/main/template1.zip Create template by HTML, CSS source codes and uploading image files: https://github.com/argelsences/eppms-templates/raw/main/template2.zip  Guide Create a template by uploading HTML, CSS and image files   Login to the demo site, for more details visit Logging in to system.</description>
+    </item>
+    
+    <item>
+      <title>Create a User Account</title>
+      <link>https://eppms.vicuna.me/wiki/posts/create-a-user-account/</link>
+      <pubDate>Mon, 18 Jan 2021 00:02:06 +0800</pubDate>
+      
+      <guid>https://eppms.vicuna.me/wiki/posts/create-a-user-account/</guid>
+      <description>Pre-requisites  A user account who has super-administrator or is an administrator of a department.  Guide   Login to the demo site, for more details visit Logging in to system
+  Click the &amp;ldquo;User&amp;rdquo; link from the menu.
+  Fill out the form:
+ Name: full name of ththe user Email: email address of the user Department: the department where the user belongs Logo: logo of the department in jpg, png or bmp format Designation: the designation of the user Role: role of the user in the system Password: minimum of 14 alphanumeric characters    Click &amp;ldquo;Save&amp;rdquo; button.</description>
+    </item>
+    
+    <item>
+      <title>Create a Department</title>
+      <link>https://eppms.vicuna.me/wiki/posts/create-a-department/</link>
+      <pubDate>Sun, 17 Jan 2021 23:24:39 +0800</pubDate>
+      
+      <guid>https://eppms.vicuna.me/wiki/posts/create-a-department/</guid>
+      <description>Pre-requisites  A user account who has super-administrator access to the system.  Guide   Login to the demo site, for more details visit Logging in to system
+  Click the &amp;ldquo;Department&amp;rdquo; link from the menu.
+  Fill out the form:
+ Name: the department name Email: the department email Tel #: telephone number of the department Logo: logo of the department in jpg, png or bmp format About: description of the department Department URI: a unique URI representing the department Facebook URL: the Facebook URL of the department Instagram URL: the Instragram URL of the department Page header color: use the color picker Page background color: use the color picker Page text color: use the color picker Google Analytics ID: the Google Analytics code only Google Tag Manager ID: the Google Tag Manager code only    Click Save button.</description>
+    </item>
+    
+    <item>
+      <title>Logging in to System</title>
+      <link>https://eppms.vicuna.me/wiki/posts/logging-in-to-system/</link>
+      <pubDate>Sun, 17 Jan 2021 21:43:21 +0800</pubDate>
+      
+      <guid>https://eppms.vicuna.me/wiki/posts/logging-in-to-system/</guid>
+      <description>Guide   Visit the demo login site at https://eppms.vicuna.me/web-admin
+  Input your username and password (the administrator may have provided you with login details).
+  Click &amp;ldquo;Let&amp;rsquo;s Go&amp;rdquo; button.
+  Go back to guides</description>
+    </item>
+    
+  </channel>
+</rss>

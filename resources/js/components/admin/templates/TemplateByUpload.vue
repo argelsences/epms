@@ -110,7 +110,7 @@
                 </v-btn>
             </v-card-actions>
 
-            <v-snackbar v-model="snackbar" :timeout="timeout">
+            <v-snackbar v-model="snackbar" >
                 <v-progress-linear indeterminate color="green" :active="loader" ></v-progress-linear>
                 <v-list-item v-for="(feedback, index) in feedbacks" :key="index">
                     <v-list-item-icon v-if="error">
@@ -308,7 +308,7 @@
                         this.feedbacks = []
                         this.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.'
                         ///////this.snackbar = true
-                        this.loader = true
+                        this.loader = false
                         this.error = false
                         /*
                         if ( editedIndex > -1 )
@@ -330,6 +330,7 @@
                     this.feedbacks = [].concat.apply([], messages)
                     this.snackbar = true
                     this.error = true
+                    this.loader = false
                 })
               
             },

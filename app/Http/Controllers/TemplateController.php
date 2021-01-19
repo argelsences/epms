@@ -354,6 +354,9 @@ class TemplateController extends Controller
         // lets generate a thumbnail
         $the_thumbnail = $this->thumbnail($template, true);
 
+        // requery template
+        $template = Template::select('id','name', 'description', 'department_id', 'method')->where('id', $template->id)->get();
+
         // return the same data compared to list to ensure using the same 
         $success = ($template) ? true : false;
         return ['success' => $success, 'item' => $template];
@@ -474,6 +477,9 @@ class TemplateController extends Controller
 
         // lets generate a thumbnail
         $the_thumbnail = $this->thumbnail($template, true);
+
+        // requery template
+        $template = Template::select('id','name', 'description', 'department_id', 'method')->where('id', $template->id)->get();
 
         // return the same data compared to list to ensure using the same 
         $success = ($template) ? true : false;

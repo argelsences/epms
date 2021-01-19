@@ -307,7 +307,7 @@
                     if (response.data.success) {
                         this.feedbacks = []
                         this.feedbacks[0] = 'Changes for ' + editedItem.name + ' is saved.'
-                        ///////this.snackbar = true
+                        this.snackbar = false
                         this.loader = false
                         this.error = false
                         /*
@@ -328,7 +328,7 @@
                 .catch( error => {
                     let messages = Object.values(error.response.data.errors); 
                     this.feedbacks = [].concat.apply([], messages)
-                    this.snackbar = true
+                    //this.snackbar = true
                     this.error = true
                     this.loader = false
                 })

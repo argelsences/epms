@@ -302,7 +302,12 @@
                 this.snackbar = true
                 this.feedbacks[0] = 'Generating template, please wait.'
 
-                axios.post('/api/templates/upsert', formData, formHeader)
+                //axios.post('/api/templates/upsert', formData, formHeader)
+                axios.post('/api/templates/upsert', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
                 .then(response => {
                     if (response.data.success) {
                         this.feedbacks = []
